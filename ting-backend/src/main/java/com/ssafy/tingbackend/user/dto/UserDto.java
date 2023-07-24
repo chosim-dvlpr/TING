@@ -1,4 +1,4 @@
-package com.ssafy.tingbackend.auth.dto;
+package com.ssafy.tingbackend.user.dto;
 
 import lombok.Data;
 

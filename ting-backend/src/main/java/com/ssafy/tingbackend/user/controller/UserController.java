@@ -1,7 +1,7 @@
-package com.ssafy.tingbackend.auth.controller;
+package com.ssafy.tingbackend.user.controller;
 
-import com.ssafy.tingbackend.auth.dto.UserDto;
-import com.ssafy.tingbackend.auth.service.AuthService;
+import com.ssafy.tingbackend.user.dto.UserDto;
+import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -16,9 +16,9 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class AuthController {
+public class UserController {
 
-    private final AuthService authService;
+    private final UserService authService;
 
     @PostMapping("/api/login")
     public Map<String, String> login(@RequestBody UserDto userDto) {
