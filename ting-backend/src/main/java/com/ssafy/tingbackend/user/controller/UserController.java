@@ -4,12 +4,10 @@ import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -19,7 +17,7 @@ public class UserController {
 
     private final UserService authService;
 
-    @PostMapping("/api/login")
+    @PostMapping("/user/login")
     public Map<String, String> login(@RequestBody UserDto userDto) {
         return authService.login(userDto);
     }
@@ -29,9 +27,4 @@ public class UserController {
         authService.signUp(userDto);
     }
 
-    @GetMapping("/api/test")
-    public void test(Principal principal) {
-        log.info("principal: {}", principal);
-        System.out.println(principal.getName());
-    }
 }
