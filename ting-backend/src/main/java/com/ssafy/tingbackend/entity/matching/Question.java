@@ -1,14 +1,12 @@
 package com.ssafy.tingbackend.entity.matching;
 
+import com.ssafy.tingbackend.entity.type.QuestionType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -20,5 +18,6 @@ public class Question {
     private Long id;
 
     private String questionCard;
-    private Integer category; // 1필수 2랜덤
+    @Enumerated(EnumType.STRING)
+    private QuestionType category; // 1필수 2랜덤
 }

@@ -1,5 +1,7 @@
-package com.ssafy.tingbackend.security;
+package com.ssafy.tingbackend.common.security;
 
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -59,12 +61,14 @@ public class JwtUtil {
                 .getExpiration().before(new Date());
     }
 
-    public static Claims getPayload(String jwt) {
+    public static Claims getPayloadAndCheckExpired(String jwt) {
+        if (isExpired(jwt)) throw new CommonException(ExceptionType.JWT_TOKEN_EXPIRED);
+
         try {
             return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new CommonException(ExceptionType.JWT_TOKEN_PARSE_ERROR);
         }
     }
 }

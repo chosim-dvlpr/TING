@@ -1,6 +1,8 @@
 package com.ssafy.tingbackend.entity;
 
 import com.ssafy.tingbackend.entity.common.BaseCreatedTimeEntity;
+import com.ssafy.tingbackend.entity.type.ReportStateType;
+import com.ssafy.tingbackend.entity.type.ReportType;
 import com.ssafy.tingbackend.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {})
-public class report extends BaseCreatedTimeEntity {
+public class Report extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +25,9 @@ public class report extends BaseCreatedTimeEntity {
     private User user;
 
     private String content;
-    private Integer state; // enum?
-    private String type; // 게시글, 댓글, 소개팅
+    @Enumerated(EnumType.STRING)
+    private ReportStateType state;
+    @Enumerated(EnumType.STRING)
+    private ReportType type; // 게시글, 댓글, 소개팅
     private Long typeId;
 }

@@ -1,4 +1,4 @@
-package com.ssafy.tingbackend.security;
+package com.ssafy.tingbackend.common.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorizationToken != null && authorizationToken.startsWith("Bearer ")) {
             String token = authorizationToken.substring(7);
 
-            if (JwtUtil.isExpired(token)) {
-                log.info("token expired");
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            String userId = JwtUtil.getPayload(token).get("userId", String.class);
+            String userId = JwtUtil.getPayloadAndCheckExpired(token).get("userId", String.class);
 
             UsernamePasswordAuthenticationToken authenticationToken
                     = new UsernamePasswordAuthenticationToken(userId, null, null);

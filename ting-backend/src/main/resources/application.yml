@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/shortdate?serverTimezone=Asia/Seoul
-    username: ssafy
-    password: ssafy
+    url: jdbc:mysql://i9b107.p.ssafy.io:3366/ting_db?serverTimezone=Asia/Seoul
+    username: ssafy_b107
+    password: 1q2w3e4r-ssafy-b107-ting
 
   jpa:
     open-in-view: false
