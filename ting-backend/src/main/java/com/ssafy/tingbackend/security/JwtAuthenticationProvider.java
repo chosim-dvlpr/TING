@@ -1,7 +1,7 @@
 package com.ssafy.tingbackend.security;
 
 import com.ssafy.tingbackend.entity.user.User;
-import com.ssafy.tingbackend.user.service.UserService;
+import com.ssafy.tingbackend.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,22 +16,20 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+    private final AuthService authService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
         String password = (String) authentication.getCredentials();
 
-        String encodePassword = passwordEncoder.encode(password);
+        User user = authService.getUserInfo(email);
 
-        User user = userService.getUserInfo(email);
-
-        if (!this.passwordEncoder.matches(encodePassword, user.getPassword())) {
+        if (!this.passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("password is not matched");
         }
 
-        return new UsernamePasswordAuthenticationToken(user, encodePassword, null);
+        return new UsernamePasswordAuthenticationToken(user, null, null);
     }
 
     @Override
