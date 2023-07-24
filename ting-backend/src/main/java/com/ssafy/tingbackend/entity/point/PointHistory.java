@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"user", "code", "changeCost", "resultPoint"})
+@ToString(of = {"user", "pointCategory", "changeCost", "resultPoint"})
 public class PointHistory extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
