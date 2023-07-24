@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.entity.chatting;
 
 import com.ssafy.tingbackend.entity.common.BaseUnmodifidableTimeEntity;
+import com.ssafy.tingbackend.entity.type.BoardType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,8 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
 
     private LocalDateTime lastChattingTime;
     private String lastChattingContent;
-    private Integer state; //enum?
+    @Enumerated(EnumType.STRING)
+    private BoardType state;
     @ColumnDefault("36.5")
     private BigDecimal temperature;
 

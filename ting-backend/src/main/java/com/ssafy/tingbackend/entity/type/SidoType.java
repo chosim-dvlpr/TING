@@ -17,7 +17,7 @@ public enum SidoType {
     JEONRA_NAMDO("전라남도"),
     KYEONGSANG_BUKDO("경상북도"),
     KYEONGSANG_NAMDO("경상남도"),
-    JEJUDO("제추특별자치도");
+    JEJUDO("제주특별자치도");
 
     private final String name;
 

@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.entity.user;
 
 import com.ssafy.tingbackend.entity.common.BaseTimeEntity;
+import com.ssafy.tingbackend.entity.type.SidoType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,7 +29,8 @@ public class User extends BaseTimeEntity {
     private String phoneNumber;
     @Column(columnDefinition = "char(1)")
     private Character gender;
-    private String region;
+    @Enumerated(EnumType.STRING)
+    private SidoType region;
     private LocalDate birth;
     private String profileImage;
     @ColumnDefault("0")

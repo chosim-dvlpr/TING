@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.entity.board;
 
 import com.ssafy.tingbackend.entity.common.BaseTimeEntity;
+import com.ssafy.tingbackend.entity.type.BoardType;
 import com.ssafy.tingbackend.entity.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,7 +35,8 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent")
     private List<Comment> children;
 
-    private String boardType; //enum?
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "advice_board_id")
