@@ -22,6 +22,8 @@ let navigate = useNavigate()
         <Route path="/" element={<div>홈!</div>}></Route>
         <Route path="/tutorial" element={<div>튜토리얼!!</div>}></Route>
         <Route path="/community" element={<div>커뮤니티</div>}></Route>
+        <Route path="/login" element={<div>로그인</div>}></Route>
+        <Route path="/signup" element={<div>회원가입</div>}></Route>
       </Routes>
 
     </div>
