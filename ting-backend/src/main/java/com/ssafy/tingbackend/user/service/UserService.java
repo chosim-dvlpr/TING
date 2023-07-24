@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.user.service;
 
+import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
@@ -43,11 +44,12 @@ public class UserService {
     }
 
     public void signUp(UserDto userDto) {
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));
+        User user = userDto.toEntity();
 
         userRepository.save(user);
+        userRepository.insertHobbys();
+        // personality, style 추가해야함
     }
 
 

@@ -15,16 +15,16 @@ import java.util.Map;
 @Slf4j
 public class UserController {
 
-    private final UserService authService;
+    private final UserService userService;
 
     @PostMapping("/user/login")
     public Map<String, String> login(@RequestBody UserDto userDto) {
-        return authService.login(userDto);
+        return userService.login(userDto);
     }
 
     @PostMapping("/user/signup")
     public void signUp(@RequestBody UserDto userDto) {
-        authService.signUp(userDto);
+        userService.signUp(userDto);
     }
 
 }
