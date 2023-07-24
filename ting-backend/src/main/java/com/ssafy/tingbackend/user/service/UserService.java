@@ -18,23 +18,24 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+//    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     public Map<String, String> login(UserDto userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
 
-        Authentication authenticate = jwtAuthenticationProvider.authenticate(authenticationToken);
-        User principal = (User) authenticate.getPrincipal();
+//        Authentication authenticate = jwtAuthenticationProvider.authenticate(authenticationToken);
+//        User principal = (User) authenticate.getPrincipal();
+//
+//        String accessToken = JwtUtil.generateAccessToken(String.valueOf(principal.getId()));
+//        String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(principal.getId()));
+//
+//        Map<String, String> result = new HashMap<>();
+//        result.put("access-token", accessToken);
+//        result.put("refresh-token", refreshToken);
 
-        String accessToken = JwtUtil.generateAccessToken(String.valueOf(principal.getId()));
-        String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(principal.getId()));
-
-        Map<String, String> result = new HashMap<>();
-        result.put("access-token", accessToken);
-        result.put("refresh-token", refreshToken);
-
-        return result;
+//        return result;
+        return null;
     }
 
     public User getUserInfo(String email) {

@@ -15,6 +15,10 @@ public class UserStyle {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "style_code")
     private AdditionalInfo additionalInfo;
 }

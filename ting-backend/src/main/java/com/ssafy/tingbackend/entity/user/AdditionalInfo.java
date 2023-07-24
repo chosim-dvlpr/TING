@@ -22,11 +22,4 @@ public class AdditionalInfo {
     private String category;
     private String name;
 
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserHobby> userHobbys = new ArrayList<>();
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserStyle> userStyles = new ArrayList<>();
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserPersonality> userPersonalities = new ArrayList<>();
-
 }

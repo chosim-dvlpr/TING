@@ -23,8 +23,8 @@ public class PointHistory extends BaseCreatedTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code")
-    private PointCategory code;
+    @JoinColumn(name = "point_code")
+    private PointCategory pointCategory;
 
     private Long changeCost;
     private Long resultPoint;
