@@ -1,4 +1,4 @@
-package com.ssafy.tingbackend.security;
+package com.ssafy.tingbackend.common.security;
 
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.user.service.AuthService;

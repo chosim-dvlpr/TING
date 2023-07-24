@@ -1,6 +1,6 @@
-package com.ssafy.tingbackend.config;
+package com.ssafy.tingbackend.common.config;
 
-import com.ssafy.tingbackend.security.JwtAuthenticationFilter;
+import com.ssafy.tingbackend.common.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,6 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .antMatchers("/api/auth").permitAll()
 //                .antMatchers("/api/v?/post/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
-                .antMatchers("/api/test").authenticated()
                 .anyRequest().permitAll()
                 .and()
 
