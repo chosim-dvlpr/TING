@@ -1,10 +1,7 @@
 package com.ssafy.tingbackend.entity.user;
 
 import com.ssafy.tingbackend.entity.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -15,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(of = {"id", "email", "nickname", "gender"})
 @DynamicInsert
