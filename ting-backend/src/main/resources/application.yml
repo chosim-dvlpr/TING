@@ -17,5 +17,18 @@ spring:
       hibernate:
         format_sql: true
 
+  # 이메일 설정
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: haha429315@gmail.com
+    password: qaagqekaqjdchlte
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secretKey: JwtSecretKeyForShortDate
