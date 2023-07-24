@@ -1,8 +1,10 @@
 package com.ssafy.tingbackend.user.service;
 
-import com.ssafy.tingbackend.entity.user.User;
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +52,31 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public UserDto userDetail(Long userId) {
+//        private List<Long> hobbyCodeList;
+//        private List<Long> styleCodeList;
+//        private List<Long> personalityCodeList;
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        return UserDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .phoneNumber(user.getPhoneNumber())
+                .gender(user.getGender().toString())
+                .region(user.getRegion().getName())
+                .birth(user.getBirth())
+                .profileImage(user.getProfileImage())
+                .height(user.getHeight())
+                .introduce(user.getIntroduce())
+                .mbtiCode(user.getMbtiCode().getCode())
+                .drinkingCode(user.getDrinkingCode().getCode())
+                .smokingCode(user.getSmokingCode().getCode())
+                .religionCode(user.getReligionCode().getCode())
+                .jobCode(user.getJobCode().getCode())
+                .build();
+    }
 }
