@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,4 +30,7 @@ public class AdviceBoard extends BaseTimeEntity {
     private String content;
     @ColumnDefault("0")
     private Long hit;
+
+    @OneToMany(mappedBy = "adviceBoard")
+    private List<Comment> comments;
 }

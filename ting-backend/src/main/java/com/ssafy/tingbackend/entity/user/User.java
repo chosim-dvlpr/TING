@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(of = {"id", "email", "nickname", "gender"})
 @DynamicInsert
 public class User extends BaseTimeEntity {
@@ -21,6 +24,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    private String password;
     private String name;
     private String nickname;
     private String phoneNumber;
@@ -35,9 +39,27 @@ public class User extends BaseTimeEntity {
     private String introduce;
 
     // 직업, 음주, 흡연, 종교, MBTI, 성격, 취미, 스타일
-    @OneToOne(fetch = FetchType.LAZY)
-    AdditionalInfo additionalInfo;
+    @OneToOne
+    private AdditionalInfo jobCode;
 
+    @OneToOne
+    private AdditionalInfo drinkingCode;
+
+    @OneToOne
+    private AdditionalInfo religionCode;
+
+    @OneToOne
+    private AdditionalInfo mbtiCode;
+
+    @OneToOne
+    private AdditionalInfo smokingCode;
+
+    @OneToMany(mappedBy = "user")
+    List<UserHobby> userHobbys = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<UserStyle> userStyles = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    List<UserPersonality> userPersonalities = new ArrayList<>();
 
     //not null
     // email password name nickname phone gender region birth point created isremoved
