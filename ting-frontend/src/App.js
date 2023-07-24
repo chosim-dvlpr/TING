@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 
 function App() {
+let navigate = useNavigate()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="mainNav">
+        <div className='navLeft'>
+          <img src="" alt="logo"></img>
+          <Link className="navMenu" to="/">메인</Link>
+          <Link className="navMenu" to="/tutorial">튜토리얼</Link>
+          <Link className="navMenu" to="/community">커뮤니티</Link>
+        </div>
+        <div className='navRight'>
+          <Link className="navMenu" to="/login">로그인</Link>
+          <Link className="navMenu" to="/signup">회원가입</Link>
+        </div>
+      </div>
+      <Routes>
+        <Route path="/" element={<div>홈!</div>}></Route>
+        <Route path="/tutorial" element={<div>튜토리얼!!</div>}></Route>
+        <Route path="/community" element={<div>커뮤니티</div>}></Route>
+        <Route path="/login" element={<div>로그인</div>}></Route>
+        <Route path="/signup" element={<div>회원가입</div>}></Route>
+      </Routes>
+
     </div>
   );
 }
