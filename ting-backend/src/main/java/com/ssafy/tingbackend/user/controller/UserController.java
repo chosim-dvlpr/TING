@@ -70,4 +70,11 @@ public class UserController {
 
         return new DataResponse<>(200, "이메일 찾기 성공", email);
     }
+
+    @GetMapping("/user/nickname/{nickname}")
+    public DataResponse<Boolean> checkNickname(@PathVariable String nickname) {
+        boolean isDuplicate = userService.checkNickname(nickname);
+
+        return new DataResponse<>(200, "닉네임 중복 확인 완료", isDuplicate);
+    }
 }

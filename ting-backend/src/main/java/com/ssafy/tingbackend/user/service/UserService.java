@@ -177,4 +177,8 @@ public class UserService {
         return userRepository.findEmail(name, phoneNumber)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
     }
+
+    public boolean checkNickname(String nickname) {
+        return userRepository.isDuplicatedNickname(nickname);
+    }
 }

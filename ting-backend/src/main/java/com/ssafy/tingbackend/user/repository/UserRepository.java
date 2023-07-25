@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u.email FROM User u WHERE u.name=:name AND u.phoneNumber=:phoneNumber AND u.isRemoved=false")
     Optional<String> findEmail(@Param("name") String name, @Param("phoneNumber") String phoneNumber);
+
+    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.nickname=:nickname AND u.isRemoved=false")
+    boolean isDuplicatedNickname(@Param("nickname") String nickname);
 }
