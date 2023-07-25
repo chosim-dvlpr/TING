@@ -6,10 +6,7 @@ import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Map;
@@ -38,6 +35,12 @@ public class UserController {
         UserResponseDto userResponseDto = userService.userDetail(userId);
 
         return new DataResponse<>(200, "유저 정보 조회 성공", userResponseDto);
+    }
+
+    @DeleteMapping("/user")
+    public void withdrawal(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        userService.withdrawal(userId);
     }
 
 }

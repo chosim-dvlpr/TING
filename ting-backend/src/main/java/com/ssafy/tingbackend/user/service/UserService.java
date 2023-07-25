@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,5 +144,13 @@ public class UserService {
                 .userStyles(styleAdditional)
                 .userPersonalities(personalityAdditional)
                 .build();
+    }
+
+    @Transactional
+    public void withdrawal(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        user.setRemoved(true);
+        user.setRemovedTime(LocalDateTime.now());
     }
 }
