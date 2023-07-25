@@ -84,16 +84,17 @@ public class UserController {
     @GetMapping("/user/email/{email}")
     public DataResponse<String> requestEmail(@PathVariable String email) {
         // 중복 추가하기==================================
-        // mongodb에 insert 추가=============================
         userService.sendEmail(email);
         return new DataResponse<>(200, "이메일 인증 요청 성공");
     }
 
     @PostMapping("/user/emailauth")
     public DataResponse<String> checkEmail(@RequestBody Map<String, String> request) {
-        EmailAuthDto emailAuthDto = userService.getEmailKey(request.get("email"));
+        EmailAuthDto emailAuthDto = userService.getEmailCode(request.get("email"));
+        if(emailAuthDto == null) return new DataResponse<>(401, "유효하지 않은 이메일");
         if(emailAuthDto.getEmail().equals(request.get("email"))
             && emailAuthDto.getKey().equals(request.get("authCode"))) {
+            userService.deleteEmailCode(emailAuthDto);
             return new DataResponse<>(200, "이메일 인증 성공");
         }
         return new DataResponse<>(401, "유효하지 않은 인증 코드");

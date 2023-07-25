@@ -1,5 +1,7 @@
 package com.ssafy.tingbackend.user.service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
@@ -190,6 +192,7 @@ public class UserService {
 
     public void sendEmail(String email) {
         long verifiedCode = Math.round(100000 + Math.random() * 899999);
+        insertCode(email, Long.toString(verifiedCode));
         // 이메일 발신될 데이터 적재
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email); // 수신자 바꾸기
@@ -201,8 +204,18 @@ public class UserService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    public EmailAuthDto getEmailKey(String email) {
+    public EmailAuthDto getEmailCode(String email) {
         EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
         return emailAuthDto;
     }
+
+    public void insertCode(String email, String code) {
+        EmailAuthDto emailAuthDto = new EmailAuthDto(email, code);
+        emailRepository.save(emailAuthDto);
+    }
+
+    public void deleteEmailCode(EmailAuthDto emailAuthDto) {
+        emailRepository.delete(emailAuthDto);
+    }
+
 }
