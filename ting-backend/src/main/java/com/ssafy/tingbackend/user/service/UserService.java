@@ -153,4 +153,12 @@ public class UserService {
         user.setRemoved(true);
         user.setRemovedTime(LocalDateTime.now());
     }
+
+    public boolean checkUser(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if(passwordEncoder.matches(password, user.getPassword())) return true;
+        else return false;
+    }
 }
