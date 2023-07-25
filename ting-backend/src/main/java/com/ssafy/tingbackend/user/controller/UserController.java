@@ -33,6 +33,14 @@ public class UserController {
         return new CommonResponse(200, "회원가입 성공");
     }
 
+
+    @GetMapping("/user/nickname/{nickname}")
+    public DataResponse<Boolean> checkNickname(@PathVariable String nickname) {
+        boolean isDuplicate = userService.checkNickname(nickname);
+
+        return new DataResponse<>(200, "닉네임 중복 확인 완료", isDuplicate);
+    }
+
     @GetMapping("/user")
     public DataResponse<UserResponseDto> userDetail(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
@@ -89,13 +97,6 @@ public class UserController {
             return new DataResponse<>(200, "이메일 인증 성공");
         }
         return new DataResponse<>(401, "유효하지 않은 인증 코드");
-    }
-
-    @GetMapping("/user/nickname/{nickname}")
-    public DataResponse<Boolean> checkNickname(@PathVariable String nickname) {
-        boolean isDuplicate = userService.checkNickname(nickname);
-
-        return new DataResponse<>(200, "닉네임 중복 확인 완료", isDuplicate);
     }
 
 }

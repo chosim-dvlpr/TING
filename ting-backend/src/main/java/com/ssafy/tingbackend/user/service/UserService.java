@@ -70,6 +70,7 @@ public class UserService {
         // 지역 정보 enum 타입으로 변환
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
 
+        // ====선택정보 빈값으로 올때 고려해서 코드 바꾸기====
         // mbti, 음주, 직업, 종교, 흡연 AdditionalInfo 객체로 변환
         user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
         user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
@@ -108,6 +109,10 @@ public class UserService {
         userHobbyRepository.saveAll(userHobbies);
         userPersonalityRepository.saveAll(userPersonalities);
         userStyleRepository.saveAll(userStyles);
+    }
+
+    public boolean checkNickname(String nickname) {
+        return userRepository.isDuplicatedNickname(nickname);
     }
 
     private AdditionalInfo getAdditionalInfo(Long code) {
@@ -199,10 +204,5 @@ public class UserService {
     public EmailAuthDto getEmailKey(String email) {
         EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
         return emailAuthDto;
-    }
-
-    public boolean checkNickname(String nickname) {
-        return userRepository.isDuplicatedNickname(nickname);
-
     }
 }
