@@ -29,12 +29,15 @@ public class User extends BaseTimeEntity {
     private String name;
     private String nickname;
     private String phoneNumber;
+
     @Column(length = 1)
     private String gender;
+
     @Enumerated(EnumType.STRING)
     private SidoType region;
     private LocalDate birth;
     private String profileImage;
+
     @ColumnDefault("0")
     private Long point;
     private Integer height;
@@ -56,14 +59,13 @@ public class User extends BaseTimeEntity {
     @OneToOne
     private AdditionalInfo smokingCode;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<UserHobby> userHobbys = new ArrayList<>();
-    @OneToMany(mappedBy = "user")
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<UserStyle> userStyles = new ArrayList<>();
-    @OneToMany(mappedBy = "user")
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<UserPersonality> userPersonalities = new ArrayList<>();
 
-    //not null
-    // email password name nickname phone gender region birth point created isremoved
-//    @Column(nullable = false)
 }

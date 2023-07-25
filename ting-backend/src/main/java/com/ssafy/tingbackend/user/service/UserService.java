@@ -8,6 +8,7 @@ import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.user.dto.AdditionalInfoDto;
 import com.ssafy.tingbackend.user.dto.EmailAuthDto;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.dto.UserResponseDto;
@@ -82,7 +83,7 @@ public class UserService {
 
         // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
         ArrayList<UserHobby> userHobbies = new ArrayList<>();
-        for(Long hobbyCode : userDto.getHobbyCodeList()) {
+        for (Long hobbyCode : userDto.getHobbyCodeList()) {
             UserHobby userHobby = new UserHobby();
             userHobby.setUser(user);
             userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
@@ -90,7 +91,7 @@ public class UserService {
         }
 
         ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
-        for(Long personalityCode : userDto.getPersonalityCodeList()) {
+        for (Long personalityCode : userDto.getPersonalityCodeList()) {
             UserPersonality userPersonality = new UserPersonality();
             userPersonality.setUser(user);
             userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
@@ -98,7 +99,7 @@ public class UserService {
         }
 
         ArrayList<UserStyle> userStyles = new ArrayList<>();
-        for(Long styleCode : userDto.getStyleCodeList()) {
+        for (Long styleCode : userDto.getStyleCodeList()) {
             UserStyle userStyle = new UserStyle();
             userStyle.setUser(user);
             userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
@@ -127,13 +128,13 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        List<AdditionalInfo> hobbyAdditional = new ArrayList<>();
-        List<AdditionalInfo> styleAdditional = new ArrayList<>();
-        List<AdditionalInfo> personalityAdditional = new ArrayList<>();
+        List<AdditionalInfoDto> hobbyAdditional = new ArrayList<>();
+        List<AdditionalInfoDto> styleAdditional = new ArrayList<>();
+        List<AdditionalInfoDto> personalityAdditional = new ArrayList<>();
 
-        user.getUserHobbys().forEach(hobby -> hobbyAdditional.add(hobby.getAdditionalInfo()));
-        user.getUserStyles().forEach(style -> styleAdditional.add(style.getAdditionalInfo()));
-        user.getUserPersonalities().forEach(personality -> personalityAdditional.add(personality.getAdditionalInfo()));
+        user.getUserHobbys().forEach(hobby -> hobbyAdditional.add(AdditionalInfoDto.of(hobby.getAdditionalInfo())));
+        user.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
+        user.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
 
         return UserResponseDto.builder()
                 .userId(user.getId())
@@ -147,11 +148,11 @@ public class UserService {
                 .profileImage(user.getProfileImage())
                 .height(user.getHeight())
                 .introduce(user.getIntroduce())
-                .mbtiCode(user.getMbtiCode())
-                .drinkingCode(user.getDrinkingCode())
-                .smokingCode(user.getSmokingCode())
-                .religionCode(user.getReligionCode())
-                .jobCode(user.getJobCode())
+                .mbtiCode(AdditionalInfoDto.of(user.getMbtiCode()))
+                .drinkingCode(AdditionalInfoDto.of(user.getDrinkingCode()))
+                .smokingCode(AdditionalInfoDto.of(user.getSmokingCode()))
+                .religionCode(AdditionalInfoDto.of(user.getReligionCode()))
+                .jobCode(AdditionalInfoDto.of(user.getJobCode()))
                 .userHobbys(hobbyAdditional)
                 .userStyles(styleAdditional)
                 .userPersonalities(personalityAdditional)
@@ -170,7 +171,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        if(passwordEncoder.matches(password, user.getPassword())) return true;
+        if (passwordEncoder.matches(password, user.getPassword())) return true;
         else return false;
     }
 
