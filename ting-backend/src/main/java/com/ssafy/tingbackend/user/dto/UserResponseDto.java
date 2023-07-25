@@ -1,6 +1,5 @@
 package com.ssafy.tingbackend.user.dto;
 
-import com.ssafy.tingbackend.entity.user.AdditionalInfo;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -27,13 +26,13 @@ public class UserResponseDto {
     private String introduce;
 
     // 직업, 음주, 흡연, 종교, MBTI, 성격, 취미, 스타일
-    private AdditionalInfo jobCode;
-    private AdditionalInfo drinkingCode;
-    private AdditionalInfo religionCode;
-    private AdditionalInfo mbtiCode;
-    private AdditionalInfo smokingCode;
+    private AdditionalInfoDto jobCode;
+    private AdditionalInfoDto drinkingCode;
+    private AdditionalInfoDto religionCode;
+    private AdditionalInfoDto mbtiCode;
+    private AdditionalInfoDto smokingCode;
 
-    List<AdditionalInfo> userHobbys = new ArrayList<>();
-    List<AdditionalInfo> userStyles = new ArrayList<>();
-    List<AdditionalInfo> userPersonalities = new ArrayList<>();
+    List<AdditionalInfoDto> userHobbys = new ArrayList<>();
+    List<AdditionalInfoDto> userStyles = new ArrayList<>();
+    List<AdditionalInfoDto> userPersonalities = new ArrayList<>();
 }
