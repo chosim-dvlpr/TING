@@ -2,11 +2,12 @@ package com.ssafy.tingbackend.user.service;
 
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
-import com.ssafy.tingbackend.entity.type.SidoType;
-import com.ssafy.tingbackend.entity.user.*;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.type.SidoType;
+import com.ssafy.tingbackend.entity.user.*;
 import com.ssafy.tingbackend.user.dto.UserDto;
+import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -104,5 +107,41 @@ public class UserService {
     private AdditionalInfo getAdditionalInfo(Long code) {
         return additionalInfoRepository.findById(code)
                 .orElseThrow(() -> new CommonException(ExceptionType.ADDITOIONAL_INFO_NOT_FOUND));
+    }
+
+    @Transactional
+    public UserResponseDto userDetail(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        List<AdditionalInfo> hobbyAdditional = new ArrayList<>();
+        List<AdditionalInfo> styleAdditional = new ArrayList<>();
+        List<AdditionalInfo> personalityAdditional = new ArrayList<>();
+
+        user.getUserHobbys().forEach(hobby -> hobbyAdditional.add(hobby.getAdditionalInfo()));
+        user.getUserStyles().forEach(style -> styleAdditional.add(style.getAdditionalInfo()));
+        user.getUserPersonalities().forEach(personality -> personalityAdditional.add(personality.getAdditionalInfo()));
+
+        return UserResponseDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .phoneNumber(user.getPhoneNumber())
+                .gender(user.getGender())
+                .region(user.getRegion() == null ? "" : user.getRegion().getName())
+                .birth(user.getBirth())
+                .profileImage(user.getProfileImage())
+                .height(user.getHeight())
+                .introduce(user.getIntroduce())
+                .mbtiCode(user.getMbtiCode())
+                .drinkingCode(user.getDrinkingCode())
+                .smokingCode(user.getSmokingCode())
+                .religionCode(user.getReligionCode())
+                .jobCode(user.getJobCode())
+                .userHobbys(hobbyAdditional)
+                .userStyles(styleAdditional)
+                .userPersonalities(personalityAdditional)
+                .build();
     }
 }

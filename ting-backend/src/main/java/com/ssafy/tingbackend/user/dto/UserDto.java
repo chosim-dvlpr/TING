@@ -12,13 +12,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    private String userId;
+    private Long userId;
     private String email;
     private String password;
     private String name;
     private String nickname;
     private String phoneNumber;
-    private Character gender;
+    private String gender;
     private String region;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birth;    // 2000-10-31 형태
@@ -27,11 +27,11 @@ public class UserDto {
     private int height;
     private String introduce;
 
-    private long mbtiCode;
-    private long drinkingCode;
-    private long smokingCode;
-    private long religionCode;
-    private long jobCode;
+    private Long mbtiCode;
+    private Long drinkingCode;
+    private Long smokingCode;
+    private Long religionCode;
+    private Long jobCode;
 
     private List<Long> hobbyCodeList;
     private List<Long> styleCodeList;
