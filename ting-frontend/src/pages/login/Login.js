@@ -5,13 +5,6 @@ import basicHttp from "../../api/basicHttp";
 function Login(){
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
-   
-
-  function LoginCheckOut(){
-    console.log(email)
-    console.log(password)
-    console.log('로 로그인 시도')
-  };
 
   const loginFunc = () => {
     // e.preventDefault();
