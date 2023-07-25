@@ -64,4 +64,10 @@ public class UserController {
         return new CommonResponse(200, "비밀번호 변경 성공");
     }
 
+    @PostMapping("/user/email")
+    public DataResponse<String> findEmail(@RequestBody UserDto userDto) {
+        String email = userService.findEmail(userDto);
+
+        return new DataResponse<>(200, "이메일 찾기 성공", email);
+    }
 }
