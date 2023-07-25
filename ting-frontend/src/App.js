@@ -1,6 +1,6 @@
 import './App.css';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-import Login from './pages/login/Login.js'
+import Login from './pages/user/Login.js'
 
 
 function App() {
