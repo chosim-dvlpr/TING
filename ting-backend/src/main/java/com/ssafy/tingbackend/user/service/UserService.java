@@ -161,4 +161,11 @@ public class UserService {
         if(passwordEncoder.matches(password, user.getPassword())) return true;
         else return false;
     }
+
+    @Transactional
+    public void modifyPassword(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(password));
+    }
 }
