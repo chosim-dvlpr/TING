@@ -43,4 +43,12 @@ public class UserController {
         userService.withdrawal(userId);
     }
 
+    @PostMapping("/user/check")
+    public DataResponse<Boolean> checkUser(Principal principal, @RequestBody Map<String, String> passwordMap) {
+        Long userId = Long.parseLong(principal.getName());
+        boolean isChecked = userService.checkUser(userId, passwordMap.get("password"));
+
+        return new DataResponse<>(200, "유저 확인 완료", isChecked);
+    }
+
 }
