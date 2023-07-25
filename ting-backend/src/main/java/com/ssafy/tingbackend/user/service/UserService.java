@@ -6,12 +6,15 @@ import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.user.dto.EmailAuthDto;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,6 +39,8 @@ public class UserService {
     private final UserStyleRepository userStyleRepository;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
+    private final EmailRepository emailRepository;
 
     public Map<String, String> login(UserDto userDto) {
         log.info("{} 유저 로그인 시도", userDto.getEmail());
@@ -178,7 +183,25 @@ public class UserService {
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
     }
 
+    public void sendEmail(String email) {
+        long verifiedCode = Math.round(100000 + Math.random() * 899999);
+        // 이메일 발신될 데이터 적재
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email); // 수신자 바꾸기
+        simpleMailMessage.setSubject("이메일 인증 코드입니다.");
+        simpleMailMessage.setText("아래의 인증 코드를 입력해주세요. \n" +
+                verifiedCode + " \n");
+
+        // 이메일 발신
+        javaMailSender.send(simpleMailMessage);
+    }
+
+    public EmailAuthDto getEmailKey(String email) {
+        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
+        return emailAuthDto;
+
     public boolean checkNickname(String nickname) {
         return userRepository.isDuplicatedNickname(nickname);
+
     }
 }

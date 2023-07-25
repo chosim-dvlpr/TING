@@ -29,6 +29,15 @@ spring:
           auth: true
           starttls:
             enable: true
+  # mongoDB
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: ting
+      authentication-database: admin
+  #      username: qweqwe
+  #      password: 123
 
 jwt:
   secretKey: JwtSecretKeyForShortDate
