@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionAdvice {
 
+    @ExceptionHandler(CommonException.class)
+    public CommonResponse commonExceptionHandler(CommonException e) {
+        /* for Debugging */
+        e.printStackTrace();
+        log.error("common exception occurred: {}", e.getExceptionType().getMessage());
+
+        return new CommonResponse(e.getExceptionType().getCode(), e.getExceptionType().getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     public CommonResponse globalExceptionHandler(Exception e) {
         /* for Debugging */

@@ -1,18 +1,33 @@
 package com.ssafy.tingbackend.user.service;
 
-import com.ssafy.tingbackend.entity.user.User;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.type.SidoType;
+import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.user.dto.AdditionalInfoDto;
+import com.ssafy.tingbackend.user.dto.EmailAuthDto;
 import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.repository.UserRepository;
+import com.ssafy.tingbackend.user.dto.UserResponseDto;
+import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -21,8 +36,14 @@ import java.util.Map;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AdditionalInfoRepository additionalInfoRepository;
+    private final UserHobbyRepository userHobbyRepository;
+    private final UserPersonalityRepository userPersonalityRepository;
+    private final UserStyleRepository userStyleRepository;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
+    private final EmailRepository emailRepository;
 
     public Map<String, String> login(UserDto userDto) {
         log.info("{} 유저 로그인 시도", userDto.getEmail());
@@ -43,12 +64,159 @@ public class UserService {
     }
 
     public void signUp(UserDto userDto) {
-        User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
+        // 기본 정보 UserDto -> User 변환
+        ModelMapper modelMapper = new ModelMapper();
+        User user = modelMapper.map(userDto, User.class);
+
+        // 지역 정보 enum 타입으로 변환
+        user.setRegion(SidoType.getEnumType(userDto.getRegion()));
+
+        // ====선택정보 빈값으로 올때 고려해서 코드 바꾸기====
+        // mbti, 음주, 직업, 종교, 흡연 AdditionalInfo 객체로 변환
+        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
+        ArrayList<UserHobby> userHobbies = new ArrayList<>();
+        for (Long hobbyCode : userDto.getHobbyCodeList()) {
+            UserHobby userHobby = new UserHobby();
+            userHobby.setUser(user);
+            userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
+            userHobbies.add(userHobby);
+        }
+
+        ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
+        for (Long personalityCode : userDto.getPersonalityCodeList()) {
+            UserPersonality userPersonality = new UserPersonality();
+            userPersonality.setUser(user);
+            userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
+            userPersonalities.add(userPersonality);
+        }
+
+        ArrayList<UserStyle> userStyles = new ArrayList<>();
+        for (Long styleCode : userDto.getStyleCodeList()) {
+            UserStyle userStyle = new UserStyle();
+            userStyle.setUser(user);
+            userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
+            userStyles.add(userStyle);
+        }
+        System.out.println(user);
+
+        // DB에 저장
         userRepository.save(user);
+        userHobbyRepository.saveAll(userHobbies);
+        userPersonalityRepository.saveAll(userPersonalities);
+        userStyleRepository.saveAll(userStyles);
     }
 
+    public boolean checkNickname(String nickname) {
+        return userRepository.isDuplicatedNickname(nickname);
+    }
+
+    private AdditionalInfo getAdditionalInfo(Long code) {
+        return additionalInfoRepository.findById(code)
+                .orElseThrow(() -> new CommonException(ExceptionType.ADDITOIONAL_INFO_NOT_FOUND));
+    }
+
+    @Transactional
+    public UserResponseDto userDetail(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        List<AdditionalInfoDto> hobbyAdditional = new ArrayList<>();
+        List<AdditionalInfoDto> styleAdditional = new ArrayList<>();
+        List<AdditionalInfoDto> personalityAdditional = new ArrayList<>();
+
+        user.getUserHobbys().forEach(hobby -> hobbyAdditional.add(AdditionalInfoDto.of(hobby.getAdditionalInfo())));
+        user.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
+        user.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
+
+        return UserResponseDto.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .phoneNumber(user.getPhoneNumber())
+                .gender(user.getGender())
+                .region(user.getRegion() == null ? "" : user.getRegion().getName())
+                .birth(user.getBirth())
+                .profileImage(user.getProfileImage())
+                .height(user.getHeight())
+                .introduce(user.getIntroduce())
+                .mbtiCode(AdditionalInfoDto.of(user.getMbtiCode()))
+                .drinkingCode(AdditionalInfoDto.of(user.getDrinkingCode()))
+                .smokingCode(AdditionalInfoDto.of(user.getSmokingCode()))
+                .religionCode(AdditionalInfoDto.of(user.getReligionCode()))
+                .jobCode(AdditionalInfoDto.of(user.getJobCode()))
+                .userHobbys(hobbyAdditional)
+                .userStyles(styleAdditional)
+                .userPersonalities(personalityAdditional)
+                .build();
+    }
+
+    @Transactional
+    public void withdrawal(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        user.setRemoved(true);
+        user.setRemovedTime(LocalDateTime.now());
+    }
+
+    public boolean checkUser(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if (passwordEncoder.matches(password, user.getPassword())) return true;
+        else return false;
+    }
+
+    @Transactional
+    public void modifyPassword(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    public String findEmail(UserDto userDto) {
+        String name = userDto.getName();
+        String phoneNumber = userDto.getPhoneNumber();
+
+        // 이름, 전화번호가 중복되는 경우를 생각해야 할까..?
+        return userRepository.findEmail(name, phoneNumber)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+    }
+
+    public void sendEmail(String email) {
+        long verifiedCode = Math.round(100000 + Math.random() * 899999);
+        insertCode(email, Long.toString(verifiedCode));
+        // 이메일 발신될 데이터 적재
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email); // 수신자 바꾸기
+        simpleMailMessage.setSubject("이메일 인증 코드입니다.");
+        simpleMailMessage.setText("아래의 인증 코드를 입력해주세요. \n" +
+                verifiedCode + " \n");
+
+        // 이메일 발신
+        javaMailSender.send(simpleMailMessage);
+    }
+
+    public EmailAuthDto getEmailCode(String email) {
+        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
+        return emailAuthDto;
+    }
+
+    public void insertCode(String email, String code) {
+        EmailAuthDto emailAuthDto = new EmailAuthDto(email, code);
+        emailRepository.save(emailAuthDto);
+    }
+
+    public void deleteEmailCode(EmailAuthDto emailAuthDto) {
+        emailRepository.delete(emailAuthDto);
+    }
 
 }
