@@ -13,9 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseDto {
-    private Long id;
+    private Long userId;
     private String email;
-    private String password;
     private String name;
     private String nickname;
     private String phoneNumber;

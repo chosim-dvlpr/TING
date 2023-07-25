@@ -27,8 +27,8 @@ public class User extends BaseTimeEntity {
     private String name;
     private String nickname;
     private String phoneNumber;
-    @Column(columnDefinition = "char(1)")
-    private Character gender;
+    @Column(length = 1)
+    private String gender;
     @Enumerated(EnumType.STRING)
     private SidoType region;
     private LocalDate birth;
