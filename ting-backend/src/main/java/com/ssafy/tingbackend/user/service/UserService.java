@@ -199,5 +199,9 @@ public class UserService {
     public EmailAuthDto getEmailKey(String email) {
         EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
         return emailAuthDto;
+
+    public boolean checkNickname(String nickname) {
+        return userRepository.isDuplicatedNickname(nickname);
+
     }
 }
