@@ -28,7 +28,7 @@ function Login(){
       };
 
       basicHttp.post('/user/login', data).then((response) => {})
-    
+      .catch(() => {console.log("실패")})
     }
   }
 
