@@ -17,6 +17,8 @@ public enum ExceptionType {
 
     USER_NOT_FOUND(4100, "존재하지 않는 유저입니다."),
 
+    ADDITOIONAL_INFO_NOT_FOUND(4200, "부가정보 코드가 존재하지 않습니다."),
+
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 
     private final int code;

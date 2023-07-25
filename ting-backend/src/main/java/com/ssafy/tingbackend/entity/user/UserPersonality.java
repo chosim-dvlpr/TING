@@ -3,12 +3,14 @@ package com.ssafy.tingbackend.entity.user;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserPersonality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

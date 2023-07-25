@@ -1,7 +1,5 @@
 package com.ssafy.tingbackend.user.dto;
 
-import com.ssafy.tingbackend.entity.type.SidoType;
-import com.ssafy.tingbackend.entity.user.User;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,7 +18,7 @@ public class UserDto {
     private String name;
     private String nickname;
     private String phoneNumber;
-    private Character gender;
+    private String gender;
     private String region;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birth;    // 2000-10-31 형태
@@ -41,23 +39,5 @@ public class UserDto {
 
     public void encodePassword(String encodedPassword) {
         this.password = encodedPassword;
-    }
-
-    public User toEntity() {
-        return User.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .nickname(nickname)
-                .phoneNumber(phoneNumber)
-                .gender(gender)
-                .region(SidoType.valueOf(region))
-                .birth(birth)
-                .profileImage(profileImage)
-                .height(height)
-                .introduce(introduce)
-//                .mbtiCode()  // 참조 타입들 어떻게 바꾸는거지..
-                // drinking, smoking, religion, job 추가해야함
-                .build();
     }
 }
