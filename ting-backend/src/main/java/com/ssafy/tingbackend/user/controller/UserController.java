@@ -2,6 +2,7 @@ package com.ssafy.tingbackend.user.controller;
 
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
+import com.ssafy.tingbackend.user.dto.EmailAuthDto;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.service.UserService;
@@ -70,4 +71,23 @@ public class UserController {
 
         return new DataResponse<>(200, "이메일 찾기 성공", email);
     }
+
+    @GetMapping("/user/email/{email}")
+    public DataResponse<String> requestEmail(@PathVariable String email) {
+        // 중복 추가하기==================================
+        // mongodb에 insert 추가=============================
+        userService.sendEmail(email);
+        return new DataResponse<>(200, "이메일 인증 요청 성공");
+    }
+
+    @PostMapping("/user/emailauth")
+    public DataResponse<String> checkEmail(@RequestBody Map<String, String> request) {
+        EmailAuthDto emailAuthDto = userService.getEmailKey(request.get("email"));
+        if(emailAuthDto.getEmail().equals(request.get("email"))
+            && emailAuthDto.getKey().equals(request.get("authCode"))) {
+            return new DataResponse<>(200, "이메일 인증 성공");
+        }
+        return new DataResponse<>(401, "유효하지 않은 인증 코드");
+    }
+
 }
