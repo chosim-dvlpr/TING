@@ -168,4 +168,13 @@ public class UserService {
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         user.setPassword(passwordEncoder.encode(password));
     }
+
+    public String findEmail(UserDto userDto) {
+        String name = userDto.getName();
+        String phoneNumber = userDto.getPhoneNumber();
+
+        // 이름, 전화번호가 중복되는 경우를 생각해야 할까..?
+        return userRepository.findEmail(name, phoneNumber)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+    }
 }
