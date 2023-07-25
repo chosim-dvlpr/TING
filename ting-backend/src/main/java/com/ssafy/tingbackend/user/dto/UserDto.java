@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    private String userId;
+    private Long userId;
     private String email;
     private String password;
     private String name;
@@ -29,11 +29,11 @@ public class UserDto {
     private int height;
     private String introduce;
 
-    private int mbtiCode;
-    private int drinkingCode;
-    private int smokingCode;
-    private int religionCode;
-    private int jobCode;
+    private Long mbtiCode;
+    private Long drinkingCode;
+    private Long smokingCode;
+    private Long religionCode;
+    private Long jobCode;
 
     private List<Long> hobbyCodeList;
     private List<Long> styleCodeList;
