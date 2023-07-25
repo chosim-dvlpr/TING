@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.user.controller;
 
+import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.dto.UserResponseDto;
@@ -25,8 +26,10 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public void signUp(@RequestBody UserDto userDto) {
+    public CommonResponse signUp(@RequestBody UserDto userDto) {
         userService.signUp(userDto);
+
+        return new CommonResponse(200, "회원가입 성공");
     }
 
     @GetMapping("/user")
@@ -38,9 +41,11 @@ public class UserController {
     }
 
     @DeleteMapping("/user")
-    public void withdrawal(Principal principal) {
+    public CommonResponse withdrawal(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         userService.withdrawal(userId);
+
+        return new CommonResponse(200, "회원 탈퇴 성공");
     }
 
     @PostMapping("/user/check")
@@ -49,6 +54,14 @@ public class UserController {
         boolean isChecked = userService.checkUser(userId, passwordMap.get("password"));
 
         return new DataResponse<>(200, "유저 확인 완료", isChecked);
+    }
+
+    @PutMapping("/user/password")
+    public CommonResponse modifyPassword(Principal principal, @RequestBody Map<String, String> passwordMap) {
+        Long userId = Long.parseLong(principal.getName());
+        userService.modifyPassword(userId, passwordMap.get("password"));
+
+        return new CommonResponse(200, "비밀번호 변경 성공");
     }
 
 }
