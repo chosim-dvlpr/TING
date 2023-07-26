@@ -53,5 +53,5 @@ public class Comment extends BaseTimeEntity {
     private Long likeCount;
 
     @OneToMany(mappedBy = "comment")
-    List<CommentLike> commentLikes = new ArrayList<>();
+    private List<CommentLike> commentLikes = new ArrayList<>();
 }

@@ -60,12 +60,12 @@ public class User extends BaseTimeEntity {
     private AdditionalInfo smokingCode;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    List<UserHobby> userHobbys = new ArrayList<>();
+    private List<UserHobby> userHobbys = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    List<UserStyle> userStyles = new ArrayList<>();
+    private List<UserStyle> userStyles = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    List<UserPersonality> userPersonalities = new ArrayList<>();
+    private List<UserPersonality> userPersonalities = new ArrayList<>();
 
 }
