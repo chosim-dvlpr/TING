@@ -145,4 +145,15 @@ public class UserController {
         return new CommonResponse(200, "이메일 인증 성공");
     }
 
+    /**
+     * 비밀번호 찾기 API (인증코드 확인)
+     * @param request 이메일, 이름, 전화번호
+     * @return Only code and message
+     */
+    @PostMapping("/user/password")
+    public CommonResponse findPassword(@RequestBody UserDto userDto) {
+        userService.findPassword(userDto);
+        return new CommonResponse(200, "임시 비밀번호 전송 성공");
+    }
+
 }

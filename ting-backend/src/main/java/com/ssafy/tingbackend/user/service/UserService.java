@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -235,4 +232,49 @@ public class UserService {
         else return false;
     }
 
+    @Transactional
+    public void findPassword(UserDto userDto) {
+        String name = userDto.getName();
+        String phoneNumber = userDto.getPhoneNumber();
+        String email = userDto.getEmail();
+
+        User user = userRepository.findPassword(name, phoneNumber, email)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        // 이메일 전송
+        String password = createKey();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("임시 비밀번호입니다.");
+        simpleMailMessage.setText("아래의 비밀번호를 입력해주세요. \n" +
+                password + " \n");
+        javaMailSender.send(simpleMailMessage);
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    public static String createKey() {
+        StringBuffer key = new StringBuffer();
+        Random rnd = new Random();
+
+        for (int i = 0; i < 8; i++) { // 인증코드 8자리
+            int index = rnd.nextInt(3); // 0~2 까지 랜덤
+
+            switch (index) {
+                case 0:
+                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+                    break;
+                case 1:
+                    // 특수문자
+                    key.append((char)((int) (rnd.nextInt(15)+33)));
+//                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
+                    //  A~Z
+                    break;
+                case 2:
+                    key.append((rnd.nextInt(10)));
+                    // 0~9
+                    break;
+            }
+        }
+        return key.toString();
+    }
 }
