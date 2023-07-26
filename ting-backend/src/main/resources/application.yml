@@ -34,11 +34,11 @@ spring:
     mongodb:
       host: i9b107.p.ssafy.io
       port: 5158
-      database: ting
+      database: admin
       authentication-database: admin
       auto-index-creation: true
-  #      username: qweqwe
-  #      password: 123
+      username: ting-mongo
+      password: 1q2w3e4r-ting-mongo
 
 jwt:
   secretKey: JwtSecretKeyForShortDate
