@@ -6,7 +6,8 @@ import basicHttp from '../../../api/basicHttp';
 
 function InputEmail(){
   // let [email, setEmail] = useState("")
-  let email = useSelector((state) => state.signupReducer.email )
+  let email = useSelector((state) => state.signupReducer.email);
+  let [msg, setMsg] = useState("");
   const Navigate = useNavigate()
 
   let dispatch = useDispatch();
@@ -21,15 +22,23 @@ function InputEmail(){
           dispatch({ type: "TEXT", email: e.target.value })
         }
         }} placeholder="이메일"/>
-      <button onClick={()=>{
+      <button onClick={() => {
           basicHttp.get(`/user/email/${email}`).then((response) => {
-            if (response.code === 200) {
-              console.log('성공');
+            // 중복체크 성공 시 인증화면으로 이동
+            if (response.data.code === 200) {
+              alert("인증 메일이 전송되었습니다.");
+              Navigate("/signup/certEmail");
+            }
+            else {
+              console.log("중복");
+              setMsg(response.data.message);
             }
           })
           .catch(() => console.log("실패"))
         }}>중복체크</button>
-      <button onClick={()=>{ Navigate("/signup/certEmail")}}>인증하기</button>
+      <br />
+      {msg}
+      {/* <button onClick={()=>{ Navigate("/signup/certEmail")}}>인증하기</button> */}
     </div>
   )
 }
