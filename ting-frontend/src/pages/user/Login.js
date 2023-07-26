@@ -16,7 +16,6 @@ function Login(){
   // };
 
   const loginFunc = () => {
-    // e.preventDefault();
     if (!email) {
       alert("Email을 입력하세요!");
     }
@@ -30,8 +29,8 @@ function Login(){
       };
 
       basicHttp.post('/user/login', data).then((response) => {
-        if (response.data === 200) {
-
+        if (response.code === 200) {
+          console.log('성공');
         }
       })
       .catch(() => {console.log("실패")})
@@ -50,10 +49,6 @@ function Login(){
       <button onClick={ ()=>{
         loginFunc();
       } }>로그인</button>
-
-      {/* <h3>이메일 : { userEmail }</h3>
-      <h3>비밀번호 : { userPassword }</h3>
-      <button onClick={() => { clickChange() }}>변경</button> */}
     </div>
   )
 };
