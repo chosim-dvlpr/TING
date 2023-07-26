@@ -42,3 +42,10 @@ spring:
 
 jwt:
   secretKey: JwtSecretKeyForShortDate
+
+ncloud:
+  sens:
+    serviceId: ncp:sms:kr:307962030868:ting
+    accessKeyId: BbrWAOXUJtjrBbP71wP3
+    secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
+    senderPhone: 01050659767

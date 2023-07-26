@@ -24,4 +24,8 @@ public class UserHobby {
     private AdditionalInfo additionalInfo;
 
     // 내용? enum?
+    public UserHobby(User user, AdditionalInfo additionalInfo) {
+        this.user = user;
+        this.additionalInfo = additionalInfo;
+    }
 }

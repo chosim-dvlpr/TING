@@ -22,4 +22,9 @@ public class UserPersonality {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "personality_code")
     private AdditionalInfo additionalInfo;
+
+    public UserPersonality(User user, AdditionalInfo additionalInfo) {
+        this.user = user;
+        this.additionalInfo = additionalInfo;
+    }
 }
