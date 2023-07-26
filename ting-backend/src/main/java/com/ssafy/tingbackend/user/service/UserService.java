@@ -73,45 +73,51 @@ public class UserService {
         // 지역 정보 enum 타입으로 변환
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
 
-        // ====선택정보 빈값으로 올때 고려해서 코드 바꾸기====
         // mbti, 음주, 직업, 종교, 흡연 AdditionalInfo 객체로 변환
-        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
-        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
-        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
-        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
-        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+        if(userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        if(userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        if(userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        if(userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        if(userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        userRepository.save(user); // DB에 저장
 
         // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
-        ArrayList<UserHobby> userHobbies = new ArrayList<>();
-        for (Long hobbyCode : userDto.getHobbyCodeList()) {
-            UserHobby userHobby = new UserHobby();
-            userHobby.setUser(user);
-            userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
-            userHobbies.add(userHobby);
+        if(userDto.getHobbyCodeList().size() > 0) {
+            ArrayList<UserHobby> userHobbies = new ArrayList<>();
+            for (Long hobbyCode : userDto.getHobbyCodeList()) {
+                UserHobby userHobby = new UserHobby();
+                userHobby.setUser(user);
+                userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
+                userHobbies.add(userHobby);
+            }
+
+            userHobbyRepository.saveAll(userHobbies); // DB에 저장
         }
 
-        ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
-        for (Long personalityCode : userDto.getPersonalityCodeList()) {
-            UserPersonality userPersonality = new UserPersonality();
-            userPersonality.setUser(user);
-            userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
-            userPersonalities.add(userPersonality);
+        if(userDto.getPersonalityCodeList().size() > 0) {
+            ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
+            for (Long personalityCode : userDto.getPersonalityCodeList()) {
+                UserPersonality userPersonality = new UserPersonality();
+                userPersonality.setUser(user);
+                userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
+                userPersonalities.add(userPersonality);
+            }
+
+            userPersonalityRepository.saveAll(userPersonalities); // DB에 저장
         }
 
-        ArrayList<UserStyle> userStyles = new ArrayList<>();
-        for (Long styleCode : userDto.getStyleCodeList()) {
-            UserStyle userStyle = new UserStyle();
-            userStyle.setUser(user);
-            userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
-            userStyles.add(userStyle);
-        }
-        System.out.println(user);
+        if(userDto.getStyleCodeList().size() > 0) {
+            ArrayList<UserStyle> userStyles = new ArrayList<>();
+            for (Long styleCode : userDto.getStyleCodeList()) {
+                UserStyle userStyle = new UserStyle();
+                userStyle.setUser(user);
+                userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
+                userStyles.add(userStyle);
+            }
 
-        // DB에 저장
-        userRepository.save(user);
-        userHobbyRepository.saveAll(userHobbies);
-        userPersonalityRepository.saveAll(userPersonalities);
-        userStyleRepository.saveAll(userStyles);
+            userStyleRepository.saveAll(userStyles); // DB에 저장
+        }
     }
 
     public boolean checkNickname(String nickname) {
