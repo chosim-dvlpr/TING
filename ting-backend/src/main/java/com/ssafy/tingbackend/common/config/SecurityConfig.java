@@ -27,7 +27,6 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .headers().disable()
-                .cors().and()
                 // 예외처리 핸들러 등록
 //                .exceptionHandling()
 //                .accessDeniedHandler(accessDeniedHandler)   // 권한이 없을때 동작
