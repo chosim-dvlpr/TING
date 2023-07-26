@@ -221,31 +221,42 @@ public class UserService {
 
     public void authPhoneNumber(String phoneNumber) {
         // 인증번호 생성
-        Long verifiedCode = Math.round(1000 + Math.random() * 8999);
+        Long authCode = Math.round(1000 + Math.random() * 8999);
 
         // 문자 전송 - 과금 조심!
-//        String messageContent = "TING 전화번호 인증 코드입니다.\n[" + verifiedCode + "]";
-//        Long time = System.currentTimeMillis();
-//        try {
-//            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
-//            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            throw new CommonException(ExceptionType.SMS_SEND_FAILED);
-//        }
+        String messageContent = "TING 전화번호 인증 코드입니다.\n" +
+                                "[" + authCode + "]";
+        Long time = System.currentTimeMillis();
+        try {
+            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
+            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        }
 
-        // 같은 전화번호로 이미 인증코드가 존재하는 경우 삭제
-        Optional<PhoneNumberAuthDto> findPhoneNumber = phoneNumberRepository.findByPhoneNumber(phoneNumber);
-        if(findPhoneNumber.isPresent()) {
-            phoneNumberRepository.delete(findPhoneNumber.get());
+        // 같은 전화번호로 이미 인증코드가 존재하는 경우 이전 코드 삭제
+        Optional<PhoneNumberAuthDto> findPhoneNumberAuth = phoneNumberRepository.findByPhoneNumber(phoneNumber);
+        if(findPhoneNumberAuth.isPresent()) {
+            phoneNumberRepository.delete(findPhoneNumberAuth.get());
         }
         // 인증코드 몽고 DB에 저장
-        insertPhoneAuthCode(phoneNumber, verifiedCode.toString());
+        insertPhoneAuthCode(phoneNumber, authCode.toString());
     }
 
-    private void insertPhoneAuthCode(String phoneNumber, String verifiedCode) {
-        PhoneNumberAuthDto phoneNumberAuthDto = new PhoneNumberAuthDto(phoneNumber, verifiedCode);
+    private void insertPhoneAuthCode(String phoneNumber, String authCode) {
+        PhoneNumberAuthDto phoneNumberAuthDto = new PhoneNumberAuthDto(phoneNumber, authCode);
         phoneNumberRepository.save(phoneNumberAuthDto);
+    }
+
+    public void validatePhoneAuthCode(String phoneNumber, String authCode) {
+        PhoneNumberAuthDto phoneNumberAuthDto = phoneNumberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new CommonException(ExceptionType.PHONE_NUMBER_NOT_FOUND));
+
+        if (!phoneNumberAuthDto.getAuthCode().equals(authCode)) {
+            throw new CommonException(ExceptionType.PHONE_AUTH_CODE_NOT_MATCH);
+        }
+        phoneNumberRepository.delete(phoneNumberAuthDto);  // 인증 성공 시 DB에서 데이터 삭제
     }
 
     @Transactional

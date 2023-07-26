@@ -170,10 +170,28 @@ public class UserController {
         return new CommonResponse(200, "이메일 인증 성공");
     }
 
+    /**
+     * 전화번호 인증 요청 API (문자로 인증코드 전송)
+     *
+     * @param phoneNumber 전화번호
+     * @return Only code and message
+     */
     @GetMapping("/user/phoneauth/{phoneNumber}")
-    public CommonResponse authPhoneNumber(@PathVariable String phoneNumber) {
+    public CommonResponse requestPhoneNumber(@PathVariable String phoneNumber) {
         userService.authPhoneNumber(phoneNumber);
         return new CommonResponse(200, "전화번호 인증 요청 성공");
+    }
+
+    /**
+     * 전화번호 인증 코드 확인 API
+     *
+     * @param requestMap 전화번호, 인증코드
+     * @return Only code and message
+     */
+    @PostMapping("/user/phoneauth")
+    public CommonResponse checkPhoneNumber(@RequestBody Map<String, String> requestMap) {
+        userService.validatePhoneAuthCode(requestMap.get("phoneNumber"), requestMap.get("authCode"));
+        return new CommonResponse(200, "전화번호 인증 성공");
     }
 
     /**
