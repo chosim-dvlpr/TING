@@ -19,6 +19,10 @@ public enum ExceptionType {
 
     ADDITOIONAL_INFO_NOT_FOUND(4200, "부가정보 코드가 존재하지 않습니다."),
 
+    DUPLICATED_EMAIL(4300, "중복된 이메일입니다."),
+    EMAIL_NOT_FOUND(4301, "존재하지 않는 이메일입니다"),
+    EMAIL_CODE_NOT_MATCH(4302, "이메일 인증코드가 틀렸습니다."),
+
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 
