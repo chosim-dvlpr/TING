@@ -32,8 +32,8 @@ spring:
   # mongoDB
   data:
     mongodb:
-      host: localhost
-      port: 27017
+      host: i9b107.p.ssafy.io
+      port: 5158
       database: ting
       authentication-database: admin
       auto-index-creation: true
