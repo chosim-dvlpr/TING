@@ -20,12 +20,22 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 로그인 API
+     * @param userDto email, password
+     * @return access-token, refresh-token
+     */
     @PostMapping("/user/login")
     public DataResponse<Map<String, String>> login(@RequestBody UserDto userDto) {
         Map<String, String> token = userService.login(userDto);
         return new DataResponse<>(200, "로그인 성공", token);
     }
 
+    /**
+     * 회원가입 API
+     * @param userDto all
+     * @return Only code and message
+     */
     @PostMapping("/user/signup")
     public CommonResponse signUp(@RequestBody UserDto userDto) {
         userService.signUp(userDto);
@@ -33,7 +43,11 @@ public class UserController {
         return new CommonResponse(200, "회원가입 성공");
     }
 
-
+    /**
+     * 닉네임 중복 확인 API
+     * @param nickname 닉네임
+     * @return 중복 여부 (true, false)
+     */
     @GetMapping("/user/nickname/{nickname}")
     public DataResponse<Boolean> checkNickname(@PathVariable String nickname) {
         boolean isDuplicate = userService.checkNickname(nickname);
@@ -41,6 +55,11 @@ public class UserController {
         return new DataResponse<>(200, "닉네임 중복 확인 완료", isDuplicate);
     }
 
+    /**
+     * 유저 상세 정보 조회 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @return 유저 상세 정보
+     */
     @GetMapping("/user")
     public DataResponse<UserResponseDto> userDetail(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
@@ -49,6 +68,11 @@ public class UserController {
         return new DataResponse<>(200, "유저 정보 조회 성공", userResponseDto);
     }
 
+    /**
+     * 회원 탈퇴 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @return Only code and message
+     */
     @DeleteMapping("/user")
     public CommonResponse withdrawal(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
@@ -57,6 +81,12 @@ public class UserController {
         return new CommonResponse(200, "회원 탈퇴 성공");
     }
 
+    /**
+     * 회원 확인 API (비밀번호만 입력)
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param passwordMap 비밀번호
+     * @return 회원 확인 여부 (true, false)
+     */
     @PostMapping("/user/check")
     public DataResponse<Boolean> checkUser(Principal principal, @RequestBody Map<String, String> passwordMap) {
         Long userId = Long.parseLong(principal.getName());
@@ -65,6 +95,12 @@ public class UserController {
         return new DataResponse<>(200, "유저 확인 완료", isChecked);
     }
 
+    /**
+     * 비밀번호 변경 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param passwordMap 비밀번호
+     * @return Only code and message
+     */
     @PutMapping("/user/password")
     public CommonResponse modifyPassword(Principal principal, @RequestBody Map<String, String> passwordMap) {
         Long userId = Long.parseLong(principal.getName());
@@ -73,6 +109,11 @@ public class UserController {
         return new CommonResponse(200, "비밀번호 변경 성공");
     }
 
+    /**
+     * 이메일 찾기 API
+     * @param userDto 이름, 전화번호
+     * @return 이메일
+     */
     @PostMapping("/user/email")
     public DataResponse<String> findEmail(@RequestBody UserDto userDto) {
         String email = userService.findEmail(userDto);
@@ -81,6 +122,11 @@ public class UserController {
     }
 
 
+    /**
+     * 이메일 인증 요청 API (이메일로 인증코드 전송)
+     * @param email 이메일
+     * @return Only code and message
+     */
     @GetMapping("/user/email/{email}")
     public DataResponse<String> requestEmail(@PathVariable String email) {
         // 중복 추가하기==================================
@@ -88,6 +134,11 @@ public class UserController {
         return new DataResponse<>(200, "이메일 인증 요청 성공");
     }
 
+    /**
+     * 이메일 코드 인증 API (인증코드 확인)
+     * @param request 이메일, 인증코드
+     * @return Only code and message
+     */
     @PostMapping("/user/emailauth")
     public DataResponse<String> checkEmail(@RequestBody Map<String, String> request) {
         EmailAuthDto emailAuthDto = userService.getEmailCode(request.get("email"));
