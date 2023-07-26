@@ -29,8 +29,14 @@ function Login(){
       };
 
       basicHttp.post('/user/login', data).then((response) => {
-        if (response.code === 200) {
+        if (response.data.code === 200) {
           console.log('성공');
+          console.log(response.data.data);
+          localStorage.setItem('access-token', response.data.data['access-token']);
+          localStorage.setItem('refresh-token', response.data.data['refresh-token']);
+        }
+        else {
+          console.log('아이디/비밀번호가 틀립니다.');
         }
       })
       .catch(() => {console.log("실패")})

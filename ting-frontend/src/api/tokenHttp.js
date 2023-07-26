@@ -2,6 +2,8 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import dayjs from "dayjs";
 
+// 토큰이 필요한 인증에 사용
+
 const baseURL = process.env.REACT_APP_SERVER_URL;
 
 const tokenHttp = axios.create({
