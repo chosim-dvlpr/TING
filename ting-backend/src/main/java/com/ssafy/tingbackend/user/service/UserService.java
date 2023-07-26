@@ -1,6 +1,5 @@
 package com.ssafy.tingbackend.user.service;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
@@ -211,9 +210,14 @@ public class UserService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    public EmailAuthDto getEmailCode(String email) {
-        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
-        return emailAuthDto;
+    public void validateEmailCode(String email, String authCode) {
+        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
+                .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
+
+        if (!emailAuthDto.getKey().equals(authCode)) {
+            throw new CommonException(ExceptionType.EMAIL_CODE_NOT_MATCH);
+        }
+        emailRepository.delete(emailAuthDto);
     }
 
     public void insertCode(String email, String code) {
@@ -221,8 +225,9 @@ public class UserService {
         emailRepository.save(emailAuthDto);
     }
 
-    public void deleteEmailCode(EmailAuthDto emailAuthDto) {
-        emailRepository.delete(emailAuthDto);
+    public boolean checkDuplicatedEmail(String email) {
+        if(userRepository.findByEmail(email).isPresent()) return true;
+        else return false;
     }
 
 }

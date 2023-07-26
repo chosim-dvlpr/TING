@@ -128,10 +128,10 @@ public class UserController {
      * @return Only code and message
      */
     @GetMapping("/user/email/{email}")
-    public DataResponse<String> requestEmail(@PathVariable String email) {
-        // 중복 추가하기==================================
+    public CommonResponse requestEmail(@PathVariable String email) {
+        if (userService.checkDuplicatedEmail(email)) return new CommonResponse(400, "중복된 이메일");
         userService.sendEmail(email);
-        return new DataResponse<>(200, "이메일 인증 요청 성공");
+        return new CommonResponse(200, "이메일 인증 요청 성공");
     }
 
     /**
@@ -140,15 +140,9 @@ public class UserController {
      * @return Only code and message
      */
     @PostMapping("/user/emailauth")
-    public DataResponse<String> checkEmail(@RequestBody Map<String, String> request) {
-        EmailAuthDto emailAuthDto = userService.getEmailCode(request.get("email"));
-        if(emailAuthDto == null) return new DataResponse<>(401, "유효하지 않은 이메일");
-        if(emailAuthDto.getEmail().equals(request.get("email"))
-            && emailAuthDto.getKey().equals(request.get("authCode"))) {
-            userService.deleteEmailCode(emailAuthDto);
-            return new DataResponse<>(200, "이메일 인증 성공");
-        }
-        return new DataResponse<>(401, "유효하지 않은 인증 코드");
+    public CommonResponse checkEmail(@RequestBody Map<String, String> request) {
+        userService.validateEmailCode(request.get("email"), request.get("authCode"));
+        return new CommonResponse(200, "이메일 인증 성공");
     }
 
 }

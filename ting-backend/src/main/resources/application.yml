@@ -36,6 +36,7 @@ spring:
       port: 27017
       database: ting
       authentication-database: admin
+      auto-index-creation: true
   #      username: qweqwe
   #      password: 123
 
