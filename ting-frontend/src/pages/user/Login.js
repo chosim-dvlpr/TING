@@ -2,12 +2,20 @@ import { useState } from "react";
 import basicHttp from "../../api/basicHttp";
 // import tokenHttp from "../../api/tokenHttp";
 
+import { useSelector, useDispatch } from "react-redux";
+
 function Login(){
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
 
+  let dispatch = useDispatch();
+  // let userEmail = useSelector((state) => { return state.userReducer.email })
+  // let userPassword = useSelector((state) => { return state.userReducer.password })
+  // let changeEmail = () => {
+  //   dispatch({ type: 200, email: email, password: password })
+  // };
+
   const loginFunc = () => {
-    // e.preventDefault();
     if (!email) {
       alert("Email을 입력하세요!");
     }
@@ -20,7 +28,17 @@ function Login(){
         password
       };
 
-      basicHttp.post('/user/login', data).then((response) => {})
+      basicHttp.post('/user/login', data).then((response) => {
+        if (response.data.code === 200) {
+          console.log('성공');
+          console.log(response.data.data);
+          localStorage.setItem('access-token', response.data.data['access-token']);
+          localStorage.setItem('refresh-token', response.data.data['refresh-token']);
+        }
+        else {
+          console.log('아이디/비밀번호가 틀립니다.');
+        }
+      })
       .catch(() => {console.log("실패")})
     }
   }
