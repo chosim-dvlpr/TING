@@ -27,6 +27,8 @@ public enum ExceptionType {
     PHONE_NUMBER_NOT_FOUND(4401, "존재하지 않는 전화번호입니다."),
     PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다."),
 
+    QNA_NOT_FOUND(4500, "문의글이 존재하지 않습니다."),
+
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 
     private final int code;
