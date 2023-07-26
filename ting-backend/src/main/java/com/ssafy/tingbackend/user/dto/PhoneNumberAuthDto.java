@@ -18,14 +18,14 @@ public class PhoneNumberAuthDto {
     @Id
     private String id;
     private String phoneNumber;
-    private String verifiedCode;
+    private String authCode;
 
     @Indexed(expireAfterSeconds = 600)
     private LocalDateTime createdAt;
 
     public PhoneNumberAuthDto(String phoneNumber, String verifiedCode) {
         this.phoneNumber = phoneNumber;
-        this.verifiedCode = verifiedCode;
+        this.authCode = verifiedCode;
         this.createdAt = LocalDateTime.now();
     }
 }
