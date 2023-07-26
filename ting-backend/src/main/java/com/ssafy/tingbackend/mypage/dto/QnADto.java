@@ -1,11 +1,8 @@
 package com.ssafy.tingbackend.mypage.dto;
 
+import com.ssafy.tingbackend.entity.QnA;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +17,16 @@ public class QnADto {
     private String answer;
     private LocalDateTime createdTime;
     private LocalDateTime completedTime;
+
+    public static QnADto of(QnA qna, Long userId) {
+        return QnADto.builder()
+                .userId(userId)
+                .qnaId(qna.getId())
+                .title(qna.getTitle())
+                .content(qna.getContent())
+                .answer(qna.getAnswer())
+                .createdTime(qna.getCreatedTime())
+                .completedTime(qna.getCompletedTime())
+                .build();
+    }
 }
