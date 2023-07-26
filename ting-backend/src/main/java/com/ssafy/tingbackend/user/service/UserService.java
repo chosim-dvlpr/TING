@@ -1,16 +1,12 @@
 package com.ssafy.tingbackend.user.service;
 
-import com.mongodb.DBObject;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
-import com.ssafy.tingbackend.user.dto.AdditionalInfoDto;
-import com.ssafy.tingbackend.user.dto.EmailAuthDto;
-import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.dto.UserResponseDto;
+import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -43,6 +36,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
+    private final PhoneNumberRepository phoneNumberRepository;
+
+    private final SmsService smsService;
 
     public Map<String, String> login(UserDto userDto) {
         log.info("{} 유저 로그인 시도", userDto.getEmail());
@@ -84,36 +80,24 @@ public class UserService {
         // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
         if(userDto.getHobbyCodeList().size() > 0) {
             ArrayList<UserHobby> userHobbies = new ArrayList<>();
-            for (Long hobbyCode : userDto.getHobbyCodeList()) {
-                UserHobby userHobby = new UserHobby();
-                userHobby.setUser(user);
-                userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
-                userHobbies.add(userHobby);
-            }
+            userDto.getHobbyCodeList().forEach(hobbyCode ->
+                    userHobbies.add(new UserHobby(user, getAdditionalInfo(hobbyCode))));
 
             userHobbyRepository.saveAll(userHobbies); // DB에 저장
         }
 
         if(userDto.getPersonalityCodeList().size() > 0) {
             ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
-            for (Long personalityCode : userDto.getPersonalityCodeList()) {
-                UserPersonality userPersonality = new UserPersonality();
-                userPersonality.setUser(user);
-                userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
-                userPersonalities.add(userPersonality);
-            }
+            userDto.getPersonalityCodeList().forEach(personalityCode ->
+                    userPersonalities.add(new UserPersonality(user, getAdditionalInfo(personalityCode))));
 
             userPersonalityRepository.saveAll(userPersonalities); // DB에 저장
         }
 
         if(userDto.getStyleCodeList().size() > 0) {
             ArrayList<UserStyle> userStyles = new ArrayList<>();
-            for (Long styleCode : userDto.getStyleCodeList()) {
-                UserStyle userStyle = new UserStyle();
-                userStyle.setUser(user);
-                userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
-                userStyles.add(userStyle);
-            }
+            userDto.getStyleCodeList().forEach(styleCode ->
+                    userStyles.add(new UserStyle(user, getAdditionalInfo(styleCode))));
 
             userStyleRepository.saveAll(userStyles); // DB에 저장
         }
@@ -235,4 +219,32 @@ public class UserService {
         else return false;
     }
 
+    public void authPhoneNumber(String phoneNumber) {
+        // 인증번호 생성
+        Long verifiedCode = Math.round(1000 + Math.random() * 8999);
+
+        // 문자 전송 - 과금 조심!
+//        String messageContent = "TING 전화번호 인증 코드입니다.\n[" + verifiedCode + "]";
+//        Long time = System.currentTimeMillis();
+//        try {
+//            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
+//            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+//        }
+
+        // 같은 전화번호로 이미 인증코드가 존재하는 경우 삭제
+        Optional<PhoneNumberAuthDto> findPhoneNumber = phoneNumberRepository.findByPhoneNumber(phoneNumber);
+        if(findPhoneNumber.isPresent()) {
+            phoneNumberRepository.delete(findPhoneNumber.get());
+        }
+        // 인증코드 몽고 DB에 저장
+        insertPhoneAuthCode(phoneNumber, verifiedCode.toString());
+    }
+
+    private void insertPhoneAuthCode(String phoneNumber, String verifiedCode) {
+        PhoneNumberAuthDto phoneNumberAuthDto = new PhoneNumberAuthDto(phoneNumber, verifiedCode);
+        phoneNumberRepository.save(phoneNumberAuthDto);
+    }
 }

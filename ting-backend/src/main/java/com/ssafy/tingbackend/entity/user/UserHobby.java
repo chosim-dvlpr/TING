@@ -1,16 +1,13 @@
 package com.ssafy.tingbackend.entity.user;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserHobby {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +22,8 @@ public class UserHobby {
     private AdditionalInfo additionalInfo;
 
     // 내용? enum?
+    public UserHobby(User user, AdditionalInfo additionalInfo) {
+        this.user = user;
+        this.additionalInfo = additionalInfo;
+    }
 }

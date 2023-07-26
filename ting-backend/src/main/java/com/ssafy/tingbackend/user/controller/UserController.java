@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     private final UserService userService;
@@ -143,6 +144,12 @@ public class UserController {
     public CommonResponse checkEmail(@RequestBody Map<String, String> request) {
         userService.validateEmailCode(request.get("email"), request.get("authCode"));
         return new CommonResponse(200, "이메일 인증 성공");
+    }
+
+    @GetMapping("/user/phoneauth/{phoneNumber}")
+    public CommonResponse authPhoneNumber(@PathVariable String phoneNumber) {
+        userService.authPhoneNumber(phoneNumber);
+        return new CommonResponse(200, "전화번호 인증 요청 성공");
     }
 
 }
