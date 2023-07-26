@@ -7,7 +7,9 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserHobby {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

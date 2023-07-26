@@ -69,16 +69,16 @@ public class UserService {
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
 
         // mbti, 음주, 직업, 종교, 흡연 AdditionalInfo 객체로 변환
-        if(userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
-        if(userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
-        if(userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
-        if(userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
-        if(userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+        if (userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        if (userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        if (userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        if (userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        if (userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
 
         userRepository.save(user); // DB에 저장
 
         // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
-        if(userDto.getHobbyCodeList().size() > 0) {
+        if (userDto.getHobbyCodeList().size() > 0) {
             ArrayList<UserHobby> userHobbies = new ArrayList<>();
             userDto.getHobbyCodeList().forEach(hobbyCode ->
                     userHobbies.add(new UserHobby(user, getAdditionalInfo(hobbyCode))));
@@ -86,7 +86,7 @@ public class UserService {
             userHobbyRepository.saveAll(userHobbies); // DB에 저장
         }
 
-        if(userDto.getPersonalityCodeList().size() > 0) {
+        if (userDto.getPersonalityCodeList().size() > 0) {
             ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
             userDto.getPersonalityCodeList().forEach(personalityCode ->
                     userPersonalities.add(new UserPersonality(user, getAdditionalInfo(personalityCode))));
@@ -94,7 +94,7 @@ public class UserService {
             userPersonalityRepository.saveAll(userPersonalities); // DB에 저장
         }
 
-        if(userDto.getStyleCodeList().size() > 0) {
+        if (userDto.getStyleCodeList().size() > 0) {
             ArrayList<UserStyle> userStyles = new ArrayList<>();
             userDto.getStyleCodeList().forEach(styleCode ->
                     userStyles.add(new UserStyle(user, getAdditionalInfo(styleCode))));
@@ -182,7 +182,7 @@ public class UserService {
 
     public void sendEmail(String email) {
         long verifiedCode = Math.round(100000 + Math.random() * 899999);
-        if(emailRepository.findByEmail(email).isPresent()) {
+        if (emailRepository.findByEmail(email).isPresent()) {
             EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
                     .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
             emailRepository.delete(emailAuthDto);
@@ -215,7 +215,7 @@ public class UserService {
     }
 
     public boolean checkDuplicatedEmail(String email) {
-        if(userRepository.findByEmail(email).isPresent()) return true;
+        if (userRepository.findByEmail(email).isPresent()) return true;
         else return false;
     }
 
@@ -246,5 +246,97 @@ public class UserService {
     private void insertPhoneAuthCode(String phoneNumber, String verifiedCode) {
         PhoneNumberAuthDto phoneNumberAuthDto = new PhoneNumberAuthDto(phoneNumber, verifiedCode);
         phoneNumberRepository.save(phoneNumberAuthDto);
+    }
+
+    @Transactional
+    public void modifyUser(Long userId, UserDto userDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        log.info("{} 유저 정보 수정 시도", user.getEmail());
+
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setRegion(SidoType.getEnumType(userDto.getRegion()));
+        user.setProfileImage(userDto.getProfileImage());
+        user.setHeight(userDto.getHeight());
+        user.setIntroduce(userDto.getIntroduce());
+        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        userHobbyRepository.deleteAll(user.getUserHobbys());
+        userStyleRepository.deleteAll(user.getUserStyles());
+        userPersonalityRepository.deleteAll(user.getUserPersonalities());
+
+        ArrayList<UserHobby> userHobbies = new ArrayList<>();
+        ArrayList<UserStyle> userStyles = new ArrayList<>();
+        ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
+
+        userDto.getHobbyCodeList().forEach(hobbyCode -> userHobbies.add(UserHobby.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(hobbyCode))
+                .build())
+        );
+        userDto.getStyleCodeList().forEach(styleCode -> userStyles.add(UserStyle.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(styleCode))
+                .build())
+        );
+        userDto.getPersonalityCodeList().forEach(personalityCode -> userPersonalities.add(UserPersonality.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(personalityCode))
+                .build())
+        );
+
+        userHobbyRepository.saveAll(userHobbies);
+        userStyleRepository.saveAll(userStyles);
+        userPersonalityRepository.saveAll(userPersonalities);
+    }
+
+    public void findPassword(UserDto userDto) {
+        String name = userDto.getName();
+        String phoneNumber = userDto.getPhoneNumber();
+        String email = userDto.getEmail();
+
+        User user = userRepository.findPassword(name, phoneNumber, email)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        // 이메일 전송
+        String password = createKey();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("임시 비밀번호입니다.");
+        simpleMailMessage.setText("아래의 비밀번호를 입력해주세요. \n" +
+                password + " \n");
+        javaMailSender.send(simpleMailMessage);
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    public static String createKey() {
+        StringBuffer key = new StringBuffer();
+        Random rnd = new Random();
+
+        for (int i = 0; i < 8; i++) { // 인증코드 8자리
+            int index = rnd.nextInt(3); // 0~2 까지 랜덤
+
+            switch (index) {
+                case 0:
+                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+                    break;
+                case 1:
+                    // 특수문자
+                    key.append((char) ((int) (rnd.nextInt(15) + 33)));
+//                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
+                    //  A~Z
+                    break;
+                case 2:
+                    key.append((rnd.nextInt(10)));
+                    // 0~9
+                    break;
+            }
+        }
+        return key.toString();
     }
 }

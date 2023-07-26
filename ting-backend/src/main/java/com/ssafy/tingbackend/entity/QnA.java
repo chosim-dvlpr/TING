@@ -2,10 +2,7 @@ package com.ssafy.tingbackend.entity;
 
 import com.ssafy.tingbackend.entity.common.BaseCreatedTimeEntity;
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -17,6 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"user", "title", "isCompleted"})
 @DynamicInsert
+@Builder
+@AllArgsConstructor
 public class QnA extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

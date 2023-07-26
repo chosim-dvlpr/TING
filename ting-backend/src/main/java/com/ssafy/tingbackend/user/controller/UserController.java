@@ -2,7 +2,6 @@ package com.ssafy.tingbackend.user.controller;
 
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
-import com.ssafy.tingbackend.user.dto.EmailAuthDto;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.service.UserService;
@@ -23,6 +22,7 @@ public class UserController {
 
     /**
      * 로그인 API
+     *
      * @param userDto email, password
      * @return access-token, refresh-token
      */
@@ -34,6 +34,7 @@ public class UserController {
 
     /**
      * 회원가입 API
+     *
      * @param userDto all
      * @return Only code and message
      */
@@ -46,6 +47,7 @@ public class UserController {
 
     /**
      * 닉네임 중복 확인 API
+     *
      * @param nickname 닉네임
      * @return 중복 여부 (true, false)
      */
@@ -58,6 +60,7 @@ public class UserController {
 
     /**
      * 유저 상세 정보 조회 API
+     *
      * @param principal 로그인한 유저의 id (자동주입)
      * @return 유저 상세 정보
      */
@@ -70,7 +73,23 @@ public class UserController {
     }
 
     /**
+     * 유저 정보 수정 API
+     *
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param userDto   수정할 유저 정보 (반드시 모든 정보를 보내야 함)
+     * @return Only code and message
+     */
+    @PutMapping("/user")
+    public CommonResponse modifyUser(Principal principal, @RequestBody UserDto userDto) {
+        Long userId = Long.parseLong(principal.getName());
+        userService.modifyUser(userId, userDto);
+
+        return new CommonResponse(200, "유저 정보 수정 성공");
+    }
+
+    /**
      * 회원 탈퇴 API
+     *
      * @param principal 로그인한 유저의 id (자동주입)
      * @return Only code and message
      */
@@ -84,7 +103,8 @@ public class UserController {
 
     /**
      * 회원 확인 API (비밀번호만 입력)
-     * @param principal 로그인한 유저의 id (자동주입)
+     *
+     * @param principal   로그인한 유저의 id (자동주입)
      * @param passwordMap 비밀번호
      * @return 회원 확인 여부 (true, false)
      */
@@ -98,7 +118,8 @@ public class UserController {
 
     /**
      * 비밀번호 변경 API
-     * @param principal 로그인한 유저의 id (자동주입)
+     *
+     * @param principal   로그인한 유저의 id (자동주입)
      * @param passwordMap 비밀번호
      * @return Only code and message
      */
@@ -112,6 +133,7 @@ public class UserController {
 
     /**
      * 이메일 찾기 API
+     *
      * @param userDto 이름, 전화번호
      * @return 이메일
      */
@@ -125,6 +147,7 @@ public class UserController {
 
     /**
      * 이메일 인증 요청 API (이메일로 인증코드 전송)
+     *
      * @param email 이메일
      * @return Only code and message
      */
@@ -137,6 +160,7 @@ public class UserController {
 
     /**
      * 이메일 코드 인증 API (인증코드 확인)
+     *
      * @param request 이메일, 인증코드
      * @return Only code and message
      */
@@ -150,6 +174,17 @@ public class UserController {
     public CommonResponse authPhoneNumber(@PathVariable String phoneNumber) {
         userService.authPhoneNumber(phoneNumber);
         return new CommonResponse(200, "전화번호 인증 요청 성공");
+    }
+
+    /**
+     * 비밀번호 찾기 API (인증코드 확인)
+     * @param request 이메일, 이름, 전화번호
+     * @return Only code and message
+     */
+    @PostMapping("/user/password")
+    public CommonResponse findPassword(@RequestBody UserDto userDto) {
+        userService.findPassword(userDto);
+        return new CommonResponse(200, "임시 비밀번호 전송 성공");
     }
 
 }

@@ -1,17 +1,15 @@
 package com.ssafy.tingbackend.entity.user;
 
-import com.ssafy.tingbackend.user.service.UserService;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserStyle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
