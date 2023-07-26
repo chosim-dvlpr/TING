@@ -2,9 +2,18 @@ import { useState } from "react";
 import basicHttp from "../../api/basicHttp";
 // import tokenHttp from "../../api/tokenHttp";
 
+import { useSelector, useDispatch } from "react-redux";
+
 function Login(){
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
+
+  let dispatch = useDispatch();
+  // let userEmail = useSelector((state) => { return state.userReducer.email })
+  // let userPassword = useSelector((state) => { return state.userReducer.password })
+  // let changeEmail = () => {
+  //   dispatch({ type: 200, email: email, password: password })
+  // };
 
   const loginFunc = () => {
     // e.preventDefault();
@@ -20,7 +29,11 @@ function Login(){
         password
       };
 
-      basicHttp.post('/user/login', data).then((response) => {})
+      basicHttp.post('/user/login', data).then((response) => {
+        if (response.data === 200) {
+
+        }
+      })
       .catch(() => {console.log("실패")})
     }
   }
@@ -37,6 +50,10 @@ function Login(){
       <button onClick={ ()=>{
         loginFunc();
       } }>로그인</button>
+
+      {/* <h3>이메일 : { userEmail }</h3>
+      <h3>비밀번호 : { userPassword }</h3>
+      <button onClick={() => { clickChange() }}>변경</button> */}
     </div>
   )
 };
