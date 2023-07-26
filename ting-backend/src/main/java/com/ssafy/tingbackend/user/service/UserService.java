@@ -198,6 +198,11 @@ public class UserService {
 
     public void sendEmail(String email) {
         long verifiedCode = Math.round(100000 + Math.random() * 899999);
+        if(emailRepository.findByEmail(email).isPresent()) {
+            EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
+                    .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
+            emailRepository.delete(emailAuthDto);
+        }
         insertCode(email, Long.toString(verifiedCode));
         // 이메일 발신될 데이터 적재
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
