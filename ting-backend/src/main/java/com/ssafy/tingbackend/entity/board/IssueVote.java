@@ -28,4 +28,10 @@ public class IssueVote extends BaseCreatedTimeEntity {
 
     private boolean isAgree;
 
+    public IssueVote(User user, IssueBoard issueBoard, Boolean isAgree) {
+        this.user = user;
+        this.issueBoard = issueBoard;
+        this.isAgree = isAgree;
+    }
+
 }
