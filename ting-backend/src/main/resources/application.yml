@@ -43,9 +43,15 @@ spring:
 jwt:
   secretKey: JwtSecretKeyForShortDate
 
+
+openvidu:
+  url: https://i9b107.p.ssafy.io
+  secret: ting-openvidu-1q2w
+
 ncloud:
   sens:
     serviceId: ncp:sms:kr:307962030868:ting
     accessKeyId: BbrWAOXUJtjrBbP71wP3
     secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
     senderPhone: 01050659767
+

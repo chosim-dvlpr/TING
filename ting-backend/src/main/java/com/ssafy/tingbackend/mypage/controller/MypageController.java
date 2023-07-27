@@ -2,11 +2,8 @@ package com.ssafy.tingbackend.mypage.controller;
 
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
-import com.ssafy.tingbackend.entity.QnA;
 import com.ssafy.tingbackend.mypage.dto.QnADto;
 import com.ssafy.tingbackend.mypage.service.MypageService;
-import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
