@@ -28,6 +28,8 @@ public enum ExceptionType {
     PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다."),
 
     QNA_NOT_FOUND(4500, "문의글이 존재하지 않습니다."),
+    ADVICE_BOARD_NOT_FOUND(4600, "연애상담 글이 존재하지 않습니다."),
+    ISSUE_BOARD_NOT_FOUND(4700, "이슈 글이 존재하지 않습니다."),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 
