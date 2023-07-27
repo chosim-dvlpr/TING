@@ -27,9 +27,10 @@ public enum ExceptionType {
     PHONE_NUMBER_NOT_FOUND(4401, "존재하지 않는 전화번호입니다."),
     PHONE_AUTH_CODE_NOT_MATCH(4402, "전화번호 인증코드가 틀렸습니다."),
 
-    QNA_NOT_FOUND(4500, "문의글이 존재하지 않습니다."),
-    ADVICE_BOARD_NOT_FOUND(4600, "연애상담 글이 존재하지 않습니다."),
-    ISSUE_BOARD_NOT_FOUND(4700, "이슈 글이 존재하지 않습니다."),
+    QNA_NOT_FOUND(4700, "문의글이 존재하지 않습니다."),
+    ADVICE_BOARD_NOT_FOUND(4500, "연애상담 글이 존재하지 않습니다."),
+    ISSUE_BOARD_NOT_FOUND(4510, "이슈 글이 존재하지 않습니다."),
+    COMMENT_NOT_FOUND(4520, "댓글이 존재하지 않습니다."),
 
     QUESTION_NOT_FOUND(4800, "매칭 질문이 존재하지 않습니다."),
     MATCHING_TIME_OUT(4600, "매칭 대기 시간이 초과되었습니다."),

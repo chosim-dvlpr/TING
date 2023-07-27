@@ -3,10 +3,7 @@ package com.ssafy.tingbackend.entity.board;
 import com.ssafy.tingbackend.entity.common.BaseTimeEntity;
 import com.ssafy.tingbackend.entity.type.BoardType;
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -16,9 +13,12 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"user", "content", "depth"})
 @DynamicInsert
+@Builder
+@AllArgsConstructor
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

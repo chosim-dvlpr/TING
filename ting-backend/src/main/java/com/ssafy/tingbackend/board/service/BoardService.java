@@ -1,15 +1,19 @@
 package com.ssafy.tingbackend.board.service;
 
 import com.ssafy.tingbackend.board.dto.AdviceBoardDto;
+import com.ssafy.tingbackend.board.dto.CommentPostDto;
 import com.ssafy.tingbackend.board.dto.IssueBoardDto;
 import com.ssafy.tingbackend.board.repository.AdviceBoardRepository;
+import com.ssafy.tingbackend.board.repository.CommentRepository;
 import com.ssafy.tingbackend.board.repository.IssueBoardRepository;
 import com.ssafy.tingbackend.board.repository.IssueVoteRepository;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.board.AdviceBoard;
+import com.ssafy.tingbackend.entity.board.Comment;
 import com.ssafy.tingbackend.entity.board.IssueBoard;
 import com.ssafy.tingbackend.entity.board.IssueVote;
+import com.ssafy.tingbackend.entity.type.BoardType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,7 @@ public class BoardService {
     private final AdviceBoardRepository adviceBoardRepository;
     private final IssueBoardRepository issueBoardRepository;
     private final IssueVoteRepository issueVoteRepository;
+    private final CommentRepository commentRepository;
 
     public void insertAdviceBoard(AdviceBoardDto adviceBoardDto, Long userId) {
         User user = userRepository.findById(userId)
@@ -168,5 +173,58 @@ public class BoardService {
         IssueVote issueVote = new IssueVote(user, issueBoard, isAgree);
         issueVoteRepository.save(issueVote);
 
+    }
+
+    public void insertComment(CommentPostDto commentPostDto) {
+        User user = userRepository.findById(commentPostDto.getUserId())
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        Long boardId = commentPostDto.getBoardId();
+        Comment comment = null;
+
+        System.out.println("!!!!!!" + commentPostDto.getBoardType());
+        if(commentPostDto.getBoardType().equals(BoardType.ADVICE)) {
+            System.out.println("============ADVICE");
+            AdviceBoard adviceBoard = adviceBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
+            comment = Comment.builder()
+                    .boardType(commentPostDto.getBoardType())
+                    .adviceBoard(adviceBoard)
+                    .content(commentPostDto.getContent())
+                    .build();
+        } else if(commentPostDto.getBoardType().equals(BoardType.ISSUE)) {
+            System.out.println("===========ISSUE");
+            IssueBoard issueBoard = issueBoardRepository.findById(boardId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
+            comment = Comment.builder()
+                    .boardType(commentPostDto.getBoardType())
+                    .issueBoard(issueBoard)
+                    .content(commentPostDto.getContent())
+                    .build();
+        }
+
+        commentRepository.save(comment);
+    }
+
+    @Transactional
+    public void modifyComment(CommentPostDto commentPostDto) {
+        User user = userRepository.findById(commentPostDto.getUserId())
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Comment comment = commentRepository.findById(commentPostDto.getCommentId())
+                .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+
+        comment.setContent(commentPostDto.getContent());
+    }
+
+    @Transactional
+    public void deleteComment(CommentPostDto commentPostDto) {
+        userRepository.findById(commentPostDto.getUserId())
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Comment comment = commentRepository.findById(commentPostDto.getCommentId())
+                .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+
+        comment.setRemoved(true);
+        comment.setRemovedTime(LocalDateTime.now());
     }
 }
