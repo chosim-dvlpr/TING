@@ -18,6 +18,7 @@ import Main from './pages/main/Main.js'
 
 import Matching from './pages/matching/Matching.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
+import MatchingStart from './component/matching/MatchingStart.js';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
         {/* 매칭 */}
         <Route path="/matching" element={< Matching/> }>
           <Route path="" element={ <WaitingRoom/> }></Route>
+          <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
       </Routes>
 
