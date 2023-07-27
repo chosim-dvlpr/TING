@@ -1,5 +1,5 @@
 import './App.css';
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+import {Routes, Route, Link} from 'react-router-dom'
 
 // 로그인, 회원가입
 import Login from './pages/user/Login.js'
@@ -13,6 +13,11 @@ import SignupDetail from './pages/user/Signup/Detail.js'
 
 // 메인페이지
 import Main from './pages/main/Main.js'
+
+// 매칭
+
+import Matching from './pages/matching/Matching.js';
+import WaitingRoom from './component/matching/WaitingRoom.js';
 
 function App() {
 
@@ -31,11 +36,13 @@ function App() {
         </div>
       </div>
       <Routes>
+        {/* 네비게이션 바 */}
         <Route path="/" element={ <Main/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
         <Route path="/community" element={ <div>커뮤니티</div> }></Route>
         <Route path="/login" element={ <Login/> }></Route>
 
+        {/* 회원가입 */}
         <Route path="/signup" element={ <Signup/> }>
           <Route path="" element={ <SignupEmail/> }></Route>
           <Route path="certEmail" element={ <CertificationEmail/> }></Route>
@@ -45,6 +52,10 @@ function App() {
           <Route path="detail" element={ <SignupDetail/> }></Route>
         </Route>
 
+        {/* 매칭 */}
+        <Route path="/matching" element={< Matching/> }>
+          <Route path="" element={ <WaitingRoom/> }></Route>
+        </Route>
       </Routes>
 
     </div>
