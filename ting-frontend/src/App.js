@@ -1,5 +1,5 @@
 import './App.css';
-import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+import {Routes, Route, Link} from 'react-router-dom'
 
 // 로그인, 회원가입
 import Login from './pages/user/Login.js'
@@ -10,9 +10,16 @@ import SignupPassword from './pages/user/Signup/Password.js'
 import SignupPhoneNumber from './pages/user/Signup/PhoneNumber.js'
 import CertificationPhonenumber from './pages/user/Signup/CertificationPassword.js'
 import SignupDetail from './pages/user/Signup/Detail.js'
+import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
 import Main from './pages/main/Main.js'
+
+// 매칭
+
+import Matching from './pages/matching/Matching.js';
+import WaitingRoom from './component/matching/WaitingRoom.js';
+import MatchingStart from './component/matching/MatchingStart.js';
 
 function App() {
 
@@ -31,11 +38,13 @@ function App() {
         </div>
       </div>
       <Routes>
+        {/* 네비게이션 바 */}
         <Route path="/" element={ <Main/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
         <Route path="/community" element={ <div>커뮤니티</div> }></Route>
         <Route path="/login" element={ <Login/> }></Route>
 
+        {/* 회원가입 */}
         <Route path="/signup" element={ <Signup/> }>
           <Route path="" element={ <SignupEmail/> }></Route>
           <Route path="certEmail" element={ <CertificationEmail/> }></Route>
@@ -44,6 +53,14 @@ function App() {
           <Route path="certPhonenum" element={ <CertificationPhonenumber/> }></Route>
           <Route path="detail" element={ <SignupDetail/> }></Route>
         </Route>
+
+        {/* 매칭 */}
+        <Route path="/matching" element={< Matching/> }>
+          <Route path="" element={ <WaitingRoom/> }></Route>
+          <Route path="start" element={ <MatchingStart/> }></Route>
+        </Route>
+
+        <Route path="/testopenvidu" element={<Openvidu/>}></Route>
 
       </Routes>
 
