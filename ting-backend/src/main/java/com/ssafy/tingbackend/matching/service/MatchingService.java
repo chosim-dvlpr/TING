@@ -5,6 +5,7 @@ import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.user.repository.UserRepository;
+import io.openvidu.java.client.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ import java.util.Map;
 public class MatchingService {
 
     private final UserRepository userRepository;
+    private final OpenViduService openViduService;
 
-    private final Map<User, DeferredResult<DataResponse>> maleQueue = new LinkedHashMap<>();
-    private final Map<User, DeferredResult<DataResponse>> femaleQueue = new LinkedHashMap<>();
-    private static int matchNo = 1;
+    private final Map<User, DeferredResult<DataResponse>> maleQueue = new LinkedHashMap<>();  // 여성 사용자 대기열
+    private final Map<User, DeferredResult<DataResponse>> femaleQueue = new LinkedHashMap<>();  // 남성 사용자 대기열
 
     public void matchUsers(Long userId, DeferredResult<DataResponse> deferredResult) {
         User user = userRepository.findById(userId)
@@ -30,10 +31,6 @@ public class MatchingService {
         deferredResult.onTimeout(() -> { throw new CommonException(ExceptionType.MATCHING_TIME_OUT); });
 
         log.info("{}({}) 유저 매칭 시도", user.getEmail(), user.getGender());
-
-        System.out.println("=========================");
-        System.out.println("male: " + maleQueue.toString());
-        System.out.println("female: " + femaleQueue.toString());
 
         Map<User, DeferredResult<DataResponse>> myQueue = null;
         Map<User, DeferredResult<DataResponse>> yourQueue = null;
@@ -48,12 +45,24 @@ public class MatchingService {
 
         User findUser = findWaitingUser(yourQueue);
         if (findUser != null) {
-            // 이 부분에서 세션 만들어서 각 여성, 남성 사용자에게 응답 보내주면 될 듯
             log.info("{}({}) - {}({}) 매칭 성공", user.getEmail(), user.getGender(), findUser.getEmail(), findUser.getGender());
-            DataResponse response = new DataResponse(200, "사용자 매칭 성공", matchNo++);
-            yourQueue.get(findUser).setResult(response);
-            yourQueue.remove(findUser);
-            deferredResult.setResult(response);
+
+            try {
+                // 매칭이 된 경우 세션 생성하여 사용자들에게 id 반환
+                Session session = openViduService.initializeSession();
+
+                yourQueue.get(findUser).setResult(
+                        new DataResponse(200, "사용자 매칭 성공", session.getSessionId())
+                );
+                yourQueue.remove(findUser);
+
+                deferredResult.setResult(
+                        new DataResponse(200, "사용자 매칭 성공", session.getSessionId())
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CommonException(ExceptionType.OPENVIDU_ERROR);
+            }
         } else {
             myQueue.put(user, deferredResult);
         }
