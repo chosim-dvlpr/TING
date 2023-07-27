@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-@DynamicInsert
 public class BaseCreatedTimeEntity {
     @CreatedDate
     @Column(updatable = false)

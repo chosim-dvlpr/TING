@@ -10,6 +10,7 @@ import SignupPassword from './pages/user/Signup/Password.js'
 import SignupPhoneNumber from './pages/user/Signup/PhoneNumber.js'
 import CertificationPhonenumber from './pages/user/Signup/CertificationPassword.js'
 import SignupDetail from './pages/user/Signup/Detail.js'
+import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
 import Main from './pages/main/Main.js'
@@ -45,6 +46,7 @@ function App() {
           <Route path="detail" element={ <SignupDetail/> }></Route>
         </Route>
 
+        <Route path="/testopenvidu" element={<Openvidu/>}></Route>
       </Routes>
 
     </div>

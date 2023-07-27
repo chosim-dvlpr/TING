@@ -28,6 +28,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'com.google.code.gson:gson'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // openvidu
+    implementation 'io.openvidu:openvidu-java-client:2.28.0'
+
+    // NAVER CLOUD PLATFORM SENS SMS API
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
