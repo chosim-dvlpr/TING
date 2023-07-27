@@ -8,12 +8,18 @@ import basicHttp from '../../../api/basicHttp';
 function CertificationEmail(){
   // let [email, setEmail] = useState("")
   let email = useSelector((state) => state.signupReducer.email);
-  const Navigate = useNavigate()
+  let [authCode, setAuthCode] = useState("");
 
+  const Navigate = useNavigate()
   let dispatch = useDispatch();
 
   const checkEmail = () => {
-    basicHttp.get('/user/emailauth').then((response) => {
+    let data = {
+      email: email,
+      authCode: authCode,
+    }
+
+    basicHttp.post('/user/emailauth', data).then((response) => {
       if (response.data.code === 200) {
         alert("인증 성공");
         Navigate("/signup/password");
@@ -37,7 +43,7 @@ function CertificationEmail(){
         {/* 이메일 수정 불가 */}
         <input type="text" id="email" value={ email } readOnly />
         <br/>
-        <input type="text" placeholder="인증번호 6자리"/>
+        <input type="text" onChange={(e) => setAuthCode(e.target.value) } placeholder="인증번호 6자리"/>
         <br/>
         <button onClick={checkEmail}>인증하기</button>
     </div>
