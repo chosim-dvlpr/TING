@@ -27,7 +27,7 @@ public class UserItem extends BaseCreatedTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code")
+    @JoinColumn(name = "item_code")
     private Item item;
 
     private LocalDateTime usedTime;

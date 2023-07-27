@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"user", "code", "changeCost", "resultPoint"})
+@ToString(of = {"user", "pointCategory", "changeCost", "resultPoint"})
 public class PointHistory extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,8 @@ public class PointHistory extends BaseCreatedTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "code")
-    private PointCategory code;
+    @JoinColumn(name = "point_code")
+    private PointCategory pointCategory;
 
     private Long changeCost;
     private Long resultPoint;

@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,4 +37,6 @@ public class IssueBoard extends BaseUnmodifidableTimeEntity {
     @ColumnDefault("0")
     private Long hit;
 
+    @OneToMany(mappedBy = "issueBoard")
+    private List<Comment> comments;
 }
