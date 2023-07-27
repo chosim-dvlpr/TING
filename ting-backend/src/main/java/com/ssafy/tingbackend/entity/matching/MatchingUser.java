@@ -24,4 +24,9 @@ public class MatchingUser {
     private User user;
 
     private Integer totalScore;
+
+    public MatchingUser(Matching matching, User user) {
+        this.matching = matching;
+        this.user = user;
+    }
 }

@@ -21,7 +21,7 @@ public class MatchingInfoDto {
     private Boolean isAcceptA;
     private Boolean isAcceptB;
 
-    @Indexed(expireAfterSeconds = 31)
+//    @Indexed(expireAfterSeconds = 31)
     private LocalDateTime createdAt;
 
     public MatchingInfoDto(String sessionId, Long userIdA, Long userIdB) {
