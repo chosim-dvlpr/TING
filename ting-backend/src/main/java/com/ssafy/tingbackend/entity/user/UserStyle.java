@@ -1,15 +1,14 @@
 package com.ssafy.tingbackend.entity.user;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserStyle {
     @Id
@@ -23,4 +22,9 @@ public class UserStyle {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "style_code")
     private AdditionalInfo additionalInfo;
+
+    public UserStyle(User user, AdditionalInfo additionalInfo) {
+        this.user = user;
+        this.additionalInfo = additionalInfo;
+    }
 }

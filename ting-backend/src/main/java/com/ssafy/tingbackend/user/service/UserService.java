@@ -1,17 +1,12 @@
 package com.ssafy.tingbackend.user.service;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
-import com.ssafy.tingbackend.user.dto.AdditionalInfoDto;
-import com.ssafy.tingbackend.user.dto.EmailAuthDto;
-import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.dto.UserResponseDto;
+import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -44,6 +36,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
+    private final PhoneNumberRepository phoneNumberRepository;
+
+    private final SmsService smsService;
 
     public Map<String, String> login(UserDto userDto) {
         log.info("{} 유저 로그인 시도", userDto.getEmail());
@@ -73,45 +68,39 @@ public class UserService {
         // 지역 정보 enum 타입으로 변환
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
 
-        // ====선택정보 빈값으로 올때 고려해서 코드 바꾸기====
         // mbti, 음주, 직업, 종교, 흡연 AdditionalInfo 객체로 변환
-        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
-        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
-        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
-        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
-        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+        if (userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        if (userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        if (userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        if (userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        if (userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        userRepository.save(user); // DB에 저장
 
         // 취미, 성격, 선호 스타일 각 매핑 객체로 변환
-        ArrayList<UserHobby> userHobbies = new ArrayList<>();
-        for (Long hobbyCode : userDto.getHobbyCodeList()) {
-            UserHobby userHobby = new UserHobby();
-            userHobby.setUser(user);
-            userHobby.setAdditionalInfo(getAdditionalInfo(hobbyCode));
-            userHobbies.add(userHobby);
+        if (userDto.getHobbyCodeList().size() > 0) {
+            ArrayList<UserHobby> userHobbies = new ArrayList<>();
+            userDto.getHobbyCodeList().forEach(hobbyCode ->
+                    userHobbies.add(new UserHobby(user, getAdditionalInfo(hobbyCode))));
+
+            userHobbyRepository.saveAll(userHobbies); // DB에 저장
         }
 
-        ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
-        for (Long personalityCode : userDto.getPersonalityCodeList()) {
-            UserPersonality userPersonality = new UserPersonality();
-            userPersonality.setUser(user);
-            userPersonality.setAdditionalInfo(getAdditionalInfo(personalityCode));
-            userPersonalities.add(userPersonality);
+        if (userDto.getPersonalityCodeList().size() > 0) {
+            ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
+            userDto.getPersonalityCodeList().forEach(personalityCode ->
+                    userPersonalities.add(new UserPersonality(user, getAdditionalInfo(personalityCode))));
+
+            userPersonalityRepository.saveAll(userPersonalities); // DB에 저장
         }
 
-        ArrayList<UserStyle> userStyles = new ArrayList<>();
-        for (Long styleCode : userDto.getStyleCodeList()) {
-            UserStyle userStyle = new UserStyle();
-            userStyle.setUser(user);
-            userStyle.setAdditionalInfo(getAdditionalInfo(styleCode));
-            userStyles.add(userStyle);
-        }
-        System.out.println(user);
+        if (userDto.getStyleCodeList().size() > 0) {
+            ArrayList<UserStyle> userStyles = new ArrayList<>();
+            userDto.getStyleCodeList().forEach(styleCode ->
+                    userStyles.add(new UserStyle(user, getAdditionalInfo(styleCode))));
 
-        // DB에 저장
-        userRepository.save(user);
-        userHobbyRepository.saveAll(userHobbies);
-        userPersonalityRepository.saveAll(userPersonalities);
-        userStyleRepository.saveAll(userStyles);
+            userStyleRepository.saveAll(userStyles); // DB에 저장
+        }
     }
 
     public boolean checkNickname(String nickname) {
@@ -193,6 +182,11 @@ public class UserService {
 
     public void sendEmail(String email) {
         long verifiedCode = Math.round(100000 + Math.random() * 899999);
+        if (emailRepository.findByEmail(email).isPresent()) {
+            EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
+                    .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
+            emailRepository.delete(emailAuthDto);
+        }
         insertCode(email, Long.toString(verifiedCode));
         // 이메일 발신될 데이터 적재
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -205,9 +199,14 @@ public class UserService {
         javaMailSender.send(simpleMailMessage);
     }
 
-    public EmailAuthDto getEmailCode(String email) {
-        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email);
-        return emailAuthDto;
+    public void validateEmailCode(String email, String authCode) {
+        EmailAuthDto emailAuthDto = emailRepository.findByEmail(email)
+                .orElseThrow(() -> new CommonException(ExceptionType.EMAIL_NOT_FOUND));
+
+        if (!emailAuthDto.getKey().equals(authCode)) {
+            throw new CommonException(ExceptionType.EMAIL_CODE_NOT_MATCH);
+        }
+        emailRepository.delete(emailAuthDto);
     }
 
     public void insertCode(String email, String code) {
@@ -215,8 +214,140 @@ public class UserService {
         emailRepository.save(emailAuthDto);
     }
 
-    public void deleteEmailCode(EmailAuthDto emailAuthDto) {
-        emailRepository.delete(emailAuthDto);
+    public boolean checkDuplicatedEmail(String email) {
+        if (userRepository.findByEmail(email).isPresent()) return true;
+        else return false;
     }
 
+    public void authPhoneNumber(String phoneNumber) {
+        // 인증번호 생성
+        Long authCode = Math.round(1000 + Math.random() * 8999);
+
+        // 문자 전송 - 과금 조심!
+        String messageContent = "TING 전화번호 인증 코드입니다.\n" +
+                                "[" + authCode + "]";
+        Long time = System.currentTimeMillis();
+        try {
+            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
+            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        } catch(Exception e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        }
+
+        // 같은 전화번호로 이미 인증코드가 존재하는 경우 이전 코드 삭제
+        Optional<PhoneNumberAuthDto> findPhoneNumberAuth = phoneNumberRepository.findByPhoneNumber(phoneNumber);
+        if(findPhoneNumberAuth.isPresent()) {
+            phoneNumberRepository.delete(findPhoneNumberAuth.get());
+        }
+        // 인증코드 몽고 DB에 저장
+        insertPhoneAuthCode(phoneNumber, authCode.toString());
+    }
+
+    private void insertPhoneAuthCode(String phoneNumber, String authCode) {
+        PhoneNumberAuthDto phoneNumberAuthDto = new PhoneNumberAuthDto(phoneNumber, authCode);
+        phoneNumberRepository.save(phoneNumberAuthDto);
+    }
+
+    public void validatePhoneAuthCode(String phoneNumber, String authCode) {
+        PhoneNumberAuthDto phoneNumberAuthDto = phoneNumberRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new CommonException(ExceptionType.PHONE_NUMBER_NOT_FOUND));
+
+        if (!phoneNumberAuthDto.getAuthCode().equals(authCode)) {
+            throw new CommonException(ExceptionType.PHONE_AUTH_CODE_NOT_MATCH);
+        }
+        phoneNumberRepository.delete(phoneNumberAuthDto);  // 인증 성공 시 DB에서 데이터 삭제
+    }
+
+    @Transactional
+    public void modifyUser(Long userId, UserDto userDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        log.info("{} 유저 정보 수정 시도", user.getEmail());
+
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setRegion(SidoType.getEnumType(userDto.getRegion()));
+        user.setProfileImage(userDto.getProfileImage());
+        user.setHeight(userDto.getHeight());
+        user.setIntroduce(userDto.getIntroduce());
+        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        userHobbyRepository.deleteAll(user.getUserHobbys());
+        userStyleRepository.deleteAll(user.getUserStyles());
+        userPersonalityRepository.deleteAll(user.getUserPersonalities());
+
+        ArrayList<UserHobby> userHobbies = new ArrayList<>();
+        ArrayList<UserStyle> userStyles = new ArrayList<>();
+        ArrayList<UserPersonality> userPersonalities = new ArrayList<>();
+
+        userDto.getHobbyCodeList().forEach(hobbyCode -> userHobbies.add(UserHobby.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(hobbyCode))
+                .build())
+        );
+        userDto.getStyleCodeList().forEach(styleCode -> userStyles.add(UserStyle.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(styleCode))
+                .build())
+        );
+        userDto.getPersonalityCodeList().forEach(personalityCode -> userPersonalities.add(UserPersonality.builder()
+                .user(user)
+                .additionalInfo(getAdditionalInfo(personalityCode))
+                .build())
+        );
+
+        userHobbyRepository.saveAll(userHobbies);
+        userStyleRepository.saveAll(userStyles);
+        userPersonalityRepository.saveAll(userPersonalities);
+    }
+
+    public void findPassword(UserDto userDto) {
+        String name = userDto.getName();
+        String phoneNumber = userDto.getPhoneNumber();
+        String email = userDto.getEmail();
+
+        User user = userRepository.findPassword(name, phoneNumber, email)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        // 이메일 전송
+        String password = createKey();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject("임시 비밀번호입니다.");
+        simpleMailMessage.setText("아래의 비밀번호를 입력해주세요. \n" +
+                password + " \n");
+        javaMailSender.send(simpleMailMessage);
+        user.setPassword(passwordEncoder.encode(password));
+    }
+
+    public static String createKey() {
+        StringBuffer key = new StringBuffer();
+        Random rnd = new Random();
+
+        for (int i = 0; i < 8; i++) { // 인증코드 8자리
+            int index = rnd.nextInt(3); // 0~2 까지 랜덤
+
+            switch (index) {
+                case 0:
+                    key.append((char) ((int) (rnd.nextInt(26)) + 97));
+                    //  a~z  (ex. 1+97=98 => (char)98 = 'b')
+                    break;
+                case 1:
+                    // 특수문자
+                    key.append((char) ((int) (rnd.nextInt(15) + 33)));
+//                    key.append((char) ((int) (rnd.nextInt(26)) + 65));
+                    //  A~Z
+                    break;
+                case 2:
+                    key.append((rnd.nextInt(10)));
+                    // 0~9
+                    break;
+            }
+        }
+        return key.toString();
+    }
 }

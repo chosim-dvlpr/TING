@@ -9,23 +9,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Document(collection = "email")
+@Document(collection = "phoneNumber")
 @Getter
 @NoArgsConstructor
-@ToString(of = {"email", "key"})
-public class EmailAuthDto {
+@ToString(of = {"phoneNumber", "verifiedCode"})
+public class PhoneNumberAuthDto {
 
     @Id
     private String id;
-    private String email;
-    private String key;
+    private String phoneNumber;
+    private String authCode;
 
     @Indexed(expireAfterSeconds = 600)
     private LocalDateTime createdAt;
 
-    public EmailAuthDto(String email, String key) {
-        this.email = email;
-        this.key = key;
+    public PhoneNumberAuthDto(String phoneNumber, String verifiedCode) {
+        this.phoneNumber = phoneNumber;
+        this.authCode = verifiedCode;
         this.createdAt = LocalDateTime.now();
     }
 }
