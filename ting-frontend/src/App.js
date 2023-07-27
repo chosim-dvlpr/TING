@@ -1,5 +1,7 @@
 import './App.css';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+
+// 로그인, 회원가입
 import Login from './pages/user/Login.js'
 import Signup from './pages/user/Signup.js'
 import SignupEmail from './pages/user/Signup/Email.js'
@@ -9,6 +11,8 @@ import SignupPhoneNumber from './pages/user/Signup/PhoneNumber.js'
 import CertificationPhonenumber from './pages/user/Signup/CertificationPassword.js'
 import SignupDetail from './pages/user/Signup/Detail.js'
 
+// 메인페이지
+import Main from './pages/main/Main.js'
 
 function App() {
 
@@ -27,12 +31,12 @@ function App() {
         </div>
       </div>
       <Routes>
-        <Route path="/" element={ <div>홈!</div> }></Route>
+        <Route path="/" element={ <Main/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
         <Route path="/community" element={ <div>커뮤니티</div> }></Route>
         <Route path="/login" element={ <Login/> }></Route>
 
-        <Route path="/signup" element={ <Signup/>}>
+        <Route path="/signup" element={ <Signup/> }>
           <Route path="" element={ <SignupEmail/> }></Route>
           <Route path="certEmail" element={ <CertificationEmail/> }></Route>
           <Route path="password" element={ <SignupPassword/> }></Route>
