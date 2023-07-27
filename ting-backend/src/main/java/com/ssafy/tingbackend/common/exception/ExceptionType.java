@@ -31,6 +31,7 @@ public enum ExceptionType {
     ADVICE_BOARD_NOT_FOUND(4600, "연애상담 글이 존재하지 않습니다."),
     ISSUE_BOARD_NOT_FOUND(4700, "이슈 글이 존재하지 않습니다."),
 
+    QUESTION_NOT_FOUND(4800, "매칭 질문이 존재하지 않습니다."),
     MATCHING_TIME_OUT(4600, "매칭 대기 시간이 초과되었습니다."),
     OPENVIDU_ERROR(4601, "openvidu 실행 중 오류가 발생하였습니다."),
 
