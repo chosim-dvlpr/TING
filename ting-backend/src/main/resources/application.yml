@@ -1,5 +1,9 @@
 server:
   port: 8080
+  ssl:
+    key-store: classpath:keystore.p12  # 인증서 파일 경로
+    key-store-type: PKCS12
+    key-store-password: springbackendssl
 
 spring:
   datasource:
@@ -53,3 +57,4 @@ ncloud:
     accessKeyId: BbrWAOXUJtjrBbP71wP3
     secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
     senderPhone: 01050659767
+
