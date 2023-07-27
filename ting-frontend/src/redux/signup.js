@@ -1,7 +1,7 @@
 const initState = {
   email: "",
   password: "",
-  phoneNumber: "",
+  phonenumber: "",
   name: "",
   nickname: "",
   gender: "",
@@ -17,7 +17,7 @@ const signupReducer = (state = initState, action) => {
     type: "text",
     email: action.email, // 변경할 state 값
     password: action.password,
-    phoneNumber: action.phoneNumber,
+    phonenumber: action.phonenumber,
     name: action.name,
     nickname: action.nickname,
     gender: action.gender,
@@ -35,7 +35,7 @@ const signupReducer = (state = initState, action) => {
 //         ...state, // 불변성 유지
 //         email: action.email, // 변경할 state 값
 //         password: action.password,
-//         phoneNumber: action.phoneNumber,
+//         phonenumber: action.phonenumber,
 //         name: action.name,
 //         nickname: action.nickname,
 //         gender: action.gender,
