@@ -55,15 +55,15 @@ public class MatchingController {
     }
 
     /**
-     * 매칭 시도 API
+     * 매칭 수락 API
      *
      * @param principal  로그인한 유저의 id (자동주입)
      *        requestMap OpenVidu 세션 ID
-     * @return 해당 세션에 접근할 수 있는 토큰 발급
+     * @return 상대도 수락을 하여 매칭이 성공된 경우 토큰, matchingId
      */
     @PostMapping("/matching/accept")
     public DeferredResult<DataResponse> acceptMatching(Principal principal, @RequestBody Map<String, String> requestMap) {
-        long timeout = 60_000L;  // 타임아웃 시간 30초
+        long timeout = 30_000L;  // 타임아웃 시간 30초
         DeferredResult<DataResponse> deferredResult = new DeferredResult<>(timeout);
 
         matchingService.acceptMatching(Long.parseLong(principal.getName()), requestMap.get("sessionId"), deferredResult);
@@ -71,6 +71,13 @@ public class MatchingController {
         return deferredResult;
     }
 
+    /**
+     * 매칭 거부 API
+     *
+     * @param principal  로그인한 유저의 id (자동주입)
+     *        requestMap OpenVidu 세션 ID
+     * @return Only code and message
+     */
     @PostMapping("/matching/reject")
     public CommonResponse rejectMatching(Principal principal, @RequestBody Map<String, String> requestMap) {
         matchingService.rejectMatching(Long.parseLong(principal.getName()), requestMap.get("sessionId"));
