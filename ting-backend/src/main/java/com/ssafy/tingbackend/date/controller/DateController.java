@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +43,21 @@ public class DateController {
         Long userId = Long.parseLong(principal.getName());
         scoreHistoryDto.setUserId(userId);
         dateService.insertScoreHistory(scoreHistoryDto);
-        return new CommonResponse(200, "상담글 작성 성공");
+        return new CommonResponse(200, "질문별 점수 저장 성공");
+    }
+
+    /**
+     * 최종 점수 저장 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param map matchingId, totalScore
+     * @return Only code and message
+     */
+    @PostMapping("/date/score/total")
+    public CommonResponse insertScore(@RequestBody Map<String, Long> map, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        map.put("userId", userId);
+        dateService.insertTotalScore(map);
+        return new CommonResponse(200, "최종 점수 저장 성공");
     }
 
 }

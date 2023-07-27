@@ -34,8 +34,10 @@ public enum ExceptionType {
     QUESTION_NOT_FOUND(4800, "매칭 질문이 존재하지 않습니다."),
     MATCHING_TIME_OUT(4600, "매칭 대기 시간이 초과되었습니다."),
     OPENVIDU_ERROR(4601, "openvidu 실행 중 오류가 발생하였습니다."),
+    MATCHING_NOT_FOUND(4602, "매칭이 존재하지 않습니다."),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
+
 
     private final int code;
     private final String message;
