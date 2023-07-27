@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -104,6 +105,8 @@ public class MatchingService {
         }
         matchingInfoRepository.save(matchingInfo);
 
+        Map<String, String> responseMap = new HashMap<>();
+
         // 두 사용자 모두 수락을 선택한 경우
         if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
                 matchingInfo.getIsAcceptA() && matchingInfo.getIsAcceptB()) {
@@ -111,17 +114,21 @@ public class MatchingService {
             Long matchingId = matchingRepository.save(new Matching()).getId();
             // ==== 소개팅 참여자(matching_user) 정보도 저장하기 ====
 
-            MatchingResponseDto response = new MatchingResponseDto(openViduService.createConnection(sessionId), matchingId);
-            deferredResult.setResult(new DataResponse<MatchingResponseDto>(200, "매칭 성사 성공", response));
 
-            response = new MatchingResponseDto(openViduService.createConnection(sessionId), matchingId);
+            responseMap.put("sessionId", openViduService.createConnection(sessionId));
+            responseMap.put("matchingId", matchingId.toString());
+            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));
+
+            responseMap.put("sessionId", openViduService.createConnection(sessionId));
             Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-            acceptQueue.get(opponentUserId).setResult(new DataResponse<MatchingResponseDto>(200, "매칭 성사 성공", response));
+            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));
         } else if(matchingInfo.getIsAcceptA() == null || matchingInfo.getIsAcceptB() == null) {  // 상대가 아직 응답을 하지 않은 경우
             acceptQueue.put(userId, deferredResult);
         } else {  // 상대가 이미 거절을 한 경우
             // ==== 매칭 실패 처리를 어떻게 할지 고민해봐야... ====
-            deferredResult.setResult(new DataResponse<MatchingResponseDto>(200, "매칭 성사 실패", new MatchingResponseDto()));
+            responseMap.put("sessionId", null);
+            responseMap.put("matchingId", null);
+            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 실패", responseMap));
         }
     }
 
@@ -141,7 +148,12 @@ public class MatchingService {
         if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
                 (matchingInfo.getIsAcceptA() || matchingInfo.getIsAcceptB())) {
             Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-            acceptQueue.get(opponentUserId).setResult(new DataResponse<MatchingResponseDto>(200, "매칭 실패", new MatchingResponseDto()));
+
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("sessionId", null);
+            responseMap.put("matchingId", null);
+
+            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 실패", responseMap));
         }
     }
 }

@@ -71,7 +71,7 @@ public class MatchingController {
         return deferredResult;
     }
 
-    @GetMapping("/matching/reject")
+    @PostMapping("/matching/reject")
     public CommonResponse rejectMatching(Principal principal, @RequestBody Map<String, String> requestMap) {
         matchingService.rejectMatching(Long.parseLong(principal.getName()), requestMap.get("sessionId"));
         return new CommonResponse(200, "매칭 거부 성공");
