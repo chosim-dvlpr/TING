@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.board.controller;
 
 import com.ssafy.tingbackend.board.dto.AdviceBoardDto;
+import com.ssafy.tingbackend.board.dto.CommentPostDto;
 import com.ssafy.tingbackend.board.dto.IssueBoardDto;
 import com.ssafy.tingbackend.board.service.BoardService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
@@ -82,6 +83,7 @@ public class BoardController {
         return new DataResponse<>(200, "문의글 목록 조회 성공", adviceList);
     }
 
+
     /**
      * 이슈 게시글 작성 API
      * @param principal 로그인한 유저의 id (자동주입)
@@ -134,7 +136,7 @@ public class BoardController {
      * 이슈 논쟁 투표 API
      * @param principal 로그인한 유저의 id (자동주입)
      * @param issueId
-     * @param isAgree
+     * @param map isAgree
      * @return Only code and message
      */
     @PostMapping("/issue/vote/{issueId}")
@@ -142,5 +144,51 @@ public class BoardController {
         Long userId = Long.parseLong(principal.getName());
         boardService.voteIssueBoard(issueId, userId, map.get("isAgree"));
         return new CommonResponse(200, "이슈글 투표 성공");
+    }
+
+
+    /**
+     * 댓글 작성 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param commentPostDto boardType, boardId, content
+     * @return Only code and message
+     */
+    @PostMapping("/comment")
+    public CommonResponse writeAdvice(@RequestBody CommentPostDto commentPostDto, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        commentPostDto.setUserId(userId);
+        boardService.insertComment(commentPostDto);
+        return new CommonResponse(200, "댓글 작성 성공");
+    }
+
+    /**
+     * 댓글 수정 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param commentPostDto content
+     * @return Only code and message
+     */
+    @PutMapping("/comment/{commentId}")
+    public CommonResponse modifyAdvice(@PathVariable Long commentId, @RequestBody CommentPostDto commentPostDto, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        commentPostDto.setCommentId(commentId);
+        commentPostDto.setUserId(userId);
+        boardService.modifyComment(commentPostDto);
+        return new CommonResponse(200, "댓글 수정 성공");
+    }
+
+    /**
+     * 댓글 삭제 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param commentId
+     * @return Only code and message
+     */
+    @DeleteMapping("/comment/{commentId}")
+    public CommonResponse deleteComment(@PathVariable Long commentId, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        CommentPostDto commentPostDto = new CommentPostDto();
+        commentPostDto.setCommentId(commentId);
+        commentPostDto.setUserId(userId);
+        boardService.deleteComment(commentPostDto);
+        return new CommonResponse(200, "댓글 삭제 성공");
     }
 }
