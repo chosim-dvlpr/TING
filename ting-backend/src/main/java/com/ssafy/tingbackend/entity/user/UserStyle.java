@@ -22,4 +22,9 @@ public class UserStyle {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "style_code")
     private AdditionalInfo additionalInfo;
+
+    public UserStyle(User user, AdditionalInfo additionalInfo) {
+        this.user = user;
+        this.additionalInfo = additionalInfo;
+    }
 }
