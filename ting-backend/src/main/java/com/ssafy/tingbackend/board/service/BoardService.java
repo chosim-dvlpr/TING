@@ -175,6 +175,7 @@ public class BoardService {
 
     }
 
+    @Transactional
     public void insertComment(CommentPostDto commentPostDto) {
         User user = userRepository.findById(commentPostDto.getUserId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
@@ -188,9 +189,9 @@ public class BoardService {
                     .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
             comment = Comment.builder()
                     .boardType(commentPostDto.getBoardType())
-                    .adviceBoard(adviceBoard)
                     .content(commentPostDto.getContent())
                     .build();
+            comment.setAdviceBoard(adviceBoard);
         } else if(commentPostDto.getBoardType().equals(BoardType.ISSUE)) {
             System.out.println("===========ISSUE");
             IssueBoard issueBoard = issueBoardRepository.findById(boardId)
@@ -200,6 +201,7 @@ public class BoardService {
                     .issueBoard(issueBoard)
                     .content(commentPostDto.getContent())
                     .build();
+            comment.setIssueBoard(issueBoard);
         }
 
         commentRepository.save(comment);

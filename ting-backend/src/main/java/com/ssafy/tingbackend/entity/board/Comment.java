@@ -54,4 +54,20 @@ public class Comment extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "comment")
     private List<CommentLike> commentLikes = new ArrayList<>();
+
+    public void setAdviceBoard(AdviceBoard adviceBoard) {
+        if(this.adviceBoard != null) {
+            this.adviceBoard.getComments().remove(this);
+        }
+        this.adviceBoard = adviceBoard;
+        adviceBoard.getComments().add(this);
+    }
+
+    public void setIssueBoard(IssueBoard issueBoard) {
+        if(this.issueBoard != null) {
+            this.issueBoard.getComments().remove(this);
+        }
+        this.issueBoard = issueBoard;
+        issueBoard.getComments().add(this);
+    }
 }
