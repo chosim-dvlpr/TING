@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.admin.controller;
 
+import com.ssafy.tingbackend.admin.dto.AdminQnaDto;
 import com.ssafy.tingbackend.admin.dto.AdminReportDto;
 import com.ssafy.tingbackend.admin.service.AdminService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
@@ -56,5 +57,12 @@ public class AdminController {
         Map<String, Object> qnaList = adminService.getQnaList(pageRequest);
 
         return new DataResponse<>(200, "QnA 리스트 조회 성공", qnaList);
+    }
+
+    @GetMapping("/admin/qna/{qnaId}")
+    public DataResponse<AdminQnaDto> getQna(@PathVariable Long qnaId) {
+        AdminQnaDto adminQnaDto = adminService.getQna(qnaId);
+
+        return new DataResponse<>(200, "QnA 조회 성공", adminQnaDto);
     }
 }
