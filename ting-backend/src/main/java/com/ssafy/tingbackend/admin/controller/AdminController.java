@@ -1,6 +1,6 @@
 package com.ssafy.tingbackend.admin.controller;
 
-import com.ssafy.tingbackend.admin.dto.ReportDto;
+import com.ssafy.tingbackend.admin.dto.AdminReportDto;
 import com.ssafy.tingbackend.admin.service.AdminService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
@@ -28,15 +28,24 @@ public class AdminController {
     }
 
     @GetMapping("/admin/report/{reportId}")
-    public DataResponse<ReportDto> getReport(@PathVariable Long reportId) {
-        ReportDto reportDto = adminService.getReport(reportId);
+    public DataResponse<AdminReportDto> getReport(@PathVariable Long reportId) {
+        AdminReportDto adminReportDto = adminService.getReport(reportId);
 
-        return new DataResponse<>(200, "신고 조회 성공", reportDto);
+        return new DataResponse<>(200, "신고 조회 성공", adminReportDto);
     }
 
     @DeleteMapping("/admin/user/{userId}")
     public CommonResponse deleteUser(@PathVariable Long userId) {
         adminService.deleteUser(userId);
         return new CommonResponse(200, "유저 삭제 성공");
+    }
+
+    @GetMapping("/admin/user/login")
+    public DataResponse<Map<String, Object>> getLoginLogList(@RequestParam(defaultValue = "1") int page,
+                                                             @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Map<String, Object> loginLogList = adminService.getLoginLogList(pageRequest);
+
+        return new DataResponse<>(200, "로그인 로그 리스트 조회 성공", loginLogList);
     }
 }

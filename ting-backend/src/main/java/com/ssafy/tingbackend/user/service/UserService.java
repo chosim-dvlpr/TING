@@ -28,6 +28,7 @@ import java.util.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LoginLogRepository loginLogRepository;
     private final AdditionalInfoRepository additionalInfoRepository;
     private final UserHobbyRepository userHobbyRepository;
     private final UserPersonalityRepository userPersonalityRepository;
@@ -54,6 +55,11 @@ public class UserService {
         Map<String, String> result = new HashMap<>();
         result.put("access-token", accessToken);
         result.put("refresh-token", refreshToken);
+
+        // 로그인 기록 저장
+        loginLogRepository.save(LoginLog.builder()
+                .user(principal)
+                .build());
 
         return result;
     }
@@ -225,19 +231,19 @@ public class UserService {
 
         // 문자 전송 - 과금 조심!
         String messageContent = "TING 전화번호 인증 코드입니다.\n" +
-                                "[" + authCode + "]";
+                "[" + authCode + "]";
         Long time = System.currentTimeMillis();
         try {
             SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
-            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
-        } catch(Exception e) {
+            if (!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new CommonException(ExceptionType.SMS_SEND_FAILED);
         }
 
         // 같은 전화번호로 이미 인증코드가 존재하는 경우 이전 코드 삭제
         Optional<PhoneNumberAuthDto> findPhoneNumberAuth = phoneNumberRepository.findByPhoneNumber(phoneNumber);
-        if(findPhoneNumberAuth.isPresent()) {
+        if (findPhoneNumberAuth.isPresent()) {
             phoneNumberRepository.delete(findPhoneNumberAuth.get());
         }
         // 인증코드 몽고 DB에 저장
