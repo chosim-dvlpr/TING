@@ -3,16 +3,10 @@ package com.ssafy.tingbackend.board.service;
 import com.ssafy.tingbackend.board.dto.AdviceBoardDto;
 import com.ssafy.tingbackend.board.dto.CommentPostDto;
 import com.ssafy.tingbackend.board.dto.IssueBoardDto;
-import com.ssafy.tingbackend.board.repository.AdviceBoardRepository;
-import com.ssafy.tingbackend.board.repository.CommentRepository;
-import com.ssafy.tingbackend.board.repository.IssueBoardRepository;
-import com.ssafy.tingbackend.board.repository.IssueVoteRepository;
+import com.ssafy.tingbackend.board.repository.*;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
-import com.ssafy.tingbackend.entity.board.AdviceBoard;
-import com.ssafy.tingbackend.entity.board.Comment;
-import com.ssafy.tingbackend.entity.board.IssueBoard;
-import com.ssafy.tingbackend.entity.board.IssueVote;
+import com.ssafy.tingbackend.entity.board.*;
 import com.ssafy.tingbackend.entity.type.BoardType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.user.repository.UserRepository;
@@ -37,6 +31,7 @@ public class BoardService {
     private final IssueBoardRepository issueBoardRepository;
     private final IssueVoteRepository issueVoteRepository;
     private final CommentRepository commentRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public void insertAdviceBoard(AdviceBoardDto adviceBoardDto, Long userId) {
         User user = userRepository.findById(userId)
@@ -183,6 +178,13 @@ public class BoardService {
         Comment comment = null;
 
         System.out.println("!!!!!!" + commentPostDto.getBoardType());
+
+        Comment parentComment = null;
+        if(commentPostDto.getDepth() == 1) {
+            parentComment = commentRepository.findById(commentPostDto.getParentId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+        }
+
         if(commentPostDto.getBoardType().equals(BoardType.ADVICE)) {
             System.out.println("============ADVICE");
             AdviceBoard adviceBoard = adviceBoardRepository.findById(boardId)
@@ -190,6 +192,8 @@ public class BoardService {
             comment = Comment.builder()
                     .boardType(commentPostDto.getBoardType())
                     .content(commentPostDto.getContent())
+                    .depth(commentPostDto.getDepth())
+                    .parent(parentComment)
                     .build();
             comment.setAdviceBoard(adviceBoard);
         } else if(commentPostDto.getBoardType().equals(BoardType.ISSUE)) {
@@ -200,6 +204,8 @@ public class BoardService {
                     .boardType(commentPostDto.getBoardType())
                     .issueBoard(issueBoard)
                     .content(commentPostDto.getContent())
+                    .depth(commentPostDto.getDepth())
+                    .parent(parentComment)
                     .build();
             comment.setIssueBoard(issueBoard);
         }
@@ -228,5 +234,37 @@ public class BoardService {
 
         comment.setRemoved(true);
         comment.setRemovedTime(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void likeComment(Long commentId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+
+        if(commentLikeRepository.find(user, comment).isPresent()) return;
+
+        CommentLike commentLike = CommentLike.builder()
+                .user(user)
+                .comment(comment)
+                .build();
+
+        comment.setLikeCount(comment.getLikeCount()+1);
+        commentLikeRepository.save(commentLike);
+    }
+
+    @Transactional
+    public void deletelikeComment(Long commentId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+
+        CommentLike commentLike = commentLikeRepository.find(user, comment)
+                .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_LIKE_NOT_FOUND));
+
+        commentLikeRepository.delete(commentLike);
+        comment.setLikeCount(comment.getLikeCount()-1);
     }
 }

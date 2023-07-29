@@ -16,4 +16,6 @@ public class CommentPostDto {
     private BoardType boardType;
     private String content;
     private Long userId;
+    private Integer depth;
+    private Long parentId;
 }
