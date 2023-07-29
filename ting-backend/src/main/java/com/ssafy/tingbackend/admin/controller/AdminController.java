@@ -2,14 +2,12 @@ package com.ssafy.tingbackend.admin.controller;
 
 import com.ssafy.tingbackend.admin.dto.ReportDto;
 import com.ssafy.tingbackend.admin.service.AdminService;
+import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -34,5 +32,11 @@ public class AdminController {
         ReportDto reportDto = adminService.getReport(reportId);
 
         return new DataResponse<>(200, "신고 조회 성공", reportDto);
+    }
+
+    @DeleteMapping("/admin/user/{userId}")
+    public CommonResponse deleteUser(@PathVariable Long userId) {
+        adminService.deleteUser(userId);
+        return new CommonResponse(200, "유저 삭제 성공");
     }
 }
