@@ -1,12 +1,15 @@
 package com.ssafy.tingbackend.admin.service;
 
 import com.ssafy.tingbackend.admin.dto.AdminLoginLogDto;
+import com.ssafy.tingbackend.admin.dto.AdminQnaDto;
 import com.ssafy.tingbackend.admin.dto.AdminReportDto;
 import com.ssafy.tingbackend.admin.repository.AdminLoginLogRepository;
+import com.ssafy.tingbackend.admin.repository.AdminQnaRepository;
 import com.ssafy.tingbackend.admin.repository.AdminReportRepository;
 import com.ssafy.tingbackend.common.dto.PageResult;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
+import com.ssafy.tingbackend.entity.QnA;
 import com.ssafy.tingbackend.entity.Report;
 import com.ssafy.tingbackend.entity.user.LoginLog;
 import com.ssafy.tingbackend.entity.user.User;
@@ -31,6 +34,7 @@ public class AdminService {
     private final AdminReportRepository reportRepository;
     private final UserRepository userRepository;
     private final AdminLoginLogRepository loginLogRepository;
+    private final AdminQnaRepository qnaRepository;
 
     public Map<String, Object> getReportList(PageRequest pageRequest) {
         Page<Report> reportList = reportRepository.findAll(pageRequest);
@@ -86,6 +90,27 @@ public class AdminService {
 
         return Map.of(
                 "loginLogList", loginLogDtoList,
+                "pageResult", pageResult
+        );
+    }
+
+    public Map<String, Object> getQnaList(PageRequest pageRequest) {
+        Page<QnA> qnaList = qnaRepository.findAll(pageRequest);
+
+        PageResult pageResult = new PageResult(
+                qnaList.getNumber(),
+                qnaList.getSize(),
+                (int) qnaList.getTotalElements(),
+                qnaList.getTotalPages(),
+                qnaList.isFirst(),
+                qnaList.isLast()
+        );
+
+        List<AdminQnaDto> adminQnaDtoList = new ArrayList<>();
+        qnaList.map(qna -> adminQnaDtoList.add(AdminQnaDto.of(qna)));
+
+        return Map.of(
+                "qnaList", adminQnaDtoList,
                 "pageResult", pageResult
         );
     }

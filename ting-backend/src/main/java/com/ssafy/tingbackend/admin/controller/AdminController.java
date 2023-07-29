@@ -48,4 +48,13 @@ public class AdminController {
 
         return new DataResponse<>(200, "로그인 로그 리스트 조회 성공", loginLogList);
     }
+
+    @GetMapping("/admin/qna")
+    public DataResponse<Map<String, Object>> getQnaList(@RequestParam(defaultValue = "1") int page,
+                                                        @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Map<String, Object> qnaList = adminService.getQnaList(pageRequest);
+
+        return new DataResponse<>(200, "QnA 리스트 조회 성공", qnaList);
+    }
 }
