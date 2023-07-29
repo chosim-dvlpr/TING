@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReportDto {
+public class AdminReportDto {
     private Long reportId;
     private Long userId;
     private String content;
@@ -21,8 +21,8 @@ public class ReportDto {
     private Long typeId;
     private LocalDateTime createdTime;
 
-    public static ReportDto of(Report report) {
-        return ReportDto.builder()
+    public static AdminReportDto of(Report report) {
+        return AdminReportDto.builder()
                 .reportId(report.getId())
                 .userId(report.getUser().getId())
                 .content(report.getContent())
