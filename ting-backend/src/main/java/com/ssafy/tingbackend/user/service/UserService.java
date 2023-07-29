@@ -42,7 +42,6 @@ public class UserService {
     private final SmsService smsService;
 
     public Map<String, String> login(UserDto userDto) {
-        log.info("{} 유저 로그인 시도", userDto.getEmail());
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
 
@@ -57,6 +56,7 @@ public class UserService {
         result.put("refresh-token", refreshToken);
 
         // 로그인 기록 저장
+        log.info("{} 유저 로그인 시도", userDto.getEmail());
         loginLogRepository.save(LoginLog.builder()
                 .user(principal)
                 .build());

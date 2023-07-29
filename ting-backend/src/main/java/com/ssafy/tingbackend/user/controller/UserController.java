@@ -195,6 +195,7 @@ public class UserController {
 
     /**
      * 비밀번호 찾기 API (인증코드 확인)
+     *
      * @param request 이메일, 이름, 전화번호
      * @return Only code and message
      */
