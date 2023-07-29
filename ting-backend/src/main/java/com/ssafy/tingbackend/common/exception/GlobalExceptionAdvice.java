@@ -51,7 +51,8 @@ public class GlobalExceptionAdvice {
         e.printStackTrace();
         log.error("global exception occurred: {}", e.getMessage());
 
-        return new CommonResponse(4000, "global exception 발생 (알 수 없는 오류), message: " + e.getMessage());
+        return new CommonResponse(4000,
+                "global exception 발생 (알 수 없는 오류), message: " + e.getMessage() + " exception type: " + e.getClass());
     }
 
 }
