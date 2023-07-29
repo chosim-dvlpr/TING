@@ -8,9 +8,8 @@ import basicHttp from '../../../api/basicHttp';
 function Detail(){
   const Navigate = useNavigate()
   let [inputNickname, setInputNickname] = useState("");
-  // let [birth, setBirth] = useState("")
   let allContentsNum = 5;
-  let [checkAllContents, setCheckAllContents] = useState([false]*allContentsNum);
+  let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
 
   let dispatch = useDispatch();
   let email = useSelector((state) => state.signupReducer.email);
@@ -110,9 +109,20 @@ function Detail(){
         birth: birth,
         region: region,
       }
-      basicHttp.post('/user', data).then((response) => {
-        
+      basicHttp.post('/user/signup', data).then((response) => {
+        console.log(response);
+        if (response.data.code === 200) {
+          alert("회원가입이 완료되었습니다.");
+          Navigate("/signup/beforeSelection");
+        }
+        else if (response.data.code === 400) {
+          alert("회원 가입 실패");
+        }
       })
+    }
+    else {
+      alert("모든 항목을 입력 또는 체크해주세요.");
+      console.log(checkAllContents);
     }
   }
     
@@ -133,7 +143,6 @@ function Detail(){
       <input type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 6자리"></input>
       <p>여기 지역 들어가야함</p>
       <button onClick={completeSignup}>회원 가입 완료</button>
-      {/* <button onClick={()=>{ Navigate("/signup/beforeSelection")}}>회원 가입 완료</button> */}
     </div>
   )
 }
