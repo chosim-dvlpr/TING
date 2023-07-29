@@ -37,6 +37,8 @@ public enum ExceptionType {
     OPENVIDU_ERROR(4601, "openvidu 실행 중 오류가 발생하였습니다."),
     MATCHING_NOT_FOUND(4602, "매칭이 존재하지 않습니다."),
 
+    REPORT_NOT_FOUND(4900, "신고 내역이 존재하지 않습니다"),
+
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 
 
