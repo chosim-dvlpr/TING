@@ -29,6 +29,14 @@ public class GlobalExceptionAdvice {
         return new CommonResponse(400, e.getMethod() + " 메서드가 지원되지 않습니다.");
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public CommonResponse illegalArgumentExceptionHandler(IllegalArgumentException e) {
+        e.printStackTrace();
+        log.error("illegal argument exception occurred: {}", e.getMessage());
+
+        return new CommonResponse(400, "잘못된 인자가 전달되었습니다.");
+    }
+
     @ExceptionHandler(InvalidFormatException.class)
     public CommonResponse invalidFormatException(InvalidFormatException e) {
         e.printStackTrace();
