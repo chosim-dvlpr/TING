@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,7 +10,7 @@ function SignUpPhoneNumber(){
   let phonenumber = useSelector((state) => state.signupReducer.phonenumber)
   let dispatch = useDispatch();
   
-  const checkPhonenumber = () => {
+  const checkPhonenumber = useCallback(() => {
     // 연락처에 '-' 제거 필요
     basicHttp.get(`/user/phoneauth/${phonenumber}`).then((response) => {
       if (response.data.code === 200) {
@@ -25,15 +25,20 @@ function SignUpPhoneNumber(){
       }
     })
     .catch(() => console.log("실패"));
-  }
+  })
 
   return(
     <div>
       <label htmlFor='phonenumber'>전화번호를 입력해주세요</label>
       <br/>
-      <input type="text" id="phonenumber" onChange={(e) => {dispatch({type: "TEXT", phonenumber: e.target.value})}} placeholder="전화번호('-'제외)"/>
-      <button onClick={checkPhonenumber()}>인증하기</button>
-      <p>{ phonenumber}</p>
+      <input type="text" id="phonenumber" 
+        onChange={(e) => {
+          if (e.target.value.length === 11) {
+            dispatch({type: "TEXT", phonenumber: e.target.value})
+          };
+        }} 
+        placeholder="전화번호('-'제외)"/>
+      <button onClick={checkPhonenumber}>인증하기</button>
     </div>
     )
   }
