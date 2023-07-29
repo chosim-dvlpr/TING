@@ -114,4 +114,11 @@ public class AdminService {
                 "pageResult", pageResult
         );
     }
+
+    public AdminQnaDto getQna(Long qnaId) {
+        QnA qna = qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new CommonException(ExceptionType.QNA_NOT_FOUND));
+
+        return AdminQnaDto.of(qna);
+    }
 }
