@@ -65,4 +65,11 @@ public class AdminController {
 
         return new DataResponse<>(200, "QnA 조회 성공", adminQnaDto);
     }
+
+    @PostMapping("/admin/qna/{qnaId}")
+    public CommonResponse answerQna(@PathVariable Long qnaId, @RequestBody Map<String, String> body) {
+        adminService.answerQna(qnaId, body.get("answer"));
+
+        return new CommonResponse(200, "QnA 답변 성공");
+    }
 }

@@ -121,4 +121,14 @@ public class AdminService {
 
         return AdminQnaDto.of(qna);
     }
+
+    @Transactional
+    public void answerQna(Long qnaId, String answer) {
+        QnA qna = qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new CommonException(ExceptionType.QNA_NOT_FOUND));
+
+        qna.setAnswer(answer);
+        qna.setCompletedTime(LocalDateTime.now());
+        qna.setCompleted(true);
+    }
 }
