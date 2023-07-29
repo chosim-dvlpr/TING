@@ -20,7 +20,7 @@ function CertificationPhonenumber(){
     basicHttp.post('/user/phoneauth', data).then((response) => {
       if (response.data.code === 200) {
         alert("인증 성공");
-        Navigate("/");
+        // Navigate("/signup/detail");
       }
       else if (response.data.code === 400) {
         alert("인증 실패");
@@ -44,7 +44,8 @@ function CertificationPhonenumber(){
         <br/>
         <input type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 6자리"/>
         <br/>
-        <button onClick={()=>{ Navigate("/signup/detail")}}>다음</button>
+        {/* <button onClick={()=>{}}>다음</button> */}
+        <button onClick={()=>{ Navigate("/signup/detail") }}>다음</button>
     </div>
 
     </div>

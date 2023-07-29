@@ -7,7 +7,7 @@ import SignupEmail from './pages/user/Signup/Email.js'
 import CertificationEmail from './pages/user/Signup/CertificationEmail.js'
 import SignupPassword from './pages/user/Signup/Password.js'
 import SignupPhoneNumber from './pages/user/Signup/PhoneNumber.js'
-import CertificationPhonenumber from './pages/user/Signup/CertificationPassword.js'
+import CertificationPhonenumber from './pages/user/Signup/CertificationPhoneNumber.js'
 import SignupDetail from './pages/user/Signup/Detail.js'
 
 
