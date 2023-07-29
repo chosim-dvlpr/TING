@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.common.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -28,13 +29,21 @@ public class GlobalExceptionAdvice {
         return new CommonResponse(400, e.getMethod() + " 메서드가 지원되지 않습니다.");
     }
 
+    @ExceptionHandler(InvalidFormatException.class)
+    public CommonResponse invalidFormatException(InvalidFormatException e) {
+        e.printStackTrace();
+        log.error("invalid format exception occurred: {}", e.getMessage());
+
+        return new CommonResponse(400, "잘못된 형식의 데이터가 전달되었습니다.");
+    }
+
     @ExceptionHandler(Exception.class)
     public CommonResponse globalExceptionHandler(Exception e) {
         /* for Debugging */
         e.printStackTrace();
         log.error("global exception occurred: {}", e.getMessage());
 
-        return new CommonResponse(4000, "global exception 발생 (알 수 없는 오류)");
+        return new CommonResponse(4000, "global exception 발생 (알 수 없는 오류), message: " + e.getMessage());
     }
 
 }
