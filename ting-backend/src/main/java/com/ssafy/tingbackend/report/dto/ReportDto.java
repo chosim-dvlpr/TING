@@ -1,4 +1,4 @@
-package com.ssafy.tingbackend.admin.dto;
+package com.ssafy.tingbackend.report.dto;
 
 import com.ssafy.tingbackend.entity.Report;
 import com.ssafy.tingbackend.entity.type.ReportStateType;
@@ -7,11 +7,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ReportDto {
     private Long reportId;
     private Long userId;
@@ -32,4 +32,5 @@ public class ReportDto {
                 .createdTime(report.getCreatedTime())
                 .build();
     }
+
 }

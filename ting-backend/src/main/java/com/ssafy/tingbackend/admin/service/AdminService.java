@@ -1,8 +1,8 @@
 package com.ssafy.tingbackend.admin.service;
 
 import com.ssafy.tingbackend.admin.dto.ReportDto;
-import com.ssafy.tingbackend.admin.repository.ReportRepository;
 import com.ssafy.tingbackend.entity.Report;
+import com.ssafy.tingbackend.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
