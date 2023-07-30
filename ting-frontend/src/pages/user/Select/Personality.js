@@ -1,17 +1,17 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAddPersonalityCodeList } from "../../../redux/signup";
+import { setPersonalityCodeList } from "../../../redux/signup";
 
 function Personality(){
-  // 토글 구현하기
   let personalityList = ["기독교", "천주교", "불교", "원불교", 
     "이슬람교", "무교"];
 
   let dispatch = useDispatch();
   let Navigate = useNavigate();
+  let signupReducer = useSelector((state) => state.signupReducer);
 
   const changePersonality = (personality) => {
-    dispatch(setAddPersonalityCodeList(personality));
+    dispatch(setPersonalityCodeList(personality));
   };
 
   return(
@@ -26,6 +26,7 @@ function Personality(){
           )
         }
       <br/>
+      { signupReducer.personalityCodeList }
       <button onClick={() => Navigate("/signup/select/style")}>다음</button>
     </div>
   )

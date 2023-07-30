@@ -1,6 +1,6 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAddHobbyCodeList } from "../../../redux/signup";
+import { setHobbyCodeList } from "../../../redux/signup";
 
 function Hobby(){
   // 토글 구현하기
@@ -9,9 +9,10 @@ function Hobby(){
 
   let dispatch = useDispatch();
   let Navigate = useNavigate();
+  // let signupReducer = useSelector((state) => state.signupReducer);
 
-  const changeHobby = (hobby) => {
-    dispatch(setAddHobbyCodeList(hobby));
+  const addHobby = (hobby) => {
+    dispatch(setHobbyCodeList(hobby));
   };
 
   return(
@@ -20,7 +21,7 @@ function Hobby(){
       {
           hobbyList.map((hobby, i) => {
             return (
-              <button onClick={() => changeHobby(hobby)} key={i}>{ hobby }</button>
+              <button onClick={() => addHobby(hobby)} key={i}>{ hobby }</button>
               )
             }
           )

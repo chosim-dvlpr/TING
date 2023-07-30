@@ -1,17 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAddStyleCodeList } from "../../../redux/signup";
+import { setStyleCodeList } from "../../../redux/signup";
 
 function Style(){
-  // 토글 구현하기
   let styleList = ["기독교", "천주교", "불교", "원불교", 
   "이슬람교", "무교"];
 
   let dispatch = useDispatch();
   let Navigate = useNavigate();
+  let signupReducer = useSelector((state) => state.signupReducer);
 
   const changeStyle = (style) => {
-  dispatch(setAddStyleCodeList(style));
+  dispatch(setStyleCodeList(style));
   };
 
   return(
@@ -26,6 +26,8 @@ function Style(){
           )
         }
       <br/>
+      { signupReducer.styleCodeList }
+      <button onClick={() => Navigate("/signup/select/introduction")}>다음</button>
     </div>
   )
 }
