@@ -1,14 +1,17 @@
 
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import basicHttp from '../../../api/basicHttp';
+import { setPhonenumber } from '../../../redux/signup';
 
 function CertificationPhonenumber(){
   let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
   let [phonenumberAuthCode, setPhonenumberAuthCode] = useState("");
   const Navigate = useNavigate()
+  
+  let dispatch = useDispatch();
 
   // 버튼 활성화 여부
   // let [isCertPhoneButtonDisabled, setIsCertPhoneButtonDisabled] = useState(true);
@@ -21,7 +24,6 @@ function CertificationPhonenumber(){
 
     if (data.authCode.length === 4) {
       basicHttp.post('/user/phoneauth', data).then((response) => {
-        console.log(response)
         if (response.data.code === 200) {
           alert("인증 성공");
           Navigate("/signup/detail");
@@ -37,11 +39,13 @@ function CertificationPhonenumber(){
     }
   };
 
-  const checkPhonenumber = useCallback(() => {
+  // 인증번호 재전송
+  const checkPhonenumber = () => {
     // 연락처에 '-' 제거 필요
     basicHttp.get(`/user/phoneauth/${phonenumber}`).then((response) => {
       if (response.data.code === 200) {
         alert("인증 메세지가 전송되었습니다.");
+        dispatch(setPhonenumber(phonenumber));
       }
       else if (response.data.code === 400) {
         alert("인증 실패");
@@ -51,14 +55,14 @@ function CertificationPhonenumber(){
       }
     })
     .catch(() => console.log("실패"));
-  })
-  
+  }
 
 
   return(
     <div>
       <h1>전화번호 인증</h1>
       <div>
+        <p>{ phonenumber }</p>
         <label htmlFor='phonenumber'>전화번호를 입력해주세요</label>
         <br/>
         <input type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />

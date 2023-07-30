@@ -3,18 +3,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import basicHttp from '../../../api/basicHttp';
+import { setPhonenumber } from '../../../redux/signup';
 
 function SignUpPhoneNumber(){
+  let [inputPhonenumber, setInputPhonenumber] = useState("");
+  let [isButtonDisabled, setIsButtonDisabled] = useState(true); // 버튼 활성화 여부
+
   const Navigate = useNavigate()
-  // let [phonenumber, setPhonenumber] = useState("")
-  let phonenumber = useSelector((state) => state.signupReducer.phonenumber)
+  // let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
   let dispatch = useDispatch();
   
-  const checkPhonenumber = useCallback(() => {
+  const checkPhonenumber = () => {
     // 연락처에 '-' 제거 필요
-    basicHttp.get(`/user/phoneauth/${phonenumber}`).then((response) => {
+    basicHttp.get(`/user/phoneauth/${inputPhonenumber}`).then((response) => {
       if (response.data.code === 200) {
         alert("인증 메세지가 전송되었습니다.");
+        dispatch(setPhonenumber(inputPhonenumber));
         Navigate("/signup/certPhonenum");
       }
       else if (response.data.code === 400) {
@@ -25,7 +29,7 @@ function SignUpPhoneNumber(){
       }
     })
     .catch(() => console.log("실패"));
-  })
+  }
 
   return(
     <div>
@@ -34,11 +38,12 @@ function SignUpPhoneNumber(){
       <input type="text" id="phonenumber" 
         onChange={(e) => {
           if (e.target.value.length === 11) {
-            dispatch({type: "TEXT", phonenumber: e.target.value})
+            setIsButtonDisabled(false);
+            setInputPhonenumber(e.target.value);
           };
-        }} 
+        }}
         placeholder="전화번호('-'제외)"/>
-      <button onClick={checkPhonenumber}>인증하기</button>
+      <button onClick={checkPhonenumber} disabled={isButtonDisabled}>인증하기</button>
     </div>
     )
   }
