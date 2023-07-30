@@ -21,6 +21,12 @@ import Matching from './pages/matching/Matching.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
 import MatchingStart from './component/matching/MatchingStart.js';
 
+// 커뮤니티
+
+import Community from './pages/community/Community.js';
+
+
+
 function App() {
 
   return (
@@ -61,6 +67,9 @@ function App() {
         </Route>
 
         <Route path="/testopenvidu" element={<Openvidu/>}></Route>
+
+        {/* 커뮤니티 페이지 */}
+        <Route path="/community/*" element={<Community />} />
 
       </Routes>
 
