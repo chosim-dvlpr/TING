@@ -6,11 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom"
 
 import { Provider } from 'react-redux';
-import { createStore } from "redux";
+// import { createStore } from "redux";
+import store from './redux/store';
 import reducer from './redux/store';
 import { composeWithDevTools } from "redux-devtools-extension";
 
-const store = createStore(reducer, composeWithDevTools());
+// const store = createStore(reducer, composeWithDevTools());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
