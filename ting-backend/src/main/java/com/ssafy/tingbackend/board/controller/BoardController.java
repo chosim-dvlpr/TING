@@ -154,7 +154,7 @@ public class BoardController {
      * @return Only code and message
      */
     @PostMapping("/comment")
-    public CommonResponse writeAdvice(@RequestBody CommentPostDto commentPostDto, Principal principal) {
+    public CommonResponse writeComment(@RequestBody CommentPostDto commentPostDto, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         commentPostDto.setUserId(userId);
         boardService.insertComment(commentPostDto);
@@ -168,7 +168,7 @@ public class BoardController {
      * @return Only code and message
      */
     @PutMapping("/comment/{commentId}")
-    public CommonResponse modifyAdvice(@PathVariable Long commentId, @RequestBody CommentPostDto commentPostDto, Principal principal) {
+    public CommonResponse modifyComment(@PathVariable Long commentId, @RequestBody CommentPostDto commentPostDto, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         commentPostDto.setCommentId(commentId);
         commentPostDto.setUserId(userId);
@@ -190,5 +190,31 @@ public class BoardController {
         commentPostDto.setUserId(userId);
         boardService.deleteComment(commentPostDto);
         return new CommonResponse(200, "댓글 삭제 성공");
+    }
+
+    /**
+     * 댓글 좋아요 등록 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param commentId
+     * @return Only code and message
+     */
+    @PostMapping("/comment/like/{commentId}")
+    public CommonResponse likeComment(@PathVariable Long commentId, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        boardService.likeComment(commentId, userId);
+        return new CommonResponse(200, "좋아요 등록 성공");
+    }
+
+    /**
+     * 댓글 좋아요 삭제 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param commentId
+     * @return Only code and message
+     */
+    @DeleteMapping("/comment/like/{commentId}")
+    public CommonResponse deletelikeComment(@PathVariable Long commentId, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        boardService.deletelikeComment(commentId, userId);
+        return new CommonResponse(200, "좋아요 삭제 성공");
     }
 }
