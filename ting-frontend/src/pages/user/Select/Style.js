@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAddStyleCodeList } from "../../../redux/signup";
 
@@ -26,10 +26,6 @@ function Style(){
           )
         }
       <br/>
-      <button onClick={() => {
-          alert("회원가입이 완료되었습니다.");
-          Navigate("/");
-        }}>다음</button>
     </div>
   )
 }
