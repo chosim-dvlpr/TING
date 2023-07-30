@@ -1,12 +1,15 @@
 import { useState,useEffect, useRef } from "react"
 import Swal from "sweetalert2";
-import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
-import UserVideoComponent from "../../pages/openvidu/UserVideoComponent";
+import { OpenVidu } from 'openvidu-browser';
+
 import tokenHttp from "../../api/tokenHttp";
-
-
-
+import UserVideoComponent from "../../pages/openvidu/UserVideoComponent";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './WaitingRoom.css'
+import { useSelector } from "react-redux";
 
 function WaitingRoom(){
   const [userdata, setUserdata] = useState({});
@@ -21,14 +24,19 @@ function WaitingRoom(){
   // 이 티켓 redux로 불러와야할 듯
   let [ticket, setTicket] = useState(10)
   let [start, setStart] = useState(0)
+  let state = useSelector((state)=>state)
 
   useEffect(() => {
-    // 유저 데이터를 조회 => redux에 보관해야함..
-    tokenHttp.get('/user').then((response) => {
-        // console.log(response.data.data)
-        setUserdata(response.data.data)
-    })
-    joinSession()
+    console.log('나오냐')
+    console.log(state.userdataReducer)
+    // 유저 데이터 redux에서 가져옴
+    setUserdata(state.userdataReducer.userdata)
+
+    // tokenHttp.get('/user').then((response) => {
+    //     // console.log(response.data.data)
+    //     setUserdata(response.data.data)
+    // })
+    joinSession();
 
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
@@ -49,6 +57,7 @@ function WaitingRoom(){
   };
 
   const handleMainVideoStream = (stream) => {
+
       if (mainStreamManager !== stream) {
           setMainStreamManager(stream);
       }
@@ -165,28 +174,36 @@ function WaitingRoom(){
   return(
     <div>
       <h1>대기실</h1>
-      <div id="video-container">
-        <h1>자신의 웹캠</h1>
-        {publisher !== undefined ? (
-          <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-                <UserVideoComponent streamManager={publisher} />
+      <Container className='box'>
+        <Row>
+          <Col className='leftBox'>
+            {publisher !== undefined ? (
+              <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+                    <UserVideoComponent streamManager={publisher} />
+                </div>
+            ) : null}
+          </Col>
+          <Col className='rightBox'>
+            <div className="stream-container col-md-6 col-xs-6">
+              {userdata.nickname} 님의 상태
+              <p>체크박스</p>
+              <p>웹캠이 확인되었습니다</p>
+              <p>체크박스</p>
+              <p>마이크가 확인되었습니다.</p>
+              <p>체크박스</p>
+              <p>잔여티켓 {ticket}개</p>
+              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
             </div>
-        ) : null}
-      </div>
-      <div>
-        <p>체크박스</p>
-        <p>웹캠이 확인되었습니다</p>
-        <p>체크박스</p>
-        <p>마이크가 확인되었습니다.</p>
-        <p>체크박스</p>
-        <p>잔여티켓 {ticket}개</p>
+          </Col>
+        </Row>
+      </Container>
+      <div id="video-container">
       </div>
       <div>
         {/* 3가지 경우 */}
         {/* 잔여 티켓 0 */}
         {/* 잔여 티켓 1개 이상 */}
         {/* 매칭 시작 버튼 눌렀을 때 */}
-        <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
       </div>
     </div>
 
@@ -217,6 +234,8 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
       <div>
         <p>{ 남은시간 }</p>
         <p>예상 대기 시간 : { 예상대기시간 }분</p>
+
+
         <button onClick={()=>{ 
           alert()
         }}>

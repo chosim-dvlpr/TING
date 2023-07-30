@@ -1,13 +1,17 @@
 import { useState } from "react";
 import basicHttp from "../../api/basicHttp";
-// import tokenHttp from "../../api/tokenHttp";
+import tokenHttp from "../../api/tokenHttp";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import { getCurrentUserdata } from "../../redux/userdata";
+
 function Login(){
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
+
+  let state = useSelector((state) => state)
 
   let dispatch = useDispatch();
   let navigate = useNavigate();
@@ -35,6 +39,12 @@ function Login(){
           console.log('성공');
           localStorage.setItem('access-token', response.data.data['access-token']);
           localStorage.setItem('refresh-token', response.data.data['refresh-token']);
+          
+          // 유저 데이터 redux에 저장
+          tokenHttp.get('/user').then((response) => {
+            dispatch(getCurrentUserdata(response.data.data))
+          })
+
           navigate("/") // 로그인 완료되면 메인으로 이동
         }
         else {
