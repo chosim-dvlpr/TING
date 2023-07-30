@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // axios를 import
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AdvicePostForm = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // 게시글 저장 로직: title과 content 값을 서버로 전송하여 저장하는 등의 작업을 수행합니다.
-      const response = await axios.post('', {
-        title,
-        body: content,
-      });
 
-      if (!response.status === 201) {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // 게시글 저장 로직: title과 content 값을 서버로 전송하여 저장하는 등의 작업을 수행
+    axios.post('https://i9b107.p.ssafy.io:5157/advice', {
+      title,
+      body: content,
+    })
+    .then((response) => {
+      if (response.status === 201) {
+       
+        navigate('/community/advice');
+      } else {
         throw new Error('Failed to save the post');
       }
-
-      // 작성 완료 후 게시글 목록 페이지로 이동
-      // 예: history.push('/community/advice');
-    } catch (error) {
+    })
+    .catch((error) => {
       console.error('Error saving the post:', error);
-    }
+    });
   };
 
-  // handleCancel 함수는 더 이상 필요하지 않으므로 삭제
+  
 
   return (
     <div>
