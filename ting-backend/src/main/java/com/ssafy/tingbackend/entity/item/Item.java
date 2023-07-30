@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id", "name", "price"})
+@ToString(of = {"code", "name", "price"})
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

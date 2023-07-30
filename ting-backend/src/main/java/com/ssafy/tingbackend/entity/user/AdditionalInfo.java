@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.entity.user;
 
+import com.ssafy.tingbackend.entity.type.AdditionalType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,14 +20,8 @@ public class AdditionalInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long code;
     // 직업, 음주, 흡연, 종교, MBTI, 성격, 취미, 스타일
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private AdditionalType category;
     private String name;
-
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserHobby> userHobbys = new ArrayList<>();
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserStyle> userStyles = new ArrayList<>();
-    @OneToMany(mappedBy = "addtionalInfo")
-    List<UserPersonality> userPersonalities = new ArrayList<>();
 
 }

@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 
 // 토큰이 필요한 인증에 사용
 
-const baseURL = process.env.REACT_APP_SERVER_URL;
+// const baseURL = process.env.REACT_APP_SERVER_URL;
+const baseURL = "https://i9b107.p.ssafy.io:5157";
 
 const tokenHttp = axios.create({
   baseURL,
@@ -15,7 +16,7 @@ const tokenHttp = axios.create({
 
 // 요청 인터셉터 설정 (요청 보내기 전에 수행되는 함수)
 tokenHttp.interceptors.request.use(async (req) => {
-  const accessToken = sessionStorage.getItem("access-token");
+  const accessToken = localStorage.getItem("access-token");
   if (!accessToken) {
     console.log("token 이 존재하지 않습니다.");
     throw new Error("expire token");
@@ -39,14 +40,14 @@ tokenHttp.interceptors.request.use(async (req) => {
       {},
       {
         headers: {
-          Authorization: sessionStorage.getItem("refresh-token"),
+          Authorization: localStorage.getItem("refresh-token"),
         },
       }
     )
     .then((response) => {
       if (response.data.message === "success") {
-        sessionStorage.setItem("access-token", response.data["accessToken"]);
-        sessionStorage.setItem("refresh-token", response.data["refresh-token"]);
+        localStorage.setItem("access-token", response.data["accessToken"]);
+        localStorage.setItem("refresh-token", response.data["refresh-token"]);
       } else {
         throw new Error("expire token");
       }
@@ -55,7 +56,7 @@ tokenHttp.interceptors.request.use(async (req) => {
       throw new Error("expire token");
     });
 
-  req.headers["Authorization"] = sessionStorage.getItem("access-token");
+  req.headers["Authorization"] = localStorage.getItem("access-token");
   return req;
 });
 

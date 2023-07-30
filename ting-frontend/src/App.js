@@ -20,6 +20,22 @@ import Hobby from './pages/user/Select/Hobby';
 import Personality from './pages/user/Select/Personality';
 import Prefer from './pages/user/Select/Prefer';
 import Introduce from './pages/user/Select/Introduce';
+import Openvidu from './pages/openvidu/openvidu-main.js';
+
+// 메인페이지
+import Main from './pages/main/Main.js'
+
+// 매칭
+
+import Matching from './pages/matching/Matching.js';
+import WaitingRoom from './component/matching/WaitingRoom.js';
+import MatchingStart from './component/matching/MatchingStart.js';
+
+// 커뮤니티
+
+import Community from './pages/community/Community.js';
+import AdvicePostForm from './pages/community/AdvicePostForm.js'
+
 
 
 function App() {
@@ -50,17 +66,14 @@ function App() {
         </div>
       </div>
       <Routes>
-        <Route path="/" element={
-          <div>
-            홈!
-            <h3>로그인 상태 : { isLogin }</h3>
-            </div>
-        }></Route>
+        {/* 네비게이션 바 */}
+        <Route path="/" element={ <Main/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
-        <Route path="/community" element={ <div>커뮤니티</div> }></Route>
+        <Route path="/community/*" element={ <Community /> }></Route>
         <Route path="/login" element={ <Login/> }></Route>
 
-        <Route path="/signup" element={ <Signup/>}>
+        {/* 회원가입 */}
+        <Route path="/signup" element={ <Signup/> }>
           <Route path="" element={ <SignupEmail/> }></Route>
           <Route path="certEmail" element={ <CertificationEmail/> }></Route>
           <Route path="password" element={ <SignupPassword/> }></Route>
@@ -81,7 +94,20 @@ function App() {
           </Route>
         </Route>
 
-      </Routes>
+        {/* 매칭 */}
+        <Route path="/matching" element={< Matching/> }>
+          <Route path="" element={ <WaitingRoom/> }></Route>
+          <Route path="start" element={ <MatchingStart/> }></Route>
+        </Route>
+
+        <Route path="/testopenvidu" element={<Openvidu/>}></Route>
+
+        {/* 커뮤니티 페이지 */}
+
+        <Route path="/community/*" element={<Community />} />
+        <Route path="/community/advice/new" element={<AdvicePostForm />} />
+    
+        </Routes>
 
     </div>
   );
