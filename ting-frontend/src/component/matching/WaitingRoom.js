@@ -1,12 +1,14 @@
 import { useState,useEffect, useRef } from "react"
 import Swal from "sweetalert2";
-import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
-import UserVideoComponent from "../../pages/openvidu/UserVideoComponent";
+import { OpenVidu } from 'openvidu-browser';
+
 import tokenHttp from "../../api/tokenHttp";
-
-
-
+import UserVideoComponent from "../../pages/openvidu/UserVideoComponent";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './WaitingRoom.css'
 
 function WaitingRoom(){
   const [userdata, setUserdata] = useState({});
@@ -165,28 +167,35 @@ function WaitingRoom(){
   return(
     <div>
       <h1>대기실</h1>
-      <div id="video-container">
-        <h1>자신의 웹캠</h1>
-        {publisher !== undefined ? (
-          <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-                <UserVideoComponent streamManager={publisher} />
+      <Container className='box'>
+        <Row>
+          <Col className='leftBox'>
+            {publisher !== undefined ? (
+              <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+                    <UserVideoComponent streamManager={publisher} />
+                </div>
+            ) : null}
+          </Col>
+          <Col className='rightBox'>
+            <div>
+              <p>체크박스</p>
+              <p>웹캠이 확인되었습니다</p>
+              <p>체크박스</p>
+              <p>마이크가 확인되었습니다.</p>
+              <p>체크박스</p>
+              <p>잔여티켓 {ticket}개</p>
+              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
             </div>
-        ) : null}
-      </div>
-      <div>
-        <p>체크박스</p>
-        <p>웹캠이 확인되었습니다</p>
-        <p>체크박스</p>
-        <p>마이크가 확인되었습니다.</p>
-        <p>체크박스</p>
-        <p>잔여티켓 {ticket}개</p>
+          </Col>
+        </Row>
+      </Container>
+      <div id="video-container">
       </div>
       <div>
         {/* 3가지 경우 */}
         {/* 잔여 티켓 0 */}
         {/* 잔여 티켓 1개 이상 */}
         {/* 매칭 시작 버튼 눌렀을 때 */}
-        <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
       </div>
     </div>
 
