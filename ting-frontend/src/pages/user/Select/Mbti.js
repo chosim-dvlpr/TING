@@ -1,8 +1,13 @@
+import { useDispatch } from "react-redux";
+import { setMbtiCode } from "../../../redux/signup";
+
 function Mbti(){
   let mbtiList = ["ISTJ", "ISFJ", "INFJ", "INTJ", 
     "ISTP", "ISFP", "INFP", "INTP", 
     "ESTP", "ESFP", "ENFP", "ENTP", 
     "ESTJ", "ESFJ", "ENFJ", "ENTJ"];
+  
+  let dispatch = useDispatch();
   
   return(
     <div className="Mbti">
@@ -10,11 +15,12 @@ function Mbti(){
         {
           mbtiList.map((mbti, i) => {
             return (
-              <button>{ mbti }</button>
+              <button onClick={dispatch(setMbtiCode(mbti))}>{ mbti }</button>
               )
             }
           )
         }
+        
     </div>
   )
 }
