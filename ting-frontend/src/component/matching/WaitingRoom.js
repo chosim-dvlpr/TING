@@ -9,6 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './WaitingRoom.css'
+import { useSelector } from "react-redux";
 
 function WaitingRoom(){
   const [userdata, setUserdata] = useState({});
@@ -23,14 +24,19 @@ function WaitingRoom(){
   // 이 티켓 redux로 불러와야할 듯
   let [ticket, setTicket] = useState(10)
   let [start, setStart] = useState(0)
+  let state = useSelector((state)=>state)
 
   useEffect(() => {
-    // 유저 데이터를 조회 => redux에 보관해야함..
-    tokenHttp.get('/user').then((response) => {
-        // console.log(response.data.data)
-        setUserdata(response.data.data)
-    })
-    joinSession()
+    console.log('나오냐')
+    console.log(state.userdataReducer)
+    // 유저 데이터 redux에서 가져옴
+    setUserdata(state.userdataReducer.userdata)
+
+    // tokenHttp.get('/user').then((response) => {
+    //     // console.log(response.data.data)
+    //     setUserdata(response.data.data)
+    // })
+    joinSession();
 
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
@@ -51,6 +57,7 @@ function WaitingRoom(){
   };
 
   const handleMainVideoStream = (stream) => {
+
       if (mainStreamManager !== stream) {
           setMainStreamManager(stream);
       }
@@ -177,7 +184,8 @@ function WaitingRoom(){
             ) : null}
           </Col>
           <Col className='rightBox'>
-            <div>
+            <div className="stream-container col-md-6 col-xs-6">
+              {userdata.nickname} 님의 상태
               <p>체크박스</p>
               <p>웹캠이 확인되었습니다</p>
               <p>체크박스</p>
@@ -226,6 +234,8 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
       <div>
         <p>{ 남은시간 }</p>
         <p>예상 대기 시간 : { 예상대기시간 }분</p>
+
+
         <button onClick={()=>{ 
           alert()
         }}>
