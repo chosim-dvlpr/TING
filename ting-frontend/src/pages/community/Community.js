@@ -4,8 +4,8 @@ router로 라우팅 구성하기
 
 
 import React from 'react';
-import Sidebar from '../../components/community/Sidebar';
-import { Routes, Route, Link } from 'react-router-dom';
+import Sidebar from '../../component/community/Sidebar';
+import { Routes, Route } from 'react-router-dom';
 import AdviceBoard from './AdviceBoard';
 import IssueBoard from './IssueBoard';
 
@@ -16,7 +16,7 @@ const Community = () => {
       <div className="community-content">
         <Routes>
           {/* 커뮤니티 메인 페이지 */}
-          <Route path="/" element={<div>커뮤니티 메인 페이지</div>} />
+          <Route path="/" element={<IssueBoard />} />
 
           {/* adivce 게시판 */}
           <Route path="advice" element={<AdviceBoard />} />

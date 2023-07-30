@@ -24,6 +24,7 @@ import MatchingStart from './component/matching/MatchingStart.js';
 // 커뮤니티
 
 import Community from './pages/community/Community.js';
+import AdvicePostForm from './pages/community/AdvicePostForm.js'
 
 
 
@@ -47,7 +48,7 @@ function App() {
         {/* 네비게이션 바 */}
         <Route path="/" element={ <Main/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
-        <Route path="/community" element={ <div>커뮤니티</div> }></Route>
+        <Route path="/community/*" element={ <Community /> }></Route>
         <Route path="/login" element={ <Login/> }></Route>
 
         {/* 회원가입 */}
@@ -69,9 +70,11 @@ function App() {
         <Route path="/testopenvidu" element={<Openvidu/>}></Route>
 
         {/* 커뮤니티 페이지 */}
-        <Route path="/community/*" element={<Community />} />
 
-      </Routes>
+        <Route path="/community/*" element={<Community />} />
+        <Route path="/community/advice/new" element={<AdvicePostForm />} />
+    
+        </Routes>
 
     </div>
   );
