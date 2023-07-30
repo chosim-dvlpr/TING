@@ -104,6 +104,21 @@ export const signupReducer = createSlice({
     setPhonenumber: (state, action) => {
       state.phonenumber = action.payload;
     },
+    setName: (state, action) => {
+      state.name = action.payload;
+    },
+    setNickname: (state, action) => {
+      state.nickname = action.payload;
+    },
+    setGender: (state, action) => {
+      state.gender = action.payload;
+    },
+    setRegion: (state, action) => {
+      state.region = action.payload;
+    },
+    setBirth: (state, action) => {
+      state.birth = action.payload;
+    },
     // setName: (state, action) => {
     //   state.name = action.payload;
     // },
@@ -146,5 +161,5 @@ export const signupReducer = createSlice({
 // };
 
 // export default signupReducer;
-export const { setEmail, setPassword, setPhonenumber } = signupReducer.actions;
+export const { setEmail, setPassword, setPhonenumber, setName, setNickname, setGender, setRegion, setBirth } = signupReducer.actions;
 export default signupReducer;
