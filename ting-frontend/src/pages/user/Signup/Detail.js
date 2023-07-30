@@ -12,6 +12,9 @@ function Detail(){
   let [inputNickname, setInputNickname] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
+  let regionList = ["서울", "부산", "대구", "인천", "광주", 
+    "대전", "울산", "경기", "강원" ,"충복", "충남", 
+    "세종", "전북", "전남", "경북", "경남", "제주"];
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
@@ -147,7 +150,7 @@ function Detail(){
         console.log(data)
         if (response.data.code === 200) {
           alert("회원가입이 완료되었습니다.");
-          Navigate("/signup");
+          Navigate("/login");
         }
         else if (response.data.code === 400) {
           alert("회원 가입 실패");
@@ -184,11 +187,16 @@ function Detail(){
       <input type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리, 슬래시"></input>
 
       <h3>지역 선택</h3>
-      <button onClick={() => regionIsExist("서울")}>서울</button>
-      <button onClick={() => regionIsExist("경기")}>경기</button>
-      <button onClick={() => regionIsExist("인천")}>인천</button>
+      {
+        regionList.map((r,i) => {
+          return (
+            <button onClick={() => regionIsExist(r)}>{r}</button>
+          )
+        })
+      }
       <br/>
-      <button onClick={completeSignup}>회원 가입 완료</button>
+      <button onClick={Navigate("/signup/selectiondata")}>추가 정보 입력하기</button>
+      <button onClick={completeSignup}>로그인 하러 가기</button>
     </div>
   )
 }
