@@ -1,7 +1,5 @@
 package com.ssafy.tingbackend.matching.controller;
 
-import com.ssafy.tingbackend.common.exception.CommonException;
-import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.matching.service.MatchingService;
@@ -44,15 +42,15 @@ public class MatchingController {
      * @param principal 로그인한 유저의 id (자동주입)
      * @return 매칭된 결과 세션 ID (비동기)
      */
-    @GetMapping("/matching")
-    public DeferredResult<DataResponse> matchUsers(Principal principal) {
-        long timeout = 600_000L;  // 타임아웃 시간 10분
-        DeferredResult<DataResponse> deferredResult = new DeferredResult<>(timeout);
-
-        matchingService.matchUsers(Long.parseLong(principal.getName()), deferredResult);
-
-        return deferredResult;
-    }
+//    @GetMapping("/matching")
+//    public DeferredResult<DataResponse> matchUsers(Principal principal) {
+//        long timeout = 600_000L;  // 타임아웃 시간 10분
+//        DeferredResult<DataResponse> deferredResult = new DeferredResult<>(timeout);
+//
+//        matchingService.matchUsers(Long.parseLong(principal.getName()), deferredResult);
+//
+//        return deferredResult;
+//    }
 
     /**
      * 매칭 수락 API

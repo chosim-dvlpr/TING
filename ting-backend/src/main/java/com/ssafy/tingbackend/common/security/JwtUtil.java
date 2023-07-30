@@ -71,4 +71,10 @@ public class JwtUtil {
             throw new CommonException(ExceptionType.JWT_TOKEN_PARSE_ERROR);
         }
     }
+
+    // 토큰에서 userId 가져오기 -> 이렇게 써도 되는거 맞나..?
+    public static String getUserIdFromToken(String token) {
+        Object userId = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("userId");
+        return userId.toString();
+    }
 }
