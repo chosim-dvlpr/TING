@@ -17,16 +17,21 @@ import com.ssafy.tingbackend.user.repository.UserHobbyRepository;
 import com.ssafy.tingbackend.user.repository.UserPersonalityRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import com.ssafy.tingbackend.user.repository.UserStyleRepository;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -100,17 +105,6 @@ public class MatchingService {
         }
     }
 
-    public User getUSerAllData(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-
-        user.setUserHobbys(userHobbyRepository.findAllByUserId(userId));
-        user.setUserPersonalities(userPersonalityRepository.findAllByUserId(userId));
-        user.setUserStyles(userStyleRepository.findAllByUserId(userId));
-
-        return user;
-    }
-
     public User findWaitingUser(Map<User, DeferredResult<DataResponse>> queue) {
         User findUser = null;
 
@@ -120,6 +114,136 @@ public class MatchingService {
         }
 
         return findUser;
+    }
+
+    public void acceptMatching(Long userId, String sessionId, DeferredResult<DataResponse> deferredResult) {
+        MatchingInfoDto matchingInfo = matchingInfoRepository.findBySessionId(sessionId);
+        System.out.println("matchingInfo = " + matchingInfo);
+        System.out.println("acceptQueue = " + acceptQueue);
+
+        if(matchingInfo.getUserIdA().equals(userId)) {
+            matchingInfo.setIsAcceptA(true);
+        } else if(matchingInfo.getUserIdB().equals(userId)) {
+            matchingInfo.setIsAcceptB(true);
+        }
+        matchingInfoRepository.save(matchingInfo);
+
+        Map<String, String> responseMap = new HashMap<>();
+
+        // 두 사용자 모두 수락을 선택한 경우
+        if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
+                matchingInfo.getIsAcceptA() && matchingInfo.getIsAcceptB()) {
+            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
+
+            // DB에 매칭 정보 저장 (matching, matching_user 테이블)
+            Matching matching = matchingRepository.save(new Matching());
+            User user = userRepository.findById(userId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            User opponentUser = userRepository.findById(opponentUserId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            matchingUserRepository.save(new MatchingUser(matching, user));
+            matchingUserRepository.save(new MatchingUser(matching, opponentUser));
+
+            responseMap.put("token", openViduService.createConnection(sessionId));
+            responseMap.put("matchingId", matching.getId().toString());
+
+            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));  // 내 요청에 대한 응답
+            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));  // 상대 요청에 대한 응답
+        } else if(matchingInfo.getIsAcceptA() == null || matchingInfo.getIsAcceptB() == null) {  // 상대가 아직 응답을 하지 않은 경우
+            acceptQueue.put(userId, deferredResult);
+        } else {  // 상대가 이미 거절을 한 경우
+            // ============== 매칭 실패 처리를 어떻게 할지 고민해봐야... ===============
+            responseMap.put("token", null);
+            responseMap.put("matchingId", null);
+            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 실패", responseMap));
+        }
+    }
+
+    public void rejectMatching(Long userId, String sessionId) {
+        MatchingInfoDto matchingInfo = matchingInfoRepository.findBySessionId(sessionId);
+        System.out.println("matchingInfo = " + matchingInfo);
+        System.out.println("acceptQueue = " + acceptQueue);
+
+        if(matchingInfo.getUserIdA().equals(userId)) {
+            matchingInfo.setIsAcceptA(false);
+        } else if(matchingInfo.getUserIdB().equals(userId)) {
+            matchingInfo.setIsAcceptB(false);
+        }
+        matchingInfoRepository.save(matchingInfo);
+
+        // 상대방이 이미 수락한 경우 - 상대방쪽에 응답해줘야 함
+        if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
+                (matchingInfo.getIsAcceptA() || matchingInfo.getIsAcceptB())) {
+            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
+
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("token", null);
+            responseMap.put("matchingId", null);
+
+            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 실패", responseMap));
+        }
+    }
+    
+    // 웹소켓으로 변경
+    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+    private final Map<String, User> mQueue = new ConcurrentHashMap<>();
+    private final Map<String, User> fQueue = new ConcurrentHashMap<>();
+
+    public void waitForMatching(Long userId, WebSocketSession session) {
+        sessions.put(session.getId(), session);
+
+        User user = getUSerAllData(userId);
+        if(user.getGender().equals("M")) mQueue.put(session.getId(), user);
+        else fQueue.put(session.getId(), user);
+
+        System.out.println(sessions.size());
+        System.out.println("male = " + mQueue);
+        System.out.println("female = " + fQueue);
+
+        if(mQueue.size() > 0 && fQueue.size() > 0) matchingUsers();
+    }
+
+    private void matchingUsers() {
+        int maxScore = 0;
+        String fSessionId = null;
+        String mSessionId = null;
+
+        // 점수가 가장 높은
+        for(String fId : fQueue.keySet()) {
+            User female = fQueue.get(fId);
+
+            for(String mId : mQueue.keySet()) {
+                User male = mQueue.get(mId);
+                int score = calculateScore(female, male);
+
+                if(score > maxScore) {
+                    maxScore = score;
+                    fSessionId = fId;
+                    mSessionId = mId;
+                }
+            }
+        }
+
+        if(fSessionId != null && mSessionId != null) {
+            // 매칭이 된 경우 세션 생성하여 사용자들에게 id 반환
+            try {
+                Session openViduSession = openViduService.initializeSession();
+                sessions.get(fSessionId).sendMessage(new TextMessage(openViduSession.getSessionId()));
+                sessions.get(mSessionId).sendMessage(new TextMessage(openViduSession.getSessionId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CommonException(ExceptionType.OPENVIDU_ERROR);
+            }
+        }
+    }
+
+    public User getUSerAllData(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        user.setUserHobbys(userHobbyRepository.findAllByUserId(userId));
+        user.setUserPersonalities(userPersonalityRepository.findAllByUserId(userId));
+        user.setUserStyles(userStyleRepository.findAllByUserId(userId));
+
+        return user;
     }
 
     // 매칭 상대 결정을 위한 점수 계산
@@ -347,69 +471,9 @@ public class MatchingService {
         return score;
     }
 
-    public void acceptMatching(Long userId, String sessionId, DeferredResult<DataResponse> deferredResult) {
-        MatchingInfoDto matchingInfo = matchingInfoRepository.findBySessionId(sessionId);
-        System.out.println("matchingInfo = " + matchingInfo);
-        System.out.println("acceptQueue = " + acceptQueue);
-
-        if(matchingInfo.getUserIdA().equals(userId)) {
-            matchingInfo.setIsAcceptA(true);
-        } else if(matchingInfo.getUserIdB().equals(userId)) {
-            matchingInfo.setIsAcceptB(true);
-        }
-        matchingInfoRepository.save(matchingInfo);
-
-        Map<String, String> responseMap = new HashMap<>();
-
-        // 두 사용자 모두 수락을 선택한 경우
-        if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
-                matchingInfo.getIsAcceptA() && matchingInfo.getIsAcceptB()) {
-            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-
-            // DB에 매칭 정보 저장 (matching, matching_user 테이블)
-            Matching matching = matchingRepository.save(new Matching());
-            User user = userRepository.findById(userId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-            User opponentUser = userRepository.findById(opponentUserId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-            matchingUserRepository.save(new MatchingUser(matching, user));
-            matchingUserRepository.save(new MatchingUser(matching, opponentUser));
-
-            responseMap.put("token", openViduService.createConnection(sessionId));
-            responseMap.put("matchingId", matching.getId().toString());
-
-            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));  // 내 요청에 대한 응답
-            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 성사 성공", responseMap));  // 상대 요청에 대한 응답
-        } else if(matchingInfo.getIsAcceptA() == null || matchingInfo.getIsAcceptB() == null) {  // 상대가 아직 응답을 하지 않은 경우
-            acceptQueue.put(userId, deferredResult);
-        } else {  // 상대가 이미 거절을 한 경우
-            // ============== 매칭 실패 처리를 어떻게 할지 고민해봐야... ===============
-            responseMap.put("token", null);
-            responseMap.put("matchingId", null);
-            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 실패", responseMap));
-        }
-    }
-
-    public void rejectMatching(Long userId, String sessionId) {
-        MatchingInfoDto matchingInfo = matchingInfoRepository.findBySessionId(sessionId);
-        System.out.println("matchingInfo = " + matchingInfo);
-        System.out.println("acceptQueue = " + acceptQueue);
-
-        if(matchingInfo.getUserIdA().equals(userId)) {
-            matchingInfo.setIsAcceptA(false);
-        } else if(matchingInfo.getUserIdB().equals(userId)) {
-            matchingInfo.setIsAcceptB(false);
-        }
-        matchingInfoRepository.save(matchingInfo);
-
-        // 상대방이 이미 수락한 경우 - 상대방쪽에 응답해줘야 함
-        if(matchingInfo.getIsAcceptA() != null && matchingInfo.getIsAcceptB() != null &&
-                (matchingInfo.getIsAcceptA() || matchingInfo.getIsAcceptB())) {
-            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-
-            Map<String, String> responseMap = new HashMap<>();
-            responseMap.put("token", null);
-            responseMap.put("matchingId", null);
-
-            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 실패", responseMap));
-        }
+    public void finishWaiting(String sessionId) {
+        sessions.remove(sessionId);
+        if(fQueue.containsKey(sessionId)) fQueue.remove(sessionId);
+        if(mQueue.containsKey(sessionId)) mQueue.remove(sessionId);
     }
 }
