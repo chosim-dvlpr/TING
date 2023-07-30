@@ -3,11 +3,17 @@ import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import UserVideoComponent from './UserVideoComponent';
 
+import tokenHttp from "../../api/tokenHttp";
+
+
+
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const App = () => {
+    const [userdata, setUserdata] = useState({});
     const [mySessionId, setMySessionId] = useState('SessionA');
-    const [myUserName, setMyUserName] = useState('Participant' + Math.floor(Math.random() * 100));
+    // const [myUserName, setMyUserName] = useState('Participant' + Math.floor(Math.random() * 100));
+    const [myUserName, setMyUserName] = useState(userdata.nickname);
     const [session, setSession] = useState(undefined);
     const [mainStreamManager, setMainStreamManager] = useState(undefined);
     const [publisher, setPublisher] = useState(undefined);
@@ -16,6 +22,12 @@ const App = () => {
     const videoRef = useRef(null);
 
     useEffect(() => {
+        // 유저 데이터를 조회 => redux에 보관해야함..
+        tokenHttp.get('/user').then((response) => {
+            // console.log(response.data.data)
+            setUserdata(response.data.data)
+        })
+
         window.addEventListener('beforeunload', onbeforeunload);
         return () => {
             window.removeEventListener('beforeunload', onbeforeunload);
@@ -47,7 +59,7 @@ const App = () => {
     const joinSession = async () => {
         // --- 1) Get an OpenVidu object ---
         const OV = new OpenVidu();
-
+      
         // --- 2) Init a session ---
         const newSession = OV.initSession();
         setSession(newSession);
@@ -57,12 +69,14 @@ const App = () => {
         newSession.on('streamCreated', (event) => {
             // Subscribe to the Stream to receive it. Second parameter is undefined
             // so OpenVidu doesn't create an HTML video by its own
+            console.log('상대방이 들어옴')
             const subscriber = newSession.subscribe(event.stream, undefined);
             setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
         });
 
         // On every Stream destroyed...
         newSession.on('streamDestroyed', (event) => {
+            console.log('상대방이 나감')
             deleteSubscriber(event.stream.streamManager);
         });
 
@@ -120,7 +134,8 @@ const App = () => {
         setSession(undefined);
         setSubscribers([]);
         setMySessionId('SessionA');
-        setMyUserName('Participant' + Math.floor(Math.random() * 100));
+        // setMyUserName('Participant' + Math.floor(Math.random() * 100));
+        setMyUserName(userdata.nickname);
         setMainStreamManager(undefined);
         setPublisher(undefined);
     };
@@ -160,7 +175,7 @@ const App = () => {
                                     className="form-control"
                                     type="text"
                                     id="userName"
-                                    value={myUserName}
+                                    value={userdata.nickname}
                                     onChange={handleChangeUserName}
                                     required
                                 />
