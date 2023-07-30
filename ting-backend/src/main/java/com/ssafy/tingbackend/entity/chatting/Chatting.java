@@ -2,6 +2,7 @@ package com.ssafy.tingbackend.entity.chatting;
 
 import com.ssafy.tingbackend.entity.common.BaseUnmodifidableTimeEntity;
 import com.ssafy.tingbackend.entity.type.BoardType;
+import com.ssafy.tingbackend.entity.type.ChattingType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"chattingUsers", "lastChattingTime", "lastChattingContent", "state", "temperature"})
+@ToString(of = {"lastChattingTime", "lastChattingContent", "state", "temperature"})
 @DynamicInsert
 public class Chatting extends BaseUnmodifidableTimeEntity {
     @Id
@@ -28,7 +29,7 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
     private LocalDateTime lastChattingTime;
     private String lastChattingContent;
     @Enumerated(EnumType.STRING)
-    private BoardType state;
+    private ChattingType state;
     @ColumnDefault("36.5")
     private BigDecimal temperature;
 
