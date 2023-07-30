@@ -5,10 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.Hibernate;
+import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -24,4 +27,12 @@ public class AdditionalInfo {
     private AdditionalType category;
     private String name;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+
+        AdditionalInfo additionalInfo = (AdditionalInfo) o;
+        return code != null && Objects.equals(code, additionalInfo.getCode());
+    }
 }

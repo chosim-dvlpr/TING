@@ -1,7 +1,5 @@
 package com.ssafy.tingbackend.matching.controller;
 
-import com.ssafy.tingbackend.common.exception.CommonException;
-import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.matching.service.MatchingService;
