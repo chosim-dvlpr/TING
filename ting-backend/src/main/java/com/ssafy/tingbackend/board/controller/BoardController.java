@@ -6,6 +6,7 @@ import com.ssafy.tingbackend.board.dto.IssueBoardDto;
 import com.ssafy.tingbackend.board.service.BoardService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
+import com.ssafy.tingbackend.entity.type.BoardType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -190,6 +191,17 @@ public class BoardController {
         commentPostDto.setUserId(userId);
         boardService.deleteComment(commentPostDto);
         return new CommonResponse(200, "댓글 삭제 성공");
+    }
+
+    /**
+     * 댓글 목록 조회 API
+     * @param boardType, boardId
+     * @return 댓글 목록 리스트
+     */
+    @GetMapping("/comment/{boardType}/{boardId}")
+    public DataResponse<List<CommentDto.Response>> listComment(@PathVariable BoardType boardType, @PathVariable Long boardId) {
+        List<CommentDto.Response> commentList = boardService.commentList(boardType, boardId);
+        return new DataResponse<>(200, "댓글 목록 조회 성공", commentList);
     }
 
     /**
