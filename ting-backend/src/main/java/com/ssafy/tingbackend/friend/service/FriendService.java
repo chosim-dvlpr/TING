@@ -30,14 +30,10 @@ public class FriendService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        List<ChattingUser> chattingUserList = chattingUserRepository.findAllByUser(user);
+        List<Long> chattingIdList = chattingUserRepository.findChattingIdByUser(user);
         List<Chatting> chattingList = new ArrayList<>();
-        for(ChattingUser chattingUser: chattingUserList) {
-            chattingList.add(chattingRepository.findById(chattingUser.getChatting().getId())
-                    .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND)));
-        }
-        // 정렬 마지막 메세지 기준으로==============================
-//        chattingList.sort();
+
+        chattingList = chattingRepository.findAllByUser(chattingIdList);
 
         List<ChattingDto> chattingDtoList = new ArrayList<>();
         for(Chatting chatting: chattingList) {
