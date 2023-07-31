@@ -214,7 +214,7 @@ public class UserService {
                 "[" + authCode + "]";
         Long time = System.currentTimeMillis();
         try {
-            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
+            SmsDto.Response response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
             if (!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
         } catch (Exception e) {
             e.printStackTrace();
