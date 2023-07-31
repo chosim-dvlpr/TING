@@ -135,4 +135,48 @@ public class UserDto {
         private List<Long> styleCodeList;
         private List<Long> personalityCodeList;
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Info {
+        private String nickname;
+        private String gender;
+        private SidoType region;
+
+        private String profileImage;
+        private int height;
+        private String introduce;
+
+        private AdditionalInfoDto mbtiCode;
+        private AdditionalInfoDto drinkingCode;
+        private AdditionalInfoDto smokingCode;
+        private AdditionalInfoDto religionCode;
+        private AdditionalInfoDto jobCode;
+
+        List<AdditionalInfoDto> userHobbys = new ArrayList<>();
+        List<AdditionalInfoDto> userStyles = new ArrayList<>();
+        List<AdditionalInfoDto> userPersonalities = new ArrayList<>();
+
+        public static UserDto.Info of(User user, List<AdditionalInfoDto> hobbyAdditional, List<AdditionalInfoDto> styleAdditional, List<AdditionalInfoDto> personalityAdditional) {
+            return UserDto.Info.builder()
+                    .nickname(user.getNickname())
+                    .gender(user.getGender())
+                    .region(user.getRegion())
+                    .profileImage(user.getProfileImage())
+                    .height(user.getHeight())
+                    .introduce(user.getIntroduce())
+                    .mbtiCode(AdditionalInfoDto.of(user.getMbtiCode()))
+                    .drinkingCode(AdditionalInfoDto.of(user.getDrinkingCode()))
+                    .smokingCode(AdditionalInfoDto.of(user.getSmokingCode()))
+                    .religionCode(AdditionalInfoDto.of(user.getReligionCode()))
+                    .jobCode(AdditionalInfoDto.of(user.getJobCode()))
+                    .userHobbys(hobbyAdditional)
+                    .userStyles(styleAdditional)
+                    .userPersonalities(personalityAdditional)
+                    .build();
+        }
+    }
 }
