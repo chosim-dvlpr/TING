@@ -14,4 +14,7 @@ public interface ChattingUserRepository extends JpaRepository<ChattingUser, Long
 
     @Query("SELECT c.user FROM ChattingUser c WHERE c.chatting.id=:chattingId AND c.user.id !=:userId")
     User findFriend(Long chattingId, Long userId);
+
+    @Query("SELECT c.chatting.id FROM ChattingUser c WHERE c.user=:user")
+    List<Long> findChattingIdByUser(User user);
 }
