@@ -41,7 +41,7 @@ public class UserService {
 
     private final SmsService smsService;
 
-    public Map<String, String> login(UserDto userDto) {
+    public Map<String, String> login(UserDto.Basic userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
 
@@ -64,7 +64,7 @@ public class UserService {
         return result;
     }
 
-    public void signUp(UserDto userDto) {
+    public void signUp(UserDto.Signup userDto) {
         userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
         // 기본 정보 UserDto -> User 변환
@@ -119,7 +119,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto userDetail(Long userId) {
+    public UserDto.Detail userDetail(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -131,27 +131,7 @@ public class UserService {
         user.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
         user.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
 
-        return UserResponseDto.builder()
-                .userId(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .nickname(user.getNickname())
-                .phoneNumber(user.getPhoneNumber())
-                .gender(user.getGender())
-                .region(user.getRegion() == null ? "" : user.getRegion().getName())
-                .birth(user.getBirth())
-                .profileImage(user.getProfileImage())
-                .height(user.getHeight())
-                .introduce(user.getIntroduce())
-                .mbtiCode(AdditionalInfoDto.of(user.getMbtiCode()))
-                .drinkingCode(AdditionalInfoDto.of(user.getDrinkingCode()))
-                .smokingCode(AdditionalInfoDto.of(user.getSmokingCode()))
-                .religionCode(AdditionalInfoDto.of(user.getReligionCode()))
-                .jobCode(AdditionalInfoDto.of(user.getJobCode()))
-                .userHobbys(hobbyAdditional)
-                .userStyles(styleAdditional)
-                .userPersonalities(personalityAdditional)
-                .build();
+        return UserDto.Detail.of(user, hobbyAdditional, styleAdditional, personalityAdditional);
     }
 
     @Transactional
@@ -177,7 +157,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
     }
 
-    public String findEmail(UserDto userDto) {
+    public String findEmail(UserDto.Basic userDto) {
         String name = userDto.getName();
         String phoneNumber = userDto.getPhoneNumber();
 
@@ -266,7 +246,7 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyUser(Long userId, UserDto userDto) {
+    public void modifyUser(Long userId, UserDto.Put userDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -312,7 +292,7 @@ public class UserService {
         userPersonalityRepository.saveAll(userPersonalities);
     }
 
-    public void findPassword(UserDto userDto) {
+    public void findPassword(UserDto.Basic userDto) {
         String name = userDto.getName();
         String phoneNumber = userDto.getPhoneNumber();
         String email = userDto.getEmail();

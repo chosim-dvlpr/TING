@@ -3,7 +3,6 @@ package com.ssafy.tingbackend.user.controller;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class UserController {
      * @return access-token, refresh-token
      */
     @PostMapping("/user/login")
-    public DataResponse<Map<String, String>> login(@RequestBody UserDto userDto) {
+    public DataResponse<Map<String, String>> login(@RequestBody UserDto.Basic userDto) {
         Map<String, String> token = userService.login(userDto);
         return new DataResponse<>(200, "로그인 성공", token);
     }
@@ -38,7 +37,7 @@ public class UserController {
      * @return Only code and message
      */
     @PostMapping("/user/signup")
-    public CommonResponse signUp(@RequestBody UserDto userDto) {
+    public CommonResponse signUp(@RequestBody UserDto.Signup userDto) {
         userService.signUp(userDto);
 
         return new CommonResponse(200, "회원가입 성공");
@@ -64,9 +63,9 @@ public class UserController {
      * @return 유저 상세 정보
      */
     @GetMapping("/user")
-    public DataResponse<UserResponseDto> userDetail(Principal principal) {
+    public DataResponse<UserDto.Detail> userDetail(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        UserResponseDto userResponseDto = userService.userDetail(userId);
+        UserDto.Detail userResponseDto = userService.userDetail(userId);
 
         return new DataResponse<>(200, "유저 정보 조회 성공", userResponseDto);
     }
@@ -79,7 +78,7 @@ public class UserController {
      * @return Only code and message
      */
     @PutMapping("/user")
-    public CommonResponse modifyUser(Principal principal, @RequestBody UserDto userDto) {
+    public CommonResponse modifyUser(Principal principal, @RequestBody UserDto.Put userDto) {
         Long userId = Long.parseLong(principal.getName());
         userService.modifyUser(userId, userDto);
 
@@ -137,7 +136,7 @@ public class UserController {
      * @return 이메일
      */
     @PostMapping("/user/email")
-    public DataResponse<String> findEmail(@RequestBody UserDto userDto) {
+    public DataResponse<String> findEmail(@RequestBody UserDto.Basic userDto) {
         String email = userService.findEmail(userDto);
 
         return new DataResponse<>(200, "이메일 찾기 성공", email);
@@ -200,7 +199,7 @@ public class UserController {
      * @return Only code and message
      */
     @PostMapping("/user/password")
-    public CommonResponse findPassword(@RequestBody UserDto userDto) {
+    public CommonResponse findPassword(@RequestBody UserDto.Basic userDto) {
         userService.findPassword(userDto);
         return new CommonResponse(200, "임시 비밀번호 전송 성공");
     }
