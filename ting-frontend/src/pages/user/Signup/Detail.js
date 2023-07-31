@@ -195,7 +195,7 @@ function Detail(){
         })
       }
       <br/>
-      <button onClick={Navigate("/signup/selectiondata")}>추가 정보 입력하기</button>
+      <button onClick={() => Navigate("/signup/select/mbti")}>추가 정보 입력하기</button>
       <button onClick={completeSignup}>로그인 하러 가기</button>
     </div>
   )
