@@ -10,23 +10,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(of = {"sessionId", "userIdA", "userIdB", "isAcceptA", "isAcceptB"})
+@ToString(of = {"socketSessionIdF", "socketSessionIdM", "isAcceptF", "isAcceptM"})
 public class MatchingInfoDto {
     @Id
     private String id;
-    private String openViduSessionId;
     private String socketSessionIdF;
     private String socketSessionIdM;
     private Boolean isAcceptF;
     private Boolean isAcceptM;
+    private Boolean isValidate;
 
 //    @Indexed(expireAfterSeconds = 31)
     private LocalDateTime createdAt;
 
-    public MatchingInfoDto(String sessionId, String socketSessionIdF, String socketSessionIdM) {
-        this.openViduSessionId = sessionId;
+    public MatchingInfoDto(String socketSessionIdF, String socketSessionIdM) {
         this.socketSessionIdF = socketSessionIdF;
         this.socketSessionIdM = socketSessionIdM;
+        this.isValidate = true;
         this.createdAt = LocalDateTime.now();
     }
 }

@@ -1,9 +1,7 @@
 package com.ssafy.tingbackend.matching.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
-import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.entity.matching.Matching;
 import com.ssafy.tingbackend.entity.matching.MatchingUser;
 import com.ssafy.tingbackend.entity.user.AdditionalInfo;
@@ -11,6 +9,7 @@ import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.entity.user.UserHobby;
 import com.ssafy.tingbackend.entity.user.UserStyle;
 import com.ssafy.tingbackend.matching.dto.MatchingInfoDto;
+import com.ssafy.tingbackend.matching.dto.WebSocketInfo;
 import com.ssafy.tingbackend.matching.dto.WebSocketMessage;
 import com.ssafy.tingbackend.matching.repository.MatchingInfoRepository;
 import com.ssafy.tingbackend.matching.repository.MatchingRepository;
@@ -19,18 +18,19 @@ import com.ssafy.tingbackend.user.repository.UserHobbyRepository;
 import com.ssafy.tingbackend.user.repository.UserPersonalityRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import com.ssafy.tingbackend.user.repository.UserStyleRepository;
-import com.sun.xml.bind.Utils;
-import io.openvidu.java.client.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Service
@@ -43,30 +43,25 @@ public class MatchingService {
     private final UserStyleRepository userStyleRepository;
 
     private final OpenViduService openViduService;
+    private final MatchingInfoRepository matchingInfoRepository;
     private final MatchingRepository matchingRepository;
     private final MatchingUserRepository matchingUserRepository;
-    private final MatchingInfoRepository matchingInfoRepository;
 
-    private final Map<User, DeferredResult<DataResponse>> maleQueue = new LinkedHashMap<>();  // 여성 사용자 대기열
-    private final Map<User, DeferredResult<DataResponse>> femaleQueue = new LinkedHashMap<>();  // 남성 사용자 대기열
-    
-//    private final Map<Long, DeferredResult<DataResponse>> acceptQueue = new LinkedHashMap<>();  // 수락한 사용자 대기열
-    
-    // ============ 웹소켓으로 변경 ==============
-    private final Map<String, WebSocketSession> socketSessions = new ConcurrentHashMap<>();
-    private final Map<String, User> mQueue = new ConcurrentHashMap<>();
-    private final Map<String, User> fQueue = new ConcurrentHashMap<>();
-    private final Map<String, User> acceptQueue = new ConcurrentHashMap<>();
+    private final Map<String, WebSocketInfo> socketInfos = new ConcurrentHashMap<>();
+    private final List<String> mQueue = new CopyOnWriteArrayList<>();
+    private final List<String> fQueue = new CopyOnWriteArrayList<>();
+    private final List<String> acceptQueue = new CopyOnWriteArrayList<>();
 
     public void waitForMatching(Long userId, WebSocketSession socketSession) {
-        socketSessions.put(socketSession.getId(), socketSession);
+        User user = getUserAllData(userId);
 
-        User user = getUSerAllData(userId);
-        if(user.getGender().equals("M")) mQueue.put(socketSession.getId(), user);
-        else fQueue.put(socketSession.getId(), user);
+        socketInfos.put(socketSession.getId(), new WebSocketInfo(socketSession, user));
+
+        if(user.getGender().equals("M")) mQueue.add(socketSession.getId());
+        else fQueue.add(socketSession.getId());
     }
 
-    @Scheduled(fixedDelay = 10_000L)  // 10초에 한번씩 수행
+    @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
     public void matchingUsers() {
 //        System.out.println("matchingUsers() 실행");
         int maxScore = 0;
@@ -74,11 +69,11 @@ public class MatchingService {
         String mSessionId = null;
 
         // 여성 사용자 기준 점수가 가장 높은
-        for(String fId : fQueue.keySet()) {
-            User female = fQueue.get(fId);
+        for(String fId : fQueue) {
+            User female = socketInfos.get(fId).getUser();
 
-            for(String mId : mQueue.keySet()) {
-                User male = mQueue.get(mId);
+            for(String mId : mQueue) {
+                User male = socketInfos.get(mId).getUser();
                 int score = calculateScore(female, male);
 
                 if(score > maxScore) {
@@ -86,7 +81,7 @@ public class MatchingService {
                     fSessionId = fId;
                     mSessionId = mId;
                 } else if(score == maxScore) {  // 동일 점수인 경우 남성 기준으로 점수 계산하여 더 높은 쌍으로
-                    int oldScore = calculateScore(mQueue.get(mSessionId), fQueue.get(fSessionId));
+                    int oldScore = calculateScore(socketInfos.get(mSessionId).getUser(), socketInfos.get(fSessionId).getUser());
                     int newScore = calculateScore(male, female);
 
                     if(newScore > oldScore) {
@@ -97,36 +92,37 @@ public class MatchingService {
             }
         }
 
-        // 여성, 남성 사용자 모두 있고, 점수가 35점 이상인 경우 세션 생성하여 반환
+        // 여성, 남성 사용자 모두 있고, 점수가 35점 이상인 경우
         if(fSessionId != null && mSessionId != null && maxScore >= 35) {
             try {
-                String openViduSessionId = openViduService.initializeSession().getSessionId();
-                Map<String, String> messageData = new HashMap<>();
-                messageData.put("sessionId", openViduSessionId);
-                WebSocketMessage message = new WebSocketMessage("session", messageData);
-                TextMessage textMessage = new TextMessage(new ObjectMapper().writeValueAsString(message));
+                WebSocketMessage message = new WebSocketMessage("findPair", null);
+                TextMessage textMessage = new TextMessage(message.toJson());
 
                 // 매칭된 사용자의 소켓에 메세지 보내기
-                socketSessions.get(fSessionId).sendMessage(textMessage);
-                socketSessions.get(mSessionId).sendMessage(textMessage);
+                socketInfos.get(fSessionId).getSession().sendMessage(textMessage);
+                socketInfos.get(mSessionId).getSession().sendMessage(textMessage);
 
                 // 대기큐에서 해당 사용자들 제거하고 수락 대기큐로 넣기
-                acceptQueue.put(fSessionId, fQueue.get(fSessionId));
-                acceptQueue.put(mSessionId, fQueue.get(mSessionId));
+                acceptQueue.add(fSessionId);
+                acceptQueue.add(mSessionId);
                 fQueue.remove(fSessionId);
                 mQueue.remove(mSessionId);
 
                 // 매칭 정보 몽고디비에 임시 저장
-                MatchingInfoDto matchingInfo = new MatchingInfoDto(openViduSessionId, fSessionId, mSessionId);
+                MatchingInfoDto matchingInfo = new MatchingInfoDto(fSessionId, mSessionId);
                 matchingInfoRepository.save(matchingInfo);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new CommonException(ExceptionType.OPENVIDU_ERROR);
             }
         }
+
+        System.out.println("fQueue=" + fQueue);
+        System.out.println("mQueue=" + mQueue);
+        System.out.println("acceptQueue=" + acceptQueue);
     }
 
-    public User getUSerAllData(Long userId) {
+    public User getUserAllData(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -385,81 +381,123 @@ public class MatchingService {
         return score;
     }
 
-    public void finishWaiting(String socketSessionId) {
-        socketSessions.remove(socketSessionId);
-        if(fQueue.containsKey(socketSessionId)) fQueue.remove(socketSessionId);
-        if(mQueue.containsKey(socketSessionId)) mQueue.remove(socketSessionId);
+    public void finishWaiting(String socketSessionId) throws IOException {
+        // 매칭 수락 대기 큐에 있던 세션이 연결이 끊긴 경우 상대방에게 알리기
+        if(acceptQueue.contains(socketSessionId)) {
+            acceptQueue.remove(socketSessionId);
+
+            User user = socketInfos.get(socketSessionId).getUser();
+            MatchingInfoDto matchingInfo;
+
+            if(user.getGender().equals("F")) {
+                matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
+                        .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+            } else {
+                matchingInfo = matchingInfoRepository.findBySocketSessionIdMAndIsValidateTrue(socketSessionId)
+                        .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+            }
+
+            WebSocketMessage message = new WebSocketMessage("matchingFail", null);
+            TextMessage textMessage = new TextMessage(message.toJson());
+            String pairSessionId = user.getGender().equals("F") ? matchingInfo.getSocketSessionIdM() : matchingInfo.getSocketSessionIdF();
+            socketInfos.get(pairSessionId).getSession().sendMessage(textMessage);
+
+            // 상대방은 다시 대기큐로 넣어야되나?
+            acceptQueue.remove(pairSessionId);
+            if(user.getGender().equals("F")) mQueue.add(pairSessionId);
+            else fQueue.add(pairSessionId);
+
+            matchingInfo.setIsValidate(false);
+            matchingInfoRepository.save(matchingInfo);
+        }
+
+        if(fQueue.contains(socketSessionId)) fQueue.remove(socketSessionId);
+        if(mQueue.contains(socketSessionId)) mQueue.remove(socketSessionId);
+
+        socketInfos.remove(socketSessionId);
     }
 
-//    public void acceptMatching(String socketSessionId) {
-//        MatchingInfoDto matchingInfo = null;
-//        Optional<MatchingInfoDto> bySocketSessionIdF = matchingInfoRepository.findBySocketSessionIdF(socketSessionId);
-//        if(bySocketSessionIdF.isPresent()) {
-//            matchingInfo = bySocketSessionIdF.get();
-//        } else {
-//            matchingInfo = matchingInfoRepository.findBySocketSessionIdM(socketSessionId)
-//                    .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
-//        }
-//        System.out.println("matchingInfo = " + matchingInfo);
-//
-//        if(matchingInfo.getSocketSessionIdF().equals(socketSessionId)) {
-//            matchingInfo.setIsAcceptF(true);
-//        } else if(matchingInfo.getSocketSessionIdM().equals(socketSessionId)) {
-//            matchingInfo.setIsAcceptM(true);
-//        }
-//        matchingInfoRepository.save(matchingInfo);
-//
-//        Map<String, String> messageData = new HashMap<>();
-//
-//        // 두 사용자 모두 수락을 선택한 경우
-//        if(matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
-//                matchingInfo.getIsAcceptF() && matchingInfo.getIsAcceptM()) {
-////            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-//
-//            // DB에 매칭 정보 저장 (matching, matching_user 테이블)
-//            Matching matching = matchingRepository.save(new Matching());
-//            User user = userRepository.findById(userId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-//            User opponentUser = userRepository.findById(opponentUserId).orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-//            matchingUserRepository.save(new MatchingUser(matching, user));
-//            matchingUserRepository.save(new MatchingUser(matching, opponentUser));
-//
-//            messageData.put("token", openViduService.createConnection(sessionId));
-//            messageData.put("matchingId", matching.getId().toString());
-//
-//            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 성공", messageData));  // 내 요청에 대한 응답
-//            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 성사 성공", messageData));  // 상대 요청에 대한 응답
-//        } else if(matchingInfo.getIsAcceptF() == null || matchingInfo.getIsAcceptM() == null) {  // 상대가 아직 응답을 하지 않은 경우
-//            acceptQueue.put(userId, deferredResult);
-//        } else {  // 상대가 이미 거절을 한 경우
-//            // ============== 매칭 실패 처리를 어떻게 할지 고민해봐야... ===============
-//            messageData.put("token", null);
-//            messageData.put("matchingId", null);
-//            deferredResult.setResult(new DataResponse<>(200, "매칭 성사 실패", messageData));
-//        }
-//    }
+    public void acceptMatching(String socketSessionId) throws IOException {
+        User user = socketInfos.get(socketSessionId).getUser();
+        MatchingInfoDto matchingInfo;
 
-    public void rejectMatching(Long userId, String sessionId) {
-//        MatchingInfoDto matchingInfo = matchingInfoRepository.findBySessionId(sessionId);
-//        System.out.println("matchingInfo = " + matchingInfo);
-//        System.out.println("acceptQueue = " + acceptQueue);
-//
-//        if(matchingInfo.getUserIdA().equals(userId)) {
-//            matchingInfo.setIsAcceptF(false);
-//        } else if(matchingInfo.getUserIdB().equals(userId)) {
-//            matchingInfo.setIsAcceptM(false);
-//        }
-//        matchingInfoRepository.save(matchingInfo);
-//
-//        // 상대방이 이미 수락한 경우 - 상대방쪽에 응답해줘야 함
-//        if(matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
-//                (matchingInfo.getIsAcceptF() || matchingInfo.getIsAcceptM())) {
-//            Long opponentUserId = matchingInfo.getUserIdA().equals(userId) ? matchingInfo.getUserIdB() : matchingInfo.getUserIdA();
-//
-//            Map<String, String> responseMap = new HashMap<>();
-//            responseMap.put("token", null);
-//            responseMap.put("matchingId", null);
-//
-//            acceptQueue.get(opponentUserId).setResult(new DataResponse<>(200, "매칭 실패", responseMap));
-//        }
+        if(user.getGender().equals("F")) {
+            matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
+            matchingInfo.setIsAcceptF(true);
+        } else {
+            matchingInfo = matchingInfoRepository.findBySocketSessionIdMAndIsValidateTrue(socketSessionId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
+            matchingInfo.setIsAcceptM(true);
+        }
+        matchingInfoRepository.save(matchingInfo);
+
+
+        // 두 사용자 모두 수락을 선택한 경우 - 매칭 성사
+        if(matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
+                matchingInfo.getIsAcceptF() && matchingInfo.getIsAcceptM()) {
+            String pairSocketSessionId = user.getGender().equals("F") ? matchingInfo.getSocketSessionIdM() : matchingInfo.getSocketSessionIdF();
+
+            // DB에 매칭 정보 저장 (matching, matching_user 테이블)
+            Matching matching = matchingRepository.save(new Matching());
+            matchingUserRepository.save(new MatchingUser(matching, user));
+            matchingUserRepository.save(new MatchingUser(matching, socketInfos.get(pairSocketSessionId).getUser()));
+
+            // 사용자들에게 openvidu 토큰값과 matchingId 반환
+            Map<String, String> messageData = new HashMap<>();
+            try {
+                String openViduSessionId = openViduService.initializeSession().getSessionId();  // openvidu 세션 생성
+                messageData.put("token", openViduService.createConnection(openViduSessionId));
+                messageData.put("matchingId", matching.getId().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CommonException(ExceptionType.OPENVIDU_ERROR);
+            }
+
+            WebSocketMessage webSocketMessage = new WebSocketMessage("matchingSuccess", messageData);
+            socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
+            socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
+            
+            // 대기큐에서 사용자들 삭제
+            acceptQueue.remove(socketSessionId);
+            acceptQueue.remove(pairSocketSessionId);
+
+            matchingInfo.setIsValidate(false);
+            matchingInfoRepository.save(matchingInfo);
+        } 
+    }
+
+    public void rejectMatching(String socketSessionId) throws IOException {
+        User user = socketInfos.get(socketSessionId).getUser();
+        MatchingInfoDto matchingInfo;
+
+        if(user.getGender().equals("F")) {
+            matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
+        } else {
+            matchingInfo = matchingInfoRepository.findBySocketSessionIdMAndIsValidateTrue(socketSessionId)
+                    .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
+        }
+
+        String pairSocketSessionId = user.getGender().equals("F") ? matchingInfo.getSocketSessionIdM() : matchingInfo.getSocketSessionIdF();
+
+        // 매칭 실패 메세지 전송
+        WebSocketMessage webSocketMessage = new WebSocketMessage("matchingFail", null);
+        socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
+        socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
+
+        // 수락 대기열에서 삭제하고, 매칭 대기열로 다시 넣어주기?
+        acceptQueue.remove(socketSessionId);
+        acceptQueue.remove(pairSocketSessionId);
+        if(user.getGender().equals("F")) {
+            fQueue.add(socketSessionId);
+            mQueue.add(pairSocketSessionId);
+        } else {
+            fQueue.add(pairSocketSessionId);
+            mQueue.add(socketSessionId);
+        }
+
+        matchingInfo.setIsValidate(false);
+        matchingInfoRepository.save(matchingInfo);
     }
 }

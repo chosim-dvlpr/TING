@@ -1,9 +1,10 @@
 package com.ssafy.tingbackend.matching.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
+import lombok.*;
 
 import java.util.Map;
 
@@ -11,7 +12,17 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(of = {"type", "data"})
 public class WebSocketMessage {
-    String type;  // expectTime, 매칭됨, 수락됨
+    String type;  // (전송) expectTime, findPair, matchingSuccess, matchingFail / (수신) accept, reject
     Map<String, String> data;
+
+    public String toJson() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.GLOBAL_EXCEPTION);
+        }
+    }
 }
