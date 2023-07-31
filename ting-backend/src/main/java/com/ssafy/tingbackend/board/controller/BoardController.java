@@ -205,6 +205,17 @@ public class BoardController {
     }
 
     /**
+     * 대댓글 목록 조회 API
+     * @param boardType, boardId, commentId
+     * @return 댓글 목록 리스트
+     */
+    @GetMapping("/comment/{boardType}/{boardId}/{commentId}")
+    public DataResponse<List<CommentDto.Response>> listComment(@PathVariable BoardType boardType, @PathVariable Long boardId, @PathVariable Long commentId) {
+        List<CommentDto.Response> commentList = boardService.commentChildList(boardType, boardId, commentId);
+        return new DataResponse<>(200, "대댓글 목록 조회 성공", commentList);
+    }
+
+    /**
      * 댓글 좋아요 등록 API
      * @param principal 로그인한 유저의 id (자동주입)
      * @param commentId

@@ -269,12 +269,28 @@ public class BoardService {
     }
 
     public List<CommentDto.Response> commentList(BoardType boardType, Long boardId) {
-
         List<Comment> commentList = new ArrayList<>();
         if(boardType.equals(BoardType.ADVICE)) {
             commentList = commentRepository.findAllAdvice(boardId);
         } else if(boardType.equals(BoardType.ISSUE)) {
             commentList = commentRepository.findAllIssue(boardId);
+        }
+
+        List<CommentDto.Response> commentDtoList = new ArrayList<>();
+        for(Comment comment: commentList) {
+            User user = userRepository.findById(comment.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            commentDtoList.add(CommentDto.Response.of(comment, user));
+        }
+        return commentDtoList;
+    }
+
+    public List<CommentDto.Response> commentChildList(BoardType boardType, Long boardId, Long commentId) {
+        List<Comment> commentList = new ArrayList<>();
+        if(boardType.equals(BoardType.ADVICE)) {
+            commentList = commentRepository.findChildAdvice(boardId, commentId);
+        } else if(boardType.equals(BoardType.ISSUE)) {
+            commentList = commentRepository.findChildIssue(boardId, commentId);
         }
 
         List<CommentDto.Response> commentDtoList = new ArrayList<>();
