@@ -11,11 +11,19 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT c FROM Comment c WHERE c.adviceBoard.id=:boardId AND c.depth=0 AND c.isRemoved=false AND " +
+    @Query("SELECT c FROM Comment c WHERE c.adviceBoard.id=:boardId AND c.depth=0 AND " +
             " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ADVICE ORDER BY c.createdTime DESC")
     List<Comment> findAllAdvice(@Param("boardId") Long boardId);
 
-    @Query("SELECT c FROM Comment c WHERE c.issueBoard.id=:boardId AND c.depth=0 AND c.isRemoved=false AND " +
-            " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ISSUE ORDER BY c.createdTime DESC")
+    @Query("SELECT c FROM Comment c WHERE c.issueBoard.id=:boardId AND c.depth=0 AND " +
+            " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ISSUE ORDER BY c.createdTime ASC")
     List<Comment> findAllIssue(Long boardId);
+
+    @Query("SELECT c FROM Comment c WHERE c.adviceBoard.id=:boardId AND c.depth=1 AND c.parent.id=:commentId AND " +
+            " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ADVICE ORDER BY c.createdTime ASC")
+    List<Comment> findChildAdvice(Long boardId, Long commentId);
+
+    @Query("SELECT c FROM Comment c WHERE c.issueBoard.id=:boardId AND c.depth=0 AND c.parent.id=:commentId AND " +
+            " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ISSUE ORDER BY c.createdTime DESC")
+    List<Comment> findChildIssue(Long boardId, Long commentId);
 }
