@@ -1,6 +1,8 @@
 package com.ssafy.tingbackend.matching.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.matching.dto.WebSocketMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,15 +18,13 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
 
     private final MatchingService matchingService;
 
-//    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-
     // 웹소켓 연결
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("웹소켓 연결 - {}", session.getId());
 
         String token = session.getHandshakeHeaders().get("Authorization").get(0);
-        Long userId = Long.parseLong(JwtUtil.getUserIdFromToken(token));
+        Long userId = Long.parseLong(JwtUtil.getPayloadAndCheckExpired(token).get("userId").toString());
         matchingService.waitForMatching(userId, session);
     }
 
@@ -32,6 +32,12 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         log.info("양방향 데이터 통신 - {}", session.getId());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        WebSocketMessage webSocketMessage = objectMapper.readValue(message.getPayload(), WebSocketMessage.class);
+
+        if(webSocketMessage.getType().equals("accept")) matchingService.acceptMatching(session.getId());
+        else if(webSocketMessage.getType().equals("reject")) matchingService.rejectMatching(session.getId());
     }
 
     // 소켓 연결 종료
@@ -45,6 +51,7 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         log.info("소켓 통신 에러 - {}", session.getId());
+        matchingService.finishWaiting(session.getId());
     }
 
 }
