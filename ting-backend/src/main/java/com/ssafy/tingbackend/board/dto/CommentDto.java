@@ -30,16 +30,27 @@ public class CommentDto {
     @AllArgsConstructor
     public static class Response {
         private Long commentId;
+        private Long parentId;
         private String content;
         private String nickname;
         private Long likeCount;
         private LocalDateTime createdTime;
         private LocalDateTime modifiedTime;
         private boolean isRemoved;
+
+        public static CommentDto.Response of(Comment comment, User user) {
+            return Response.builder()
+                    .commentId(comment.getId())
+                    .parentId(comment.getParent()==null? null:comment.getParent().getId())
+                    .content(comment.getContent())
+                    .nickname(user.getNickname())
+                    .likeCount(comment.getLikeCount())
+                    .createdTime(comment.getCreatedTime())
+                    .modifiedTime(comment.getModifiedTime())
+                    .isRemoved(comment.isRemoved())
+                    .build();
+        }
     }
 
-//    public static CommentDto of(Comment comment, User user) {
-//        return CommentDto.builder()
-//                .build();
-//    }
+
 }

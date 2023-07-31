@@ -177,8 +177,6 @@ public class BoardService {
         Long boardId = commentRequest.getBoardId();
         Comment comment = null;
 
-        System.out.println("!!!!!!" + commentRequest.getBoardType());
-
         Comment parentComment = null;
         if(commentRequest.getDepth() == 1) {
             parentComment = commentRepository.findById(commentRequest.getParentId())
@@ -194,6 +192,7 @@ public class BoardService {
                     .content(commentRequest.getContent())
                     .depth(commentRequest.getDepth())
                     .parent(parentComment)
+                    .user(user)
                     .build();
             comment.setAdviceBoard(adviceBoard);
         } else if(commentRequest.getBoardType().equals(BoardType.ISSUE)) {
@@ -206,6 +205,7 @@ public class BoardService {
                     .content(commentRequest.getContent())
                     .depth(commentRequest.getDepth())
                     .parent(parentComment)
+                    .user(user)
                     .build();
             comment.setIssueBoard(issueBoard);
         }
@@ -266,5 +266,23 @@ public class BoardService {
 
         commentLikeRepository.delete(commentLike);
         comment.setLikeCount(comment.getLikeCount()-1);
+    }
+
+    public List<CommentDto.Response> commentList(BoardType boardType, Long boardId) {
+
+        List<Comment> commentList = new ArrayList<>();
+        if(boardType.equals(BoardType.ADVICE)) {
+            commentList = commentRepository.findAllAdvice(boardId);
+        } else if(boardType.equals(BoardType.ISSUE)) {
+            commentList = commentRepository.findAllIssue(boardId);
+        }
+
+        List<CommentDto.Response> commentDtoList = new ArrayList<>();
+        for(Comment comment: commentList) {
+            User user = userRepository.findById(comment.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            commentDtoList.add(CommentDto.Response.of(comment, user));
+        }
+        return commentDtoList;
     }
 }
