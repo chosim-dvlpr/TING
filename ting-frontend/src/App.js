@@ -18,8 +18,8 @@ import Religion from './pages/user/Select/Religion';
 import Job from './pages/user/Select/Job';
 import Hobby from './pages/user/Select/Hobby';
 import Personality from './pages/user/Select/Personality';
-import Prefer from './pages/user/Select/Prefer';
-import Introduce from './pages/user/Select/Introduce';
+import Style from './pages/user/Select/Style';
+import Introduction from './pages/user/Select/Introduction';
 import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
@@ -89,8 +89,8 @@ function App() {
             <Route path="job" element={ <Job/> }></Route>
             <Route path="hobby" element={ <Hobby/> }></Route>
             <Route path="personality" element={ <Personality/> }></Route>
-            <Route path="prefer" element={ <Prefer/> }></Route>
-            <Route path="introduce" element={ <Introduce/> }></Route>
+            <Route path="style" element={ <Style/> }></Route>
+            <Route path="introduction" element={ <Introduction/> }></Route>
           </Route>
         </Route>
 

@@ -66,26 +66,38 @@ export const signupReducer = createSlice({
     setReligionCode: (state, action) => {
       state.religionCode = action.payload;
     },
-    setAddHobbyCodeList: (state, action) => {
-      state.hobbyCodeList.push(action.payload);
-    },
-    setDeleteHobbyCodeList: (state, action) => {
-      state.hobbyCodeList.slice(action.payload, 1);
+    setHobbyCodeList: (state, action) => {
+      let hobbyIndex = state.hobbyCodeList.indexOf(action.payload);
+      if (hobbyIndex > -1) {
+        state.hobbyCodeList.splice(hobbyIndex, 1);
+      }
+      else {
+        state.hobbyCodeList.push(action.payload);
+      }
     },
     setJobCode: (state, action) => {
       state.jobCode = action.payload;
     },
-    setAddPersonalityCodeList: (state, action) => {
-      state.personalityCodeList.push(action.payload);
-    },
-    setDeletePersonalityCodeList: (state, action) => {
-      state.personalityCodeList.slice(action.payload, 1);
+    setPersonalityCodeList: (state, action) => {
+      let personalityIndex = state.personalityCodeList.indexOf(action.payload);
+      if (personalityIndex > -1) {
+        state.personalityCodeList.splice(personalityIndex, 1);
+      }
+      else {
+        state.personalityCodeList.push(action.payload);
+      }    
     },
     setIntroduction: (state, action) => {
       state.introduction = action.payload;
     },
-    setAddStyleCodeList: (state, action) => {
-      state.styleCodeList.push(action.payload);
+    setStyleCodeList: (state, action) => {
+      let styleIndex = state.styleCodeList.indexOf(action.payload);
+      if (styleIndex > -1) {
+        state.styleCodeList.splice(styleIndex, 1);
+      }
+      else {
+        state.styleCodeList.push(action.payload);
+      }       
     },
     setDeleteStyleCodeList: (state, action) => {
       state.styleCodeList.slice(action.payload, 1);
@@ -95,8 +107,7 @@ export const signupReducer = createSlice({
 
 
 export const { setEmail, setPassword, setPhonenumber, setName, setNickname, setGender, setRegion, setBirth,
-  setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setAddHobbyCodeList,
-  setDeleteHobbyCodeList, setJobCode, setAddPersonalityCodeList, setDeletePersonalityCodeList, setIntroduction,
-  setAddStyleCodeList, setDeleteStyleCodeList, 
+  setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setHobbyCodeList,
+  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList,
 } = signupReducer.actions;
 export default signupReducer;

@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { setMbtiCode } from "../../../redux/signup";
+import { useNavigate } from "react-router-dom";
 
 function Mbti(){
   let mbtiList = ["ISTJ", "ISFJ", "INFJ", "INTJ", 
@@ -8,6 +9,11 @@ function Mbti(){
     "ESTJ", "ESFJ", "ENFJ", "ENTJ"];
   
   let dispatch = useDispatch();
+  let Navigate = useNavigate();
+
+  const changeMbti = (mbti) => {
+    dispatch(setMbtiCode(mbti));
+  };
   
   return(
     <div className="Mbti">
@@ -15,12 +21,13 @@ function Mbti(){
         {
           mbtiList.map((mbti, i) => {
             return (
-              <button onClick={dispatch(setMbtiCode(mbti))}>{ mbti }</button>
+              <button onClick={() => changeMbti(mbti)} key={i}>{ mbti }</button>
               )
             }
           )
         }
-        
+      <br/>
+      <button onClick={() => Navigate("/signup/select/height")}>다음</button>
     </div>
   )
 }
