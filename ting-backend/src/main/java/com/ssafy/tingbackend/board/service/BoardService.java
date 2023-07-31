@@ -1,7 +1,7 @@
 package com.ssafy.tingbackend.board.service;
 
 import com.ssafy.tingbackend.board.dto.AdviceBoardDto;
-import com.ssafy.tingbackend.board.dto.CommentPostDto;
+import com.ssafy.tingbackend.board.dto.CommentDto;
 import com.ssafy.tingbackend.board.dto.IssueBoardDto;
 import com.ssafy.tingbackend.board.repository.*;
 import com.ssafy.tingbackend.common.exception.CommonException;
@@ -33,14 +33,14 @@ public class BoardService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
 
-    public void insertAdviceBoard(AdviceBoardDto adviceBoardDto, Long userId) {
+    public void insertAdviceBoard(AdviceBoardDto.Request adviceBoardRequest, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
         AdviceBoard adviceBoard = AdviceBoard.builder()
                 .user(user)
-                .title(adviceBoardDto.getTitle())
-                .content(adviceBoardDto.getContent())
+                .title(adviceBoardRequest.getTitle())
+                .content(adviceBoardRequest.getContent())
                 .build();
 
         adviceBoardRepository.save(adviceBoard);
@@ -59,52 +59,52 @@ public class BoardService {
     }
 
     @Transactional
-    public void modifyAdviceBoard(AdviceBoardDto adviceBoardDto, Long userId) {
+    public void modifyAdviceBoard(AdviceBoardDto.Request adviceBoardRequest, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        AdviceBoard adviceBoard = adviceBoardRepository.findById(adviceBoardDto.getId())
+        AdviceBoard adviceBoard = adviceBoardRepository.findById(adviceBoardRequest.getAdviceId())
                 .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
 
-        adviceBoard.setTitle(adviceBoardDto.getTitle());
-        adviceBoard.setContent(adviceBoardDto.getContent());
+        adviceBoard.setTitle(adviceBoardRequest.getTitle());
+        adviceBoard.setContent(adviceBoardRequest.getContent());
     }
 
     @Transactional
-    public AdviceBoardDto adviceDetail(Long adviceId) {
+    public AdviceBoardDto.Response adviceDetail(Long adviceId) {
         AdviceBoard adviceBoard = adviceBoardRepository.findById(adviceId)
                 .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
         User user = userRepository.findById(adviceBoard.getUser().getId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         adviceBoard.setHit(adviceBoard.getHit()+1);
-        return AdviceBoardDto.of(adviceBoard, user);
+        return AdviceBoardDto.Response.of(adviceBoard, user);
     }
 
-    public List<AdviceBoardDto> adviceList(int pageNo) {
+    public List<AdviceBoardDto.Response> adviceList(int pageNo) {
         PageRequest pageRequest = PageRequest.of(pageNo-1, 3, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<AdviceBoard> page = adviceBoardRepository.findList(pageRequest);
         List<AdviceBoard> adviceBoardList = page.getContent();
-        List<AdviceBoardDto> adviceBoardDtoList = new ArrayList<>();
+        List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
         for(AdviceBoard adviceBoard : adviceBoardList) {
             User user = userRepository.findById(adviceBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-            adviceBoardDtoList.add(AdviceBoardDto.of(adviceBoard, user));
+            adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
         }
 
         return adviceBoardDtoList;
     }
 
-    public void insertIssueBoard(IssueBoardDto issueBoardDto, Long userId) {
+    public void insertIssueBoard(IssueBoardDto.Request issueBoardRequest, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
         IssueBoard issueBoard = IssueBoard.builder()
                 .user(user)
-                .title(issueBoardDto.getTitle())
-                .content(issueBoardDto.getContent())
-                .agreeTitle(issueBoardDto.getAgreeTitle())
-                .opposeTitle(issueBoardDto.getOpposeTitle())
+                .title(issueBoardRequest.getTitle())
+                .content(issueBoardRequest.getContent())
+                .agreeTitle(issueBoardRequest.getAgreeTitle())
+                .opposeTitle(issueBoardRequest.getOpposeTitle())
                 .build();
 
         issueBoardRepository.save(issueBoard);
@@ -123,28 +123,28 @@ public class BoardService {
     }
 
     @Transactional
-    public IssueBoardDto issueDetail(Long issueId) {
+    public IssueBoardDto.Response issueDetail(Long issueId) {
         IssueBoard issueBoard = issueBoardRepository.findById(issueId)
                 .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
         User user = userRepository.findById(issueBoard.getUser().getId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         issueBoard.setHit(issueBoard.getHit()+1);
-        return IssueBoardDto.of(issueBoard, user);
+        return IssueBoardDto.Response.of(issueBoard, user);
     }
 
-    public List<IssueBoardDto> issueList(int pageNo) {
+    public List<IssueBoardDto.Response> issueList(int pageNo) {
         PageRequest pageRequest = PageRequest.of(pageNo-1, 3, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<IssueBoard> page = issueBoardRepository.findList(pageRequest);
         List<IssueBoard> issueBoardList = page.getContent();
-        List<IssueBoardDto> issueBoardDtoList = new ArrayList<>();
+        List<IssueBoardDto.Response> issueBoardResponseList = new ArrayList<>();
         for(IssueBoard issueBoard : issueBoardList) {
             User user = userRepository.findById(issueBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-            issueBoardDtoList.add(IssueBoardDto.of(issueBoard, user));
+            issueBoardResponseList.add(IssueBoardDto.Response.of(issueBoard, user));
         }
 
-        return issueBoardDtoList;
+        return issueBoardResponseList;
     }
 
     @Transactional
@@ -171,40 +171,40 @@ public class BoardService {
     }
 
     @Transactional
-    public void insertComment(CommentPostDto commentPostDto) {
-        User user = userRepository.findById(commentPostDto.getUserId())
+    public void insertComment(CommentDto.Request commentRequest) {
+        User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-        Long boardId = commentPostDto.getBoardId();
+        Long boardId = commentRequest.getBoardId();
         Comment comment = null;
 
-        System.out.println("!!!!!!" + commentPostDto.getBoardType());
+        System.out.println("!!!!!!" + commentRequest.getBoardType());
 
         Comment parentComment = null;
-        if(commentPostDto.getDepth() == 1) {
-            parentComment = commentRepository.findById(commentPostDto.getParentId())
+        if(commentRequest.getDepth() == 1) {
+            parentComment = commentRepository.findById(commentRequest.getParentId())
                     .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
         }
 
-        if(commentPostDto.getBoardType().equals(BoardType.ADVICE)) {
+        if(commentRequest.getBoardType().equals(BoardType.ADVICE)) {
             System.out.println("============ADVICE");
             AdviceBoard adviceBoard = adviceBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
             comment = Comment.builder()
-                    .boardType(commentPostDto.getBoardType())
-                    .content(commentPostDto.getContent())
-                    .depth(commentPostDto.getDepth())
+                    .boardType(commentRequest.getBoardType())
+                    .content(commentRequest.getContent())
+                    .depth(commentRequest.getDepth())
                     .parent(parentComment)
                     .build();
             comment.setAdviceBoard(adviceBoard);
-        } else if(commentPostDto.getBoardType().equals(BoardType.ISSUE)) {
+        } else if(commentRequest.getBoardType().equals(BoardType.ISSUE)) {
             System.out.println("===========ISSUE");
             IssueBoard issueBoard = issueBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
             comment = Comment.builder()
-                    .boardType(commentPostDto.getBoardType())
+                    .boardType(commentRequest.getBoardType())
                     .issueBoard(issueBoard)
-                    .content(commentPostDto.getContent())
-                    .depth(commentPostDto.getDepth())
+                    .content(commentRequest.getContent())
+                    .depth(commentRequest.getDepth())
                     .parent(parentComment)
                     .build();
             comment.setIssueBoard(issueBoard);
@@ -214,22 +214,22 @@ public class BoardService {
     }
 
     @Transactional
-    public void modifyComment(CommentPostDto commentPostDto) {
-        User user = userRepository.findById(commentPostDto.getUserId())
+    public void modifyComment(CommentDto.Request commentRequest) {
+        User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        Comment comment = commentRepository.findById(commentPostDto.getCommentId())
+        Comment comment = commentRepository.findById(commentRequest.getCommentId())
                 .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
 
-        comment.setContent(commentPostDto.getContent());
+        comment.setContent(commentRequest.getContent());
     }
 
     @Transactional
-    public void deleteComment(CommentPostDto commentPostDto) {
-        userRepository.findById(commentPostDto.getUserId())
+    public void deleteComment(CommentDto.Request commentRequest) {
+        userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        Comment comment = commentRepository.findById(commentPostDto.getCommentId())
+        Comment comment = commentRepository.findById(commentRequest.getCommentId())
                 .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
 
         comment.setRemoved(true);
@@ -255,7 +255,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void deletelikeComment(Long commentId, Long userId) {
+    public void deleteLikeComment(Long commentId, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)

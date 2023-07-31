@@ -1,7 +1,7 @@
 package com.ssafy.tingbackend.board.controller;
 
 import com.ssafy.tingbackend.board.dto.AdviceBoardDto;
-import com.ssafy.tingbackend.board.dto.CommentPostDto;
+import com.ssafy.tingbackend.board.dto.CommentDto;
 import com.ssafy.tingbackend.board.dto.IssueBoardDto;
 import com.ssafy.tingbackend.board.service.BoardService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
@@ -24,13 +24,13 @@ public class BoardController {
     /**
      * 상담 게시글 작성 API
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param adviceBoardDto title, content
+     * @param adviceBoardRequest title, content
      * @return Only code and message
      */
     @PostMapping("/advice")
-    public CommonResponse writeAdvice(@RequestBody AdviceBoardDto adviceBoardDto, Principal principal) {
+    public CommonResponse writeAdvice(@RequestBody AdviceBoardDto.Request adviceBoardRequest, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        boardService.insertAdviceBoard(adviceBoardDto, userId);
+        boardService.insertAdviceBoard(adviceBoardRequest, userId);
         return new CommonResponse(200, "상담글 작성 성공");
     }
 
@@ -50,14 +50,14 @@ public class BoardController {
     /**
      * 상담 게시글 수정 API
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param adviceBoardDto title, content
+     * @param adviceBoardRequest title, content
      * @return Only code and message
      */
     @PutMapping("/advice/{adviceId}")
-    public CommonResponse modifyAdvice(@PathVariable Long adviceId, @RequestBody AdviceBoardDto adviceBoardDto, Principal principal) {
+    public CommonResponse modifyAdvice(@PathVariable Long adviceId, @RequestBody AdviceBoardDto.Request adviceBoardRequest, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        adviceBoardDto.setId(adviceId);
-        boardService.modifyAdviceBoard(adviceBoardDto, userId);
+        adviceBoardRequest.setAdviceId(adviceId);
+        boardService.modifyAdviceBoard(adviceBoardRequest, userId);
         return new CommonResponse(200, "상담글 수정 성공");
     }
 
@@ -67,9 +67,9 @@ public class BoardController {
      * @return 상담 상세 정보
      */
     @GetMapping("/advice/{adviceId}")
-    public DataResponse<AdviceBoardDto> detailQuestion(@PathVariable Long adviceId) {
-        AdviceBoardDto adviceBoardDto = boardService.adviceDetail(adviceId);
-        return new DataResponse<>(200, "상담글 상세 조회 성공", adviceBoardDto);
+    public DataResponse<AdviceBoardDto.Response> detailQuestion(@PathVariable Long adviceId) {
+        AdviceBoardDto.Response adviceBoardResponse = boardService.adviceDetail(adviceId);
+        return new DataResponse<>(200, "상담글 상세 조회 성공", adviceBoardResponse);
     }
 
     /**
@@ -78,8 +78,8 @@ public class BoardController {
      * @return 문의 목록 리스트
      */
     @GetMapping("/advice")
-    public DataResponse<List<AdviceBoardDto>> listQuestion(@RequestParam("pageNo") int pageNo) {
-        List<AdviceBoardDto> adviceList = boardService.adviceList(pageNo);
+    public DataResponse<List<AdviceBoardDto.Response>> listQuestion(@RequestParam("pageNo") int pageNo) {
+        List<AdviceBoardDto.Response> adviceList = boardService.adviceList(pageNo);
         return new DataResponse<>(200, "문의글 목록 조회 성공", adviceList);
     }
 
@@ -87,13 +87,13 @@ public class BoardController {
     /**
      * 이슈 게시글 작성 API
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param issueBoardDto title, content, agreeTitle, opposeTitle
+     * @param issueBoardRequest title, content, agreeTitle, opposeTitle
      * @return Only code and message
      */
     @PostMapping("/issue")
-    public CommonResponse writeIssue(@RequestBody IssueBoardDto issueBoardDto, Principal principal) {
+    public CommonResponse writeIssue(@RequestBody IssueBoardDto.Request issueBoardRequest, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        boardService.insertIssueBoard(issueBoardDto, userId);
+        boardService.insertIssueBoard(issueBoardRequest, userId);
         return new CommonResponse(200, "이슈글 작성 성공");
     }
 
@@ -116,9 +116,9 @@ public class BoardController {
      * @return 이슈 상세 정보
      */
     @GetMapping("/issue/{issueId}")
-    public DataResponse<IssueBoardDto> detailIssue(@PathVariable Long issueId) {
-        IssueBoardDto issueBoardDto = boardService.issueDetail(issueId);
-        return new DataResponse<>(200, "이슈글 상세 조회 성공", issueBoardDto);
+    public DataResponse<IssueBoardDto.Response> detailIssue(@PathVariable Long issueId) {
+        IssueBoardDto.Response issueBoardResponse = boardService.issueDetail(issueId);
+        return new DataResponse<>(200, "이슈글 상세 조회 성공", issueBoardResponse);
     }
 
     /**
@@ -127,8 +127,8 @@ public class BoardController {
      * @return 이슈 목록 리스트
      */
     @GetMapping("/issue")
-    public DataResponse<List<IssueBoardDto>> listIssue(@RequestParam("pageNo") int pageNo) {
-        List<IssueBoardDto> issueList = boardService.issueList(pageNo);
+    public DataResponse<List<IssueBoardDto.Response>> listIssue(@RequestParam("pageNo") int pageNo) {
+        List<IssueBoardDto.Response> issueList = boardService.issueList(pageNo);
         return new DataResponse<>(200, "이슈글 목록 조회 성공", issueList);
     }
 
@@ -150,29 +150,29 @@ public class BoardController {
     /**
      * 댓글 작성 API
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param commentPostDto boardType, boardId, content
+     * @param commentRequest boardType, boardId, content
      * @return Only code and message
      */
     @PostMapping("/comment")
-    public CommonResponse writeComment(@RequestBody CommentPostDto commentPostDto, Principal principal) {
+    public CommonResponse writeComment(@RequestBody CommentDto.Request commentRequest, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        commentPostDto.setUserId(userId);
-        boardService.insertComment(commentPostDto);
+        commentRequest.setUserId(userId);
+        boardService.insertComment(commentRequest);
         return new CommonResponse(200, "댓글 작성 성공");
     }
 
     /**
      * 댓글 수정 API
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param commentPostDto content
+     * @param commentRequest content
      * @return Only code and message
      */
     @PutMapping("/comment/{commentId}")
-    public CommonResponse modifyComment(@PathVariable Long commentId, @RequestBody CommentPostDto commentPostDto, Principal principal) {
+    public CommonResponse modifyComment(@PathVariable Long commentId, @RequestBody CommentDto.Request commentRequest, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        commentPostDto.setCommentId(commentId);
-        commentPostDto.setUserId(userId);
-        boardService.modifyComment(commentPostDto);
+        commentRequest.setCommentId(commentId);
+        commentRequest.setUserId(userId);
+        boardService.modifyComment(commentRequest);
         return new CommonResponse(200, "댓글 수정 성공");
     }
 
@@ -185,7 +185,7 @@ public class BoardController {
     @DeleteMapping("/comment/{commentId}")
     public CommonResponse deleteComment(@PathVariable Long commentId, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        CommentPostDto commentPostDto = new CommentPostDto();
+        CommentDto.Request commentPostDto = new CommentDto.Request();
         commentPostDto.setCommentId(commentId);
         commentPostDto.setUserId(userId);
         boardService.deleteComment(commentPostDto);
@@ -214,7 +214,7 @@ public class BoardController {
     @DeleteMapping("/comment/like/{commentId}")
     public CommonResponse deletelikeComment(@PathVariable Long commentId, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        boardService.deletelikeComment(commentId, userId);
+        boardService.deleteLikeComment(commentId, userId);
         return new CommonResponse(200, "좋아요 삭제 성공");
     }
 }
