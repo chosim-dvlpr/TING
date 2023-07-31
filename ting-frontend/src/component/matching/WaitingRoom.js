@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import './WaitingRoom.css'
 import { useSelector } from "react-redux";
+import Webcam from "react-webcam"
 
 function WaitingRoom(){
   const [userdata, setUserdata] = useState({});
@@ -27,6 +28,7 @@ function WaitingRoom(){
         <Row>
           <Col className='leftBox'>
             <h1>여기는 웹캠</h1>
+            <Webcam/>
           </Col>
           <Col className='rightBox'>
             <div className="stream-container col-md-6 col-xs-6">
