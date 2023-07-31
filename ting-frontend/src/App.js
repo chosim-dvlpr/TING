@@ -27,7 +27,7 @@ import Main from './pages/main/Main.js'
 
 // 매칭
 
-import Matching from './pages/matching/Matching.js';
+import MatchingPage from './pages/matching/MatchingPage.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
 import MatchingStart from './component/matching/MatchingStart.js';
 
@@ -95,7 +95,7 @@ function App() {
         </Route>
 
         {/* 매칭 */}
-        <Route path="/matching" element={< Matching/> }>
+        <Route path="/matching" element={< MatchingPage/> }>
           <Route path="" element={ <WaitingRoom/> }></Route>
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>

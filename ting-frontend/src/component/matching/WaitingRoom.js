@@ -19,6 +19,7 @@ function WaitingRoom(){
   useEffect(() => {
     // 유저 데이터 redux에서 가져옴
     setUserdata(state.userdataReducer.userdata)
+    console.log(state.userdataReducer.userdata)
   }, []);
 
   return(
@@ -29,6 +30,8 @@ function WaitingRoom(){
           <Col className='leftBox'>
             <h1>여기는 웹캠</h1>
             <Webcam/>
+            <h1>여긴 소리</h1>
+
           </Col>
           <Col className='rightBox'>
             <div className="stream-container col-md-6 col-xs-6">
