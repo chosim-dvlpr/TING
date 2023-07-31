@@ -16,15 +16,14 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
 
     private final MatchingService matchingService;
 
-//    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-
     // 웹소켓 연결
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("웹소켓 연결 - {}", session.getId());
+//        System.out.println(session.getPrincipal().getName());
 
         String token = session.getHandshakeHeaders().get("Authorization").get(0);
-        Long userId = Long.parseLong(JwtUtil.getUserIdFromToken(token));
+        Long userId = Long.parseLong(JwtUtil.getPayloadAndCheckExpired(token).get("userId").toString());
         matchingService.waitForMatching(userId, session);
     }
 
@@ -32,6 +31,7 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         log.info("양방향 데이터 통신 - {}", session.getId());
+        System.out.println(message.getPayload());
     }
 
     // 소켓 연결 종료

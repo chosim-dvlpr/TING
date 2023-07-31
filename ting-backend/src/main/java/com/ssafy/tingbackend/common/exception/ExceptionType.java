@@ -37,6 +37,7 @@ public enum ExceptionType {
     MATCHING_TIME_OUT(4600, "매칭 대기 시간이 초과되었습니다."),
     OPENVIDU_ERROR(4601, "openvidu 실행 중 오류가 발생하였습니다."),
     MATCHING_NOT_FOUND(4602, "매칭이 존재하지 않습니다."),
+    SOCKET_SESSION_NOT_FOUND(4603, "소켓 세션이 존재하지 않습니다."),
 
     CHATTING_NOT_FOUND(4700, "채팅이 존재하지 않습니다."),
 
