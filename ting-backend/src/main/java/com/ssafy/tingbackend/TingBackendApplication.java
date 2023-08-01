@@ -1,6 +1,5 @@
 package com.ssafy.tingbackend;
 
-import com.ssafy.tingbackend.chatting.service.TemperatureService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
