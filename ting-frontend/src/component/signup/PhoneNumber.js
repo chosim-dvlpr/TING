@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import basicHttp from '../../../api/basicHttp';
-import { setPhonenumber } from '../../../redux/signup';
+import basicHttp from '../../api/basicHttp';
+import { setPhonenumber } from '../../redux/signup';
 
 function SignUpPhoneNumber(){
   let [inputPhonenumber, setInputPhonenumber] = useState("");

@@ -1,6 +1,6 @@
 import {Outlet, useNavigate} from 'react-router-dom'
 
-function Matching(){
+function MatchingPage(){
   let Navigate = useNavigate()
 
   return(
@@ -13,4 +13,4 @@ function Matching(){
   )
 }
 
-export default Matching
+export default MatchingPage

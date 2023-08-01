@@ -1,42 +1,59 @@
 import './App.css';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import { useEffect, useState } from 'react';
-import Login from './pages/user/Login.js'
-import Signup from './pages/user/Signup.js'
-import SignupEmail from './pages/user/Signup/Email.js'
-import CertificationEmail from './pages/user/Signup/CertificationEmail.js'
-import SignupPassword from './pages/user/Signup/Password.js'
-import SignupPhoneNumber from './pages/user/Signup/PhoneNumber.js'
-import CertificationPhonenumber from './pages/user/Signup/CertificationPhoneNumber.js'
-import SignupDetail from './pages/user/Signup/Detail.js'
-import SelectionData from './pages/user/SelectionData';
-import Mbti from './pages/user/Select/Mbti';
-import Height from './pages/user/Select/Height';
-import Smoke from './pages/user/Select/Smoke';
-import Drink from './pages/user/Select/Drink';
-import Religion from './pages/user/Select/Religion';
-import Job from './pages/user/Select/Job';
-import Hobby from './pages/user/Select/Hobby';
-import Personality from './pages/user/Select/Personality';
-import Style from './pages/user/Select/Style';
-import Introduction from './pages/user/Select/Introduction';
+import LoginPage from './pages/LoginPage.js'
+import SignupPage from './pages/SignupPage.js'
+import SignupEmail from './component/signup/Email.js'
+import CertificationEmail from './component/signup/CertificationEmail.js'
+import SignupPassword from './component/signup/Password.js'
+import SignupPhoneNumber from './component/signup/PhoneNumber.js'
+import CertificationPhonenumber from './component/signup/CertificationPhoneNumber.js'
+import SignupDetail from './component/signup/Detail.js'
+import SelectionData from './component/signup/SelectionData';
+import Mbti from './component/signup/select/Mbti';
+import Height from './component/signup/select/Height';
+import Smoke from './component/signup/select/Smoke';
+import Drink from './component/signup/select/Drink';
+import Religion from './component/signup/select/Religion';
+import Job from './component/signup/select/Job';
+import Hobby from './component/signup/select/Hobby';
+import Personality from './component/signup/select/Personality';
+import Style from './component/signup/select/Style';
+import Introduction from './component/signup/select/Introduction';
 import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
-import Main from './pages/main/Main.js'
+import MainPage from './pages/MainPage';
 
 // 매칭
-
-import Matching from './pages/matching/Matching.js';
+import MatchingPage from './pages/MatchingPage.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
 import MatchingStart from './component/matching/MatchingStart.js';
+import MatchingFinal from './component/matching/MatchingFinal';
+
 
 // 커뮤니티
 
-import Community from './pages/community/Community.js';
-import AdvicePostForm from './pages/community/AdvicePostForm.js'
+import CommunityPage from './pages/CommunityPage.js';
+import AdvicePostForm from './component/community/advice/AdviceCreate.js'
 
+// 튜토리얼
+import TutorialPage from './pages/TutorialPage';
 
+// 내 프로필
+import MyProfilePage from './pages/MyProfilePage';
+
+// 아이템
+import ItemPage from './pages/ItemPage';
+
+// 관리자
+import AdminPage from './pages/AdminPage';
+
+// 친구
+import FriendList from './component/friend/FriendList';
+import Friend from './component/friend/Friend';
+import FriendChatting from './component/friend/FriendChatting';
+import FriendProfile from './component/friend/FriendProfile';
 
 function App() {
   let accessToken = localStorage.getItem('access-token');
@@ -67,13 +84,13 @@ function App() {
       </div>
       <Routes>
         {/* 네비게이션 바 */}
-        <Route path="/" element={ <Main/> }></Route>
+        <Route path="/" element={ <MainPage/> }></Route>
         <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
-        <Route path="/community/*" element={ <Community /> }></Route>
-        <Route path="/login" element={ <Login/> }></Route>
+        <Route path="/community/*" element={ <CommunityPage /> }></Route>
+        <Route path="/login" element={ <LoginPage/> }></Route>
 
         {/* 회원가입 */}
-        <Route path="/signup" element={ <Signup/> }>
+        <Route path="/signup" element={ <SignupPage/> }>
           <Route path="" element={ <SignupEmail/> }></Route>
           <Route path="certEmail" element={ <CertificationEmail/> }></Route>
           <Route path="password" element={ <SignupPassword/> }></Route>
@@ -95,7 +112,7 @@ function App() {
         </Route>
 
         {/* 매칭 */}
-        <Route path="/matching" element={< Matching/> }>
+        <Route path="/matching" element={< MatchingPage/> }>
           <Route path="" element={ <WaitingRoom/> }></Route>
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
@@ -104,7 +121,7 @@ function App() {
 
         {/* 커뮤니티 페이지 */}
 
-        <Route path="/community/*" element={<Community />} />
+        <Route path="/community/*" element={<CommunityPage />} />
         <Route path="/community/advice/new" element={<AdvicePostForm />} />
     
         </Routes>
