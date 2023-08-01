@@ -85,7 +85,7 @@ function App() {
       <Routes>
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
-        <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
+        <Route path="/tutorial" element={ <TutorialPage/> }></Route>
         <Route path="/community/*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
