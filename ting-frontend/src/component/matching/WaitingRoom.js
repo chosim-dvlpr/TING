@@ -6,14 +6,16 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./WaitingRoom.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Webcam from "react-webcam";
+import { setOpenviduToken } from "../../redux/openviduStore";
 
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
 
   const [userdata, setUserdata] = useState({});
+  let dispatch = useDispatch();
 
   // 이 티켓 redux로 불러와야할 듯
   let [ticket, setTicket] = useState(10);
@@ -28,6 +30,7 @@ function WaitingRoom() {
 
   let navigate = useNavigate("");
 
+  // 웹소켓 연결
   const handleConnectClick = () => {
     const serverUrl = "wss://i9b107.p.ssafy.io:5157/matching";
 
@@ -39,6 +42,9 @@ function WaitingRoom() {
       console.log("소켓 연결 성공");
       setSocket(ws);
       const token = localStorage.getItem("access-token");
+      // 토큰 redux에 저장
+      dispatch(setOpenviduToken(token))
+
       ws.send(
         JSON.stringify({
           type: "jwt",
@@ -55,7 +61,7 @@ function WaitingRoom() {
 
     ws.onclose = () => {
       console.log("소켓 연결 끊김");
-      alert("현재 매칭을 할 수 없습니다. (token 확인)");
+      alert("현재 매칭을 할 수 없습니다. (token 확인)"); // 이 부분 확인 필요
       setSocket(null);
     };
 
@@ -136,6 +142,7 @@ function WaitingRoom() {
                     매칭 시간 : <TimerComponent />
                   </div>
                   <div>예상 대기시간 :{expectTime}</div>
+                  <button onClick={()=>{findPairModal(navigate)}}>테스트 버튼</button>
                 </>
               )}
             </div>
