@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @ToString(of = {"type", "data"})
 public class WebSocketMessage {
-    String type;  // (전송) expectTime, findPair, matchingSuccess, matchingFail / (수신) accept, reject
+    String type;  // (전송) expectTime, findPair, matchingSuccess, matchingFail / (수신) accept
     Map<String, String> data;
 
     public String toJson() {

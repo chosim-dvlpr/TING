@@ -14,4 +14,9 @@ import org.springframework.web.socket.WebSocketSession;
 public class WebSocketInfo {
     WebSocketSession session;
     User user;
+    int count;
+
+    public void countUp() {
+        this.count++;
+    }
 }
