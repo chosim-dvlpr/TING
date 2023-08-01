@@ -119,7 +119,8 @@ function alert(navigate){
       navigate('/matching/start')
     } else if (res.isDenied){
       // start 다시 0으로
-      window.location.href = "http://localhost:3000/matching/"
+      // window.location.href = "http://localhost:3000/matching/"
+      navigate('/matching')
     }
   })
 }
