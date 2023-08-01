@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react"
 import Swal from "sweetalert2";
+import {useNavigate} from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -9,6 +10,7 @@ import { useSelector } from "react-redux";
 import Webcam from "react-webcam"
 
 function WaitingRoom(){
+
   const [userdata, setUserdata] = useState({});
 
   // 이 티켓 redux로 불러와야할 듯
@@ -18,8 +20,13 @@ function WaitingRoom(){
 
   useEffect(() => {
     // 유저 데이터 redux에서 가져옴
-    setUserdata(state.userdataReducer.userdata)
+    setUserdata(state.userdataReducer.userdata);
+    console.log(state.userdataReducer.userdata);
   }, []);
+
+  let navigate = useNavigate("");
+
+
 
   return(
     <div>
@@ -27,8 +34,9 @@ function WaitingRoom(){
       <Container className='box'>
         <Row>
           <Col className='leftBox'>
-            <h1>여기는 웹캠</h1>
-            <Webcam/>
+            <Webcam 
+              audio={true}
+            />
           </Col>
           <Col className='rightBox'>
             <div className="stream-container col-md-6 col-xs-6">
@@ -39,7 +47,7 @@ function WaitingRoom(){
               <p>마이크가 확인되었습니다.</p>
               <p>체크박스</p>
               <p>잔여티켓 {ticket}개</p>
-              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
+              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart} navigate={navigate} />
             </div>
           </Col>
         </Row>
@@ -57,7 +65,13 @@ function WaitingRoom(){
   )
 }
 
-const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
+const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>{
+
+  let [micandVideo,setMicandVideo] = useState(0)
+
+  navigator.mediaDevices.getUserMedia({audio:true, video:true})
+    .then(() => {setMicandVideo(1)})
+    .catch(err=>{console.log(err)})
 
   let 남은시간 = '07:21'
   let 예상대기시간 = 5
@@ -66,7 +80,7 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
     return
   }
   // 잔여 티켓 1 이상
-  else if (ticket > 0 && start === 0 ){
+  else if (ticket > 0 && start === 0 && micandVideo === 1){
     return (
       <button onClick={()=>{
         setTicket(ticket - 1)
@@ -81,10 +95,8 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
       <div>
         <p>{ 남은시간 }</p>
         <p>예상 대기 시간 : { 예상대기시간 }분</p>
-
-
         <button onClick={()=>{ 
-          alert()
+          alert(navigate)
         }}>
           임시 시작
         </button>
@@ -93,7 +105,7 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
   }
 };
 
-function alert(){
+function alert(navigate){
 
   Swal.fire({
     icon: 'success',
@@ -107,10 +119,12 @@ function alert(){
   }).then((res)=>{
     if (res.isConfirmed) {
       // 리덕스로 ticket 개수 -1
-      window.location.href = "http://localhost:3000/matching/start"
+      // window.location.href = "http://localhost:3000/matching/start"
+      navigate('/matching/start')
     } else if (res.isDenied){
       // start 다시 0으로
-      window.location.href = "http://localhost:3000/matching/"
+      // window.location.href = "http://localhost:3000/matching/"
+      navigate('/matching')
     }
   })
 }

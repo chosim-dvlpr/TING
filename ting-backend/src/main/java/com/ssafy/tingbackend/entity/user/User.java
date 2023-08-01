@@ -17,7 +17,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
-@ToString(of = {"id", "email", "nickname", "gender", "region", "jobCode", "drinkingCode", "religionCode", "userHobbys"})
+//@ToString(of = {"id", "email", "nickname", "gender", "region", "jobCode", "drinkingCode", "religionCode", "userHobbys"})
+@ToString(of = {"id", "nickname", "gender"})
 @DynamicInsert
 public class User extends BaseTimeEntity {
 
