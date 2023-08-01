@@ -1,14 +1,18 @@
 package com.ssafy.tingbackend.user.controller;
 
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Map;
 
@@ -34,13 +38,23 @@ public class UserController {
     /**
      * Refresh Token 재발급 API
      *
-     * @param principal 로그인한 유저의 id (자동주입)
+     * @param request 요청 http
      * @return access-token, refresh-token
      */
     @PostMapping("/user/refresh")
-    public DataResponse<Map<String, String>> refreshToken(Principal principal) {
-        Map<String, String> token = userService.refreshToken(principal.getName());
-        return new DataResponse<>(200, "토큰 재발급 성공", token);
+    public DataResponse<Map<String, String>> refreshToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new CommonException(ExceptionType.JWT_TOKEN_INVALID);
+        }
+        String token = bearerToken.substring(7);
+        Claims claims = JwtUtil.getPayloadAndCheckExpired(token);
+        if (!"refresh-token".equals(claims.getSubject())) {
+            throw new CommonException(ExceptionType.JWT_TOKEN_INVALID);
+        }
+
+        Map<String, String> result = userService.refreshToken(claims.get("userId", String.class));
+        return new DataResponse<>(200, "토큰 재발급 성공", result);
     }
 
     /**
