@@ -1,7 +1,6 @@
 package com.ssafy.tingbackend.matching.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.matching.dto.WebSocketMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +21,7 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         log.info("웹소켓 연결 - {}", session.getId());
-
-        String token = session.getHandshakeHeaders().get("Authorization").get(0);
-        Long userId = Long.parseLong(JwtUtil.getPayloadAndCheckExpired(token).get("userId").toString());
-        matchingService.waitForMatching(userId, session);
+        matchingService.connectSocket(session);
     }
 
     // 양방향 데이터 통신 - 클라이언트에서 메세지를 보내오는 경우
@@ -36,8 +32,15 @@ public class MatchingWebSocketHandler extends TextWebSocketHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         WebSocketMessage webSocketMessage = objectMapper.readValue(message.getPayload(), WebSocketMessage.class);
 
-        if(webSocketMessage.getType().equals("accept")) matchingService.acceptMatching(session.getId());
-        else if(webSocketMessage.getType().equals("reject")) matchingService.rejectMatching(session.getId());
+        if(webSocketMessage.getType().equals("jwt")) {
+            matchingService.waitForMatching(session.getId(), webSocketMessage.getData().get("token"));
+        }
+        if(webSocketMessage.getType().equals("accept")) {
+            matchingService.acceptMatching(session.getId());
+        }
+        if(webSocketMessage.getType().equals("reject")) {
+            matchingService.rejectMatching(session.getId());
+        }
     }
 
     // 소켓 연결 종료

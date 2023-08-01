@@ -39,6 +39,10 @@ dependencies {
     // NAVER CLOUD PLATFORM SENS SMS API
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
+    //google cloud natural language api
+    implementation 'com.google.cloud:google-cloud-language:2.21.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.18.0'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
