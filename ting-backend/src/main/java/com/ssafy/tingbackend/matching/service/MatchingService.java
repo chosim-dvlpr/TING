@@ -2,6 +2,7 @@ package com.ssafy.tingbackend.matching.service;
 
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
+import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.entity.matching.Matching;
 import com.ssafy.tingbackend.entity.matching.MatchingUser;
 import com.ssafy.tingbackend.entity.user.AdditionalInfo;
@@ -48,25 +49,33 @@ public class MatchingService {
     private final MatchingRepository matchingRepository;
     private final MatchingUserRepository matchingUserRepository;
 
-    private final Map<String, WebSocketInfo> socketInfos = new ConcurrentHashMap<>();
-    private final List<String> mQueue = new CopyOnWriteArrayList<>();
-    private final List<String> fQueue = new CopyOnWriteArrayList<>();
-    private final List<String> acceptQueue = new CopyOnWriteArrayList<>();
+    // WebSocketSessionId를 키로 사용
+    private final Map<String, WebSocketInfo> socketInfos = new ConcurrentHashMap<>();  // 소켓 연결 정보
+    private final List<String> mQueue = new CopyOnWriteArrayList<>();  // 남성 사용자 대기열
+    private final List<String> fQueue = new CopyOnWriteArrayList<>();  // 여성 사용자 대기열
+    private final List<String> acceptQueue = new CopyOnWriteArrayList<>();  // 매칭 후 수락을 기다리는 대기열
 
-    public void waitForMatching(Long userId, WebSocketSession socketSession) throws IOException {
+    public void connectSocket(WebSocketSession socketSession) {
+        socketInfos.put(socketSession.getId(), new WebSocketInfo(socketSession, 0));
+    }
+
+
+    public void waitForMatching(String socketSessionId, String token) throws IOException {
+        // 소켓연결정보에 유저 정보 넣기
+        Long userId = Long.parseLong(JwtUtil.getPayloadAndCheckExpired(token).get("userId").toString());
         User user = getUserAllData(userId);
+        socketInfos.get(socketSessionId).setUser(user);
 
-        socketInfos.put(socketSession.getId(), new WebSocketInfo(socketSession, user, 0));
-
+        // 유저 성별에 해당하는 대기열에 넣기
         Integer time;
         if(user.getGender().equals("M")) {
-            mQueue.add(socketSession.getId());
+            mQueue.add(socketSessionId);
 
             // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
             if(fQueue.size() == 0) time = 180;
             else time = 60;
         } else {
-            fQueue.add(socketSession.getId());
+            fQueue.add(socketSessionId);
 
             // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
             if(mQueue.size() == 0) time = 180;
@@ -78,7 +87,7 @@ public class MatchingService {
         messageData.put("time", time.toString());
         WebSocketMessage message = new WebSocketMessage("expectedTime", messageData);
         TextMessage textMessage = new TextMessage(message.toJson());
-        socketSession.sendMessage(textMessage);
+        socketInfos.get(socketSessionId).getSession().sendMessage(textMessage);
     }
 
     @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
@@ -524,4 +533,5 @@ public class MatchingService {
         matchingInfo.setIsValidate(false);
         matchingInfoRepository.save(matchingInfo);
     }
+
 }

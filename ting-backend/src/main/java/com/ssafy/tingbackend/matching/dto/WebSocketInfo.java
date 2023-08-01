@@ -16,6 +16,10 @@ public class WebSocketInfo {
     User user;
     int count;
 
+    public WebSocketInfo(WebSocketSession session, int count) {
+        this.session = session;
+        this.count = count;
+    }
     public void countUp() {
         this.count++;
     }
