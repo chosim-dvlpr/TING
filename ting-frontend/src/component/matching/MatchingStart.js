@@ -29,12 +29,23 @@ function MatchingStart(){
     console.log(state.userdataReducer)
     setUserdata(state.userdataReducer.userdata)
     // setMyUserName(userdata.nickname)
-
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
         window.removeEventListener('beforeunload', onbeforeunload);
     };
   }, []);
+
+  useEffect(() => { 
+    // TODO: redux에서 오픈 비두 입장 토큰 가져오기
+    
+    // TODO: 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
+    
+    // TODO: state에 토큰을 저장하고 joinSession 메서드 호출
+
+    return () => {
+    };
+  }, []);
+
 
   const onbeforeunload = (event) => {
       leaveSession();
