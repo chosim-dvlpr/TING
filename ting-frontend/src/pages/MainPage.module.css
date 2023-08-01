@@ -32,3 +32,11 @@
     height: 504px;
   }
   
+
+  .content2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 700px; /* .container 크기의 50%로 설정 */
+    height: 1080px;
+  }

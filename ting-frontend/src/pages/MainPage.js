@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import {FullPage, Slide } from 'react-full-page';
+
 import AOS from "aos";
 import "./aos.css";
+
 import styles from './MainPage.module.css';
 
 function MainPage() {
@@ -17,21 +18,21 @@ function MainPage() {
   }, []);
 
   return (
-    <FullPage>
+    <div >
       {/* 첫 번째 섹션 - 풀페이지 영상 */}
-      <Slide>
+      <div className={styles.content2} data-aos="fade-down" data-aos-duration="3000">
         <div className={styles.fullPageVideo}>
           {/* 영상을 넣을 Video 태그 등 추가 */}
           <h1>메인 페이지!</h1>
         </div>
-      </Slide>
+      </div>
 
       {/* 두 번째 섹션 - 프로젝트 설명 */}
-      <Slide>
+      <div data-aos="fade-down" data-aos-duration="1000">
         <div className={styles.container}>
           <div className={styles.content}>
             <h1 className={styles.title}>메인화면</h1>
-            <div data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1500">
+            <div data-aos="fade-down">
               <h1>이거 작동 되나요</h1>
             </div>
             <div>이 버튼을 누르면 매칭이 진행됩니다.</div>
@@ -57,8 +58,8 @@ function MainPage() {
             />
           </div>
         </div>
-      </Slide>
-    </FullPage>
+      </div>
+    </div>
   );
 }
 
