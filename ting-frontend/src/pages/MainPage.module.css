@@ -1,0 +1,34 @@
+/* MainPage.module.css */
+
+.container {
+    display: flex;
+    align-items: center;
+    margin: 0 240px; /* 1920x1080 화면에 margin 왼쪽과 오른쪽에 240px*/
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 700px; /* .container 크기의 50%로 설정 */
+    height: 504px;
+  }
+  
+  .textbox {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .image {
+    max-width: 100%;
+    width: 700px; /* .container 크기의 50%로 설정 */
+    height: 504px;
+  }
+  
