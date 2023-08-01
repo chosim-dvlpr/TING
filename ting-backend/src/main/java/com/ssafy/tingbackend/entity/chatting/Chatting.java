@@ -33,4 +33,8 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
 
     @OneToMany(mappedBy = "chatting")
     private List<ChattingUser> chattingUsers = new ArrayList<>();
+
+    public void changeTemperature(BigDecimal diff) {
+        temperature.add(diff);
+    }
 }

@@ -1,4 +1,4 @@
-package com.ssafy.tingbackend.common.config;
+package com.ssafy.tingbackend.matching.config;
 
 import com.ssafy.tingbackend.matching.service.MatchingWebSocketHandler;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 @Configuration
 @EnableWebSocket
-//@EnableWebSocketMessageBroker
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
@@ -22,17 +21,5 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .addInterceptors(new HttpSessionHandshakeInterceptor())
                 .setAllowedOrigins("*");
     }
-
-//    // ======== STOMP로 변경 ========
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.enableSimpleBroker("/pub");
-//        registry.setApplicationDestinationPrefixes("/sub");
-//    }
-//
-//    @Override
-//    public void registerStompEndpoints(StompEndpointRegistry registry) {
-//        registry.addEndpoint("/matching").withSockJS();
-//    }
 
 }
