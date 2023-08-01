@@ -1,0 +1,13 @@
+.box{
+    width : 80%;
+    background-color: #fee5ef;
+    border-radius: 30px;
+}
+
+.rightBox{
+    margin: auto;
+}
+
+.leftBox{
+    margin: auto;
+}

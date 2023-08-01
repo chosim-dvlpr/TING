@@ -1,8 +1,17 @@
-import { combineReducers } from "redux";
-import signupReducer from "./signup";
+// import { combineReducers } from "redux";
+// import signupReducer from "./signup";
+import { configureStore } from "@reduxjs/toolkit";
+import signupSlice from "./signup";
+// const rootReducer = combineReducers({
+//   signupReducer: signupSlice.reducer,
+// });
+import userdataSlice from "./userdata.js";
 
-const rootReducer = combineReducers({
-  signupReducer,
-});
+export default configureStore({
+  reducer: {
+      signupReducer : signupSlice.reducer,
+      userdataReducer : userdataSlice.reducer, 
+  }
+}) 
 
-export default rootReducer;
+// export default rootReducer;

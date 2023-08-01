@@ -1,52 +1,113 @@
-const initState = {
-  email: "",
-  password: "",
-  phoneNumber: "",
-  name: "",
-  nickname: "",
-  gender: "",
-  birth: "",
-  region: "",
-}
+import { createSlice } from '@reduxjs/toolkit';
 
-const TEXT = "text";
+export const signupReducer = createSlice({
+  name: 'signupReducer',
+  initialState: {
+    // 기본값
+    email: "",
+    password: "",
+    phonenumber: "",
+    name: "",
+    nickname: "",
+    gender: "",
+    birth: "",
+    region: "",
+    // 선택값
+    profileImage: "",
+    mbtiCode: "",
+    heightCode: "",
+    drinkingCode: "",
+    smokingCode: "",
+    religionCode: "",
+    hobbyCodeList: [],
+    jobCode: "",
+    personalityCodeList: [],
+    introduction: "",
+    styleCodeList: [],
+  },
+  reducers: {
+    setEmail: (state, action) => {
+      state.email = action.payload;
+    },
+    setPassword: (state, action) => {
+      state.password = action.payload;
+    },
+    setPhonenumber: (state, action) => {
+      state.phonenumber = action.payload;
+    },
+    setName: (state, action) => {
+      state.name = action.payload;
+    },
+    setNickname: (state, action) => {
+      state.nickname = action.payload;
+    },
+    setGender: (state, action) => {
+      state.gender = action.payload;
+    },
+    setRegion: (state, action) => {
+      state.region = action.payload;
+    },
+    setBirth: (state, action) => {
+      state.birth = action.payload;
+    },
+    // 여기부터는 선택값
+    setMbtiCode: (state, action) => {
+      state.mbtiCode = action.payload;
+    },
+    setHeightCode: (state, action) => {
+      state.heightCode = action.payload;
+    },
+    setDrinkingCode: (state, action) => {
+      state.drinkingCode = action.payload;
+    },
+    setSmokingCode: (state, action) => {
+      state.smokingCode = action.payload;
+    },
+    setReligionCode: (state, action) => {
+      state.religionCode = action.payload;
+    },
+    setHobbyCodeList: (state, action) => {
+      let hobbyIndex = state.hobbyCodeList.indexOf(action.payload);
+      if (hobbyIndex > -1) {
+        state.hobbyCodeList.splice(hobbyIndex, 1);
+      }
+      else {
+        state.hobbyCodeList.push(action.payload);
+      }
+    },
+    setJobCode: (state, action) => {
+      state.jobCode = action.payload;
+    },
+    setPersonalityCodeList: (state, action) => {
+      let personalityIndex = state.personalityCodeList.indexOf(action.payload);
+      if (personalityIndex > -1) {
+        state.personalityCodeList.splice(personalityIndex, 1);
+      }
+      else {
+        state.personalityCodeList.push(action.payload);
+      }    
+    },
+    setIntroduction: (state, action) => {
+      state.introduction = action.payload;
+    },
+    setStyleCodeList: (state, action) => {
+      let styleIndex = state.styleCodeList.indexOf(action.payload);
+      if (styleIndex > -1) {
+        state.styleCodeList.splice(styleIndex, 1);
+      }
+      else {
+        state.styleCodeList.push(action.payload);
+      }       
+    },
+    setDeleteStyleCodeList: (state, action) => {
+      state.styleCodeList.slice(action.payload, 1);
+    },
+  }
+})
 
-const signupReducer = (state = initState, action) => {
-  return {
-    ...state, // 불변성 유지
-    type: "text",
-    email: action.email, // 변경할 state 값
-    password: action.password,
-    phoneNumber: action.phoneNumber,
-    name: action.name,
-    nickname: action.nickname,
-    gender: action.gender,
-    birth: action.birth,
-    region: action.region,
-  };
-  // 뒤로가기 눌렀을 때 데이터를 초기화할지?
-};
 
-// const signupReducer = (state = initState, action) => {
-//   switch (action.type) {
-//     // 성공 시
-//     case 200:
-//       return {
-//         ...state, // 불변성 유지
-//         email: action.email, // 변경할 state 값
-//         password: action.password,
-//         phoneNumber: action.phoneNumber,
-//         name: action.name,
-//         nickname: action.nickname,
-//         gender: action.gender,
-//         birth: action.birth,
-//         region: action.region,
-//       };
-//     // 기본 값
-//     default:
-//       return state;
-//     // 뒤로가기 눌렀을 때 데이터를 초기화할지?
-//   }
-// };
-
+export const { setEmail, setPassword, setPhonenumber, setName, setNickname, setGender, setRegion, setBirth,
+  setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setHobbyCodeList,
+  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList,
+} = signupReducer.actions;
 export default signupReducer;
