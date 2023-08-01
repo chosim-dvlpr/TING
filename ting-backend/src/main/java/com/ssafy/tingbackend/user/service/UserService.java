@@ -383,7 +383,7 @@ public class UserService {
                 // 프로필 세팅
                 User user = userRepository.findById(Long.parseLong(principal.getName()))
                         .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-                user.setProfileImage(saveFolder + File.separator + today + File.separator + saveFileName);
+                user.setProfileImage(today + File.separator + saveFileName);
                 userRepository.save(user);
             }
         }
