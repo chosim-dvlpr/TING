@@ -4,10 +4,10 @@ router로 라우팅 구성하기
 
 
 import React from 'react';
-import Sidebar from '../component/community/Sidebar';
+import Sidebar from '../component/community/common/Sidebar';
 import { Routes, Route } from 'react-router-dom';
-import AdviceBoard from './community/AdviceBoard';
-import IssueBoard from './community/IssueBoard';
+import AdviceBoard from '../component/community/advice/AdviceBoard';
+import IssueBoard from '../component/community/issue/IssueBoard';
 
 function CommunityPage() {
   return (

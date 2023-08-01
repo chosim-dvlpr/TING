@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // axios를 import
 
-import AdvicePostForm from './AdvicePostForm'; // AdvicePostForm 컴포넌트 import
-import Pagination from '../../component/community/Pagination';
+import AdvicePostForm from './AdviceCreate'; // AdvicePostForm 컴포넌트 import
+import Pagination from '../common/Pagination';
 
 const AdviceBoard = () => {
   const [posts, setPosts] = useState([]);

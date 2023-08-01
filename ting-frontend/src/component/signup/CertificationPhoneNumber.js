@@ -3,8 +3,8 @@ import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
-import basicHttp from '../../../api/basicHttp';
-import { setPhonenumber } from '../../../redux/signup';
+import basicHttp from '../../api/basicHttp';
+import { setPhonenumber } from '../../redux/signup';
 
 function CertificationPhonenumber(){
   let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
