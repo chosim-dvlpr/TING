@@ -1,13 +1,13 @@
 import { useState } from "react";
-import basicHttp from "../../api/basicHttp";
-import tokenHttp from "../../api/tokenHttp";
+import basicHttp from "../api/basicHttp";
+import tokenHttp from "../api/tokenHttp";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { getCurrentUserdata } from "../../redux/userdata";
+import { getCurrentUserdata } from "../redux/userdata";
 
-function Login(){
+function LoginPage(){
   let [email, setEmail] = useState('')
   let [password, setPassword] = useState('')
 
@@ -74,4 +74,4 @@ function Login(){
   )
 };
 
-export default Login;
+export default LoginPage;

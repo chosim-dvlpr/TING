@@ -1,6 +1,6 @@
 import {Routes, Route, Navigate, Outlet} from 'react-router-dom'
 
-function SignUp(){
+function SignUpPage(){
 
   return(
     <div>
@@ -10,4 +10,4 @@ function SignUp(){
   )
 }
 
-export default SignUp
+export default SignUpPage

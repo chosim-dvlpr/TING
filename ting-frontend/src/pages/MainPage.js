@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom' 
 
-function Main (){
+function MainPage (){
   let Navigate = useNavigate()
 
   return(
@@ -26,4 +26,4 @@ function Main (){
   )
 }
 
-export default Main
+export default MainPage
