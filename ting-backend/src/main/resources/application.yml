@@ -67,7 +67,7 @@ ncloud:
     secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
     senderPhone: 01050659767
 
-
+# profile 이미지 파일경로
 file:
   path: /app/profile
 

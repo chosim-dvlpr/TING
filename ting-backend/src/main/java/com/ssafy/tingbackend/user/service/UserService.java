@@ -12,6 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -388,5 +396,41 @@ public class UserService {
             }
         }
 
+    }
+
+    public ResponseEntity<Resource> getProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if (user.getProfileImage() == null) {
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        String[] userProfilePath = user.getProfileImage().split("/");
+
+        // 다운로드할 이미지 파일의 경로 생성
+        Path filePath = Paths.get(uploadPath, userProfilePath[0], userProfilePath[1]);
+        Resource resource;
+        try {
+            resource = new UrlResource(filePath.toUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        // 이미지 파일의 MIME 타입 지정
+        String contentType;
+        try {
+            contentType = Files.probeContentType(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        // 다운로드할 이미지 파일의 HTTP 헤더 설정
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

@@ -11,6 +11,8 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,6 +81,11 @@ public class UserController {
     public CommonResponse profile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
         userService.saveProfile(file, principal);
         return new CommonResponse(200, "프로필 등록 성공");
+    }
+
+    @GetMapping("/user/profile")
+    public ResponseEntity<Resource> getProfile(Principal principal) {
+        return userService.getProfile(Long.parseLong(principal.getName()));
     }
 
     /**
