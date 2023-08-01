@@ -2,8 +2,8 @@
 import { useNavigate } from "react-router-dom"
 import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import basicHttp from '../../../api/basicHttp';
-import { setGender, setName, setRegion, setBirth, setNickname } from '../../../redux/signup';
+import basicHttp from '../../api/basicHttp';
+import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
 
 
 function Detail(){

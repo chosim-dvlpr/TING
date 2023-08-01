@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import basicHttp from '../../../api/basicHttp';
-import { setEmail } from '../../../redux/signup';
+import basicHttp from '../../api/basicHttp';
+import { setEmail } from '../../redux/signup';
 
 function InputEmail(){
   // let [email, setEmail] = useState("")

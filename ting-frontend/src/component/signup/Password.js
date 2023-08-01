@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setPassword } from "../../../redux/signup";
+import { setPassword } from "../../redux/signup";
 import { useDispatch } from "react-redux";
 
 function Password() {

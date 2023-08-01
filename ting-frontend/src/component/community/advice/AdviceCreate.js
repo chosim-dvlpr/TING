@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const AdvicePostForm = () => {
+const AdviceCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -62,4 +62,4 @@ const AdvicePostForm = () => {
   );
 };
 
-export default AdvicePostForm;
+export default AdviceCreate;
