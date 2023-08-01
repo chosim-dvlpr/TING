@@ -359,6 +359,7 @@ public class UserService {
     }
 
 
+    @Transactional
     public void saveProfile(MultipartFile file, Principal principal) throws IOException {
         if (file == null) {
             throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
@@ -383,6 +384,7 @@ public class UserService {
                 User user = userRepository.findById(Long.parseLong(principal.getName()))
                         .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
                 user.setProfileImage(saveFolder + File.separator + today + File.separator + saveFileName);
+                userRepository.save(user);
             }
         }
 
