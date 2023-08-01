@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react"
 import Swal from "sweetalert2";
+import {useNavigate} from "react-router-dom";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -22,6 +23,10 @@ function WaitingRoom(){
     console.log(state.userdataReducer.userdata)
   }, []);
 
+  let navigate = useNavigate("");
+
+
+
   return(
     <div>
       <h1>대기실</h1>
@@ -42,7 +47,7 @@ function WaitingRoom(){
               <p>마이크가 확인되었습니다.</p>
               <p>체크박스</p>
               <p>잔여티켓 {ticket}개</p>
-              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart}  />
+              <MatchingStartButton ticket={ticket} setTicket={setTicket} start={start} setStart={setStart} navigate={navigate} />
             </div>
           </Col>
         </Row>
@@ -60,7 +65,7 @@ function WaitingRoom(){
   )
 }
 
-const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
+const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>{
 
   let 남은시간 = '07:21'
   let 예상대기시간 = 5
@@ -87,7 +92,7 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
 
 
         <button onClick={()=>{ 
-          alert()
+          alert(navigate)
         }}>
           임시 시작
         </button>
@@ -96,7 +101,7 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket })=>{
   }
 };
 
-function alert(){
+function alert(navigate){
 
   Swal.fire({
     icon: 'success',
@@ -110,7 +115,8 @@ function alert(){
   }).then((res)=>{
     if (res.isConfirmed) {
       // 리덕스로 ticket 개수 -1
-      window.location.href = "http://localhost:3000/matching/start"
+      // window.location.href = "http://localhost:3000/matching/start"
+      navigate('/matching/start')
     } else if (res.isDenied){
       // start 다시 0으로
       window.location.href = "http://localhost:3000/matching/"

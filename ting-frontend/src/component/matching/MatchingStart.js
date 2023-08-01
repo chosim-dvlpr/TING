@@ -6,14 +6,15 @@ import axios from 'axios';
 import UserVideoComponent from '../../pages/openvidu/UserVideoComponent.js';
 
 import { useSelector } from 'react-redux';
+import './MatchingStart.css'
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function MatchingStart(){
   const [userdata, setUserdata] = useState({});
   const [mySessionId, setMySessionId] = useState('SessionA');
-  // const [myUserName, setMyUserName] = useState('Participant' + Math.floor(Math.random() * 100));
-  const [myUserName, setMyUserName] = useState('');
+  const [myUserName, setMyUserName] = useState('Participant' + Math.floor(Math.random() * 100));
+//   const [myUserName, setMyUserName] = useState('');
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
@@ -27,7 +28,7 @@ function MatchingStart(){
     // userdata redux에서 가져옴
     console.log(state.userdataReducer)
     setUserdata(state.userdataReducer.userdata)
-    setMyUserName(userdata.nickname)
+    // setMyUserName(userdata.nickname)
 
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
@@ -161,76 +162,74 @@ function MatchingStart(){
   };
 
     return (
-        <div className="container">
-            {session === undefined ? (
-                <div id="join">
-                    <div id="img-div">
-                        <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-                    </div>
-                    <div id="join-dialog" className="jumbotron vertical-center">
-                        <h1> Join a video session </h1>
-                        <form className="form-group" onSubmit={joinSession}>
-                            <p>
-                                <label>Participant: </label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    id="userName"
-                                    value={userdata.nickname}
-                                    onChange={handleChangeUserName}
-                                    required
-                                />
-                            </p>
-                            <p>
-                                <label> Session: </label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    id="sessionId"
-                                    value={mySessionId}
-                                    onChange={handleChangeSessionId}
-                                    required
-                                />
-                            </p>
-                            <p className="text-center">
-                                <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            ) : null}
+      <div className="container">
+        {session === undefined ? (
+          <div id="join">
+            <div id="img-div">
+              <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
+            </div>
+            <div id="join-dialog" className="jumbotron vertical-center">
+              <h1> Join a video session </h1>
+              <form className="form-group" onSubmit={joinSession}>
+                <p>
+                  <label>Participant: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    id="userName"
+                    value={userdata.nickname}
+                    onChange={handleChangeUserName}
+                    required
+                  />
+                </p>
+                <p>
+                  <label> Session: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    id="sessionId"
+                    value={mySessionId}
+                    onChange={handleChangeSessionId}
+                    required
+                  />
+                </p>
+                <p className="text-center">
+                  <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
+                </p>
+                </form>
+              </div>
+            </div>
+          ) : null}
 
-            {session !== undefined ? (
-                <div id="session">
-                    <div id="session-header">
-                        <h1 id="session-title">{mySessionId}</h1>
-                        <input
-                            className="btn btn-large btn-danger"
-                            type="button"
-                            id="buttonLeaveSession"
-                            onClick={leaveSession}
-                            value="Leave session"
-                        />
-                    </div>
+          {session !== undefined ? (
+            <div id="session">
+              <div id="session-header">
+                <h1 id="session-title">{mySessionId}</h1>
+                <input
+                  className="btn btn-large btn-danger"
+                  type="button"
+                  id="buttonLeaveSession"
+                  onClick={leaveSession}
+                  value="Leave session"
+                />
+              </div>
 
-                    <h2>질문</h2>
+              <div id="video-container">
+                {publisher !== undefined ? (
+                  <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+                    <UserVideoComponent streamManager={publisher} />
+                  </div>
+                ) : null}
 
-                    <div id="video-container" className="col-md-6">
-                        {publisher !== undefined ? (
-                            <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-                                <UserVideoComponent streamManager={publisher} />
-                            </div>
-                        ) : null}
-                        {subscribers.map((sub, i) => (
-                            <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
-                                <span>{sub.id}</span>
-                                <UserVideoComponent streamManager={sub} />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ) : null}
-        </div>
+                {subscribers.map((sub, i) => (
+                  <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+      </div>
     );
 };
 
