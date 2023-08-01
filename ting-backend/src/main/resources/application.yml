@@ -67,8 +67,13 @@ ncloud:
     secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
     senderPhone: 01050659767
 
+
+file:
+  path: /app/profile
+
 # natural language api
 cloud:
   gcp:
     credentials:
       location: classpath:service-account-key.json
+

@@ -11,14 +11,20 @@ import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -40,6 +46,9 @@ public class UserService {
     private final PhoneNumberAuthRepository phoneNumberRepository;
 
     private final SmsService smsService;
+
+    @Value("${file.path}")
+    private String uploadPath;
 
     public Map<String, String> login(UserDto.Basic userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -350,4 +359,32 @@ public class UserService {
     }
 
 
+    public void saveProfile(MultipartFile file, Principal principal) throws IOException {
+        if (file == null) {
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        if (!file.isEmpty()) {
+            String today = new SimpleDateFormat("yyMMdd").format(new Date());
+            String saveFolder = uploadPath + File.separator + today;
+
+            // 폴더가 없다면 저장경로의 폴더를 생성
+            File folder = new File(saveFolder);
+            if (!folder.exists()) folder.mkdirs();
+
+            String originalFileName = file.getOriginalFilename();
+            if (!originalFileName.isEmpty()) {
+                // 파일 저장
+                String saveFileName = UUID.randomUUID().toString()
+                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                file.transferTo(new File(folder, saveFileName));
+
+                // 프로필 세팅
+                User user = userRepository.findById(Long.parseLong(principal.getName()))
+                        .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+                user.setProfileImage(saveFolder + File.separator + today + File.separator + saveFileName);
+            }
+        }
+
+    }
 }

@@ -10,11 +10,16 @@ import com.ssafy.tingbackend.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,6 +73,12 @@ public class UserController {
         userService.signUp(userDto);
 
         return new CommonResponse(200, "회원가입 성공");
+    }
+
+    @PostMapping("/user/profile")
+    public CommonResponse profile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
+        userService.saveProfile(file, principal);
+        return new CommonResponse(200, "프로필 등록 성공");
     }
 
     /**
