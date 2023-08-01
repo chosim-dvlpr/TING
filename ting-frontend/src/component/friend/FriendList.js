@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import tokenHttp from "../../api/tokenHttp";
 import FriendProfile from "./FriendProfile";
+import ChatRoom from "./FriendChatting";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -10,10 +11,10 @@ function FriendList(){
   let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
 
   const friendListAxios = () => {
-    tokenHttp.get(`/friend`).then((response) => {
+    tokenHttp.get('/friend').then((response) => {
       // 불러오기 성공 시 friendList에 친구목록 저장
       if (response.data.code === 200) {
-        console.log('불러오기 성공');
+        console.log('친구 목록 불러오기 성공');
         setFriendList(response.data.data);
       }
       else if (response.data.code === 400) {
@@ -31,7 +32,7 @@ function FriendList(){
   return (
     <div>
       <h3>여기는 친구리스트</h3>
-      <h3 onClick={() => setIsModal(!isModal)}>프로필 이미지 임시</h3>
+      <h3 onClick={() => setIsModal(!isModal)}>리스트 임시</h3>
       <div>
         {
           friendList.map((friend, i) => {
@@ -52,7 +53,7 @@ function FriendList(){
       </div>
 
       <div>
-        {isModal === true ? <FriendProfile userId={userId} /> : null}
+        {isModal === true ? <ChatRoom userId={userId} /> : null}
       </div>
     </div>
   )

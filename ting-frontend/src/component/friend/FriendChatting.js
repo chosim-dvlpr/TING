@@ -1,13 +1,15 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-
+import FriendProfile from "./FriendProfile";
 import * as StompJs from "@stomp/stompjs";
 // import * as SockJS from 'sockjs-client'
 
 
 export default function ChatRoom() {
   let navigate = useNavigate();
+  let [isModal, setIsModal] = useState(true);
+  // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
 
   const param = useParams(); // 채널을 구분하는 식별자
   const chatroomId = param.chatroomId;
@@ -57,21 +59,21 @@ export default function ChatRoom() {
       const clientdata = new StompJs.Client({
         brokerURL: "ws://localhost:3000/test",
         connectHeaders: {
-          login: "",
+          login: "", // 로그인 정보 넣기
           passcode: "password",
         },
         debug: function (str) {
-          console.log("======",str);
+          console.log("======",str); // 디버깅을 위한 콘솔 출력
         },
         reconnectDelay: 5000, // 자동 재 연결
-        heartbeatIncoming: 4000,
-        heartbeatOutgoing: 4000,
+        heartbeatIncoming: 4000, // 입력 heartbeat 주기
+        heartbeatOutgoing: 4000, // 출력 heartbeat 주기
       });
 
 
       // 구독
       clientdata.onConnect = function () {
-        clientdata.subscribe("/sub/channels/" + chatroomId, callback);
+        clientdata.subscribe("/sub/channels/" + chatroomId, callback); // 메세지 수신하는 callback함수
       };
 
       clientdata.activate(); // 클라이언트 활성화
@@ -167,6 +169,11 @@ export default function ChatRoom() {
         </form>
       </div>
       {chatroomId}
+      
+      <div>
+        <h3 onClick={() => setIsModal(!isModal)}>프로필 이미지 임시</h3>
+        {isModal === true ? <FriendProfile userId={userId} /> : null}
+      </div>
     </>
   );
 }
