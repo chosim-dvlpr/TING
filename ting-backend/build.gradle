@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3-1'
 
     // openvidu
     implementation 'io.openvidu:openvidu-java-client:2.28.0'
@@ -39,9 +41,18 @@ dependencies {
     // NAVER CLOUD PLATFORM SENS SMS API
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 
+
+    // 채팅
+//    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+//    implementation 'org.springframework.boot:spring-boot-devtools'
+//    implementation 'org.webjars.bower:bootstrap:4.3.1'
+//    implementation 'org.webjars.bower:vue:2.5.16'
+//    implementation 'org.webjars.bower:axios:0.17.1'
+
     //google cloud natural language api
     implementation 'com.google.cloud:google-cloud-language:2.21.0'
     implementation 'com.google.auth:google-auth-library-oauth2-http:1.18.0'
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'

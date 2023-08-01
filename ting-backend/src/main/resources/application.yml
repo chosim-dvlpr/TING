@@ -44,6 +44,15 @@ spring:
       username: ting-mongo
       password: 1q2w3e4r-ting-mongo
 
+  # 채팅
+#  devtools:
+#    livereload:
+#      enabled: true
+#    restart:
+#      enabled: false
+#  freemarker:
+#    cache: false
+
 jwt:
   secretKey: JwtSecretKeyForShortDate
 
