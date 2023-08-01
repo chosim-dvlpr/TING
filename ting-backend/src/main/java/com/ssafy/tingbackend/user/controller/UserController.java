@@ -2,6 +2,7 @@ package com.ssafy.tingbackend.user.controller;
 
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
+import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,18 @@ public class UserController {
     public DataResponse<Map<String, String>> login(@RequestBody UserDto.Basic userDto) {
         Map<String, String> token = userService.login(userDto);
         return new DataResponse<>(200, "로그인 성공", token);
+    }
+
+    /**
+     * Refresh Token 재발급 API
+     *
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @return access-token, refresh-token
+     */
+    @PostMapping("/user/refresh")
+    public DataResponse<Map<String, String>> refreshToken(Principal principal) {
+        Map<String, String> token = userService.refreshToken(principal.getName());
+        return new DataResponse<>(200, "토큰 재발급 성공", token);
     }
 
     /**

@@ -64,6 +64,18 @@ public class UserService {
         return result;
     }
 
+    public Map<String, String> refreshToken(String userId) {
+        String accessToken = JwtUtil.generateAccessToken(String.valueOf(userId));
+        String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
+
+        Map<String, String> result = new HashMap<>();
+        result.put("access-token", accessToken);
+        result.put("refresh-token", refreshToken);
+
+        // 로그인 기록 저장
+        return result;
+    }
+
     public void signUp(UserDto.Signup userDto) {
         userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
@@ -336,4 +348,6 @@ public class UserService {
         }
         return key.toString();
     }
+
+
 }
