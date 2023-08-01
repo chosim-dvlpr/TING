@@ -27,6 +27,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,74 +53,97 @@ public class MatchingService {
     private final List<String> fQueue = new CopyOnWriteArrayList<>();
     private final List<String> acceptQueue = new CopyOnWriteArrayList<>();
 
-    public void waitForMatching(Long userId, WebSocketSession socketSession) {
+    public void waitForMatching(Long userId, WebSocketSession socketSession) throws IOException {
         User user = getUserAllData(userId);
 
-        socketInfos.put(socketSession.getId(), new WebSocketInfo(socketSession, user));
+        socketInfos.put(socketSession.getId(), new WebSocketInfo(socketSession, user, 0));
 
-        if(user.getGender().equals("M")) mQueue.add(socketSession.getId());
-        else fQueue.add(socketSession.getId());
+        Integer time;
+        if(user.getGender().equals("M")) {
+            mQueue.add(socketSession.getId());
+
+            // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
+            if(fQueue.size() == 0) time = 180;
+            else time = 60;
+        } else {
+            fQueue.add(socketSession.getId());
+
+            // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
+            if(mQueue.size() == 0) time = 180;
+            else time = 60;
+        }
+
+        // 예상 대기 시간 전송
+        Map<String, String> messageData = new HashMap<>();
+        messageData.put("time", time.toString());
+        WebSocketMessage message = new WebSocketMessage("expectedTime", messageData);
+        TextMessage textMessage = new TextMessage(message.toJson());
+        socketSession.sendMessage(textMessage);
     }
 
     @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
-    public void matchingUsers() {
-//        System.out.println("matchingUsers() 실행");
-        int maxScore = 0;
-        String fSessionId = null;
-        String mSessionId = null;
-
-        // 여성 사용자 기준 점수가 가장 높은
-        for(String fId : fQueue) {
-            User female = socketInfos.get(fId).getUser();
+    public void matchingUsers() {        
+//        System.out.println("========== 매칭 전 ==========");
+//        System.out.println("fQueue=" + fQueue);
+//        System.out.println("mQueue=" + mQueue);
+//        System.out.println("acceptQueue=" + acceptQueue);
+        
+        // 먼저 들어온 여성 사용자들부터 순서대로 점수 계산, 가장 점수합이 높은 쌍부터 내보내기(기준 점수 50점)
+        // 오래 대기하는 사용자들을 위한 가산점 -> 함수 한번 돌 떄마다 count++, 점수에 count 더해서 계산
+        Iterator<String> iter = fQueue.iterator();
+        while(iter.hasNext()) {
+            String fSessionId = iter.next();
+            User female = socketInfos.get(fSessionId).getUser();
+            int maxScore = 0;
+            String mSessionId = null;
 
             for(String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();
-                int score = calculateScore(female, male);
+                int score = calculateScore(female, male) + calculateScore(male, female)
+                        + socketInfos.get(fSessionId).getCount() + socketInfos.get(mId).getCount();
 
                 if(score > maxScore) {
                     maxScore = score;
-                    fSessionId = fId;
                     mSessionId = mId;
-                } else if(score == maxScore) {  // 동일 점수인 경우 남성 기준으로 점수 계산하여 더 높은 쌍으로
-                    int oldScore = calculateScore(socketInfos.get(mSessionId).getUser(), socketInfos.get(fSessionId).getUser());
-                    int newScore = calculateScore(male, female);
+                }
+            }
 
-                    if(newScore > oldScore) {
-                        fSessionId = fId;
-                        mSessionId = mId;
-                    }
+            if(mSessionId != null && maxScore >= 50) {
+                try {
+                    WebSocketMessage message = new WebSocketMessage("findPair", null);
+                    TextMessage textMessage = new TextMessage(message.toJson());
+
+                    // 매칭된 사용자의 소켓에 메세지 보내기
+                    socketInfos.get(fSessionId).getSession().sendMessage(textMessage);
+                    socketInfos.get(mSessionId).getSession().sendMessage(textMessage);
+
+                    // 대기큐에서 해당 사용자들 제거하고 수락 대기큐로 넣기
+                    acceptQueue.add(fSessionId);
+                    acceptQueue.add(mSessionId);
+                    fQueue.remove(fSessionId);
+                    mQueue.remove(mSessionId);
+
+                    // 매칭 정보 몽고디비에 임시 저장
+                    MatchingInfoDto matchingInfo = new MatchingInfoDto(fSessionId, mSessionId);
+                    matchingInfoRepository.save(matchingInfo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new CommonException(ExceptionType.OPENVIDU_ERROR);
                 }
             }
         }
 
-        // 여성, 남성 사용자 모두 있고, 점수가 35점 이상인 경우
-        if(fSessionId != null && mSessionId != null && maxScore >= 35) {
-            try {
-                WebSocketMessage message = new WebSocketMessage("findPair", null);
-                TextMessage textMessage = new TextMessage(message.toJson());
-
-                // 매칭된 사용자의 소켓에 메세지 보내기
-                socketInfos.get(fSessionId).getSession().sendMessage(textMessage);
-                socketInfos.get(mSessionId).getSession().sendMessage(textMessage);
-
-                // 대기큐에서 해당 사용자들 제거하고 수락 대기큐로 넣기
-                acceptQueue.add(fSessionId);
-                acceptQueue.add(mSessionId);
-                fQueue.remove(fSessionId);
-                mQueue.remove(mSessionId);
-
-                // 매칭 정보 몽고디비에 임시 저장
-                MatchingInfoDto matchingInfo = new MatchingInfoDto(fSessionId, mSessionId);
-                matchingInfoRepository.save(matchingInfo);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new CommonException(ExceptionType.OPENVIDU_ERROR);
-            }
+        for(String fId : fQueue) {
+            socketInfos.get(fId).countUp();
+        }
+        for(String mId : mQueue) {
+            socketInfos.get(mId).countUp();
         }
 
-        System.out.println("fQueue=" + fQueue);
-        System.out.println("mQueue=" + mQueue);
-        System.out.println("acceptQueue=" + acceptQueue);
+//        System.out.println("========== 매칭 후 ==========");
+//        System.out.println("fQueue=" + fQueue);
+//        System.out.println("mQueue=" + mQueue);
+//        System.out.println("acceptQueue=" + acceptQueue);
     }
 
     public User getUserAllData(Long userId) {
