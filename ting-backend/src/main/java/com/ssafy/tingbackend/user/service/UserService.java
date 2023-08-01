@@ -43,7 +43,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
-    private final PhoneNumberRepository phoneNumberRepository;
+    private final PhoneNumberAuthRepository phoneNumberRepository;
 
     private final SmsService smsService;
 
