@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import Webcam from "react-webcam"
 
 function WaitingRoom(){
+
   const [userdata, setUserdata] = useState({});
 
   // 이 티켓 redux로 불러와야할 듯
@@ -19,8 +20,8 @@ function WaitingRoom(){
 
   useEffect(() => {
     // 유저 데이터 redux에서 가져옴
-    setUserdata(state.userdataReducer.userdata)
-    console.log(state.userdataReducer.userdata)
+    setUserdata(state.userdataReducer.userdata);
+    console.log(state.userdataReducer.userdata);
   }, []);
 
   let navigate = useNavigate("");
@@ -33,10 +34,9 @@ function WaitingRoom(){
       <Container className='box'>
         <Row>
           <Col className='leftBox'>
-            <h1>여기는 웹캠</h1>
-            <Webcam/>
-            <h1>여긴 소리</h1>
-
+            <Webcam 
+              audio={true}
+            />
           </Col>
           <Col className='rightBox'>
             <div className="stream-container col-md-6 col-xs-6">
@@ -67,6 +67,12 @@ function WaitingRoom(){
 
 const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>{
 
+  let [micandVideo,setMicandVideo] = useState(0)
+
+  navigator.mediaDevices.getUserMedia({audio:true, video:true})
+    .then(() => {setMicandVideo(1)})
+    .catch(err=>{console.log(err)})
+
   let 남은시간 = '07:21'
   let 예상대기시간 = 5
   // 잔여 티켓 0
@@ -74,7 +80,7 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>
     return
   }
   // 잔여 티켓 1 이상
-  else if (ticket > 0 && start === 0 ){
+  else if (ticket > 0 && start === 0 && micandVideo === 1){
     return (
       <button onClick={()=>{
         setTicket(ticket - 1)
@@ -89,8 +95,6 @@ const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>
       <div>
         <p>{ 남은시간 }</p>
         <p>예상 대기 시간 : { 예상대기시간 }분</p>
-
-
         <button onClick={()=>{ 
           alert(navigate)
         }}>
