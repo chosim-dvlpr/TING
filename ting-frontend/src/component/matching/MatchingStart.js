@@ -8,6 +8,7 @@ import UserVideoComponent from '../../pages/openvidu/UserVideoComponent.js';
 import { useSelector } from 'react-redux';
 import './MatchingStart.css'
 import { useNavigate } from 'react-router-dom';
+import ScoreCheck from './asset/ScoreCheck.js';
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -37,10 +38,10 @@ function MatchingStart(){
 
   useEffect(() => { 
     // TODO: redux에서 오픈 비두 입장 토큰 가져오기
-    let sessionToken = state.openviduReducer.token
+    let accessToken = state.openviduReducer.token
  
     // TODO: 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
-    if (sessionToken === null){
+    if (accessToken === null){
       alert('로그인 후 돌아오세요')
       navigate('/')
     }
@@ -49,6 +50,7 @@ function MatchingStart(){
     // setMySessionId(sessionToken) // 에러
     // 세션에도 조건이 필요함 -> sessionA로 들어갔을 때는 정상 작동
     // session에 토큰을 넣었을 때는 에러
+    joinSession(accessToken)
 
     return () => {
     };
@@ -77,7 +79,7 @@ function MatchingStart(){
       setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
   };
 
-  const joinSession = async () => {
+  const joinSession = async (accessToken) => {
       // --- 1) Get an OpenVidu object ---
       const OV = new OpenVidu();
     
@@ -109,7 +111,8 @@ function MatchingStart(){
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
       try {
-          const token = await getToken();
+          // const token = await getToken();
+          const token = accessToken
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           await newSession.connect(token, { clientData: myUserName });
@@ -182,7 +185,7 @@ function MatchingStart(){
 
     return (
       <div className="container">
-        {session === undefined ? (
+        {/* {session === undefined ? (
           <div id="join">
             <div id="img-div">
               <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
@@ -218,9 +221,9 @@ function MatchingStart(){
                 </form>
               </div>
             </div>
-          ) : null}
+          ) : null} */}
 
-          {session !== undefined ? (
+          {/* {session !== undefined ? ( */}
             <div id="session">
               <div id="session-header">
                 <h1 id="session-title">{mySessionId}</h1>
@@ -247,7 +250,8 @@ function MatchingStart(){
                 ))}
               </div>
             </div>
-          ) : null}
+          {/* ) : null} */}
+          <ScoreCheck></ScoreCheck>
       </div>
     );
 };
