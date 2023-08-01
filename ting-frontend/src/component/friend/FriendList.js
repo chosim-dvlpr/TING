@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 import tokenHttp from "../../api/tokenHttp";
+import FriendProfile from "./FriendProfile";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
 function FriendList(){
   let [friendList, setFriendList] = useState([]);
+  let [isModal, setIsModal] = useState(true);
+  let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
 
   const friendListAxios = () => {
     tokenHttp.get(`/friend`).then((response) => {
@@ -28,12 +31,14 @@ function FriendList(){
   return (
     <div>
       <h3>여기는 친구리스트</h3>
+      <h3 onClick={() => setIsModal(!isModal)}>프로필 이미지 임시</h3>
       <div>
         {
           friendList.map((friend, i) => {
             return ( 
               <div>
                 {/* profileImage 추가 필요 */}
+                {/* 프로필이미지 클릭 시 userId에 저장 */}
                 {/* <img></img> */}
                 <h3>{ friend.nickname }</h3>
                 <h4>{ friend.lastChattingContent }</h4>
@@ -43,6 +48,11 @@ function FriendList(){
             )
           })
         }
+
+      </div>
+
+      <div>
+        {isModal === true ? <FriendProfile userId={userId} /> : null}
       </div>
     </div>
   )
