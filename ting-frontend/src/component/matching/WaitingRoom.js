@@ -61,9 +61,6 @@ function WaitingRoom() {
 
     // 연결이 끊어졌을 때 호출되는 함수
     ws.onclose = () => {
-      console.log("소켓 연결 끊김");
-      alert("현재 매칭을 할 수 없습니다. (token 확인)");
-      ws.send("연결 끊김");
       setSocket(null);
     };
 
