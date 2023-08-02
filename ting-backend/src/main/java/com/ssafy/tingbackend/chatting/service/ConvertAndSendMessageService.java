@@ -1,27 +1,23 @@
 package com.ssafy.tingbackend.chatting.service;
 
-import com.ssafy.tingbackend.chatting.dto.MessageResponseDto;
-import com.ssafy.tingbackend.chatting.utils.MessageIdGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
+import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ConvertAndSendMessageService {
-    @Autowired
-    private SimpMessagingTemplate template;
+    private final SimpMessagingTemplate template;
+    private final ChattingMessageRepository chattingMessageRepository;
 
-    public void convertAndSendMessage(String type,
-                                      Long roomId,
-                                      Long userId,
-                                      String message) {
+    public void convertAndSendMessage(Long roomId, Long userId, String content) {
+        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content);
+        chattingMessageRepository.save(chattingMessageDto);
         template.convertAndSend(
             "/subscription/chat/room/" + roomId,
-            new MessageResponseDto(
-                MessageIdGenerator.generateId(),
-                type,
-                "사용자 " + userId + ": " + message
-            )
+                chattingMessageDto
         );
     }
 }

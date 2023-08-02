@@ -1,5 +1,12 @@
 package com.ssafy.tingbackend.chatting.dto;
 
+import lombok.Getter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
+
+@Getter
+@ToString(of = {"type", "roomId", "userId","message"})
 public class MessageRequestDto {
     private String type;
 
@@ -13,29 +20,10 @@ public class MessageRequestDto {
 
     }
 
-    public MessageRequestDto(String type,
-                             Long roomId,
-                             Long userId,
-                             String message) {
+    public MessageRequestDto(String type, Long roomId, Long userId, String message) {
         this.type = type;
         this.roomId = roomId;
         this.userId = userId;
         this.message = message;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Long getRoomId() {
-        return roomId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
