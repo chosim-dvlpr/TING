@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./WaitingRoom.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
 
@@ -18,8 +18,7 @@ function WaitingRoom() {
   let dispatch = useDispatch();
 
   // 이 티켓 redux로 불러와야할 듯
-  let [ticket, setTicket] = useState(10);
-  let [start, setStart] = useState(0);
+  let [ticket, setTicket] = useState(0);
   let state = useSelector((state) => state);
 
   useEffect(() => {
@@ -55,46 +54,74 @@ function WaitingRoom() {
       );
     };
 
+    // 에러 발생시 호출되는 함수
     ws.onerror = (error) => {
       console.error("WebSocket connection error:", error);
     };
 
+    // 연결이 끊어졌을 때 호출되는 함수
     ws.onclose = () => {
       console.log("소켓 연결 끊김");
-      alert("현재 매칭을 할 수 없습니다. (token 확인)"); // 이 부분 확인 필요
+      alert("현재 매칭을 할 수 없습니다. (token 확인)");
+      ws.send("연결 끊김");
       setSocket(null);
     };
 
+    // 서버로부터 메시지를 받았을 때 호출되는 함수
     ws.onmessage = ({ data }) => {
       let response = JSON.parse(data);
       console.log(response);
 
-      if (response.type === "expectedTime") {
-        // TODO: 예상 시간을 출력하는 로직 추가 (state로 관리)
-        let expectedTime = response.data.time;
-        let minute = Math.floor(expectedTime / 60);
-        let second = expectedTime % 60;
-        setExpectTime(`${minute}분 ${second}초`);
-      } else if (response.type === "findPair") {
-        // TODO: 매칭 수락 모달창 띄우는 로직 추가.
-        findPairModal();
-      } else if (response.type === "matchingSuccess") {
-        // TODO: 양쪽 모두 매칭이 성공했으므로 openvidu 페이지로 이동 (response.data 에 openvidu 입장 토큰이 담겨있음)
-        let enterToken = response.data.token;
+      switch (response.type) {
+        // 예상시간 출력
+        case "expectedTime":
+          let expectedTime = response.data.time;
+          let minute = Math.floor(expectedTime / 60);
+          let second = expectedTime % 60;
+          setExpectTime(`${minute}분 ${second}초`);
+          break;
 
-        // redux에 토큰 넣고, navigate로 페이지 이동
+        // 매칭 수락 모달을 띄움
+        case "findPair":
+          findPairModal();
+          break;
 
-        navigate("/matching/start");
-      } else if (response.type === "matchingFail") {
-        // TODO: 상대방이 매칭을 받지 않았으므로 다시 매칭을 기다려야 함
+        // 양쪽 모두 매칭 성공 (redux에 openvidu token 저장 후 화상화면으로 이동)
+        case "matchingSuccess":
+          let enterToken = response.data.token;
+          console.log(state.openviduReducer.token);
+          dispatch(setOpenviduToken(enterToken));
+          navigate("/matching/start");
+          break;
+
+        // 한쪽이 매칭 거절
+        case "matchingFail":
+          alert("상대방이 매칭을 받지 않았습니다.");
+          break;
       }
     };
   };
 
-  // findModal 에서 "네"를 눌렀을때, accept 서버로 보내는 함수
-
-  // findModal 에서 "아니오"를 눌렀을 때, reject 서버로 보내는 함수
-
+  function findPairModal() {
+    Swal.fire({
+      icon: "success",
+      title: "매칭 성공",
+      text: "매칭을 시작하시겠습니까?",
+      timer: 15000,
+      timerProgressBar: true,
+      showCancelButton: true,
+      cancelButtonText: "아니오",
+      confirmButtonText: "네",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        // TODO: findModal 에서 "네"를 눌렀을때, accept 메시지를 서버로 보내는 함수
+        socket.send(JSON.stringify({ type: "accept" }));
+      } else if (res.isDenied) {
+        // TODO: findModal 에서 "아니오"를 눌렀을 때, reject 메시지를 서버로 보내는 함수
+        socket.send(JSON.stringify({ type: "reject" }));
+      }
+    });
+  }
 
   useEffect(() => {
     return () => {
@@ -110,10 +137,8 @@ function WaitingRoom() {
       <h1>대기실</h1>
       <Container className="box">
         <Row>
-          <Col className='leftBox'>
-            <Webcam 
-              audio={true}
-            />
+          <Col className="leftBox">
+            <Webcam audio={true} />
           </Col>
           <Col className="rightBox">
             <div className="stream-container col-md-6 col-xs-6">
@@ -160,70 +185,55 @@ function WaitingRoom() {
   );
 }
 
-const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate })=>{
+const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate }) => {
+  let [micandVideo, setMicandVideo] = useState(0);
 
-  let [micandVideo,setMicandVideo] = useState(0)
+  navigator.mediaDevices
+    .getUserMedia({ audio: true, video: true })
+    .then(() => {
+      setMicandVideo(1);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-  navigator.mediaDevices.getUserMedia({audio:true, video:true})
-    .then(() => {setMicandVideo(1)})
-    .catch(err=>{console.log(err)})
-
-  let 남은시간 = '07:21'
-  let 예상대기시간 = 5
+  let 남은시간 = "07:21";
+  let 예상대기시간 = 5;
   // 잔여 티켓 0
-  if( ticket === 0 && start === 0 ){
-    return
+  if (ticket === 0 && start === 0) {
+    return;
   }
   // 잔여 티켓 1 이상
-  else if (ticket > 0 && start === 0 && micandVideo === 1){
+  else if (ticket > 0 && start === 0 && micandVideo === 1) {
     return (
-      <button onClick={()=>{
-        setTicket(ticket - 1)
-        setStart(1)
-      }}>매칭 시작</button>
-    )
+      <button
+        onClick={() => {
+          setTicket(ticket - 1);
+          setStart(1);
+        }}
+      >
+        매칭 시작
+      </button>
+    );
   }
 
   // 매칭시작 버튼 눌렀을 때
-  if (start === 1){
-    return(
+  if (start === 1) {
+    return (
       <div>
-        <p>{ 남은시간 }</p>
-        <p>예상 대기 시간 : { 예상대기시간 }분</p>
-        <button onClick={()=>{ 
-          alert(navigate)
-        }}>
+        <p>{남은시간}</p>
+        <p>예상 대기 시간 : {예상대기시간}분</p>
+        <button
+          onClick={() => {
+            alert(navigate);
+          }}
+        >
           임시 시작
         </button>
       </div>
-    )
+    );
   }
 };
-
-function findPairModal(navigate) {
-  Swal.fire({
-    icon: "success",
-    title: "매칭 성공",
-    text: "매칭을 시작하시겠습니까?",
-    timer: 15000,
-    timerProgressBar: true,
-    showCancelButton: true,
-    cancelButtonText: "아니오",
-    confirmButtonText: "네",
-  }).then((res) => {
-    if (res.isConfirmed) {
-      // 리덕스로 ticket 개수 -1
-      // window.location.href = "http://localhost:3000/matching/start"
-
-      // 매칭이 성공했을 떄 화상화면 페이지로 이동
-      navigate("/matching/start");
-    } else if (res.isDenied) {
-      // start 다시 0으로
-      // window.location.href = "http://localhost:3000/matching/"
-      navigate('/matching')
-    }
-  });
-}
 
 const TimerComponent = () => {
   const [time, setTime] = useState(0);
