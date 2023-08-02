@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import RoomList from "./RoomList";
 import Room from "./Room";
 
+import useMessageStore from "./useMessageStore";
+
 // websocket으로 구현하기 => 실시간 데이터!
 
 function FriendList(){
@@ -34,11 +36,32 @@ function FriendList(){
     friendListAxios();
   }, [])
 
+  // RoomList.js
+  const messageStore = useMessageStore();
+
+  const {
+    connected,
+    currentRoomIndex,
+    roomIndices,
+  } = messageStore;
+
+  const handleClickEnterRoom = ({ newRoomIndex }) => {
+    if (connected && newRoomIndex !== currentRoomIndex) {
+      messageStore.disconnect(currentRoomIndex);
+    }
+    messageStore.connect(newRoomIndex);
+  };
+  
+
+  const handleClickQuitRoom = async () => {
+    messageStore.disconnect(currentRoomIndex);
+  };
+
   return (
     <div>
       <h3>여기는 친구리스트</h3>
       {/* 친구 리스트 임시 버튼 */}
-      {/* <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button> */}
+      <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button>
       <div>
         {
           friendList.map((friend, i) => {
@@ -51,6 +74,27 @@ function FriendList(){
                 <h4>{ friend.lastChattingContent }</h4>
                 <h4>{ friend.unreaded }</h4>
                 <button>케밥</button>
+                <button
+                  type="button"
+                  disabled={i === currentRoomIndex}
+                  onClick={() => {handleClickEnterRoom({
+                    previousRoomIndex: currentRoomIndex,
+                    newRoomIndex: i,
+                  });
+                  Navigate("/friend/chat");
+                }}
+                >
+                  채팅방
+                  {' '}
+                  {i}
+                </button>
+                <button
+                  type="button"
+                  disabled={!connected}
+                  onClick={() => handleClickQuitRoom()}
+                >
+                  연결 종료
+                </button>
               </div>
             )
           })

@@ -111,11 +111,11 @@ export default class MessageStore {
     console.log('----',message)
     return {
       id: message.id,
-      chattingId: message.chattingId,
-      userId: message.userId,
+      chattingId: message.chattingId, // 채팅방번호 - DB에서 가져오기 (API)
+      userId: message.userId, // DB 저장되어있는 유저ID로 보내기 - 보내는 사람 아이디
       content: message.content,
       sendTime: new Date().toLocaleTimeString(),
-      value: `${message.value} (${new Date().toLocaleTimeString()})`,
+      value: `${message.userId} ${message.content} (${new Date().toLocaleTimeString()})`,
       // private String id;
       // private Long chattingId;
       // private Long userId;
