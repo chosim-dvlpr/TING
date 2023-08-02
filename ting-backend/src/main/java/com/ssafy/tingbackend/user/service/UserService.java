@@ -419,18 +419,26 @@ public class UserService {
         }
 
         // 이미지 파일의 MIME 타입 지정
-        String contentType;
-        try {
-            contentType = Files.probeContentType(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        // 이미지의 Content-Type을 확인하여 적절한 MIME 타입을 지정합니다.
+        String contentType = "image/jpeg"; // 예시로 jpeg 이미지를 사용합니다.
+        if (userProfilePath[1].endsWith(".png")) {
+            contentType = "image/png";
+        } else if (userProfilePath[1].endsWith(".gif")) {
+            contentType = "image/gif";
         }
+
+//        String contentType;
+//        try {
+//            contentType = Files.probeContentType(filePath);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+//        }
 
         // 다운로드할 이미지 파일의 HTTP 헤더 설정
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 }
