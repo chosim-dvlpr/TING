@@ -477,19 +477,23 @@ public class MatchingService {
             matchingUserRepository.save(new MatchingUser(matching, socketInfos.get(pairSocketSessionId).getUser()));
 
             // 사용자들에게 openvidu 토큰값과 matchingId 반환
-            Map<String, String> messageData = new HashMap<>();
+            Map<String, String> messageData1 = new HashMap<>();
+            Map<String, String> messageData2 = new HashMap<>();
             try {
                 String openViduSessionId = openViduService.initializeSession().getSessionId();  // openvidu 세션 생성
-                messageData.put("token", openViduService.createConnection(openViduSessionId));
-                messageData.put("matchingId", matching.getId().toString());
+                messageData1.put("token", openViduService.createConnection(openViduSessionId));
+                messageData2.put("token", openViduService.createConnection(openViduSessionId));
+                messageData1.put("matchingId", matching.getId().toString());
+                messageData2.put("matchingId", matching.getId().toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new CommonException(ExceptionType.OPENVIDU_ERROR);
             }
 
-            WebSocketMessage webSocketMessage = new WebSocketMessage("matchingSuccess", messageData);
-            socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
-            socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
+            WebSocketMessage webSocketMessage1 = new WebSocketMessage("matchingSuccess", messageData1);
+            WebSocketMessage webSocketMessage2 = new WebSocketMessage("matchingSuccess", messageData2);
+            socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage1.toJson()));
+            socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage2.toJson()));
             
             // 대기큐에서 사용자들 삭제
             acceptQueue.remove(socketSessionId);
