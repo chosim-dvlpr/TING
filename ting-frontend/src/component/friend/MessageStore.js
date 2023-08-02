@@ -108,8 +108,13 @@ export default class MessageStore {
   }
 
   formatMessage(message) {
+    console.log('----',message)
     return {
       id: message.id,
+      chattingId: message.chattingId,
+      userId: message.userId,
+      content: message.content,
+      sendTime: new Date().toLocaleTimeString(),
       value: `${message.value} (${new Date().toLocaleTimeString()})`,
       // private String id;
       // private Long chattingId;
