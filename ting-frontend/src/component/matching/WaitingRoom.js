@@ -16,6 +16,7 @@ function WaitingRoom() {
 
   const [userdata, setUserdata] = useState({});
   let dispatch = useDispatch();
+  let navigate = useNavigate("");
 
   // 이 티켓 redux로 불러와야할 듯
   let [ticket, setTicket] = useState(0);
@@ -26,8 +27,6 @@ function WaitingRoom() {
     setUserdata(state.userdataReducer.userdata);
     console.log(state.userdataReducer.userdata);
   }, []);
-
-  let navigate = useNavigate("");
 
   // 웹소켓 연결
   const handleConnectClick = () => {
@@ -86,7 +85,7 @@ function WaitingRoom() {
         // 양쪽 모두 매칭 성공 (redux에 openvidu token 저장 후 화상화면으로 이동)
         case "matchingSuccess":
           let enterToken = response.data.token;
-          console.log(state.openviduReducer.token);
+          // console.log(state.openviduReducer.token);
           dispatch(setOpenviduToken(enterToken));
           navigate("/matching/start");
           break;

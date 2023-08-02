@@ -5,12 +5,13 @@ import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import UserVideoComponent from '../../pages/openvidu/UserVideoComponent.js';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './MatchingStart.css'
 import { useNavigate } from 'react-router-dom';
 import ScoreCheck from './asset/ScoreCheck.js';
+import tokenHttp from '../../api/tokenHttp.js';
+import { getQuestionData } from '../../redux/matchingStore.js'
 import QuestionCard from './asset/QuestionCard.js';
-
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -23,15 +24,17 @@ function MatchingStart(){
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
+  const [question, setQuestion] = useState([]);
 
   let state = useSelector((state)=>state);
   let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   useEffect(() => { 
     // userdata redux에서 가져옴
-    console.log(state.userdataReducer)
     setUserdata(state.userdataReducer.userdata)
-    // setMyUserName(userdata.nickname)
+    // setMyUserName(userdata.nickname)   
+
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
         window.removeEventListener('beforeunload', onbeforeunload);
@@ -49,6 +52,10 @@ function MatchingStart(){
     }
     //state에 토큰을 저장하고 joinSession 메서드 호출
     // TODO: 카드 정보 redux에 저장
+    tokenHttp.get('/date/question').then((response) => {
+      // console.log(response.data.dat a)
+      dispatch(getQuestionData(response))
+    })
     joinSession(accessToken)
 
     return () => {
