@@ -88,6 +88,11 @@ public class UserController {
         return userService.getProfile(Long.parseLong(principal.getName()));
     }
 
+    @GetMapping("/user/profile/{userId}")
+    public ResponseEntity<Resource> getProfile(@PathVariable Long userId) {
+        return userService.getProfile(userId);
+    }
+
     /**
      * 닉네임 중복 확인 API
      *
