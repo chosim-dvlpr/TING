@@ -3,6 +3,8 @@ import tokenHttp from "../../api/tokenHttp";
 import FriendProfile from "./FriendProfile";
 import ChatRoom from "./FriendChatting";
 import { useNavigate } from "react-router-dom";
+import RoomList from "./RoomList";
+import Room from "./Room";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -36,12 +38,12 @@ function FriendList(){
     <div>
       <h3>여기는 친구리스트</h3>
       {/* 친구 리스트 임시 버튼 */}
-      <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button>
+      {/* <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button> */}
       <div>
         {
           friendList.map((friend, i) => {
             return ( 
-              <div>
+              <div key={i}>
                 {/* profileImage 추가 필요 */}
                 {/* 프로필이미지 클릭 시 userId에 저장 */}
                 {/* <img></img> */}
@@ -58,6 +60,8 @@ function FriendList(){
 
       <div>
         {/* {isModal === true ? <ChatRoom userId={userId} /> : null} */}
+        <RoomList />
+        <Room />
       </div>
     </div>
   )
