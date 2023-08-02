@@ -164,66 +164,8 @@ function MatchingStart(){
       setPublisher(undefined);
   };
 
-  const getToken = async () => {
-      const sessionId = await createSession(mySessionId);
-      return await createToken(sessionId);
-  };
-
-  const createSession = async (sessionId) => {
-      const response = await axios.post('https://i9b107.p.ssafy.io:5157' + '/api/sessions', { customSessionId: sessionId }, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The sessionId
-  };
-
-  const createToken = async (sessionId) => {
-      const response = await axios.post('https://i9b107.p.ssafy.io:5157' + '/api/sessions/' + sessionId + '/connections', {}, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The token
-  };
-
     return (
       <div className="container">
-        {/* {session === undefined ? (
-          <div id="join">
-            <div id="img-div">
-              <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-            </div>
-            <div id="join-dialog" className="jumbotron vertical-center">
-              <h1> Join a video session </h1>
-              <form className="form-group" onSubmit={joinSession}>
-                <p>
-                  <label>Participant: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    id="userName"
-                    value={userdata.nickname}
-                    onChange={handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    id="sessionId"
-                    value={mySessionId}
-                    onChange={handleChangeSessionId}
-                    required
-                  />
-                </p>
-                <p className="text-center">
-                  <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                </p>
-                </form>
-              </div>
-            </div>
-          ) : null} */}
-
-          {/* {session !== undefined ? ( */}
             <div id="session">
               <div id="session-header">
                 <h1 id="session-title">{mySessionId}</h1>
@@ -250,7 +192,6 @@ function MatchingStart(){
                 ))}
               </div>
             </div>
-          {/* ) : null} */}
           <ScoreCheck></ScoreCheck>
       </div>
     );
