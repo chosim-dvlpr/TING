@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import './MatchingStart.css'
 import { useNavigate } from 'react-router-dom';
 import ScoreCheck from './asset/ScoreCheck.js';
+import QuestionCard from './asset/QuestionCard.js';
+
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -37,19 +39,16 @@ function MatchingStart(){
   }, []);
 
   useEffect(() => { 
-    // TODO: redux에서 오픈 비두 입장 토큰 가져오기
+    // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token
  
-    // TODO: 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
+    // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
     if (accessToken === null){
       alert('로그인 후 돌아오세요')
       navigate('/')
     }
-    // TODO: state에 토큰을 저장하고 joinSession 메서드 호출
-    // state에 저장을 해야하는가? 이미 위에서 sessionToken에 바로 저장
-    // setMySessionId(sessionToken) // 에러
-    // 세션에도 조건이 필요함 -> sessionA로 들어갔을 때는 정상 작동
-    // session에 토큰을 넣었을 때는 에러
+    //state에 토큰을 저장하고 joinSession 메서드 호출
+    // TODO: 카드 정보 redux에 저장
     joinSession(accessToken)
 
     return () => {
@@ -178,6 +177,9 @@ function MatchingStart(){
                 />
               </div>
 
+              {/* 질문 카드 */}
+              <QuestionCard/>
+
               <div id="video-container">
                 {publisher !== undefined ? (
                   <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
@@ -192,6 +194,8 @@ function MatchingStart(){
                 ))}
               </div>
             </div>
+          
+          {/* 점수 체크판 */}
           <ScoreCheck></ScoreCheck>
       </div>
     );

@@ -1,4 +1,5 @@
 import styles from './ScoreCheck.module.css';
+import TimerBar from './TimerBar.js'
 
 function ScoreCheck(){
   const score = [0,1,2,3,4,5,6,7,8,9,10]
@@ -7,7 +8,7 @@ function ScoreCheck(){
     <div className='wrapper'>
       <div className={styles.ScoreCheckBox}>
         <div>
-          시간 줄어드는 바
+          <TimerBar totalTime={30000} />
         </div>
         <div className={styles.ScoreBox}>
         {
