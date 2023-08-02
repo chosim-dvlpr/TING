@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import tokenHttp from "../../api/tokenHttp";
 import FriendProfile from "./FriendProfile";
 import ChatRoom from "./FriendChatting";
+import { useNavigate } from "react-router-dom";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -9,6 +10,8 @@ function FriendList(){
   let [friendList, setFriendList] = useState([]);
   let [isModal, setIsModal] = useState(true);
   let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
+
+  let Navigate = useNavigate();
 
   const friendListAxios = () => {
     tokenHttp.get('/friend').then((response) => {
@@ -32,7 +35,8 @@ function FriendList(){
   return (
     <div>
       <h3>여기는 친구리스트</h3>
-      <h3 onClick={() => setIsModal(!isModal)}>리스트 임시</h3>
+      {/* 친구 리스트 임시 버튼 */}
+      <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button>
       <div>
         {
           friendList.map((friend, i) => {
@@ -53,7 +57,7 @@ function FriendList(){
       </div>
 
       <div>
-        {isModal === true ? <ChatRoom userId={userId} /> : null}
+        {/* {isModal === true ? <ChatRoom userId={userId} /> : null} */}
       </div>
     </div>
   )

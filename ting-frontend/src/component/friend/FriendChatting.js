@@ -8,8 +8,8 @@ import * as StompJs from "@stomp/stompjs";
 
 export default function ChatRoom() {
   let navigate = useNavigate();
-  let [isModal, setIsModal] = useState(true);
-  // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
+  let [isProfileModal, setIsProfileModal] = useState(false);
+  let [friendId, setFriendId] = useState(1); // 초기값은 ""으로 설정해두기
 
   const param = useParams(); // 채널을 구분하는 식별자
   const chatroomId = param.chatroomId;
@@ -168,11 +168,11 @@ export default function ChatRoom() {
           </div>
         </form>
       </div>
-      {chatroomId}
+      <p>chatroomId : {chatroomId}</p>
       
       <div>
-        <h3 onClick={() => setIsModal(!isModal)}>프로필 이미지 임시</h3>
-        {isModal === true ? <FriendProfile userId={userId} /> : null}
+        <button onClick={() => setIsProfileModal(!isProfileModal)}>프로필 이미지 임시 버튼</button>
+        {isProfileModal === true ? <FriendProfile friendId={friendId} /> : null}
       </div>
     </>
   );
