@@ -14,7 +14,9 @@ public class ConvertAndSendMessageService {
 
     public void convertAndSendMessage(Long roomId, Long userId, String content) {
         ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content);
-        chattingMessageRepository.save(chattingMessageDto);
+//        chattingMessageRepository.save(chattingMessageDto);
+        System.out.println(userId);
+        template.convertAndSendToUser(String.valueOf((userId+1)%3), "/list", chattingMessageDto);
         template.convertAndSend(
             "/subscription/chat/room/" + roomId,
                 chattingMessageDto

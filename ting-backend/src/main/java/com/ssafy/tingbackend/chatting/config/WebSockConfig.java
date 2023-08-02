@@ -15,6 +15,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/chat")
                 .setAllowedOriginPatterns ("*")
                 .withSockJS();
+//                .setHandshakeHandler(new CustomHandshakeHandler())
 //        .setAllowedOrigins("http://localhost:9991")
     }
 
@@ -22,6 +23,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/publication");
         registry.enableSimpleBroker("/subscription");
+        registry.setUserDestinationPrefix("/user");
     }
 
 }
