@@ -69,7 +69,7 @@ function App() {
     <div className="App">
       <div className="mainNav">
         <div className='navLeft'>
-          <img src="" alt="logo"></img>
+          <img src="img/ting-logo.png" className="logo" alt="logo"></img>
           <Link className="navMenu" to="/">메인</Link>
           <Link className="navMenu" to="/tutorial">튜토리얼</Link>
           <Link className="navMenu" to="/community">커뮤니티</Link>
@@ -85,7 +85,7 @@ function App() {
       <Routes>
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
-        <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
+        <Route path="/tutorial" element={ <TutorialPage/> }></Route>
         <Route path="/community/*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 

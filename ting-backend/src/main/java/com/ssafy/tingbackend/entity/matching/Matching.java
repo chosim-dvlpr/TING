@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(of = {"isSuccess", "matchingUserList"})
 @DynamicInsert
 public class Matching extends BaseCreatedTimeEntity {

@@ -12,10 +12,8 @@ const UserVideoComponent = (props) => {
     <div>
       {props.streamManager !== undefined ? (
         <div className="streamcomponent">
+          <p>{getNicknameTag()}</p>
           <OpenViduVideoComponent streamManager={props.streamManager} />
-          <div>
-            <p>{getNicknameTag()}</p>
-          </div>
         </div>
       ) : null}
     </div>
