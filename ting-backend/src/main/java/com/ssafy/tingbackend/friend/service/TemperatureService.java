@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -36,15 +37,24 @@ public class TemperatureService {
     private final ChattingRepository chattingRepository;
     private final ChattingMessageRepository chattingMessageRepository;
 
-//    @Scheduled(fixedDelay = 10_800_000L)  // 스케줄러 - 3시간에 한번씩 수행
+    @Scheduled(fixedDelay = 10_800_000L)  // 스케줄러 - 3시간에 한번씩 수행
     @Transactional
     @Async
     public void updateTeperature() throws IOException {
+        log.info("채팅방 온도 업데이트");
+
         // 전체 채팅방에 대해 온도 재계산
         List<Chatting> chattingList = chattingRepository.findAllByState(ChattingType.ALIVE);
         LocalDateTime now = LocalDateTime.now();
 
         for(Chatting chatting : chattingList) {
+            // 마지막 대화가 3일이 넘었는데 상태가 ALIVE인 경우 상태 DEAD로 바꿔주기
+            Duration chattingDuration;
+            if(chatting.getLastChattingTime() != null) chattingDuration = Duration.between(now, chatting.getLastChattingTime());
+            else chattingDuration = Duration.between(now, chatting.getCreatedTime());
+
+            if(chattingDuration.getSeconds() > 259200) chatting.setState(ChattingType.DEAD);  // 259200초=3일
+
             List<ChattingMessageDto> chattingMessages =
                     chattingMessageRepository.findAllByChattingIdOrderBySendTimeDesc(chatting.getId());
             if(chattingMessages.size() == 0) continue;
@@ -53,8 +63,8 @@ public class TemperatureService {
             int count = 1;  // 채팅을 주고받은 횟수 (메세지 보낸 사용자가 바뀌는 경우 +1)
             Long userId = chattingMessages.get(0).getUserId();
             for(ChattingMessageDto message : chattingMessages) {
-                Duration duration = Duration.between(now, message.getSendTime());
-                if(duration.getSeconds() > 10800) break;  // 3시간 이전에 보낸 메세지면 그만 보기
+                Duration messageDuration = Duration.between(now, message.getSendTime());
+                if(messageDuration.getSeconds() > 10800) break;  // 3시간 이전에 보낸 메세지면 그만 보기
 
                 if(message.getUserId() != userId) {
                     count++;
@@ -72,9 +82,7 @@ public class TemperatureService {
             double temperatureDiff = 0.0;
 
             // 감정 점수에 대한 온도 반영
-//            System.out.println("================ [" + chatting.getId() + "] ==================");
             BigDecimal sentimentScore = analyzeMessage(messagesText);
-//            System.out.println("감정분석 점수= " + sentimentScore);
             if(sentimentScore.compareTo(new BigDecimal("-0.2")) <= 0 &&
                 sentimentScore.compareTo(new BigDecimal("-0.5")) > 0) {
                 temperatureDiff += -0.1;
@@ -89,7 +97,6 @@ public class TemperatureService {
 
             // 채팅 빈도에 대한 온도 반영
             count /= 2;
-//            System.out.println(count);
             if(count == 0) {
                 temperatureDiff += -0.2;
             } else if(count == 1 || count == 2) {
@@ -100,7 +107,6 @@ public class TemperatureService {
                 temperatureDiff += 0.2;
             }
 
-//            System.out.println("temperatureDiff= " + temperatureDiff);
             chatting.changeTemperature(new BigDecimal(temperatureDiff));
         }
     }
@@ -120,11 +126,6 @@ public class TemperatureService {
             if (sentiment == null) return BigDecimal.ZERO;
             return new BigDecimal(sentiment.getScore());
         }
-    }
-
-    public void insertTest(Long chattingId, Long userId, String text) {
-        ChattingMessageDto message = new ChattingMessageDto(chattingId, userId, text);
-        chattingMessageRepository.save(message);
     }
 
 }
