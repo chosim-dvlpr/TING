@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setQuestionNumber } from "../../../redux/matchingStore";
 
 function TimerBar(){
-  let [count, setCount] = useState(30);
+  let [count, setCount] = useState(10); // 처음 인사는 10초
   let [questionCount, setQuestionCount] = useState(0);
   let dispatch = useDispatch()
 
