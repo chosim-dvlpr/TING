@@ -42,7 +42,7 @@ function WaitingRoom() {
       setSocket(ws);
       const token = localStorage.getItem("access-token");
       // 토큰 redux에 저장
-      dispatch(setOpenviduToken(token))
+      dispatch(setOpenviduToken(token));
 
       ws.send(
         JSON.stringify({
@@ -83,7 +83,7 @@ function WaitingRoom() {
 
         // 매칭 수락 모달을 띄움
         case "findPair":
-          findPairModal();
+          findPairModal(ws);
           break;
 
         // 양쪽 모두 매칭 성공 (redux에 openvidu token 저장 후 화상화면으로 이동)
@@ -102,7 +102,7 @@ function WaitingRoom() {
     };
   };
 
-  function findPairModal() {
+  function findPairModal(socket) {
     Swal.fire({
       icon: "success",
       title: "매칭 성공",
@@ -167,7 +167,13 @@ function WaitingRoom() {
                     매칭 시간 : <TimerComponent />
                   </div>
                   <div>예상 대기시간 :{expectTime}</div>
-                  <button onClick={()=>{findPairModal(navigate)}}>테스트 버튼</button>
+                  <button
+                    onClick={() => {
+                      findPairModal(navigate);
+                    }}
+                  >
+                    테스트 버튼
+                  </button>
                 </>
               )}
             </div>
@@ -185,7 +191,13 @@ function WaitingRoom() {
   );
 }
 
-const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate }) => {
+const MatchingStartButton = ({
+  start,
+  setStart,
+  ticket,
+  setTicket,
+  navigate,
+}) => {
   let [micandVideo, setMicandVideo] = useState(0);
 
   navigator.mediaDevices
