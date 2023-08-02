@@ -24,5 +24,4 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/subscription");
     }
 
-
 }
