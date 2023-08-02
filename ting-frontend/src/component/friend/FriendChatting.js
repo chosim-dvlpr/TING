@@ -1,7 +1,10 @@
 // Room.js 와 같은 내용
+import { useLocation, useNavigate } from 'react-router-dom';
 import useMessageStore from './useMessageStore';
 
-export default function Room() {
+function FriendChatting() {
+  const location = useLocation();
+  const Navigate = useNavigate();
   const messageStore = useMessageStore();
 
   const {
@@ -28,6 +31,13 @@ export default function Room() {
     messageStore.changeInput(value);
   };
 
+  // 채팅방 나가기
+  const handleClickQuitRoom = async () => {
+    messageStore.disconnect(location.state.friend.chattingId);
+    console.log('채팅 연결 해제')
+    Navigate("/friend");
+  };
+
   if (!connected) {
     return (
       null
@@ -36,6 +46,15 @@ export default function Room() {
 
   return (
     <div>
+      <h4>여기는 채팅창</h4>
+      <button
+        type="button"
+        disabled={!connected}
+        onClick={() => handleClickQuitRoom()}
+      >
+        연결 종료 버튼
+      </button>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="message-to-send">
           메시지 입력
@@ -61,3 +80,5 @@ export default function Room() {
     </div>
   );
 }
+
+export default FriendChatting;
