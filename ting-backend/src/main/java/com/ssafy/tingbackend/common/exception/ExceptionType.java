@@ -43,6 +43,8 @@ public enum ExceptionType {
     CHATTING_NOT_FOUND(4700, "채팅이 존재하지 않습니다."),
 
     POINT_CATEGORY_NOT_FOUND(4800, "포인트 카테고리가 존재하지 않습니다."),
+    ITEM_NOT_FOUND(4801, "아이템이 존재하지 않습니다."),
+    USER_ITEM_NOT_FOUND(4802, "사용자가 해당 아이템을 보유하고 있지 않습니다."),
 
     REPORT_NOT_FOUND(4900, "신고 내역이 존재하지 않습니다"),
 
