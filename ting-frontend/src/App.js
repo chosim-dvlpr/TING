@@ -114,8 +114,14 @@ function App() {
 
         <Route path="/community/*" element={<CommunityPage />} />
         <Route path="/community/advice/new" element={<AdvicePostForm />} />
-    
-        </Routes>
+        
+        {/* 친구목록 임시 */}
+        <Route path="/friend" element={<Friend />}>
+          <Route path="" element={<FriendList />}></Route>
+          <Route path="chat" element={<FriendChatting />}></Route>
+        </Route>
+        
+      </Routes>
 
     </div>
   );

@@ -5,8 +5,13 @@ import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import UserVideoComponent from '../../pages/openvidu/UserVideoComponent.js';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './MatchingStart.css'
+import { useNavigate } from 'react-router-dom';
+import ScoreCheck from './asset/ScoreCheck.js';
+import tokenHttp from '../../api/tokenHttp.js';
+import { getQuestionData } from '../../redux/matchingStore.js'
+import QuestionCard from './asset/QuestionCard.js';
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -19,22 +24,44 @@ function MatchingStart(){
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
+  const [question, setQuestion] = useState([]);
 
-  const videoRef = useRef(null);
-
-  let state = useSelector((state)=>state)
+  let state = useSelector((state)=>state);
+  let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   useEffect(() => { 
     // userdata redux에서 가져옴
-    console.log(state.userdataReducer)
     setUserdata(state.userdataReducer.userdata)
-    // setMyUserName(userdata.nickname)
+    // setMyUserName(userdata.nickname)   
 
     window.addEventListener('beforeunload', onbeforeunload);
     return () => {
         window.removeEventListener('beforeunload', onbeforeunload);
     };
   }, []);
+
+  useEffect(() => { 
+    // redux에서 오픈 비두 입장 토큰 가져오기
+    let accessToken = state.openviduReducer.token
+ 
+    // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
+    if (accessToken === null){
+      alert('로그인 후 돌아오세요')
+      navigate('/')
+    }
+    //state에 토큰을 저장하고 joinSession 메서드 호출
+    // TODO: 카드 정보 redux에 저장
+    tokenHttp.get('/date/question').then((response) => {
+      // console.log(response.data.dat a)
+      dispatch(getQuestionData(response))
+    })
+    joinSession(accessToken)
+
+    return () => {
+    };
+  }, []);
+
 
   const onbeforeunload = (event) => {
       leaveSession();
@@ -58,7 +85,7 @@ function MatchingStart(){
       setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
   };
 
-  const joinSession = async () => {
+  const joinSession = async (accessToken) => {
       // --- 1) Get an OpenVidu object ---
       const OV = new OpenVidu();
     
@@ -90,7 +117,8 @@ function MatchingStart(){
       // --- 4) Connect to the session with a valid user token ---
       // Get a token from the OpenVidu deployment
       try {
-          const token = await getToken();
+          // const token = await getToken();
+          const token = accessToken
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           await newSession.connect(token, { clientData: myUserName });
@@ -142,66 +170,8 @@ function MatchingStart(){
       setPublisher(undefined);
   };
 
-  const getToken = async () => {
-      const sessionId = await createSession(mySessionId);
-      return await createToken(sessionId);
-  };
-
-  const createSession = async (sessionId) => {
-      const response = await axios.post('https://i9b107.p.ssafy.io:5157' + '/api/sessions', { customSessionId: sessionId }, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The sessionId
-  };
-
-  const createToken = async (sessionId) => {
-      const response = await axios.post('https://i9b107.p.ssafy.io:5157' + '/api/sessions/' + sessionId + '/connections', {}, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The token
-  };
-
     return (
       <div className="container">
-        {session === undefined ? (
-          <div id="join">
-            <div id="img-div">
-              <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-            </div>
-            <div id="join-dialog" className="jumbotron vertical-center">
-              <h1> Join a video session </h1>
-              <form className="form-group" onSubmit={joinSession}>
-                <p>
-                  <label>Participant: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    id="userName"
-                    value={userdata.nickname}
-                    onChange={handleChangeUserName}
-                    required
-                  />
-                </p>
-                <p>
-                  <label> Session: </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    id="sessionId"
-                    value={mySessionId}
-                    onChange={handleChangeSessionId}
-                    required
-                  />
-                </p>
-                <p className="text-center">
-                  <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                </p>
-                </form>
-              </div>
-            </div>
-          ) : null}
-
-          {session !== undefined ? (
             <div id="session">
               <div id="session-header">
                 <h1 id="session-title">{mySessionId}</h1>
@@ -213,6 +183,9 @@ function MatchingStart(){
                   value="Leave session"
                 />
               </div>
+
+              {/* 질문 카드 */}
+              <QuestionCard/>
 
               <div id="video-container">
                 {publisher !== undefined ? (
@@ -228,7 +201,9 @@ function MatchingStart(){
                 ))}
               </div>
             </div>
-          ) : null}
+          
+          {/* 점수 체크판 */}
+          <ScoreCheck></ScoreCheck>
       </div>
     );
 };
