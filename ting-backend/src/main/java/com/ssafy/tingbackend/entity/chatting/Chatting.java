@@ -35,6 +35,6 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
     private List<ChattingUser> chattingUsers = new ArrayList<>();
 
     public void changeTemperature(BigDecimal diff) {
-        temperature.add(diff);
+        this.temperature = this.temperature.add(diff);
     }
 }

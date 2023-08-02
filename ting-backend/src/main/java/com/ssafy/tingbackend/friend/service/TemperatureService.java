@@ -45,19 +45,67 @@ public class TemperatureService {
         LocalDateTime now = LocalDateTime.now();
 
         for(Chatting chatting : chattingList) {
-            List<ChattingMessageDto> chattingMessages = chattingMessageRepository.findAllByChattingId(chatting.getId());
+            List<ChattingMessageDto> chattingMessages =
+                    chattingMessageRepository.findAllByChattingIdOrderBySendTimeDesc(chatting.getId());
+            if(chattingMessages.size() == 0) continue;
+            
             String messagesText = "";
+            int count = 1;  // 채팅을 주고받은 횟수 (메세지 보낸 사용자가 바뀌는 경우 +1)
+            Long userId = chattingMessages.get(0).getUserId();
             for(ChattingMessageDto message : chattingMessages) {
                 Duration duration = Duration.between(now, message.getSendTime());
-                if(duration.getSeconds() <= 10800) messagesText += message.getContent() + " ";
+                if(duration.getSeconds() > 10800) break;  // 3시간 이전에 보낸 메세지면 그만 보기
+
+                if(message.getUserId() != userId) {
+                    count++;
+                    userId = message.getUserId();
+                }
+                messagesText += message.getContent() + " ";
             }
 
-            BigDecimal sentimentScore = analyzeEntities(messagesText);
-            chatting.changeTemperature(sentimentScore);
+            // 3시간 동안 주고받은 메세지가 하나도 없는 경우 온도-0.2
+            if(messagesText.length() == 0) {
+                chatting.changeTemperature(new BigDecimal("-0.2"));
+                continue;
+            }
+
+            double temperatureDiff = 0.0;
+
+            // 감정 점수에 대한 온도 반영
+//            System.out.println("================ [" + chatting.getId() + "] ==================");
+            BigDecimal sentimentScore = analyzeMessage(messagesText);
+//            System.out.println("감정분석 점수= " + sentimentScore);
+            if(sentimentScore.compareTo(new BigDecimal("-0.2")) <= 0 &&
+                sentimentScore.compareTo(new BigDecimal("-0.5")) > 0) {
+                temperatureDiff += -0.1;
+            } else if(sentimentScore.compareTo(new BigDecimal("-0.5")) <= 0) {
+                temperatureDiff += -0.2;
+            } else if(sentimentScore.compareTo(new BigDecimal("0.2")) >= 0 &&
+                    sentimentScore.compareTo(new BigDecimal("0.5")) < 0) {
+                temperatureDiff += 0.1;
+            } else if(sentimentScore.compareTo(new BigDecimal("0.5")) >= 0) {
+                temperatureDiff += 0.2;
+            }
+
+            // 채팅 빈도에 대한 온도 반영
+            count /= 2;
+//            System.out.println(count);
+            if(count == 0) {
+                temperatureDiff += -0.2;
+            } else if(count == 1 || count == 2) {
+                temperatureDiff += -0.1;
+            } else if(count >= 6 && count <= 10) {
+                temperatureDiff += 0.1;
+            } else if(count >= 10) {
+                temperatureDiff += 0.2;
+            }
+
+//            System.out.println("temperatureDiff= " + temperatureDiff);
+            chatting.changeTemperature(new BigDecimal(temperatureDiff));
         }
     }
 
-    public BigDecimal analyzeEntities(String text) throws IOException {
+    public BigDecimal analyzeMessage(String text) throws IOException {
         // 인증 키 파일을 사용하여 Credentials 객체 생성
         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceKeyPath.getInputStream());
 
@@ -68,15 +116,15 @@ public class TemperatureService {
             Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
             AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
             Sentiment sentiment = response.getDocumentSentiment();
-//            if (sentiment == null) {
-//                System.out.println("No sentiment found");
-//            } else {
-//                System.out.printf("Sentiment magnitude: %.3f\n", sentiment.getMagnitude());
-//                System.out.printf("Sentiment score: %.3f\n", sentiment.getScore());
-//            }
 
-            return new BigDecimal(String.format("%.1f", sentiment.getScore()));
+            if (sentiment == null) return BigDecimal.ZERO;
+            return new BigDecimal(sentiment.getScore());
         }
+    }
+
+    public void insertTest(Long chattingId, Long userId, String text) {
+        ChattingMessageDto message = new ChattingMessageDto(chattingId, userId, text);
+        chattingMessageRepository.save(message);
     }
 
 }

@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface ChattingMessageRepository extends MongoRepository<ChattingMessageDto, String> {
-    List<ChattingMessageDto> findAllByChattingId(Long chattingId);
+    List<ChattingMessageDto> findAllByChattingIdOrderBySendTimeDesc(Long chattingId);
 }
