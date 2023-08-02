@@ -6,10 +6,18 @@ import "./aos.css";
 
 import styles from './MainPage.module.css';
 
+
+//component
+import CountdownTimer from "../component/main/CountdownTimer";
+
+
 function MainPage() {
 
-  const navigate = useNavigate();
-
+const navigate = useNavigate();
+//  const header1 = "love";
+//  const header2 = "with";
+//  const header3 = "ting";
+ 
   useEffect(() => {
     AOS.init();
     return () => {
@@ -18,48 +26,55 @@ function MainPage() {
   }, []);
 
   return (
-    <div >
-      {/* 첫 번째 섹션 - 풀페이지 영상 */}
-      <div className={styles.content2} data-aos="fade-down" data-aos-duration="3000">
-        <div className={styles.fullPageVideo}>
-          {/* 영상을 넣을 Video 태그 등 추가 */}
-          <h1>메인 페이지!</h1>
-        </div>
-      </div>
-
-      {/* 두 번째 섹션 - 프로젝트 설명 */}
-      <div data-aos="fade-down" data-aos-duration="1000">
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <h1 className={styles.title}>메인화면</h1>
-            <div data-aos="fade-down">
-              <h1>이거 작동 되나요</h1>
-            </div>
-            <div>이 버튼을 누르면 매칭이 진행됩니다.</div>
-            <button className={styles.button} onClick={() => navigate('/matching')}>
-              매칭 진행 버튼
-            </button>
-            <div className={styles.textbox}>
-              <p>
-                짧고 굵게{' '}
-                <button className={styles.button} onClick={() => navigate('/matching')}>
-                  팅(로고)
-                </button>{' '}
-                하러 가기
-              </p>
-            </div>
-          </div>
-          <div>
-            {/* Placeholder Image */}
-            <img
-              className={styles.image}
-              src="https://via.placeholder.com/700x200" // Placeholder image URL
-              alt="main"
-            />
-          </div>
-        </div>
-      </div>
+    
+   <div>
+    {/*section1 */}
+   <div className={styles.container}>
+    
+    <div className={styles.section1textbox}>
+      <h1>스피드 소개팅 <br></br>Ting을 만나보세요</h1>
     </div>
+
+    <div className={styles.section1imgbox}>
+    <img src="/img/main.png" alt="main" className={styles.img}></img>
+    
+    </div>
+  
+    <button onClick={()=>{ navigate("/matching") }}>Ting하러가기</button>
+   </div>
+
+    {/*section2 */}
+   <div data-aos="fade-down" data-aos-duration="1000" className={styles.container}>
+
+    <img src="/img/watch.png" alt="watch" className={styles.section2imgbox} ></img>
+
+    <div><CountdownTimer/></div>
+    {/* <div className={styles.section2textbox}><h1>5분동안 할 수 있는 일<br></br>생각해보세요</h1></div> */}
+  
+    </div>
+
+      {/*section3 */}
+    <div data-aos="fade-down" data-aos-duration="1000" className={styles.container}>
+      <img src="/img/cards_front.png" alt="cards_front" className={styles.imgbox}></img>
+      <img src="/img/cards_left.png" alt="cards_left" className={styles.imgbox}></img>
+      <h1>Ting에서는<br/>5분 안에<br/>상대의 취미, 취향까지 알 수 있습니다</h1>
+    </div>
+
+    <div data-aos="fade-down" data-aos-duration="1000" className={styles.container}>
+    <h1>5분 후 바로 <br/>상대에게 마음을 표현해보세요</h1>
+    <img src="/img/hearthand.png" alt="hearthand" className={styles.imgbox}></img>
+    </div>
+
+    <div data-aos="fade-down" data-aos-duration="1000" className={styles.container}>
+    <img src="/img/click.png" alt="click" className={styles.imgbox}></img>
+    <h1>지금 Ting하러가기</h1>
+    
+    </div>
+
+
+   
+</div>
+   
   );
 }
 

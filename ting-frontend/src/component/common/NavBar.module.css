@@ -1,0 +1,34 @@
+.logo {
+    height:60px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-left:100px;
+  }
+  
+  .navMenu {
+    margin-left: 64px;
+    font-size: 24px;
+    font-weight: 500;
+    width:64px;
+    text-decoration: none;
+    color: #888888;
+  }
+  
+  .navLeft {
+    margin-left:150px;
+  }
+  
+  .navRight {
+    margin-left: auto;
+    margin-right: 150px;
+  }
+  
+  .mainNav {
+    width:100%;
+    height: 60px;
+    display: flex;
+    background-color: #fee5ef;
+    align-items: center;
+  }
+  

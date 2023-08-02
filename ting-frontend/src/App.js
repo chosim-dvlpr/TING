@@ -25,6 +25,9 @@ import Openvidu from './pages/openvidu/openvidu-main.js';
 // 메인페이지
 import MainPage from './pages/MainPage';
 
+//NavBar
+import NavBar from './component/common/NavBar';
+
 // 매칭
 import MatchingPage from './pages/MatchingPage.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
@@ -55,6 +58,7 @@ import Friend from './component/friend/Friend';
 import FriendChatting from './component/friend/FriendChatting';
 import FriendProfile from './component/friend/FriendProfile';
 
+
 function App() {
   let accessToken = localStorage.getItem('access-token');
   // accessToken이 있다면 isLogin에 true 저장
@@ -67,21 +71,8 @@ function App() {
 
   return (
     <div className="App">
-      <div className="mainNav">
-        <div className='navLeft'>
-          <img src="img/ting-logo.png" className="logo" alt="logo"></img>
-          <Link className="navMenu" to="/">메인</Link>
-          <Link className="navMenu" to="/tutorial">튜토리얼</Link>
-          <Link className="navMenu" to="/community">커뮤니티</Link>
-        </div>
-        <div className='navRight'>
-          {/* <Link className="navMenu" to="/login">로그인</Link>
-          <Link className="navMenu" to="/signup">회원가입</Link> */}
-          {!isLogin && <Link className="navMenu" to="/login">로그인</Link>}
-          {!isLogin && <Link className="navMenu" to="/signup">회원가입</Link>}
-          {isLogin && <button onClick={handleLogout}>로그아웃</button>}
-        </div>
-      </div>
+      <NavBar/>
+    
       <Routes>
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
