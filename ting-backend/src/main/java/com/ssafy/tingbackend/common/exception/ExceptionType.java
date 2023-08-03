@@ -41,6 +41,7 @@ public enum ExceptionType {
     SOCKET_SESSION_NOT_FOUND(4603, "소켓 세션이 존재하지 않습니다."),
 
     CHATTING_NOT_FOUND(4700, "채팅이 존재하지 않습니다."),
+    CHATTING_USER_NOT_FOUND(4701, "채팅 유저가 존재하지 않습니다."),
 
     POINT_CATEGORY_NOT_FOUND(4800, "포인트 카테고리가 존재하지 않습니다."),
     ITEM_NOT_FOUND(4801, "아이템이 존재하지 않습니다."),

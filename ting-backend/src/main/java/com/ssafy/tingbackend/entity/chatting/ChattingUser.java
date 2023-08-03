@@ -1,15 +1,13 @@
 package com.ssafy.tingbackend.entity.chatting;
 
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id"})
 public class ChattingUser {
