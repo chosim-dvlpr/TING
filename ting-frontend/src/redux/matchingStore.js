@@ -4,7 +4,7 @@ export let matchingReducer = createSlice({
   name : 'matchingReducer',
   initialState:{ questionData:{}, questionNumber:0  },
   reducers : {
-    getQuestionData: (state, action) => {
+    setQuestionData: (state, action) => {
       state.questionData = action.payload
       console.log('데이터 저장 됫나')
       console.log(action.payload)
@@ -16,6 +16,6 @@ export let matchingReducer = createSlice({
   }
 })
 
-export let { getQuestionData,setQuestionNumber } = matchingReducer.actions;
+export let { setQuestionData,setQuestionNumber } = matchingReducer.actions;
 
 export default matchingReducer
