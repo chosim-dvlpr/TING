@@ -37,4 +37,8 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
     public void changeTemperature(BigDecimal diff) {
         this.temperature = this.temperature.add(diff);
     }
+
+    public Chatting(ChattingType state) {
+        this.state = state;
+    }
 }

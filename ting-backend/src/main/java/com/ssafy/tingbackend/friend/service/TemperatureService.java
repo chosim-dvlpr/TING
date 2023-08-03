@@ -37,11 +37,11 @@ public class TemperatureService {
     private final ChattingRepository chattingRepository;
     private final ChattingMessageRepository chattingMessageRepository;
 
-    @Scheduled(fixedDelay = 10_800_000L)  // 스케줄러 - 3시간에 한번씩 수행
+    @Scheduled(cron = "0 0 2,6,10,14,17,21 * * *", zone = "Asia/Seoul")  // 매일 2시, 6시, 10시, 14시, 17시, 21시
     @Transactional
     @Async
     public void updateTeperature() throws IOException {
-        log.info("채팅방 온도 업데이트");
+        log.info("채팅방 온도 업데이트 시작 ({})", LocalDateTime.now());
 
         // 전체 채팅방에 대해 온도 재계산
         List<Chatting> chattingList = chattingRepository.findAllByState(ChattingType.ALIVE);
@@ -109,6 +109,8 @@ public class TemperatureService {
 
             chatting.changeTemperature(new BigDecimal(temperatureDiff));
         }
+
+        log.info("채팅방 온도 업데이트 완료 ({})", LocalDateTime.now());
     }
 
     public BigDecimal analyzeMessage(String text) throws IOException {
