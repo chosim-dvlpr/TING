@@ -10,7 +10,7 @@ import './MatchingStart.css'
 import { useNavigate } from 'react-router-dom';
 import ScoreCheck from './asset/ScoreCheck.js';
 import tokenHttp from '../../api/tokenHttp.js';
-import { getQuestionData } from '../../redux/matchingStore.js'
+import { setQuestionData } from '../../redux/matchingStore.js'
 import QuestionCard from './asset/QuestionCard.js';
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -54,7 +54,7 @@ function MatchingStart(){
     // TODO: 카드 정보 redux에 저장
     tokenHttp.get('/date/question').then((response) => {
       // console.log(response.data.dat a)
-      dispatch(getQuestionData(response))
+      dispatch(setQuestionData(response))
     })
     joinSession(accessToken)
 

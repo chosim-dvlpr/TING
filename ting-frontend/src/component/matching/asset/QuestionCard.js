@@ -11,9 +11,10 @@ function QuestionCard(){
     console.log('질문 카드');
     const questionData = state.matchingReducer.questionData?.data?.data;
     if (questionData) {
-      setAllQuestion([{ id: -1, questionCard: '인사', category: 'GREET' }, ...questionData]);
+      setAllQuestion(questionData);
       setQNum(state.matchingReducer.questionNumber);
       console.log(questionData);
+      console.log(allQuestion)
       console.log(qNum);
     }
   }, [state.matchingReducer.questionData, state.matchingReducer.questionNumber]);
