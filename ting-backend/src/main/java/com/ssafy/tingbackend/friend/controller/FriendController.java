@@ -25,9 +25,9 @@ public class FriendController {
      * @return 친구 목록 정보
      */
     @GetMapping("/friend")
-    public DataResponse<List<ChattingDto>> chattingList(Principal principal) {
+    public DataResponse<List<ChattingDto>> friendList(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        List<ChattingDto> chattingList = friendService.chattingList(userId);
+        List<ChattingDto> chattingList = friendService.friendList(userId);
         return new DataResponse<>(200, "친구 목록 조회 성공", chattingList);
     }
 

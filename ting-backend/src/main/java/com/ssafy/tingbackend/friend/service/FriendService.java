@@ -30,7 +30,7 @@ public class FriendService {
     private final ChattingRepository chattingRepository;
     private final ChattingUserRepository chattingUserRepository;
 
-    public List<ChattingDto> chattingList(Long userId) {
+    public List<ChattingDto> friendList(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 

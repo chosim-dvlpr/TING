@@ -7,12 +7,17 @@ import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.chatting.ChattingUser;
 import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
 import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
+import com.ssafy.tingbackend.friend.repository.ChattingRepository;
 import com.ssafy.tingbackend.friend.repository.ChattingUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class ChattingService {
     private final SimpMessagingTemplate template;
     private final ChattingMessageRepository chattingMessageRepository;
     private final ChattingUserRepository chattingUserRepository;
+    private final ChattingRepository chattingRepository;
     private final StompDestination destination = new StompDestination();
     private final MessageRequestDto curMessage = new MessageRequestDto();
 
@@ -62,5 +68,13 @@ public class ChattingService {
         if(destination.isRoomLast()) {
             resetUnread(curMessage.getRoomId(), curMessage.getUserId());
         }
+    }
+
+    public Map<String, Object> chattingList(Long chattingId) {
+        Map<String, Object> result = new HashMap<>();
+        List<ChattingMessageDto> chattingMessageList = chattingMessageRepository.findAllByChattingIdOrderBySendTimeAsc(chattingId);
+        result.put("chattingList", chattingMessageList);
+        result.put("temperature", chattingRepository.findTemperatureById(chattingId));
+        return result;
     }
 }

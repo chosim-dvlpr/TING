@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ChattingRepository extends JpaRepository<Chatting, Long> {
@@ -16,4 +17,7 @@ public interface ChattingRepository extends JpaRepository<Chatting, Long> {
     List<Chatting> findAllByUser(List<Long> chattingIdList);
 
     List<Chatting> findAllByState(ChattingType state);
+
+    @Query("SELECT c.temperature FROM Chatting c WHERE c.id=:chattingId")
+    BigDecimal findTemperatureById(Long chattingId);
 }
