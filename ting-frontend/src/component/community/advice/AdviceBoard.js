@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import AdviceCreate from "./AdviceCreate";
+import styles from "./AdviceBoard.module.css";
 
 function AdviceBoard() {
     const [adviceList, setAdviceList] = useState([]);
@@ -31,36 +33,35 @@ function AdviceBoard() {
     };
 
     return (
-        <div>
+        <div className={styles.adviceBoardContainer}>
             <h1>Advice Board</h1>
-            <table>
+            <table className={styles.adviceTable}>
                 <thead>
                     <tr>
-                        <th>Attribute</th>
-                        <th>Value</th>
+                        <th>Id</th>
+                        <th>title</th>
+                        <th>nickname</th>
+                        <th>hit</th>
+                        <th>createdTime</th>
+                        <th>modifiedTime</th>
                     </tr>
                 </thead>
                 <tbody>
                     {adviceList.map((advice, index) => (
-                        <React.Fragment key={index}>
-                            <tr>
-                                <td>adviceId</td>
-                                <td>{advice.adviceId}</td>
-                            </tr>
-                            <tr>
-                                <td>title</td>
-                                <td>{advice.title}</td>
-                            </tr>
-                            <tr>
-                                <td>content</td>
-                                <td>{advice.content}</td>
-                            </tr>
-                            {/* Repeat for other properties */}
-                        </React.Fragment>
+                        <tr key={advice.adviceId}>
+                            <td>{advice.adviceId}</td>
+                            <td>
+                                <Link to={`/community/advice/detail/${advice.adviceId}`}>{advice.title}</Link>
+                            </td>
+                            <td>{advice.nickname}</td>
+                            <td>{advice.hit}</td>
+                            <td>{advice.createdTime}</td>
+                            <td>{advice.modifiedTime}</td>
+                        </tr>
                     ))}
                 </tbody>
             </table>
-            <AdviceCreate/>
+            <AdviceCreate />
         </div>
     );
 }

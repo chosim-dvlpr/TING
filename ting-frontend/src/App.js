@@ -38,7 +38,8 @@ import MatchingFinal from './component/matching/MatchingFinal';
 // 커뮤니티
 
 import CommunityPage from './pages/CommunityPage.js';
-import AdvicePostForm from './component/community/advice/AdviceCreate.js'
+import AdviceBoard from './component/community/advice/AdviceBoard';
+import AdviceDetail from './component/community/advice/AdviceDetail';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -113,7 +114,10 @@ function App() {
         {/* 커뮤니티 페이지 */}
 
         <Route path="/community/*" element={<CommunityPage />} />
-        <Route path="/community/advice/new" element={<AdvicePostForm />} />
+
+        <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
+        <Route path="/community/advice" element={<AdviceBoard/>} />
+
         
         {/* 친구목록 임시 */}
         <Route path="/friend" element={<Friend />}>
