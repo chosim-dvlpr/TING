@@ -27,10 +27,12 @@ function ScoreCheck(){
 function HeartScore(props){
   return (
     <div className={styles.HeartScore}>
-      <img src="/img/heart-icon.png" />
-      <div className={styles.ScoreText}>
-        {props.score}
-      </div>
+      <button>
+        <img src="/img/heart-icon.png" />
+        <div className={styles.ScoreText}>
+          {props.score}
+        </div>
+      </button>
     </div>
   )
 }
