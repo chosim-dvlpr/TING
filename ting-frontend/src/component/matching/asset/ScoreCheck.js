@@ -4,7 +4,6 @@ import TimerBar from './TimerBar.js'
 
 function ScoreCheck(){
   const score = [0,1,2,3,4,5,6,7,8,9,10]
-  let [timerResetSign, setTimerResetSign] = useState(false) 
 
   return(
     <div className='wrapper'>
@@ -12,8 +11,6 @@ function ScoreCheck(){
         <div>
           <TimerBar 
             totalTime={30000} 
-            timerResetSign={timerResetSign}
-            setTimerResetSign={setTimerResetSign} 
           />
         </div>
         <div className={styles.ScoreBox}>
@@ -36,8 +33,11 @@ function ScoreCheck(){
 }
 
 function HeartScore(props){
+  
   let [buttonToggleSign,setButtonToggleSign] = useState(false)
   
+  // useEffect 로 questionNumber 가 바뀌면 토글을 풀어야 함
+
   useEffect(()=>{
     console.log('여기 버튼 초기화해!', props.score)
     if (props.timerResetSign){
@@ -47,6 +47,18 @@ function HeartScore(props){
     // console.log('buttontoggle',buttonToggleSign)
     // console.log('timerreset',props.timerResetSign)
   },[props.timerResetSign])
+
+
+  // 점수 클릭시 발생하는 이벤트
+  const handleScoreSelect = () => {
+    // TODO: 점수를 서버로 전송하는 로직
+
+    // TODO: myScore에 추가하는 로직
+
+    // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
+    
+    // TODO: 선택이 불가능하도록 state 변경
+  }
 
   return (
     <div className={styles.HeartScore}>
@@ -58,6 +70,7 @@ function HeartScore(props){
           className={styles.ScoreText} 
           onClick={()=>{
             setButtonToggleSign(!buttonToggleSign);
+            handleScoreSelect();
           }}
         >
           {props.score}
