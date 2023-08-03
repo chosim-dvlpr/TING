@@ -13,12 +13,14 @@ import { setOpenviduToken } from "../../redux/openviduStore";
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
-  const [userdata, setUserdata] = useState({}); // 유저 데이터를 관리하는 state
+
+  const [userdata, setUserdata] = useState({});
+  let dispatch = useDispatch();
+  let navigate = useNavigate("");
 
   // 이 티켓 redux로 불러와야할 듯
   let [ticket, setTicket] = useState(0);
   let state = useSelector((state) => state);
-  let dispatch = useDispatch();
 
   useEffect(() => {
     // 유저 데이터 redux에서 가져옴
@@ -26,8 +28,7 @@ function WaitingRoom() {
     console.log(state.userdataReducer.userdata);
   }, []);
 
-  let navigate = useNavigate("");
-
+  // 웹소켓 연결
   const handleConnectClick = () => {
     const serverUrl = "wss://i9b107.p.ssafy.io:5157/matching";
 
@@ -39,6 +40,9 @@ function WaitingRoom() {
       console.log("소켓 연결 성공");
       setSocket(ws);
       const token = localStorage.getItem("access-token");
+      // 토큰 redux에 저장
+      dispatch(setOpenviduToken(token));
+
       ws.send(
         JSON.stringify({
           type: "jwt",
@@ -56,9 +60,6 @@ function WaitingRoom() {
 
     // 연결이 끊어졌을 때 호출되는 함수
     ws.onclose = () => {
-      console.log("소켓 연결 끊김");
-      alert("현재 매칭을 할 수 없습니다. (token 확인)");
-      ws.send("연결 끊김");
       setSocket(null);
     };
 
@@ -78,13 +79,13 @@ function WaitingRoom() {
 
         // 매칭 수락 모달을 띄움
         case "findPair":
-          findPairModal();
+          findPairModal(ws);
           break;
 
         // 양쪽 모두 매칭 성공 (redux에 openvidu token 저장 후 화상화면으로 이동)
         case "matchingSuccess":
           let enterToken = response.data.token;
-          console.log(state.openviduReducer.token);
+          // console.log(state.openviduReducer.token);
           dispatch(setOpenviduToken(enterToken));
           navigate("/matching/start");
           break;
@@ -97,7 +98,7 @@ function WaitingRoom() {
     };
   };
 
-  function findPairModal() {
+  function findPairModal(socket) {
     Swal.fire({
       icon: "success",
       title: "매칭 성공",
@@ -162,6 +163,13 @@ function WaitingRoom() {
                     매칭 시간 : <TimerComponent />
                   </div>
                   <div>예상 대기시간 :{expectTime}</div>
+                  <button
+                    onClick={() => {
+                      findPairModal(navigate);
+                    }}
+                  >
+                    테스트 버튼
+                  </button>
                 </>
               )}
             </div>
@@ -179,7 +187,13 @@ function WaitingRoom() {
   );
 }
 
-const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate }) => {
+const MatchingStartButton = ({
+  start,
+  setStart,
+  ticket,
+  setTicket,
+  navigate,
+}) => {
   let [micandVideo, setMicandVideo] = useState(0);
 
   navigator.mediaDevices
