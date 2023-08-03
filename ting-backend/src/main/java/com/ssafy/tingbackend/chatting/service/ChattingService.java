@@ -4,6 +4,7 @@ import com.ssafy.tingbackend.chatting.dto.MessageRequestDto;
 import com.ssafy.tingbackend.chatting.dto.StompDestination;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
+import com.ssafy.tingbackend.entity.chatting.Chatting;
 import com.ssafy.tingbackend.entity.chatting.ChattingUser;
 import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
 import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
@@ -14,6 +15,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +34,17 @@ public class ChattingService {
     @Transactional
     public void convertAndSendMessage(Long roomId, Long userId, String content) {
         ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content);
-        chattingMessageRepository.save(chattingMessageDto);
         ChattingUser friendChattingUser =  chattingUserRepository.findFriendChattingUser(roomId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
         template.convertAndSend("/subscription/list" + friendChattingUser.getUser().getId(), chattingMessageDto);
 //        template.convertAndSend("/subscription/list", chattingMessageDto); // 테스트용
         template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
+        chattingMessageRepository.save(chattingMessageDto);
         friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
+        Chatting chatting = chattingRepository.findById(roomId)
+                .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));
+        chatting.setLastChattingContent(content);
+        chatting.setLastChattingTime(LocalDateTime.now());
     }
 
     @Transactional
