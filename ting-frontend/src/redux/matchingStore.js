@@ -4,6 +4,7 @@ export let matchingReducer = createSlice({
   name: "matchingReducer",
 
   initialState: {
+    openviduSession: null,
     questionData: {},
     questionNumber: 0,
     matchingId: null,
@@ -27,9 +28,12 @@ export let matchingReducer = createSlice({
     setYourData: (state, action) => {
       state.yourData = action.payload;
     },
+    setOpenviduSession: (state, action) => {
+      state.openviduSession = action.payload;
+    },
   },
 });
 
-export let { setQuestionData, setQuestionNumber, setMatchingId, setYourData } = matchingReducer.actions;
+export let { setQuestionData, setQuestionNumber, setMatchingId, setYourData, setOpenviduSession } = matchingReducer.actions;
 
 export default matchingReducer;

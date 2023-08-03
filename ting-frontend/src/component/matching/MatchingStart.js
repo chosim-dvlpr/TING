@@ -10,7 +10,7 @@ import "./MatchingStart.css";
 import { useNavigate } from "react-router-dom";
 import ScoreCheck from "./asset/ScoreCheck.js";
 import tokenHttp from "../../api/tokenHttp.js";
-import { setQuestionData, setQuestionNumber, setYourData } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession } from "../../redux/matchingStore.js";
 import QuestionCard from "./asset/QuestionCard.js";
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -84,6 +84,7 @@ function MatchingStart() {
     // --- 2) Init a session ---
     const newSession = OV.initSession();
     setSession(newSession);
+    dispatch(setOpenviduSession(newSession));
 
     // --- 3) Specify the actions when events take place in the session ---
     // On every new Stream received...
@@ -123,6 +124,11 @@ function MatchingStart() {
     newSession.on("signal:score", (event) => {
       let data = JSON.parse(event.data);
       console.log(data);
+      
+      // TODO: 점수를 yourScore에 저장
+
+      // TODO: 상대방이 선택한 점수 표시
+
       alert(data.score);
     });
 
