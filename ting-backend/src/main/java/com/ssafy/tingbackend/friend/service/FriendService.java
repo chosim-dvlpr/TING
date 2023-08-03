@@ -42,7 +42,8 @@ public class FriendService {
         List<ChattingDto> chattingDtoList = new ArrayList<>();
         for(Chatting chatting: chattingList) {
             User friend = chattingUserRepository.findFriend(chatting.getId(), userId);
-            chattingDtoList.add(ChattingDto.of(chatting, friend));
+            Integer unread = chattingUserRepository.findUnread(chatting.getId(), userId);
+            chattingDtoList.add(ChattingDto.of(chatting, friend, unread));
         }
 
         return chattingDtoList;
