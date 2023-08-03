@@ -24,4 +24,10 @@ public class ChattingUser {
     private User user;
 
     private Integer unread;
+
+    public ChattingUser(Chatting chatting, User user) {
+        this.chatting = chatting;
+        this.user = user;
+        this.unread = 0;
+    }
 }
