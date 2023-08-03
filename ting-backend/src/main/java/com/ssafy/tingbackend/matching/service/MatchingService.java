@@ -495,6 +495,7 @@ public class MatchingService {
         }
         matchingInfoRepository.save(matchingInfo);
 
+        log.info("matchingInfo = {}", matchingInfo);
 
         // 두 사용자 모두 수락을 선택한 경우 - 매칭 성사
         if (matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
