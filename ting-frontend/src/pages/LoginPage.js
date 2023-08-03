@@ -36,14 +36,15 @@ function LoginPage() {
         .post("/user/login", data)
         .then((response) => {
           if (response.data.code === 200) {
+            console.log("성공");
             localStorage.setItem("access-token", response.data.data["access-token"]);
             localStorage.setItem("refresh-token", response.data.data["refresh-token"]);
 
             // 유저 데이터 redux에 저장
             tokenHttp.get("/user").then((response) => {
               dispatch(getCurrentUserdata(response.data.data));
+              localStorage.setItem("userId", response.data.data.userId);
             });
-
             navigate("/"); // 로그인 완료되면 메인으로 이동
           } else {
             // input 값 초기화
