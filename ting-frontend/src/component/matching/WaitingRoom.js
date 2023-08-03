@@ -8,8 +8,8 @@ import Col from "react-bootstrap/Col";
 import "./WaitingRoom.css";
 import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
-import { setOpenviduToken, setMatchingId } from "../../redux/openviduStore";
-
+import { setOpenviduToken } from "../../redux/openviduStore";
+import { setMatchingId } from "../../redux/matchingStore";
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
