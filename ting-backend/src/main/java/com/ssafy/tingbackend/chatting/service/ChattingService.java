@@ -13,15 +13,15 @@ import com.ssafy.tingbackend.friend.repository.ChattingRepository;
 import com.ssafy.tingbackend.friend.repository.ChattingUserRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -90,5 +90,13 @@ public class ChattingService {
         result.put("chattingList", chattingMessageList);
         result.put("temperature", chattingRepository.findTemperatureById(chattingId));
         return result;
+    }
+
+    public void deleteMessages() {
+        LocalDateTime deleteTime = LocalDateTime.of(2023, 8, 2, 16, 0, 0);
+
+        List<ChattingMessageDto> data = chattingMessageRepository.findBySendTimeGreaterThan (deleteTime);
+        System.out.println(data);
+//        chattingMessageRepository.deleteAll(data);
     }
 }
