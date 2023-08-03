@@ -1,15 +1,21 @@
+/* AdviceBoard.module.css */
 
-.adviceListContainer {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-  }
+.adviceBoardContainer {
+  width: 600px;
+  height: 600px;
   
-  .nickname {
-    font-weight: bold;
-  }
-  
-  .title {
-    margin-left: 10px;
-  }
-  
+  justify-content: center;
+  align-items: center;
+}
+
+.adviceTable {
+  width: 100%;
+  border-collapse: collapse;
+  /* Add table styles here */
+}
+
+.adviceTable th, .adviceTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  /* Add table cell styles here */
+}
