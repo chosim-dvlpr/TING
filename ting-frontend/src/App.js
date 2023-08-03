@@ -73,6 +73,7 @@ function App() {
           <Link className="navMenu" to="/">메인</Link>
           <Link className="navMenu" to="/tutorial">튜토리얼</Link>
           <Link className="navMenu" to="/community">커뮤니티</Link>
+          <Link className="navMenu" to="/friend">친구목록</Link>
         </div>
         <div className='navRight'>
           {/* <Link className="navMenu" to="/login">로그인</Link>

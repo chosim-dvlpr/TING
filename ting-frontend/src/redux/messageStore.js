@@ -2,23 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { messageService } from '../component/friend/MessageService';
-import { connect, useSelector } from 'react-redux';
 
 const baseUrl = 'https://i9b107.p.ssafy.io:5157';
 
 export default class MessageStore {
   constructor() {
     this.listeners = new Set();
-
-    // const mapStateToProps = (state) => ({
-    //   userdata: state.userdata
-    // });
-
-
-    // // 본인의 아이디
-    // // this.userId = 
-    // connect(mapStateToProps);
-    // console.log(userdataReducer)
+    // this.id = Math.ceil(Math.random() * 1000);
+    // 본인의 아이디
+    this.userId = localStorage.getItem("userId");
 
     this.socket = null;
     this.client = null;
@@ -96,7 +88,7 @@ export default class MessageStore {
       client: this.client,
       messageToSend: {
         type,
-        id: this.id,
+        // id: this.id,
         roomId: this.currentRoomIndex,
         userId: this.userId,
         message,
@@ -114,7 +106,6 @@ export default class MessageStore {
   }
 
   formatMessage(message) {
-    console.log('----',message)
     return {
       id: message.id,
       chattingId: message.chattingId, // 채팅방번호 - DB에서 가져오기 (API)

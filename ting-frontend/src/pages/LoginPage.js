@@ -43,6 +43,7 @@ function LoginPage(){
           // 유저 데이터 redux에 저장
           tokenHttp.get('/user').then((response) => {
             dispatch(getCurrentUserdata(response.data.data))
+            localStorage.setItem("userId", response.data.data.userId)
           })
 
           navigate("/") // 로그인 완료되면 메인으로 이동

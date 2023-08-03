@@ -1,11 +1,13 @@
 // Room.js 와 같은 내용
 import { useLocation, useNavigate } from 'react-router-dom';
 import useMessageStore from './useMessageStore';
+import { useSelector } from 'react-redux';
 
 function FriendChatting() {
   const location = useLocation();
   const Navigate = useNavigate();
   const messageStore = useMessageStore();
+  let userdata = useSelector((state) => state.userdataReducer);
 
   const {
     connected,

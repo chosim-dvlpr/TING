@@ -7,13 +7,15 @@ import RoomList from "./RoomList";
 import Room from "./Room";
 
 import useMessageStore from "./useMessageStore";
+import { useSelector } from "react-redux";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
 function FriendList(){
   let [friendList, setFriendList] = useState([]);
   // let [isModal, setIsModal] = useState(true);
-  let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
+  // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
+  let userdata = useSelector((state) => state.userdataReducer);
 
   let Navigate = useNavigate();
 
@@ -48,6 +50,9 @@ function FriendList(){
 
   // 채팅방 입장할 때
   const handleClickEnterRoom = (roomIndex) => {
+    if (connected) {
+      messageStore.disconnect(currentRoomIndex);
+    }
     messageStore.connect(roomIndex.roomIndex);
     Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
