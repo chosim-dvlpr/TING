@@ -105,6 +105,7 @@ public class MatchingService {
             User female = socketInfos.get(fSessionId).getUser();
             int maxScore = 0;
             String mSessionId = null;
+            // ========= 이미 매칭된 상대는 매칭되지 않게 처리해야함 ============
 
             for(String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();

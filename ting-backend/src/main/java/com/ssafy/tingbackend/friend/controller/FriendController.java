@@ -5,11 +5,13 @@ import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.friend.dto.ChattingDto;
 import com.ssafy.tingbackend.friend.service.FriendService;
+import com.ssafy.tingbackend.friend.service.TemperatureService;
 import com.ssafy.tingbackend.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -17,7 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class FriendController {
+
     private final FriendService friendService;
+    private final TemperatureService temperatureService;
 
     /**
      * 친구 목록 조회 API
@@ -63,4 +67,5 @@ public class FriendController {
         friendService.deleteFriend(chattingId);
         return new CommonResponse(200, "친구 삭제 성공");
     }
+    
 }
