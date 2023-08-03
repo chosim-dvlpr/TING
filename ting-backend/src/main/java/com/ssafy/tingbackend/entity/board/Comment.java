@@ -48,7 +48,6 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
     private Integer depth;
-    private boolean isAnonymous;
     @ColumnDefault("0")
     private Long likeCount;
 
