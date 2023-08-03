@@ -57,7 +57,7 @@ public class ChattingController {
 
     /**
      * 방 안에서  메세지 보내기
-     * @param messageRequestDto type, rommId, userId, message
+     * @param messageRequestDto type, roomId, userId, message
      */
     @MessageMapping("/chat/message")
     public void message(MessageRequestDto messageRequestDto) {

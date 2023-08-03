@@ -49,10 +49,8 @@ public class ChattingService {
 
     @Transactional
     public void resetUnread(Long roomId, Long userId) {
-        System.out.println("start==================");
         ChattingUser chattingUser = chattingUserRepository.findByRoomAndUser(roomId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
-        System.out.println("found=====================");
         chattingUser.setUnread(0);
     }
 
