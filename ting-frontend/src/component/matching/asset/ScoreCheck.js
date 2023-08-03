@@ -36,15 +36,15 @@ function HeartScore(props){
   
   // useEffect 로 questionNumber 가 바뀌면 토글을 풀어야 함
 
-  useEffect(()=>{
-    console.log('여기 버튼 초기화해!', props.score)
-    if (props.timerResetSign){
-      setButtonToggleSign(false)
-    }
-    props.setTimerResetSign(false)
-    // console.log('buttontoggle',buttonToggleSign)
-    // console.log('timerreset',props.timerResetSign)
-  },[props.timerResetSign])
+  // useEffect(()=>{
+  //   console.log('여기 버튼 초기화해!', props.score)
+  //   if (props.timerResetSign){
+  //     setButtonToggleSign(false)
+  //   }
+  //   // props.setTimerResetSign(false)
+  //   // console.log('buttontoggle',buttonToggleSign)
+  //   // console.log('timerreset',props.timerResetSign)
+  // },[props.timerResetSign])
 
 
   // 점수 클릭시 발생하는 이벤트
