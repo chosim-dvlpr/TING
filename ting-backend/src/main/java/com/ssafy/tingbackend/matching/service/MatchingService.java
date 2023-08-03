@@ -68,19 +68,21 @@ public class MatchingService {
 
         // 유저 성별에 해당하는 대기열에 넣기
         Integer time;
-        if(user.getGender().equals("M")) {
+        if (user.getGender().equals("M")) {
             mQueue.add(socketSessionId);
 
             // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
-            if(fQueue.size() == 0) time = 180;
+            if (fQueue.size() == 0) time = 180;
             else time = 60;
         } else {
             fQueue.add(socketSessionId);
 
             // 이성의 큐가 비어있는 경우 3분, 아닌 경우 1분
-            if(mQueue.size() == 0) time = 180;
+            if (mQueue.size() == 0) time = 180;
             else time = 60;
         }
+
+        log.info("대기열에 추가 - {}, userNickname - {}", socketSessionId, user.getNickname());
 
         // 예상 대기 시간 전송
         Map<String, String> messageData = new HashMap<>();
@@ -91,34 +93,34 @@ public class MatchingService {
     }
 
     @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
-    public void matchingUsers() {        
+    public void matchingUsers() {
 //        System.out.println("========== 매칭 전 ==========");
 //        System.out.println("fQueue=" + fQueue);
 //        System.out.println("mQueue=" + mQueue);
 //        System.out.println("acceptQueue=" + acceptQueue);
-        
+
         // 먼저 들어온 여성 사용자들부터 순서대로 점수 계산, 가장 점수합이 높은 쌍부터 내보내기(기준 점수 50점)
         // 오래 대기하는 사용자들을 위한 가산점 -> 함수 한번 돌 떄마다 count++, 점수에 count 더해서 계산
         Iterator<String> iter = fQueue.iterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             String fSessionId = iter.next();
             User female = socketInfos.get(fSessionId).getUser();
             int maxScore = 0;
             String mSessionId = null;
             // ========= 이미 매칭된 상대는 매칭되지 않게 처리해야함 ============
 
-            for(String mId : mQueue) {
+            for (String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();
                 int score = calculateScore(female, male) + calculateScore(male, female)
                         + socketInfos.get(fSessionId).getCount() + socketInfos.get(mId).getCount();
 
-                if(score > maxScore) {
+                if (score > maxScore) {
                     maxScore = score;
                     mSessionId = mId;
                 }
             }
 
-            if(mSessionId != null && maxScore >= 50) {
+            if (mSessionId != null && maxScore >= 50) {
                 try {
                     WebSocketMessage message = new WebSocketMessage("findPair", null);
                     TextMessage textMessage = new TextMessage(message.toJson());
@@ -143,10 +145,10 @@ public class MatchingService {
             }
         }
 
-        for(String fId : fQueue) {
+        for (String fId : fQueue) {
             socketInfos.get(fId).countUp();
         }
-        for(String mId : mQueue) {
+        for (String mId : mQueue) {
             socketInfos.get(mId).countUp();
         }
 
@@ -186,27 +188,27 @@ public class MatchingService {
     }
 
     private int smokingScore(AdditionalInfo mySmoking, AdditionalInfo yourSmoking) {
-        if(mySmoking == null || yourSmoking == null) return 0;
+        if (mySmoking == null || yourSmoking == null) return 0;
 
         int score = 0;
         String yourSmokingName = yourSmoking.getName();
 
         switch (mySmoking.getName()) {
             case "비흡연":
-                if(yourSmokingName.equals("비흡연")) score = 10;
+                if (yourSmokingName.equals("비흡연")) score = 10;
                 else score = 0;
                 break;
             case "가끔 핌":
-                if(yourSmokingName.equals("비흡연") || yourSmokingName.equals("가끔 핌")) score = 10;
-                else if(yourSmokingName.equals("전자담배")) score = 7;
+                if (yourSmokingName.equals("비흡연") || yourSmokingName.equals("가끔 핌")) score = 10;
+                else if (yourSmokingName.equals("전자담배")) score = 7;
                 else score = 2;
                 break;
             case "자주 핌":
                 score = 10;
                 break;
             case "전자담배":
-                if(yourSmokingName.equals("비흡연") || yourSmokingName.equals("전자담배")) score = 10;
-                else if(yourSmokingName.equals("가끔 핌")) score = 7;
+                if (yourSmokingName.equals("비흡연") || yourSmokingName.equals("전자담배")) score = 10;
+                else if (yourSmokingName.equals("가끔 핌")) score = 7;
                 else score = 2;
                 break;
         }
@@ -216,24 +218,24 @@ public class MatchingService {
     }
 
     private int drinkingScore(AdditionalInfo myDrinking, AdditionalInfo yourDrinking) {
-        if(myDrinking == null || yourDrinking == null) return 0;
+        if (myDrinking == null || yourDrinking == null) return 0;
 
         int score = 0;
         String yourDrinkingName = yourDrinking.getName();
 
         switch (myDrinking.getName()) {
             case "안 마심":
-                if(yourDrinkingName.equals("안 마심")) score = 10;
-                else if(yourDrinkingName.equals("가끔 마심")) score = 5;
+                if (yourDrinkingName.equals("안 마심")) score = 10;
+                else if (yourDrinkingName.equals("가끔 마심")) score = 5;
                 else score = 0;
                 break;
             case "가끔 마심":
-                if(yourDrinkingName.equals("가끔 마심")) score = 10;
+                if (yourDrinkingName.equals("가끔 마심")) score = 10;
                 else score = 5;
                 break;
             case "자주 마심":
-                if(yourDrinkingName.equals("자주 마심")) score = 10;
-                else if(yourDrinkingName.equals("가끔 마심")) score = 5;
+                if (yourDrinkingName.equals("자주 마심")) score = 10;
+                else if (yourDrinkingName.equals("가끔 마심")) score = 5;
                 else score = 0;
                 break;
         }
@@ -243,38 +245,38 @@ public class MatchingService {
     }
 
     private int religionScore(AdditionalInfo myReligion, AdditionalInfo yourReligion) {
-        if(myReligion == null || yourReligion == null) return 0;
+        if (myReligion == null || yourReligion == null) return 0;
 
-        if(myReligion.equals(yourReligion)) return 10;
+        if (myReligion.equals(yourReligion)) return 10;
         else return 0;
     }
 
     public int styleScore(User me, User you) {
         int score = 0;
 
-        for(UserStyle userStyle : me.getUserStyles()) {
+        for (UserStyle userStyle : me.getUserStyles()) {
             AdditionalInfo addInfo = userStyle.getAdditionalInfo();
             switch (addInfo.getName()) {
                 case "동갑":
-                    if(me.getBirth().getYear() == you.getBirth().getYear()) score += 10;
+                    if (me.getBirth().getYear() == you.getBirth().getYear()) score += 10;
                     break;
                 case "연상":
-                    if(me.getBirth().getYear() < you.getBirth().getYear()) score += 10;
+                    if (me.getBirth().getYear() < you.getBirth().getYear()) score += 10;
                     break;
                 case "연하":
-                    if(me.getBirth().getYear() > you.getBirth().getYear()) score += 10;
+                    if (me.getBirth().getYear() > you.getBirth().getYear()) score += 10;
                     break;
                 case "같은 동네":
-                    if(me.getRegion().equals(you.getRegion())) score += 10;
+                    if (me.getRegion().equals(you.getRegion())) score += 10;
                     break;
                 case "장거리":
-                    if(!me.getRegion().equals(you.getRegion())) score += 10;
+                    if (!me.getRegion().equals(you.getRegion())) score += 10;
                     break;
                 case "취미가 같은":
-                    if(hasSameHobby(me.getUserHobbys(), you.getUserHobbys())) score += 10;
+                    if (hasSameHobby(me.getUserHobbys(), you.getUserHobbys())) score += 10;
                     break;
                 case "유사 직종":
-                    if(me.getJobCode().equals(you.getJobCode())) score += 10;
+                    if (me.getJobCode().equals(you.getJobCode())) score += 10;
                     break;
             }
         }
@@ -285,128 +287,151 @@ public class MatchingService {
 
     private boolean hasSameHobby(List<UserHobby> myHobbys, List<UserHobby> yourHobbys) {
         // 하나라도 겹치는 취미가 있으면 true 반환
-        for(UserHobby myhobby : myHobbys) {
+        for (UserHobby myhobby : myHobbys) {
             AdditionalInfo hobbyAddInfo = myhobby.getAdditionalInfo();
-            for(UserHobby yourHobby : yourHobbys) {
-                if(yourHobby.getAdditionalInfo().equals(hobbyAddInfo)) return true;
+            for (UserHobby yourHobby : yourHobbys) {
+                if (yourHobby.getAdditionalInfo().equals(hobbyAddInfo)) return true;
             }
         }
-        
+
         return false;
     }
 
     public int mbtiScore(AdditionalInfo myMbti, AdditionalInfo yourMbti) {
-        if(myMbti == null || yourMbti == null) return 0;
+        if (myMbti == null || yourMbti == null) return 0;
 
         int score = 0;
         String yourMbtiName = yourMbti.getName();
 
         switch (myMbti.getName()) {
             case "INFP":
-                if(yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ") ||
+                if (yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ") ||
                         yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
                 else score = 4;
                 break;
             case "ENFP":
-                if(yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ") ||
+                if (yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ") ||
                         yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
                 else score = 4;
                 break;
             case "INFJ":
-                if(yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENTP")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
+                if (yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENTP")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
                         yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP")) score = 16;
                 else score = 4;
                 break;
             case "ENFJ":
-                if(yourMbtiName.equals("INFP") || yourMbtiName.equals("ISFP")) score = 20;
-                else if(yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
-                        yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
+                if (yourMbtiName.equals("INFP") || yourMbtiName.equals("ISFP")) score = 20;
+                else if (yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
+                        yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score = 16;
                 else score = 4;
                 break;
             case "INTJ":
-                if(yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENTP")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
-                        yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 12;
+                if (yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENTP")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
+                        yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score = 16;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 12;
                 else score = 8;
                 break;
             case "ENTJ":
-                if(yourMbtiName.equals("INFP") || yourMbtiName.equals("INTP")) score = 20;
-                else if(yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
+                if (yourMbtiName.equals("INFP") || yourMbtiName.equals("INTP")) score = 20;
+                else if (yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("INTJ") ||
                         yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ENTP")) score = 16;
                 else score = 12;
                 break;
             case "INTP":
-                if(yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESTJ")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") ||
-                        yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 12;
+                if (yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESTJ")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("INFJ") || yourMbtiName.equals("ENFJ") ||
+                        yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score = 16;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 12;
                 else score = 8;
                 break;
             case "ENTP":
-                if(yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ")) score = 20;
-                else if(yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ") ||
+                if (yourMbtiName.equals("INFJ") || yourMbtiName.equals("INTJ")) score = 20;
+                else if (yourMbtiName.equals("INFP") || yourMbtiName.equals("ENFP") || yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ENTJ") ||
                         yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score = 16;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 12;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 12;
                 else score = 8;
                 break;
             case "ISFP":
-                if(yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ")) score = 20;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
+                if (yourMbtiName.equals("ENFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ"))
+                    score = 20;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
                         yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 12;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 8;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ESFP":
-                if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 20;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
+                if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 20;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
                         yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ")) score = 12;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 8;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ISTP":
-                if(yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ")) score = 20;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
+                if (yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ")) score = 20;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
                         yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 12;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 8;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ESTP":
-                if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 20;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
+                if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ISTJ")) score = 20;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP") ||
                         yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ESTJ")) score = 12;
-                else if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP")) score += 8;
+                else if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("ESTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ISFJ":
-                if(yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score = 20;
-                else if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ")) score = 16;
-                else if(yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP")) score += 12;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score += 8;
+                if (yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score = 20;
+                else if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ"))
+                    score = 16;
+                else if (yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP"))
+                    score += 12;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ESFJ":
-                if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP")) score = 20;
-                else if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ")) score = 16;
-                else if(yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score += 12;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score += 8;
+                if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP")) score = 20;
+                else if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ"))
+                    score = 16;
+                else if (yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP"))
+                    score += 12;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ISTJ":
-                if(yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score = 20;
-                else if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ")) score = 16;
-                else if(yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP")) score += 12;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP")) score += 8;
+                if (yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score = 20;
+                else if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ"))
+                    score = 16;
+                else if (yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP"))
+                    score += 12;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("INTP") || yourMbtiName.equals("ENTP"))
+                    score += 8;
                 else score = 4;
                 break;
             case "ESTJ":
-                if(yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("INTP")) score = 20;
-                else if(yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ")) score = 16;
-                else if(yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP")) score += 12;
-                else if(yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTP")) score += 8;
+                if (yourMbtiName.equals("ISFP") || yourMbtiName.equals("ISTP") || yourMbtiName.equals("INTP"))
+                    score = 20;
+                else if (yourMbtiName.equals("ISFJ") || yourMbtiName.equals("ESFJ") || yourMbtiName.equals("ISTJ") || yourMbtiName.equals("ESTJ"))
+                    score = 16;
+                else if (yourMbtiName.equals("ENTJ") || yourMbtiName.equals("ESFP") || yourMbtiName.equals("ESTP"))
+                    score += 12;
+                else if (yourMbtiName.equals("INTJ") || yourMbtiName.equals("ENTP")) score += 8;
                 else score = 4;
                 break;
         }
@@ -417,13 +442,13 @@ public class MatchingService {
 
     public void finishWaiting(String socketSessionId) throws IOException {
         // 매칭 수락 대기 큐에 있던 세션이 연결이 끊긴 경우 상대방에게 알리기
-        if(acceptQueue.contains(socketSessionId)) {
+        if (acceptQueue.contains(socketSessionId)) {
             acceptQueue.remove(socketSessionId);
 
             User user = socketInfos.get(socketSessionId).getUser();
             MatchingInfoDto matchingInfo;
 
-            if(user.getGender().equals("F")) {
+            if (user.getGender().equals("F")) {
                 matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
                         .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
             } else {
@@ -438,15 +463,15 @@ public class MatchingService {
 
             // 상대방은 다시 대기큐로 넣어야되나?
             acceptQueue.remove(pairSessionId);
-            if(user.getGender().equals("F")) mQueue.add(pairSessionId);
+            if (user.getGender().equals("F")) mQueue.add(pairSessionId);
             else fQueue.add(pairSessionId);
 
             matchingInfo.setIsValidate(false);
             matchingInfoRepository.save(matchingInfo);
         }
 
-        if(fQueue.contains(socketSessionId)) fQueue.remove(socketSessionId);
-        if(mQueue.contains(socketSessionId)) mQueue.remove(socketSessionId);
+        if (fQueue.contains(socketSessionId)) fQueue.remove(socketSessionId);
+        if (mQueue.contains(socketSessionId)) mQueue.remove(socketSessionId);
 
         socketInfos.remove(socketSessionId);
     }
@@ -455,7 +480,7 @@ public class MatchingService {
         User user = socketInfos.get(socketSessionId).getUser();
         MatchingInfoDto matchingInfo;
 
-        if(user.getGender().equals("F")) {
+        if (user.getGender().equals("F")) {
             matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
                     .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
             matchingInfo.setIsAcceptF(true);
@@ -468,7 +493,7 @@ public class MatchingService {
 
 
         // 두 사용자 모두 수락을 선택한 경우 - 매칭 성사
-        if(matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
+        if (matchingInfo.getIsAcceptF() != null && matchingInfo.getIsAcceptM() != null &&
                 matchingInfo.getIsAcceptF() && matchingInfo.getIsAcceptM()) {
             String pairSocketSessionId = user.getGender().equals("F") ? matchingInfo.getSocketSessionIdM() : matchingInfo.getSocketSessionIdF();
 
@@ -495,21 +520,21 @@ public class MatchingService {
             WebSocketMessage webSocketMessage2 = new WebSocketMessage("matchingSuccess", messageData2);
             socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage1.toJson()));
             socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage2.toJson()));
-            
+
             // 대기큐에서 사용자들 삭제
             acceptQueue.remove(socketSessionId);
             acceptQueue.remove(pairSocketSessionId);
 
             matchingInfo.setIsValidate(false);
             matchingInfoRepository.save(matchingInfo);
-        } 
+        }
     }
 
     public void rejectMatching(String socketSessionId) throws IOException {
         User user = socketInfos.get(socketSessionId).getUser();
         MatchingInfoDto matchingInfo;
 
-        if(user.getGender().equals("F")) {
+        if (user.getGender().equals("F")) {
             matchingInfo = matchingInfoRepository.findBySocketSessionIdFAndIsValidateTrue(socketSessionId)
                     .orElseThrow(() -> new CommonException(ExceptionType.SOCKET_SESSION_NOT_FOUND));
         } else {
@@ -527,7 +552,7 @@ public class MatchingService {
         // 수락 대기열에서 삭제하고, 매칭 대기열로 다시 넣어주기?
         acceptQueue.remove(socketSessionId);
         acceptQueue.remove(pairSocketSessionId);
-        if(user.getGender().equals("F")) {
+        if (user.getGender().equals("F")) {
             fQueue.add(socketSessionId);
             mQueue.add(pairSocketSessionId);
         } else {
