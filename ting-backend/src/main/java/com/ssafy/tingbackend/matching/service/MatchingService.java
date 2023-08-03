@@ -120,6 +120,10 @@ public class MatchingService {
                 }
             }
 
+            // 임시 테스트 코드
+            maxScore = 100;
+            // 임시 테스트 코드
+
             if (mSessionId != null && maxScore >= 50) {
                 try {
                     WebSocketMessage message = new WebSocketMessage("findPair", null);
