@@ -120,6 +120,9 @@ function App() {
           <Route path="" element={<FriendList />}></Route>
           <Route path="chat" element={<FriendChatting />}></Route>
         </Route>
+
+        {/* 마이페이지 */}
+        <Route path="/mypage" element={<MyProfilePage/>}></Route>
         
       </Routes>
 
