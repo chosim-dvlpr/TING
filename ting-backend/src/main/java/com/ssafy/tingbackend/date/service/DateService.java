@@ -11,6 +11,7 @@ import com.ssafy.tingbackend.entity.matching.Matching;
 import com.ssafy.tingbackend.entity.matching.MatchingScoreHistory;
 import com.ssafy.tingbackend.entity.matching.MatchingUser;
 import com.ssafy.tingbackend.entity.matching.Question;
+import com.ssafy.tingbackend.entity.type.QuestionType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.matching.repository.MatchingRepository;
 import com.ssafy.tingbackend.matching.repository.MatchingUserRepository;
@@ -36,11 +37,49 @@ public class DateService {
     private final MatchingUserRepository matchingUserRepository;
 
     public List<QuestionDto> getQuestions() {
-        List<Question> questionList = questionRepository.findAll();
-        List<QuestionDto> questions = new ArrayList<>();
-        for(Question question: questionList) {
-            questions.add(QuestionDto.of(question));
+        List<Question> etcCardList = questionRepository.findAllByCategory(QuestionType.ETC);
+        List<Question> allCardList = questionRepository.findAllCard(QuestionType.ESSENTIAL, QuestionType.RANDOM);
+
+        // 인사, 최종 점수, 마지막 어필 카드
+        Question helloCard = null, endCard = null, scoreCard = null, lastCard = null;
+        for(Question etcCard : etcCardList) {
+            if(etcCard.getQuestionCard().equals("인사")) helloCard = etcCard;
+            else if(etcCard.getQuestionCard().equals("끝")) endCard = etcCard;
+            else if(etcCard.getQuestionCard().equals("최종 점수")) scoreCard = etcCard;
+            else if(etcCard.getQuestionCard().equals("마지막 어필")) lastCard = etcCard;
         }
+
+        // 필수 카드 3개, 랜덤 카드 7개 임의로 뽑기
+        Question[] selectedCards = new Question[10];
+        boolean[] isSelected = new boolean[allCardList.size()];
+        int essentialCnt = 0, randomCnt = 0;
+
+        while(true) {
+            if(essentialCnt >= 3 && randomCnt >= 7) break;
+
+            int number = (int) (Math.random() * allCardList.size());
+            if(!isSelected[number]) {
+                Question nowSelected = allCardList.get(number);
+                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL) && essentialCnt >=3 ||
+                        nowSelected.getCategory().equals(QuestionType.RANDOM) && randomCnt >= 7) continue;
+
+                selectedCards[essentialCnt + randomCnt] = nowSelected;
+                isSelected[number] = true;
+                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL)) essentialCnt++;
+                else randomCnt++;
+            }
+        }
+
+        // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
+        List<QuestionDto> questions = new ArrayList<>();
+        questions.add(QuestionDto.of(helloCard));
+        for(int i = 0; i < 10; i++) {
+            questions.add(QuestionDto.of(selectedCards[i]));
+        }
+        questions.add(QuestionDto.of(endCard));
+        questions.add(QuestionDto.of(scoreCard));
+        questions.add(QuestionDto.of(lastCard));
+
         return questions;
     }
 
