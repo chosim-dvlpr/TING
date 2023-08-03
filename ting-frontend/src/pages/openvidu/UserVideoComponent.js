@@ -5,6 +5,7 @@ import './UserVideo.css';
 const UserVideoComponent = (props) => {
   const getNicknameTag = () => {
     // Gets the nickName of the user
+    console.log(JSON.parse(props.streamManager.stream.connection.data).clientData);
     return JSON.parse(props.streamManager.stream.connection.data).clientData;
   };
 
@@ -12,7 +13,7 @@ const UserVideoComponent = (props) => {
     <div>
       {props.streamManager !== undefined ? (
         <div className="streamcomponent">
-          <p>{getNicknameTag()}</p>
+          {/* <p>{getNicknameTag()}</p> */}
           <OpenViduVideoComponent streamManager={props.streamManager} />
         </div>
       ) : null}

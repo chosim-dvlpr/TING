@@ -103,7 +103,7 @@ function App() {
         </Route>
 
         {/* 매칭 */}
-        <Route path="/matching" element={< MatchingPage/> }>
+        <Route path="/matching" element={< MatchingPage /> }>
           <Route path="" element={ <WaitingRoom/> }></Route>
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
