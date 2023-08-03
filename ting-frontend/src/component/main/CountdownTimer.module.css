@@ -1,11 +1,11 @@
 /* CountdownTimer.module.css */
 
 .countdown {
-    font-size: 40px;
+    font-size: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    
   }
   
   .timer {
