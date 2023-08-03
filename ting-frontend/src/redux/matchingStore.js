@@ -19,6 +19,6 @@ export let matchingReducer = createSlice({
   },
 });
 
-export let { getQuestionData, setQuestionNumber, setMatchingId } = matchingReducer.actions;
+export let { setQuestionData, setQuestionNumber, setMatchingId } = matchingReducer.actions;
 
 export default matchingReducer;
