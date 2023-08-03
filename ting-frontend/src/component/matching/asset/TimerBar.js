@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setQuestionNumber } from "../../../redux/matchingStore";
 
 function TimerBar(props) {
@@ -12,7 +12,6 @@ function TimerBar(props) {
 
   // 질문카드가 변경되었을떄
   useEffect(() => {
-    clearInterval(timer);
     setCount(30);
   }, [questionNumber]);
 

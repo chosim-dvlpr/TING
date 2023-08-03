@@ -20,8 +20,6 @@ function ScoreCheck(){
               <HeartScore 
                 key={i} 
                 score={score} 
-                timerResetSign={timerResetSign}
-                setTimerResetSign={setTimerResetSign}
               ></HeartScore>
               )
             })
