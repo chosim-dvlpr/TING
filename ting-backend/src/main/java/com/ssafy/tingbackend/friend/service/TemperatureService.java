@@ -37,7 +37,7 @@ public class TemperatureService {
     private final ChattingRepository chattingRepository;
     private final ChattingMessageRepository chattingMessageRepository;
 
-    @Scheduled(cron = "0 0 2,6,10,14,17,21 * * *", zone = "Asia/Seoul")  // 매일 2시, 6시, 10시, 14시, 17시, 21시
+    @Scheduled(cron = "0 0 2,6,10,14,18,20,22 * * *", zone = "Asia/Seoul")  // 매일 2시, 6시, 10시, 14시, 18시, 20시, 22시
     @Transactional
     @Async
     public void updateTeperature() throws IOException {
@@ -46,6 +46,12 @@ public class TemperatureService {
         // 전체 채팅방에 대해 온도 재계산
         List<Chatting> chattingList = chattingRepository.findAllByState(ChattingType.ALIVE);
         LocalDateTime now = LocalDateTime.now();
+        int durationTime;  // 이전 업데이트와 차이 시간
+        if(now.getHour() == 20 || now.getHour() == 22) {
+            durationTime = 7200;  // 7200초 = 2시간
+        } else {
+            durationTime = 14400;  // 14400 = 4시간
+        }
 
         for(Chatting chatting : chattingList) {
             // 마지막 대화가 3일이 넘었는데 상태가 ALIVE인 경우 상태 DEAD로 바꿔주기
@@ -64,7 +70,7 @@ public class TemperatureService {
             Long userId = chattingMessages.get(0).getUserId();
             for(ChattingMessageDto message : chattingMessages) {
                 Duration messageDuration = Duration.between(now, message.getSendTime());
-                if(messageDuration.getSeconds() > 10800) break;  // 3시간 이전에 보낸 메세지면 그만 보기
+                if(messageDuration.getSeconds() > durationTime) break;  // 이전 업데이트에 포함됐던 메세지면 그만 보기
 
                 if(message.getUserId() != userId) {
                     count++;
@@ -73,7 +79,7 @@ public class TemperatureService {
                 messagesText += message.getContent() + " ";
             }
 
-            // 3시간 동안 주고받은 메세지가 하나도 없는 경우 온도-0.2
+            // 주고받은 메세지가 하나도 없는 경우 온도-0.2
             if(messagesText.length() == 0) {
                 chatting.changeTemperature(new BigDecimal("-0.2"));
                 continue;
