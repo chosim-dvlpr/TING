@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import useForceUpdate from './useForceUpdate';
 
-import { messageStore } from './MessageStore';
+import { messageStore } from '../../redux/messageStore';
 
 export default function useMessageStore() {
   const forceUpdate = useForceUpdate();
