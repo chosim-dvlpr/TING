@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import "./WaitingRoom.css";
 import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
-import { setOpenviduToken } from "../../redux/openviduStore";
+import { setOpenviduToken, setMatchingId } from "../../redux/openviduStore";
 
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
@@ -82,11 +82,14 @@ function WaitingRoom() {
           findPairModal(ws);
           break;
 
-        // 양쪽 모두 매칭 성공 (redux에 openvidu token 저장 후 화상화면으로 이동)
+        // 양쪽 모두 매칭 성공 (redux에 openvidu token, matchingId 저장 후 화상화면으로 이동)
         case "matchingSuccess":
           let enterToken = response.data.token;
-          // console.log(state.openviduReducer.token);
+          let matchingId = response.data.matchingId;
+          
           dispatch(setOpenviduToken(enterToken));
+          dispatch(setMatchingId(matchingId));
+        
           navigate("/matching/start");
           break;
 
@@ -187,13 +190,7 @@ function WaitingRoom() {
   );
 }
 
-const MatchingStartButton = ({
-  start,
-  setStart,
-  ticket,
-  setTicket,
-  navigate,
-}) => {
+const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate }) => {
   let [micandVideo, setMicandVideo] = useState(0);
 
   navigator.mediaDevices
