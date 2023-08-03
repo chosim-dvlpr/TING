@@ -20,9 +20,9 @@ public class ChattingDto {
     private String profileImage;
     private String nickname;
     private Long userId;
-    private Integer unreaded;
+    private Integer unread;
 
-    public static ChattingDto of(Chatting chatting, User friend) {
+    public static ChattingDto of(Chatting chatting, User friend, Integer unread) {
         return ChattingDto.builder()
                 .chattingId(chatting.getId())
                 .lastChattingContent(chatting.getLastChattingContent())
@@ -31,6 +31,7 @@ public class ChattingDto {
                 .profileImage(friend.getProfileImage())
                 .nickname(friend.getNickname())
                 .userId(friend.getId())
+                .unread(unread)
                 .build();
     }
 }
