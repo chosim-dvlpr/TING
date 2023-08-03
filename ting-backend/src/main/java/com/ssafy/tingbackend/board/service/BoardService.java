@@ -184,7 +184,6 @@ public class BoardService {
         }
 
         if(commentRequest.getBoardType().equals(BoardType.ADVICE)) {
-            System.out.println("============ADVICE");
             AdviceBoard adviceBoard = adviceBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
             comment = Comment.builder()
@@ -196,7 +195,6 @@ public class BoardService {
                     .build();
             comment.setAdviceBoard(adviceBoard);
         } else if(commentRequest.getBoardType().equals(BoardType.ISSUE)) {
-            System.out.println("===========ISSUE");
             IssueBoard issueBoard = issueBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
             comment = Comment.builder()

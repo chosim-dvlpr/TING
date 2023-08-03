@@ -6,10 +6,12 @@ import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.chatting.Chatting;
 import com.ssafy.tingbackend.entity.chatting.ChattingUser;
+import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
 import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
 import com.ssafy.tingbackend.friend.repository.ChattingRepository;
 import com.ssafy.tingbackend.friend.repository.ChattingUserRepository;
+import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -28,18 +30,26 @@ public class ChattingService {
     private final ChattingMessageRepository chattingMessageRepository;
     private final ChattingUserRepository chattingUserRepository;
     private final ChattingRepository chattingRepository;
+    private final UserRepository userRepository;
     private final StompDestination destination = new StompDestination();
     private final MessageRequestDto curMessage = new MessageRequestDto();
 
     @Transactional
     public void convertAndSendMessage(Long roomId, Long userId, String content) {
-        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        String nickname = user.getNickname();
+        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content, nickname);
+
         ChattingUser friendChattingUser =  chattingUserRepository.findFriendChattingUser(roomId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
-        template.convertAndSend("/subscription/list" + friendChattingUser.getUser().getId(), chattingMessageDto);
+
 //        template.convertAndSend("/subscription/list", chattingMessageDto); // 테스트용
+        template.convertAndSend("/subscription/list" + friendChattingUser.getUser().getId(), chattingMessageDto);
         template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
+
         chattingMessageRepository.save(chattingMessageDto);
+
         friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
         Chatting chatting = chattingRepository.findById(roomId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));

@@ -19,11 +19,13 @@ public class ChattingMessageDto {
     private Long userId;
     private String content;
     private LocalDateTime sendTime;
+    private String nickname;
 
-    public ChattingMessageDto(Long chattingId, Long userId, String content) {
+    public ChattingMessageDto(Long chattingId, Long userId, String content, String nickname) {
         this.chattingId = chattingId;
         this.userId = userId;
         this.content = content;
         this.sendTime = LocalDateTime.now();
+        this.nickname = nickname;
     }
 }
