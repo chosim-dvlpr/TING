@@ -31,7 +31,8 @@ function TimerBar(props) {
         console.log("타이머끝낫어!");
         setCount(30)
         // 타임이 끝나면 5점을 자동으로 상대에게 전달
-        console.log('5초후 세션',openviduSession.signal)
+        console.log('5초후 세션', openviduSession.signal)
+        console.log(openviduSession);
         openviduSession.signal({
           data: JSON.stringify({ score: 5 }),
           to: [],
@@ -39,7 +40,7 @@ function TimerBar(props) {
         });
 
         // TODO: myScore에 5점 추가하는 로직
-        dispatch(setMyScore([...myScore,5]))
+        // dispatch(setMyScore([...myScore,5]))
         // dispatch(setQuestionNumber(questionNumber+1))
         // TODO: API로 점수 저장하는 로직
 

@@ -10,7 +10,12 @@ import "./MatchingStart.css";
 import { useNavigate } from "react-router-dom";
 import ScoreCheck from "./asset/ScoreCheck.js";
 import tokenHttp from "../../api/tokenHttp.js";
-import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession } from "../../redux/matchingStore.js";
+import {
+  setQuestionData,
+  setQuestionNumber,
+  setYourData,
+  setOpenviduSession,
+} from "../../redux/matchingStore.js";
 import QuestionCard from "./asset/QuestionCard.js";
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -84,7 +89,6 @@ function MatchingStart() {
     // --- 2) Init a session ---
     const newSession = OV.initSession();
     setSession(newSession);
-    dispatch(setOpenviduSession(newSession));
 
     // --- 3) Specify the actions when events take place in the session ---
     // On every new Stream received...
@@ -122,11 +126,11 @@ function MatchingStart() {
 
     // 상대방이 점수를 선택했을때 실행되는 함수
     newSession.on("signal:score", (event) => {
-      console.log('범인은 바로 너?')
+      console.log("범인은 바로 너?");
       // console.log(event.data)
       // let data = JSON.parse(event.data);
       // console.log(data);
-      
+
       // TODO: 점수를 yourScore에 저장
 
       // TODO: 상대방이 선택한 점수 표시
@@ -175,12 +179,18 @@ function MatchingStart() {
       // Obtain the current video device in use
       const devices = await OV.getDevices();
       const videoDevices = devices.filter((device) => device.kind === "videoinput");
-      const currentVideoDeviceId = newPublisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
-      const currentVideoDevice = videoDevices.find((device) => device.deviceId === currentVideoDeviceId);
+      const currentVideoDeviceId = newPublisher.stream
+        .getMediaStream()
+        .getVideoTracks()[0]
+        .getSettings().deviceId;
+      const currentVideoDevice = videoDevices.find(
+        (device) => device.deviceId === currentVideoDeviceId
+      );
 
       // Set the main video in the page to display our webcam and store our Publisher
       setMainStreamManager(newPublisher);
       setPublisher(newPublisher);
+      dispatch(setOpenviduSession(newSession));
     } catch (error) {
       console.log("There was an error connecting to the session:", error.code, error.message);
     }
@@ -202,7 +212,13 @@ function MatchingStart() {
     <div className="container">
       <div id="session">
         <div id="session-header">
-          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={leaveSession} value="Leave session" />
+          <input
+            className="btn btn-large btn-danger"
+            type="button"
+            id="buttonLeaveSession"
+            onClick={leaveSession}
+            value="Leave session"
+          />
         </div>
 
         {/* 질문 카드 */}
@@ -210,13 +226,20 @@ function MatchingStart() {
 
         <div id="video-container">
           {publisher !== undefined ? (
-            <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+            <div
+              className="stream-container col-md-6 col-xs-6"
+              onClick={() => handleMainVideoStream(publisher)}
+            >
               <UserVideoComponent streamManager={publisher} />
             </div>
           ) : null}
 
           {subscribers.map((sub, i) => (
-            <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
+            <div
+              key={sub.id}
+              className="stream-container col-md-6 col-xs-6"
+              onClick={() => handleMainVideoStream(sub)}
+            >
               <UserVideoComponent streamManager={sub} />
             </div>
           ))}
