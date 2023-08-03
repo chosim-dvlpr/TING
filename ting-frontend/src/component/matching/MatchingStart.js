@@ -122,14 +122,16 @@ function MatchingStart() {
 
     // 상대방이 점수를 선택했을때 실행되는 함수
     newSession.on("signal:score", (event) => {
-      let data = JSON.parse(event.data);
-      console.log(data);
+      console.log('범인은 바로 너?')
+      // console.log(event.data)
+      // let data = JSON.parse(event.data);
+      // console.log(data);
       
       // TODO: 점수를 yourScore에 저장
 
       // TODO: 상대방이 선택한 점수 표시
 
-      alert(data.score);
+      // alert(data.score);
     });
 
     // 최종점수를 받는 로직

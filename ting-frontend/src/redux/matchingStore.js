@@ -30,6 +30,7 @@ export let matchingReducer = createSlice({
     },
     setOpenviduSession: (state, action) => {
       state.openviduSession = action.payload;
+      console.log('세션',state.openviduSession)
     },
     setMyScore:(state,action)=>{
       state.myScore = action.payload;

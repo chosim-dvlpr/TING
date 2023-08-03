@@ -40,17 +40,17 @@ function HeartScore(props){
 
   useEffect(()=>{
     console.log('여기 버튼 초기화해!', props.score)
-    if (props.timerResetSign){
-      setButtonToggleSign(false)
-    }
-    props.setTimerResetSign(false)
+    // if (props.timerResetSign){
+    //   setButtonToggleSign(false)
+    // }
+    // props.setTimerResetSign(false)
     // console.log('buttontoggle',buttonToggleSign)
     // console.log('timerreset',props.timerResetSign)
   },[props.timerResetSign])
 
 
   // 점수 클릭시 발생하는 이벤트
-  const handleScoreSelect = () => {
+  const handleScoreSelect = (score) => {
     // TODO: 점수를 서버로 전송하는 로직
 
     // TODO: myScore에 추가하는 로직
@@ -70,7 +70,7 @@ function HeartScore(props){
           className={styles.ScoreText} 
           onClick={()=>{
             setButtonToggleSign(!buttonToggleSign);
-            handleScoreSelect();
+            handleScoreSelect(props.score);
           }}
         >
           {props.score}
