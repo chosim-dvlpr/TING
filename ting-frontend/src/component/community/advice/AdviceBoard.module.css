@@ -1,0 +1,15 @@
+
+.adviceListContainer {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .nickname {
+    font-weight: bold;
+  }
+  
+  .title {
+    margin-left: 10px;
+  }
+  

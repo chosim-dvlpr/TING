@@ -6,7 +6,7 @@ const MainButton = () => {
   return (
     <div className={styles.container}>
          <Link to="/matching" className={styles.linkButton}>
-        <button className={styles.btn}>Ting</button>
+        <button className={styles.btn}>팅하러가기</button>
       </Link>
 
     </div>

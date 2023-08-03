@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import tokenHttp from '../../../api/tokenHttp';
 
 const AdviceCreate = () => {
   const [title, setTitle] = useState('');
@@ -12,9 +13,9 @@ const AdviceCreate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // 게시글 저장 로직: title과 content 값을 서버로 전송하여 저장하는 등의 작업을 수행
-    axios.post('https://i9b107.p.ssafy.io:5157/advice', {
-      title,
-      body: content,
+    tokenHttp.post('https://i9b107.p.ssafy.io:5157/advice', {
+      title: title,
+      content: content,
     })
     .then((response) => {
       if (response.status === 201) {
