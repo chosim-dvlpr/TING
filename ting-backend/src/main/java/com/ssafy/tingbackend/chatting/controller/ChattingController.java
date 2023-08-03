@@ -3,9 +3,8 @@ package com.ssafy.tingbackend.chatting.controller;
 
 import com.ssafy.tingbackend.chatting.dto.MessageRequestDto;
 import com.ssafy.tingbackend.chatting.service.ChattingService;
+import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
-import com.ssafy.tingbackend.friend.dto.ChattingDto;
-import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -76,6 +72,15 @@ public class ChattingController {
         chattingService.checkAndReset();
     }
 
+
+    /**
+     * 임시=========채팅 삭제 API
+     */
+    @GetMapping("/chatting/delete")
+    public CommonResponse deleteMessages() {
+        chattingService.deleteMessages();
+        return new CommonResponse();
+    }
 //    @MessageExceptionHandler
 //    public String exception() {
 //        return "Error has occurred.";
