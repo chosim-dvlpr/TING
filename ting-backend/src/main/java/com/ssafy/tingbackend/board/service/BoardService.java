@@ -81,7 +81,7 @@ public class BoardService {
     }
 
     public List<AdviceBoardDto.Response> adviceList(int pageNo) {
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 3, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<AdviceBoard> page = adviceBoardRepository.findList(pageRequest);
         List<AdviceBoard> adviceBoardList = page.getContent();
@@ -133,7 +133,7 @@ public class BoardService {
     }
 
     public List<IssueBoardDto.Response> issueList(int pageNo) {
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 3, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<IssueBoard> page = issueBoardRepository.findList(pageRequest);
         List<IssueBoard> issueBoardList = page.getContent();
