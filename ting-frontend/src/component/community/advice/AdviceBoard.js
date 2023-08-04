@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./AdviceBoard.module.css";
+import Sidebar from "../common/Sidebar";
 
 function AdviceBoard() {
     const [adviceList, setAdviceList] = useState([]);
@@ -15,8 +16,6 @@ function AdviceBoard() {
     const getAllAdviceData = async () => {
         let page = 1;
         let allData = [];
-
-    
 
         try {
             while (true) {
@@ -37,8 +36,8 @@ function AdviceBoard() {
 
     return (
         <div className={styles.adviceBoardContainer}>
-            <h1>Advice Board</h1>
-            <button onClick={() => navigate('/community/advice/create')}>글 작성하기</button>
+            <Sidebar/>
+            <button className={styles.createButton} onClick={() => navigate('/community/advice/create')}>글 작성하기</button>
             <table className={styles.adviceTable}>
                 <thead>
                     <tr>
@@ -47,7 +46,7 @@ function AdviceBoard() {
                         <th>nickname</th>
                         <th>hit</th>
                         <th>createdTime</th>
-                        <th>modifiedTime</th>
+                        {/* <th>modifiedTime</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -55,22 +54,16 @@ function AdviceBoard() {
                         <tr key={advice.adviceId}>
                             <td>{advice.adviceId}</td>
                             <td>
-                                <Link to={`/community/advice/detail/${advice.adviceId}`}>{advice.title}</Link>
+                                <Link className={styles.link} to={`/community/advice/detail/${advice.adviceId}`}>{advice.title}</Link>
                             </td>
                             <td>{advice.nickname}</td>
                             <td>{advice.hit}</td>
                             <td>{advice.createdTime}</td>
-                            <td>{advice.modifiedTime}</td>
+                            {/* <td>{advice.modifiedTime}</td> */}
                         </tr>
                     ))}
                 </tbody>
             </table>
-            
-           
-                        
-                          
-
-        
         </div>
     );
 }

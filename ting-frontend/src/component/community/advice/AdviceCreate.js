@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tokenHttp from '../../../api/tokenHttp';
+import styles from './AdviceCreate.module.css'; // module.css 파일을 가져옵니다
 
 const AdviceCreate = () => {
   const [title, setTitle] = useState('');
@@ -15,7 +16,7 @@ const AdviceCreate = () => {
 
   const fetchUserInfo = () => {
     tokenHttp
-      .get('/user') // 사용자 정보를 가져오는 엔드포인트를 설정해주세요
+      .get('/user')
       .then((response) => {
         setUser(response.data);
       })
@@ -26,10 +27,9 @@ const AdviceCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // 사용자가 로그인되어 있지 않으면 리다이렉트
+
     if (!user) {
-      navigate('/login'); // 로그인 페이지로 리다이렉트
+      navigate('/login');
       return;
     }
 
@@ -41,7 +41,7 @@ const AdviceCreate = () => {
     try {
       const response = await tokenHttp.post('/advice', newPost);
       if (response.status === 201) {
-        navigate('/community/advice'); // 게시글 작성 후 페이지 이동
+        navigate('/community/advice');
       } else {
         throw new Error('Failed to save the post');
       }
@@ -51,30 +51,38 @@ const AdviceCreate = () => {
   };
 
   return (
-    <div>
-      <h2>게시글 작성 폼</h2>
+    <div className={styles.formContainer}>
+      <h2>당신의 사랑 고민은 무엇인가요?</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">제목</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="title" className={styles.label}>
+            제목
+          </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            className={styles.inputField}
           />
         </div>
-        <div>
-          <label htmlFor="content">내용</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="content" className={styles.label}>
+            내용
+          </label>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
+            className={styles.textAreaField}
           />
         </div>
         <div>
-          <button type="submit">저장</button>
+          <button type="submit" className={styles.submitButton}>
+            저장
+          </button>
         </div>
       </form>
     </div>
