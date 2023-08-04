@@ -39,9 +39,9 @@ const NavBar = () => {
   return (
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
-        <img src="img/pixelting.png" className="logo" alt="logo"></img>
         <Link className={styles.navMenu} to="/">
-          메인
+        <img src="img/pixelting.png" className="logo" alt="logo"></img>
+          
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
           튜토리얼
