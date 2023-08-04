@@ -30,14 +30,17 @@ export let matchingReducer = createSlice({
     },
     setOpenviduSession: (state, action) => {
       state.openviduSession = action.payload;
-      console.log('세션',state.openviduSession)
+      console.log("세션", state.openviduSession);
     },
-    setMyScore:(state,action)=>{
+    setMyScore: (state, action) => {
       state.myScore = action.payload;
+    },
+    setYourScore: (state, action) => {
+      state.yourScore = action.payload;
     },
   },
 });
 
-export let { setQuestionData, setQuestionNumber, setMatchingId, setYourData, setOpenviduSession, setMyScore } = matchingReducer.actions;
+export let { setQuestionData, setQuestionNumber, setMatchingId, setYourData, setOpenviduSession, setMyScore, setYourScore } = matchingReducer.actions;
 
 export default matchingReducer;
