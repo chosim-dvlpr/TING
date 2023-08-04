@@ -76,12 +76,12 @@ public class BoardController {
     /**
      * 상담 목록 조회 API
      * @param pageNo
-     * @return 문의 목록 리스트
+     * @return 문의 목록 리스트 adviceBoardList, totalPages, totalElements
      */
     @GetMapping("/advice")
-    public DataResponse<List<AdviceBoardDto.Response>> listQuestion(@RequestParam("pageNo") int pageNo) {
-        List<AdviceBoardDto.Response> adviceList = boardService.adviceList(pageNo);
-        return new DataResponse<>(200, "문의글 목록 조회 성공", adviceList);
+    public DataResponse<Map<String, Object>> listQuestion(@RequestParam("pageNo") int pageNo) {
+        Map<String, Object> result = boardService.adviceList(pageNo);
+        return new DataResponse<>(200, "문의글 목록 조회 성공", result);
     }
 
 
@@ -125,12 +125,12 @@ public class BoardController {
     /**
      * 이슈 목록 조회 API
      * @param pageNo
-     * @return 이슈 목록 리스트
+     * @return 이슈 목록 리스트 issueBoardList, totalPages, totalElements
      */
     @GetMapping("/issue")
-    public DataResponse<List<IssueBoardDto.Response>> listIssue(@RequestParam("pageNo") int pageNo) {
-        List<IssueBoardDto.Response> issueList = boardService.issueList(pageNo);
-        return new DataResponse<>(200, "이슈글 목록 조회 성공", issueList);
+    public DataResponse<Map<String, Object>> listIssue(@RequestParam("pageNo") int pageNo) {
+        Map<String, Object> result = boardService.issueList(pageNo);
+        return new DataResponse<>(200, "이슈글 목록 조회 성공", result);
     }
 
     /**
