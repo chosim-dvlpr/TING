@@ -28,9 +28,9 @@ public class DateController {
      * 질문카드 조회 API
      * @return 질문카드 리스트
      */
-    @GetMapping("/date/question")
-    public DataResponse<List<QuestionDto>> listQuestion() {
-        List<QuestionDto> questionList = dateService.getQuestions();
+    @GetMapping("/date/question/{matchingId}")
+    public DataResponse<List<QuestionDto>> listQuestion(@PathVariable Long matchingId) {
+        List<QuestionDto> questionList = dateService.getMatchingQuestions(matchingId);
         return new DataResponse<>(200, "질문카드 조회 성공", questionList);
     }
 

@@ -29,4 +29,21 @@ public class MatchingScoreHistory {
     private Question question;
     private Integer questionOrder;
     private Integer score;
+
+    /*
+    // 변경?
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "matching_question_id")
+    private MatchingQuestion matchingQuestion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private Integer score;
+     */
 }

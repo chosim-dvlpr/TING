@@ -3,8 +3,13 @@ package com.ssafy.tingbackend.matching.service;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.date.dto.QuestionDto;
+import com.ssafy.tingbackend.date.repository.QuestionRepository;
 import com.ssafy.tingbackend.entity.matching.Matching;
+import com.ssafy.tingbackend.entity.matching.MatchingQuestion;
 import com.ssafy.tingbackend.entity.matching.MatchingUser;
+import com.ssafy.tingbackend.entity.matching.Question;
+import com.ssafy.tingbackend.entity.type.QuestionType;
 import com.ssafy.tingbackend.entity.user.AdditionalInfo;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.entity.user.UserHobby;
@@ -13,6 +18,7 @@ import com.ssafy.tingbackend.matching.dto.MatchingInfoDto;
 import com.ssafy.tingbackend.matching.dto.WebSocketInfo;
 import com.ssafy.tingbackend.matching.dto.WebSocketMessage;
 import com.ssafy.tingbackend.matching.repository.MatchingInfoRepository;
+import com.ssafy.tingbackend.matching.repository.MatchingQuestionRepository;
 import com.ssafy.tingbackend.matching.repository.MatchingRepository;
 import com.ssafy.tingbackend.matching.repository.MatchingUserRepository;
 import com.ssafy.tingbackend.user.repository.UserHobbyRepository;
@@ -27,10 +33,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -48,6 +51,8 @@ public class MatchingService {
     private final MatchingInfoRepository matchingInfoRepository;
     private final MatchingRepository matchingRepository;
     private final MatchingUserRepository matchingUserRepository;
+    private final QuestionRepository questionRepository;
+    private final MatchingQuestionRepository matchingQuestionRepository;
 
     // WebSocketSessionId를 키로 사용
     private final Map<String, WebSocketInfo> socketInfos = new ConcurrentHashMap<>();  // 소켓 연결 정보
@@ -507,6 +512,14 @@ public class MatchingService {
             matchingUserRepository.save(new MatchingUser(matching, user));
             matchingUserRepository.save(new MatchingUser(matching, socketInfos.get(pairSocketSessionId).getUser()));
 
+            // 매칭 질문 생성하여 저장
+            Question[] questions = getQuestions();
+            List<MatchingQuestion> matchingQuestions = new ArrayList<>();
+            for(int i = 0; i < 10; i++) {
+                matchingQuestions.add(new MatchingQuestion(matching, questions[i], i + 1));
+            }
+            matchingQuestionRepository.saveAll(matchingQuestions);
+
             // 사용자들에게 openvidu 토큰값과 matchingId 반환
             Map<String, String> messageData1 = new HashMap<>();
             Map<String, String> messageData2 = new HashMap<>();
@@ -566,6 +579,34 @@ public class MatchingService {
 
         matchingInfo.setIsValidate(false);
         matchingInfoRepository.save(matchingInfo);
+    }
+
+    public Question[] getQuestions() {
+        List<Question> allCardList = questionRepository.findAllCard(QuestionType.ESSENTIAL, QuestionType.RANDOM);
+
+        // 필수 카드 3개, 랜덤 카드 7개 임의로 뽑기
+        Question[] questions = new Question[10];
+        boolean[] isSelected = new boolean[allCardList.size()];
+        int essentialCnt = 0, randomCnt = 0;
+
+        while(true) {
+            if(essentialCnt >= 3 && randomCnt >= 7) break;
+
+            int number = (int) (Math.random() * allCardList.size());
+            if(!isSelected[number]) {
+                Question nowSelected = allCardList.get(number);
+                System.out.println("nowSelected=" + nowSelected);
+                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL) && essentialCnt >=3 ||
+                        nowSelected.getCategory().equals(QuestionType.RANDOM) && randomCnt >= 7) continue;
+
+                questions[essentialCnt + randomCnt] = nowSelected;
+                isSelected[number] = true;
+                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL)) essentialCnt++;
+                else randomCnt++;
+            }
+        }
+
+        return questions;
     }
 
 }
