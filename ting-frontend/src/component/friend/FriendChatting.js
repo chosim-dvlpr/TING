@@ -13,7 +13,7 @@ function FriendChatting() {
 
   const [previousMessage, setPreviousMessage] = useState([]);
 
-  const {
+  let {
     connected,
     messageEntered,
     messageLogs,
@@ -67,8 +67,7 @@ function FriendChatting() {
   const handleClickQuitRoom = async () => {
     messageStore.disconnect(location.state.friend.chattingId);
     console.log('채팅 연결 해제')
-    // previousMessage = {};
-    // messageLogs = {};
+    messageLogs = {};
     Navigate("/friend");
   };
 
