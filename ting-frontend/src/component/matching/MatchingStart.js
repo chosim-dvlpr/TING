@@ -35,6 +35,10 @@ function MatchingStart() {
   // react-router
   const navigate = useNavigate();
 
+  //  점수 알림창
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
   useEffect(() => {
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
@@ -125,18 +129,23 @@ function MatchingStart() {
       console.log("signal:score 실행", event.data);
       let data = JSON.parse(event.data);
 
-      console.log(yourData);
       if (data.userId !== yourData.userId) return;
 
       // 점수를 yourScore에 저장
-      dispatch(setYourScore([...yourScore, data.score]));
+      dispatch(setYourScore(data.score));
 
       // TODO: 상대방이 선택한 점수 표시 (이 부분에 음성 출력)
       alert("상대방이 " + data.score + "점을 선택했습니다.");
 
       // 점수 저장 api 호출
       // tokenHttp.post("/date/score");
-      
+
+      // 경고창 자동 삭제
+      setAlertMessage(data.score);
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 2000);
     });
 
     // 최종점수를 받는 로직
@@ -206,6 +215,8 @@ function MatchingStart() {
 
   return (
     <div className="container">
+      {showAlert && <div>{alertMessage}</div>}
+
       <div id="session">
         <div id="session-header">
           <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={leaveSession} value="Leave session" />

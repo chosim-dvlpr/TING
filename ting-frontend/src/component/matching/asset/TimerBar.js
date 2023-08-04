@@ -4,8 +4,9 @@ import { setQuestionNumber } from "../../../redux/matchingStore";
 import { setMyScore } from "../../../redux/matchingStore";
 
 function TimerBar(props) {
-  let [count, setCount] = useState(10); // 처음 인사는 10초
+  let [count, setCount] = useState(30); // 처음 인사는 10초
   let [questionCount, setQuestionCount] = useState(0);
+  let [startTimer, setStartTimer] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -15,39 +16,39 @@ function TimerBar(props) {
   const userData = useSelector((state) => state.userdataReducer.userdata);
 
   // 질문카드가 변경되었을떄
-  // useEffect(() => {
-  //   setCount(30);
-  // }, [questionNumber]);
 
   useEffect(() => {
-    {
-      const timer = setInterval(() => {
-        setCount((count) => count - 1);
-      }, 1000);
+    const timer = setInterval(() => {
+      setCount((count) => count - 1);
+    }, 1000);
 
-      if (count === -1) {
-        clearInterval(timer);
-        // 타이머 끝났다는 신호 줌
-        console.log("타이머끝낫어!");
-        setCount(30);
-        // 타임이 끝나면 5점을 자동으로 상대에게 전달
-        console.log("5초후 세션", openviduSession.signal);
-        console.log(openviduSession);
-        openviduSession.signal({
-          data: JSON.stringify({ score: 5, userId: userData.userId }),
-          to: [],
-          type: "score",
-        });
-
-        // TODO: myScore에 5점 추가하는 로직
-        // dispatch(setMyScore([...myScore,5]))
-        // dispatch(setQuestionNumber(questionNumber+1))
-        // TODO: API로 점수 저장하는 로직
-      }
-      return () => {
-        clearInterval(timer);
-      };
+    if (questionNumber === 0 && startTimer == false) {
+      setCount(10);
+      setStartTimer(true);
     }
+
+    if (count === -1) {
+      clearInterval(timer);
+      // 타이머 끝났다는 신호 줌
+      console.log("타이머끝낫어!");
+      setCount(30);
+      // 타임이 끝나면 5점을 자동으로 상대에게 전달
+      openviduSession.signal({
+        data: JSON.stringify({ score: 5, userId: userData.userId }),
+        to: [],
+        type: "score",
+      });
+
+      // TODO: myScore에 5점 추가하는 로직
+      dispatch(setMyScore(5));
+      console.log("이거 세번 호출?");
+      dispatch(setQuestionNumber(questionNumber + 1));
+
+      // TODO: API로 점수 저장하는 로직
+    }
+    return () => {
+      clearInterval(timer);
+    };
   }, [count]);
 
   return <h3>{count}</h3>;
