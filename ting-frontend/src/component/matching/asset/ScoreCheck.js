@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './ScoreCheck.module.css';
 import TimerBar from './TimerBar.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { setMyScore } from '../../../redux/matchingStore';
 
 function ScoreCheck(){
   const score = [0,1,2,3,4,5,6,7,8,9,10]
@@ -20,8 +22,6 @@ function ScoreCheck(){
               <HeartScore 
                 key={i} 
                 score={score} 
-                // timerResetSign={timerResetSign}
-                // setTimerResetSign={setTimerResetSign}
               ></HeartScore>
               )
             })
@@ -36,17 +36,16 @@ function HeartScore(props){
   
   let [buttonToggleSign,setButtonToggleSign] = useState(false)
   
+  const openviduSession = useSelector((state) => state.matchingReducer.openviduSession)
+  const myScore = useSelector((state) => state.matchingReducer.myScore);
+
   // useEffect 로 questionNumber 가 바뀌면 토글을 풀어야 함
+  const dispatch = useDispatch()
 
   useEffect(()=>{
     console.log('여기 버튼 초기화해!', props.score)
-    // if (props.timerResetSign){
-    //   setButtonToggleSign(false)
-    // }
-    // props.setTimerResetSign(false)
-    // console.log('buttontoggle',buttonToggleSign)
-    // console.log('timerreset',props.timerResetSign)
-  },[props.timerResetSign])
+
+  },[])
 
 
   // 점수 클릭시 발생하는 이벤트
@@ -54,9 +53,14 @@ function HeartScore(props){
     // TODO: 점수를 서버로 전송하는 로직
 
     // TODO: myScore에 추가하는 로직
+    dispatch(setMyScore({score}))
 
     // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
-    
+    openviduSession.signal({
+      data: JSON.stringify({ score: score }),
+      to: [],
+      type: "score",
+    });
     // TODO: 선택이 불가능하도록 state 변경
   }
 

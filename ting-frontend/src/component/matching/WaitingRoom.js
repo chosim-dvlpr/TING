@@ -66,6 +66,7 @@ function WaitingRoom() {
     // 서버로부터 메시지를 받았을 때 호출되는 함수
     ws.onmessage = ({ data }) => {
       let response = JSON.parse(data);
+      console.log('여기 토큰')
       console.log(response);
 
       switch (response.type) {

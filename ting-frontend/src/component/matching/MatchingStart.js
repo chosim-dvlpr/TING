@@ -15,6 +15,7 @@ import {
   setQuestionNumber,
   setYourData,
   setOpenviduSession,
+  setYourScore,
 } from "../../redux/matchingStore.js";
 import QuestionCard from "./asset/QuestionCard.js";
 
@@ -38,6 +39,10 @@ function MatchingStart() {
 
   // react-router
   const navigate = useNavigate();
+
+  //  점수 알림창
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
 
   useEffect(() => {
     // redux에서 오픈 비두 입장 토큰 가져오기
@@ -126,15 +131,18 @@ function MatchingStart() {
 
     // 상대방이 점수를 선택했을때 실행되는 함수
     newSession.on("signal:score", (event) => {
-      console.log("범인은 바로 너?");
-      // console.log(event.data)
-      // let data = JSON.parse(event.data);
-      // console.log(data);
-
+      let data = JSON.parse(event.data);
       // TODO: 점수를 yourScore에 저장
-
+      dispatch(setYourScore(data.score))
+      console.log('상대방 준 점수 리스트', yourScore)
       // TODO: 상대방이 선택한 점수 표시
 
+      // 경고창 자동 삭제
+      setAlertMessage(data.score)
+      setShowAlert(true)
+      setTimeout(()=>{
+        setShowAlert(false);
+      },2000);
       // alert(data.score);
     });
 
@@ -210,6 +218,8 @@ function MatchingStart() {
 
   return (
     <div className="container">
+      {showAlert && <div>{alertMessage}</div>}
+      
       <div id="session">
         <div id="session-header">
           <input
