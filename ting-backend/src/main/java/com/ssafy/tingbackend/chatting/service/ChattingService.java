@@ -49,7 +49,7 @@ public class ChattingService {
         template.convertAndSend("/subscription/list/" + friendChattingUser.getUser().getId(), chattingMessageDto);
         template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
 
-//        chattingMessageRepository.save(chattingMessageDto);
+        chattingMessageRepository.save(chattingMessageDto);
 
         friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
         Chatting chatting = chattingRepository.findById(roomId)
