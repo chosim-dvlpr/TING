@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -80,7 +82,8 @@ public class BoardService {
         return AdviceBoardDto.Response.of(adviceBoard, user);
     }
 
-    public List<AdviceBoardDto.Response> adviceList(int pageNo) {
+    public Map<String, Object> adviceList(int pageNo) {
+        Map<String, Object> result = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<AdviceBoard> page = adviceBoardRepository.findList(pageRequest);
@@ -91,8 +94,10 @@ public class BoardService {
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
         }
-
-        return adviceBoardDtoList;
+        result.put("adviceBoardList", adviceBoardDtoList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
     }
 
     public void insertIssueBoard(IssueBoardDto.Request issueBoardRequest, Long userId) {
@@ -132,7 +137,8 @@ public class BoardService {
         return IssueBoardDto.Response.of(issueBoard, user);
     }
 
-    public List<IssueBoardDto.Response> issueList(int pageNo) {
+    public Map<String, Object> issueList(int pageNo) {
+        Map<String, Object> result = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<IssueBoard> page = issueBoardRepository.findList(pageRequest);
@@ -144,7 +150,10 @@ public class BoardService {
             issueBoardResponseList.add(IssueBoardDto.Response.of(issueBoard, user));
         }
 
-        return issueBoardResponseList;
+        result.put("issueBoardList", issueBoardResponseList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
     }
 
     @Transactional
