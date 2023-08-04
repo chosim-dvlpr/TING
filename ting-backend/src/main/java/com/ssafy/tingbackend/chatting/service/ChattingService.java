@@ -63,6 +63,7 @@ public class ChattingService {
         ChattingUser chattingUser = chattingUserRepository.findByRoomAndUser(roomId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
         chattingUser.setUnread(0);
+        chattingUserRepository.save(chattingUser);
     }
 
     public void enter(MessageRequestDto messageRequestDto) {
