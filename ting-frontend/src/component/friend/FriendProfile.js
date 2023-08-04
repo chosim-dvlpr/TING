@@ -29,17 +29,18 @@ function FriendProfile(props){
       <h3>프로필</h3>
 
       {/* 프로필 이미지 추가 필요 */}
-      <p>{ friendProfile.nickname }</p>
-      <p>{ friendProfile.introduce }</p>
-      <p>{ friendProfile.height }</p>
-      <p>{ friendProfile.mbtiCode }</p>
-      <p>{ friendProfile.drinkingCode }</p>
-      <p>{ friendProfile.religionCode }</p>
-      <p>{ friendProfile.jobCode }</p>
-      <p>{ friendProfile.userHobbys }</p>
-      <p>{ friendProfile.userStyles }</p>
-      <p>{ friendProfile.userPersonalities }</p>
+      <p>닉네임 : { friendProfile.nickname }</p>
+      <p>자기소개 : { friendProfile.introduce }</p>
+      <p>#{ friendProfile.height }</p>
+      <p>#{ friendProfile.mbtiCode }</p>
+      <p>#{ friendProfile.drinkingCode }</p>
+      <p>#{ friendProfile.religionCode }</p>
+      <p>#{ friendProfile.jobCode }</p>
+      <p>#{ friendProfile.userHobbys }</p>
+      <p>#{ friendProfile.userStyles }</p>
+      <p>#{ friendProfile.userPersonalities }</p>
       {/* 온도 추가 필요 */}
+      <hr/>
     </div>
   )
 }

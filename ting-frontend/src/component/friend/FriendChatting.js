@@ -4,6 +4,7 @@ import useMessageStore from './useMessageStore';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import tokenHttp from '../../api/tokenHttp';
+import FriendProfile from './FriendProfile';
 
 function FriendChatting() {
   const location = useLocation();
@@ -12,6 +13,7 @@ function FriendChatting() {
   // let userdata = useSelector((state) => state.userdataReducer);
 
   const [previousMessage, setPreviousMessage] = useState([]);
+  const [isProfileModal, setIsProfileModal] = useState(false); // 프로필 모달 띄우기
 
   let {
     connected,
@@ -88,6 +90,9 @@ function FriendChatting() {
         연결 종료 버튼
       </button>
 
+      <p>친구 닉네임 : { location.state.friend.nickname }</p>
+      <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="message-to-send">
           메시지 입력
@@ -103,6 +108,13 @@ function FriendChatting() {
           전송
         </button>
       </form>
+
+      {/* 프로필 모달 */}
+      {
+        isProfileModal &&
+        <FriendProfile userId={ location.state.friend.userId }/>
+      }
+
       <ul>
         {messageLogs.map((message) => (
           <li key={message.id}>
