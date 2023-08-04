@@ -44,11 +44,12 @@ public class ChattingService {
         ChattingUser friendChattingUser =  chattingUserRepository.findFriendChattingUser(roomId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
 
-//        template.convertAndSend("/subscription/list", chattingMessageDto); // 테스트용
-        template.convertAndSend("/subscription/list" + friendChattingUser.getUser().getId(), chattingMessageDto);
+//        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content, "닉네임임시");//테스트
+//        template.convertAndSend("/subscription/list/1", chattingMessageDto); // 테스트용
+        template.convertAndSend("/subscription/list/" + friendChattingUser.getUser().getId(), chattingMessageDto);
         template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
 
-        chattingMessageRepository.save(chattingMessageDto);
+//        chattingMessageRepository.save(chattingMessageDto);
 
         friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
         Chatting chatting = chattingRepository.findById(roomId)
