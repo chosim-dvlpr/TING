@@ -79,7 +79,7 @@ function FriendList(){
                 <h3>친구 닉네임 : { friend.nickname }</h3>
                 <h4>친구 프로필 : { friend.profileImage }</h4>
                 <h4>친구 마지막 대화 : { friend.lastChattingContent }</h4>
-                <h4>친구 안읽은 개수 : { friend.unreaded }</h4>
+                <h4>친구 안읽은 개수 : { friend.unread }</h4>
                 <h4>친구 아이디 번호 : { friend.userId }</h4>
                 <h4>채팅방 번호 : { friend.chattingId }</h4>
                 <h4>친구 상태 : { friend.state }</h4>
