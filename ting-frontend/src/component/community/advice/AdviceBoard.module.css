@@ -1,21 +1,56 @@
 /* AdviceBoard.module.css */
 
+/* Container styles */
 .adviceBoardContainer {
-  width: 600px;
-  height: 600px;
-  
-  justify-content: center;
-  align-items: center;
+  padding: 20px;
 }
 
+/* Table styles */
 .adviceTable {
-  width: 100%;
+  width: 1400px;
   border-collapse: collapse;
-  /* Add table styles here */
+  margin-top: 20px;
+  margin-left: 200px;
+  margin-right: 100px;
+  
 }
 
-.adviceTable th, .adviceTable td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  /* Add table cell styles here */
+.adviceTable th,
+.adviceTable td {
+  padding: 10px;
+  border: 1px solid #004BA1;
+  text-align: center;
+}
+
+.adviceTable th {
+  background-color: #004BA1;
+  color: white;
+}
+
+/* Button styles */
+.createButton {
+ 
+  padding: 10px 20px;
+  background-color: #004BA1;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  margin-right: 400px;
+  margin-bottom: 60px;
+  margin-top: 20px;
+}
+
+.createButton:hover {
+  background-color: #0056b3;
+}
+
+/* Link styles */
+.link {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
