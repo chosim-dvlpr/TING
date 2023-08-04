@@ -13,12 +13,19 @@ function FriendChatting() {
 
   const [previousMessage, setPreviousMessage] = useState([]);
 
+  const {
+    connected,
+    messageEntered,
+    messageLogs,
+  } = messageStore;
+
   // 처음 렌더링 시 기존 데이터 DB에서 받아오기
   const getPreviousMessage = () => {
     tokenHttp.get(`/chatting/${location.state.friend.chattingId}`).then((response) => {
       // 불러오기 성공 시 previousMessage에 대화 내용 저장
       if (response.data.code === 200) {
         console.log('로그 불러오기 성공');
+        console.log(response.data)
         setPreviousMessage([...response.data.data.chattingList]); // 대화 내용 저장
       }
       else if (response.data.code === 400) {
@@ -31,14 +38,12 @@ function FriendChatting() {
   // 처음 렌더링 시 실행
   useEffect(() => {
     getPreviousMessage(); // 불러온 데이터를 messageLogs에 저장
+    // const messageLogs = previousMessage
+    // messageLogs.push(previousMessage)
   }, [])
 
 
-  const {
-    connected,
-    messageEntered,
-    messageLogs,
-  } = messageStore;
+
 
   const beforeUnloadListener = (() => {
     if (connected) {
@@ -62,6 +67,8 @@ function FriendChatting() {
   const handleClickQuitRoom = async () => {
     messageStore.disconnect(location.state.friend.chattingId);
     console.log('채팅 연결 해제')
+    // previousMessage = {};
+    // messageLogs = {};
     Navigate("/friend");
   };
 
@@ -104,6 +111,12 @@ function FriendChatting() {
           </li>
         ))}
       </ul>
+      {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
+      <p>{ previousMessage.map((message) => 
+        <li key={message.id}>
+          {message.content}
+        </li>
+      ) }</p>
     </div>
   );
 }
