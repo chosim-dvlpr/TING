@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import AdviceCreate from "./AdviceCreate";
+import { Link, useNavigate } from "react-router-dom";
+
 import styles from "./AdviceBoard.module.css";
 
 function AdviceBoard() {
     const [adviceList, setAdviceList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getAllAdviceData();
@@ -14,6 +15,8 @@ function AdviceBoard() {
     const getAllAdviceData = async () => {
         let page = 1;
         let allData = [];
+
+    
 
         try {
             while (true) {
@@ -35,6 +38,7 @@ function AdviceBoard() {
     return (
         <div className={styles.adviceBoardContainer}>
             <h1>Advice Board</h1>
+            <button onClick={() => navigate('/community/advice/create')}>글 작성하기</button>
             <table className={styles.adviceTable}>
                 <thead>
                     <tr>
@@ -61,7 +65,12 @@ function AdviceBoard() {
                     ))}
                 </tbody>
             </table>
-            <AdviceCreate />
+            
+           
+                        
+                          
+
+        
         </div>
     );
 }

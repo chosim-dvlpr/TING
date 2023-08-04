@@ -1,36 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import axios from 'axios';
 import tokenHttp from '../../../api/tokenHttp';
 
 const AdviceCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = () => {
+    tokenHttp
+      .get('/user') // 사용자 정보를 가져오는 엔드포인트를 설정해주세요
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching user info:', error);
+      });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 게시글 저장 로직: title과 content 값을 서버로 전송하여 저장하는 등의 작업을 수행
-    tokenHttp.post('https://i9b107.p.ssafy.io:5157/advice', {
+    
+    // 사용자가 로그인되어 있지 않으면 리다이렉트
+    if (!user) {
+      navigate('/login'); // 로그인 페이지로 리다이렉트
+      return;
+    }
+
+    const newPost = {
       title: title,
       content: content,
-    })
-    .then((response) => {
+    };
+
+    try {
+      const response = await tokenHttp.post('/advice', newPost);
       if (response.status === 201) {
-       
-        navigate('/community/advice');
+        navigate('/community/advice'); // 게시글 작성 후 페이지 이동
       } else {
         throw new Error('Failed to save the post');
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error saving the post:', error);
-    });
+    }
   };
-
-  
 
   return (
     <div>
