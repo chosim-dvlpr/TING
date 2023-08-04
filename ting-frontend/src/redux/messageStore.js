@@ -90,6 +90,7 @@ export default class MessageStore {
     this.currentRoomIndex = 0; // 방번호 초기화
     this.messageEntered = '';
     this.messageLogs = [];
+    this.messageLogsObject = {};
     this.publish();
 
     this.connect();
@@ -126,15 +127,40 @@ export default class MessageStore {
     this.publish();
   }
 
+  updateUnreadCount(chattingId) {
+    const newMessageLogs = this.messageLogsObject[chattingId];
+    if (!newMessageLogs) return; // 해당 채팅방의 메시지 로그가 없으면 아무것도 하지 않음
+  
+    // 현재 연결된 채팅방이 아니면 안읽은 개수 업데이트
+    if (chattingId !== this.currentRoomIndex) {
+      const unreadCount = newMessageLogs.reduce(
+        (count, message) => count + (message.userId !== this.userId ? 1 : 0),
+        0
+      );
+  
+      // 해당 채팅방의 안읽은 개수를 업데이트
+      this.messageLogsObject = {
+        ...this.messageLogsObject,
+        [chattingId]: newMessageLogs.map((message) => ({
+          ...message,
+          unread: message.userId !== this.userId ? unreadCount : 0,
+        })),
+      };
+    }
+    console.log(this.messageLogsObject)
+  }
+
   receiveMessage(messageReceived) {
     const message = JSON.parse(messageReceived.body);
     this.messageLogs = [...this.messageLogs, this.formatMessage(message)];
-    // this.messageLogsObject = { ...this.messageLogsObject, message.chattingId: this.messageLogs, }
+    this.messageLogsObject = { ...this.messageLogsObject, [message.chattingId]: this.messageLogs, }
+    this.updateUnreadCount(message.chattingId);
 
     this.publish();
     console.log('message',message)
     console.log('messageLogs', this.messageLogs)
-    // console.log('messageLogsObject', this.messageLogsObject)
+    console.log('messageLogsObject', this.messageLogsObject)
+    // console.log('messageLogsObject Length', this.messageLogsObject[message.chattingId])
   }
 
   formatMessage(message) {

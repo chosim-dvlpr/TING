@@ -46,6 +46,7 @@ function FriendList(){
     connected,
     currentRoomIndex,
     roomIndices,
+    messageLogsObject,
   } = messageStore;
 
   // 채팅방 입장할 때
@@ -56,6 +57,18 @@ function FriendList(){
     messageStore.connect(roomIndex.roomIndex);
     Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
+
+  // 리스트 렌더링 되면 모든 채팅방 연결
+  const connectSocket = () => {
+    // if (connected) {
+    //   messageStore.disconnect(currentRoomIndex);
+    // }
+    messageStore.connect();
+  }
+
+  // useEffect(() => {
+  //   connectSocket();
+  // }, [])
 
   return (
     <div>
@@ -79,7 +92,7 @@ function FriendList(){
                 <h3>친구 닉네임 : { friend.nickname }</h3>
                 <h4>친구 프로필 : { friend.profileImage }</h4>
                 <h4>친구 마지막 대화 : { friend.lastChattingContent }</h4>
-                <h4>친구 안읽은 개수 : { friend.unread }</h4>
+                <h4>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</h4>
                 <h4>친구 아이디 번호 : { friend.userId }</h4>
                 <h4>채팅방 번호 : { friend.chattingId }</h4>
                 <h4>친구 상태 : { friend.state }</h4>
