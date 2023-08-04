@@ -465,7 +465,7 @@ public class MatchingService {
             String pairSessionId = user.getGender().equals("F") ? matchingInfo.getSocketSessionIdM() : matchingInfo.getSocketSessionIdF();
             socketInfos.get(pairSessionId).getSession().sendMessage(textMessage);
 
-            // 상대방은 다시 대기큐로 넣어야되나?
+            // 상대방은 다시 대기열로 넣어주기
             acceptQueue.remove(pairSessionId);
             if (user.getGender().equals("F")) mQueue.add(pairSessionId);
             else fQueue.add(pairSessionId);
@@ -551,18 +551,17 @@ public class MatchingService {
 
         // 매칭 실패 메세지 전송
         WebSocketMessage webSocketMessage = new WebSocketMessage("matchingFail", null);
-        socketInfos.get(socketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
         socketInfos.get(pairSocketSessionId).getSession().sendMessage(new TextMessage(webSocketMessage.toJson()));
 
-        // 수락 대기열에서 삭제하고, 매칭 대기열로 다시 넣어주기?
+        // 수락 대기열에서 삭제하고, 거절한 상대 사용자만 다시 대기열로 넣어주기
         acceptQueue.remove(socketSessionId);
         acceptQueue.remove(pairSocketSessionId);
         if (user.getGender().equals("F")) {
-            fQueue.add(socketSessionId);
+//            fQueue.add(socketSessionId);
             mQueue.add(pairSocketSessionId);
         } else {
             fQueue.add(pairSocketSessionId);
-            mQueue.add(socketSessionId);
+//            mQueue.add(socketSessionId);
         }
 
         matchingInfo.setIsValidate(false);
