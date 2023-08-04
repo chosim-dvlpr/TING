@@ -1,0 +1,47 @@
+/*메인 비트비트 폰트*/
+/* @font-face{
+  font-family:'bitbit';
+  src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
+} */
+@font-face {
+  font-family: 'PFStardust';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/PFStardust.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+   
+  }
+  
+  .btn {
+    font-family: "PFStardust";
+    font-size: 30px;
+    flex: 1 1 auto;
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color:white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
+    border: none;
+  }
+  
+
+  .btn:hover {
+    background-position: right center;
+  }
+  
+  .linkButton {
+    text-decoration: none;
+    color: inherit; /* 상위 요소의 색상 상속 */
+    display: inline-block;
+    
+  }

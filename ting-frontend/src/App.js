@@ -25,6 +25,9 @@ import Openvidu from './pages/openvidu/openvidu-main.js';
 // 메인페이지
 import MainPage from './pages/MainPage';
 
+//NavBar
+import NavBar from './component/common/NavBar';
+
 // 매칭
 import MatchingPage from './pages/MatchingPage.js';
 import WaitingRoom from './component/matching/WaitingRoom.js';
@@ -35,7 +38,9 @@ import MatchingFinal from './component/matching/MatchingFinal';
 // 커뮤니티
 
 import CommunityPage from './pages/CommunityPage.js';
-import AdvicePostForm from './component/community/advice/AdviceCreate.js'
+import AdviceBoard from './component/community/advice/AdviceBoard';
+import AdviceDetail from './component/community/advice/AdviceDetail';
+import AdviceCreate from './component/community/advice/AdviceCreate';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -55,6 +60,7 @@ import Friend from './component/friend/Friend';
 import FriendChatting from './component/friend/FriendChatting';
 import FriendProfile from './component/friend/FriendProfile';
 
+
 function App() {
   let accessToken = localStorage.getItem('access-token');
   // accessToken이 있다면 isLogin에 true 저장
@@ -67,25 +73,12 @@ function App() {
 
   return (
     <div className="App">
-      <div className="mainNav">
-        <div className='navLeft'>
-          <img src="" alt="logo"></img>
-          <Link className="navMenu" to="/">메인</Link>
-          <Link className="navMenu" to="/tutorial">튜토리얼</Link>
-          <Link className="navMenu" to="/community">커뮤니티</Link>
-        </div>
-        <div className='navRight'>
-          {/* <Link className="navMenu" to="/login">로그인</Link>
-          <Link className="navMenu" to="/signup">회원가입</Link> */}
-          {!isLogin && <Link className="navMenu" to="/login">로그인</Link>}
-          {!isLogin && <Link className="navMenu" to="/signup">회원가입</Link>}
-          {isLogin && <button onClick={handleLogout}>로그아웃</button>}
-        </div>
-      </div>
+      <NavBar/>
+    
       <Routes>
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
-        <Route path="/tutorial" element={ <div>튜토리얼!!</div> }></Route>
+        <Route path="/tutorial" element={ <TutorialPage/> }></Route>
         <Route path="/community/*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
@@ -112,7 +105,7 @@ function App() {
         </Route>
 
         {/* 매칭 */}
-        <Route path="/matching" element={< MatchingPage/> }>
+        <Route path="/matching" element={< MatchingPage /> }>
           <Route path="" element={ <WaitingRoom/> }></Route>
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
@@ -122,9 +115,22 @@ function App() {
         {/* 커뮤니티 페이지 */}
 
         <Route path="/community/*" element={<CommunityPage />} />
-        <Route path="/community/advice/new" element={<AdvicePostForm />} />
-    
-        </Routes>
+
+        <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
+        <Route path="/community/advice" element={<AdviceBoard/>} />
+        <Route path="/community/advice/create" element = {<AdviceCreate/>} />
+
+        
+        {/* 친구목록 임시 */}
+        <Route path="/friend" element={<Friend />}>
+          <Route path="" element={<FriendList />}></Route>
+          <Route path="chat" element={<FriendChatting />}></Route>
+        </Route>
+
+        {/* 마이페이지 */}
+        <Route path="/mypage" element={<MyProfilePage/>}></Route>
+        
+      </Routes>
 
     </div>
   );

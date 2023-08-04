@@ -1,0 +1,148 @@
+
+/*메인 비트비트 폰트*/
+/* @font-face{
+  font-family:'bitbit';
+  src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
+}  */
+
+@font-face {
+  font-family: 'PFStardust';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/PFStardust.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.h1 {
+  font-family: "PFStardust";
+}
+
+.wrapper {
+  width: auto;
+  height: 800px;
+  background-color: #FEE5EF;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.section1textbox {
+  
+  width: 500px; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+ 
+
+}
+
+.section1textbox h1 {
+  font-family: "PFStardust";
+  font-size: 60px;
+  font-weight: 900;
+  
+ 
+
+}
+
+
+
+.section1imgbox {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 100px;
+  margin-top: 100px;
+  
+
+}
+
+.section1imgbox img {
+  width: 600px;
+  
+}
+
+
+
+/*section2*/
+
+.section2imgbox {
+  width: 300px;
+  display:flex;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.section2textbox {
+  font-family: "PFStardust";
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  margin-left: 50px;
+
+}
+
+.section2textbox h1 {
+  font-family: "PFStardust";
+ 
+}
+
+/*section3*/
+.section3imgbox1 {
+  width: 200px;
+  display:flex;
+  margin-top: 20px;
+}
+
+
+.section3imgbox2 {
+  width: 180px;
+  display:flex;
+  margin-top: 20px;
+  margin-right:100px;
+}
+
+
+/*section4*/
+.section4imgbox {
+  width: 300px;
+  display:flex;
+  margin-top: 20px;
+  margin-left:100px;
+}
+
+
+
+
+/*section5*/
+.section5imgbox {
+  width: 200px;
+  display:flex;
+  margin-top: 20px;
+  margin-right:100px;
+}
+
+.section5textbox {
+  font-family: "PFStardust";
+  display: flex;
+  flex-direction: row; 
+  align-items: center; 
+  justify-content: center; 
+  margin-left: 50px;
+
+}
+
+.section5textbox h1 {
+  font-family: "PFStardust";
+}
+
+
+
+
+
+
