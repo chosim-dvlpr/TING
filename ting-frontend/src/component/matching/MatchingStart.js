@@ -31,7 +31,7 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-
+  const [disableaButton, setDisableButton] = useState(false)
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -318,15 +318,17 @@ function MatchingStart() {
                 <div className={styles.HeartScore}>
                   <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
-                  <div
+                  <button
                     className={styles.ScoreText}
+                    disabled={disableaButton}
                     onClick={() => {
                       setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                      setDisableButton(true)
                       handleScoreSelect(score);
                     }}
                   >
                     {score}
-                  </div>
+                  </button>
                 </div>
               );
             })}
