@@ -9,7 +9,7 @@ const baseURL = "https://i9b107.p.ssafy.io:5157";
 
 const tokenHttp = axios.create({
   baseURL,
-  header: {
+  header: { 
     "Content-Type": "application/json",
   },
 });
