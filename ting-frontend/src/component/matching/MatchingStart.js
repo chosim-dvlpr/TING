@@ -42,6 +42,7 @@ function MatchingStart() {
   useEffect(() => {
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
+    let matchingId = state.matchingReducer.matchingId
 
     // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
     if (accessToken === null) {
@@ -50,7 +51,7 @@ function MatchingStart() {
     }
 
     //state에 토큰을 저장하고 joinSession 메서드 호출
-    tokenHttp.get("/date/question").then((response) => {
+    tokenHttp.get(`/date/question/${matchingId}`).then((response) => {
       dispatch(setQuestionData(response.data.data));
     });
 
