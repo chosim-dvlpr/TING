@@ -31,7 +31,7 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-
+  const [disableaButton, setDisableButton] = useState(false)
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -87,6 +87,14 @@ function MatchingStart() {
       clearInterval(timer);
       setCount(30);
       // 타임이 끝나면 5점을 자동으로 상대에게 전달
+
+      // 이미 점수를 선택했다면 상대에게 점수를 전송하지 않음
+      let alreadyClickedScore = false;
+      buttonToggleSign.map((sign) => {
+        if (sign) alreadyClickedScore = true;
+      });
+      if (alreadyClickedScore) return;
+
       session.signal({
         data: JSON.stringify({ score: 5, userId: userData.userId }),
         to: [],
@@ -103,7 +111,12 @@ function MatchingStart() {
     };
   }, [count]);
 
+  // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
+    // 버튼 재활성화
+    setDisableButton(false)
+    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false])
+    setCount(30)
     if (questionNumber === 11) {
       setCount(5);
     }
@@ -252,7 +265,6 @@ function MatchingStart() {
       // Set the main video in the page to display our webcam and store our Publisher
       setMainStreamManager(newPublisher);
       setPublisher(newPublisher);
-      dispatch(setOpenviduSession(newSession));
       setSession(newSession);
     } catch (error) {
       console.log("There was an error connecting to the session:", error.code, error.message);
@@ -318,15 +330,17 @@ function MatchingStart() {
                 <div className={styles.HeartScore}>
                   <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
-                  <div
+                  <button
                     className={styles.ScoreText}
+                    disabled={disableaButton}
                     onClick={() => {
                       setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                      setDisableButton(true)
                       handleScoreSelect(score);
                     }}
                   >
                     {score}
-                  </div>
+                  </button>
                 </div>
               );
             })}
