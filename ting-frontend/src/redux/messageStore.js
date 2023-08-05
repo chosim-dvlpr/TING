@@ -3,7 +3,8 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { messageService } from '../component/friend/MessageService';
 
-const baseUrl = 'https://i9b107.p.ssafy.io:5157';
+// const baseUrl = 'https://localhost:8080';
+const baseUrl = "https://i9b107.p.ssafy.io:5157";
 
 export default class MessageStore {
   constructor() {
@@ -15,6 +16,7 @@ export default class MessageStore {
     this.socket = null;
     this.client = null;
     this.connected = false;
+    this.isList = true;
 
     this.roomIndices = [1, 2, 3];
 
@@ -22,6 +24,7 @@ export default class MessageStore {
     this.messageEntered = '';
 
     this.messageLogs = [];
+    this.messageLogsObject = {};
   }
 
   // 채팅방 연결
@@ -31,7 +34,8 @@ export default class MessageStore {
 
     this.currentRoomIndex = roomIndex;
 
-    this.subscribeMessageBroker(this.currentRoomIndex);
+    if(this.isList) this.subscribeMessageBroker(this.currentRoomIndex);
+    else this.subscribeMessageBrokerList();
 
     this.connected = true;
     this.publish();
@@ -47,6 +51,27 @@ export default class MessageStore {
           (messageReceived) => this.receiveMessage(messageReceived),
           {},
         );
+
+        this.isList = false;
+
+        // 엔터 입력 시 메세지 전송하기
+        this.sendMessage({ type: 'enter' });
+      },
+    );
+  }
+
+  // 채팅리스트 구독 연결
+  subscribeMessageBrokerList() {
+    this.client.connect(
+      {},
+      () => {
+        this.client.subscribe(
+          `/subscription/list/${this.userId}`,
+          (messageReceived) => this.receiveMessage(messageReceived),
+          {},
+        );
+
+        this.isList = true;
         
         // 엔터 입력 시 메세지 전송하기
         this.sendMessage({ type: 'enter' });
@@ -65,7 +90,10 @@ export default class MessageStore {
     this.currentRoomIndex = 0; // 방번호 초기화
     this.messageEntered = '';
     this.messageLogs = [];
+    this.messageLogsObject = {};
     this.publish();
+
+    this.connect();
   }
 
   // 메세지 내용 작성
@@ -99,10 +127,40 @@ export default class MessageStore {
     this.publish();
   }
 
+  updateUnreadCount(chattingId) {
+    const newMessageLogs = this.messageLogsObject[chattingId];
+    if (!newMessageLogs) return; // 해당 채팅방의 메시지 로그가 없으면 아무것도 하지 않음
+  
+    // 현재 연결된 채팅방이 아니면 안읽은 개수 업데이트
+    if (chattingId !== this.currentRoomIndex) {
+      const unreadCount = newMessageLogs.reduce(
+        (count, message) => count + (message.userId !== this.userId ? 1 : 0),
+        0
+      );
+  
+      // 해당 채팅방의 안읽은 개수를 업데이트
+      this.messageLogsObject = {
+        ...this.messageLogsObject,
+        [chattingId]: newMessageLogs.map((message) => ({
+          ...message,
+          unread: message.userId !== this.userId ? unreadCount : 0,
+        })),
+      };
+    }
+    console.log(this.messageLogsObject)
+  }
+
   receiveMessage(messageReceived) {
     const message = JSON.parse(messageReceived.body);
     this.messageLogs = [...this.messageLogs, this.formatMessage(message)];
+    this.messageLogsObject = { ...this.messageLogsObject, [message.chattingId]: this.messageLogs, }
+    // this.updateUnreadCount(message.chattingId);
+
     this.publish();
+    console.log('message',message)
+    console.log('messageLogs', this.messageLogs)
+    console.log('messageLogsObject', this.messageLogsObject)
+    // console.log('messageLogsObject Length', this.messageLogsObject[message.chattingId])
   }
 
   formatMessage(message) {

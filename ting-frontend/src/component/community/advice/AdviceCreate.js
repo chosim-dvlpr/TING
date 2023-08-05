@@ -1,61 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import tokenHttp from '../../../api/tokenHttp';
+import styles from './AdviceCreate.module.css'; // module.css 파일을 가져옵니다
 
 const AdviceCreate = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = () => {
+    tokenHttp
+      .get('/user')
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching user info:', error);
+      });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 게시글 저장 로직: title과 content 값을 서버로 전송하여 저장하는 등의 작업을 수행
-    axios.post('https://i9b107.p.ssafy.io:5157/advice', {
-      title,
-      body: content,
-    })
-    .then((response) => {
+
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    const newPost = {
+      title: title,
+      content: content,
+    };
+
+    try {
+      const response = await tokenHttp.post('/advice', newPost);
       if (response.status === 201) {
-       
         navigate('/community/advice');
       } else {
         throw new Error('Failed to save the post');
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error('Error saving the post:', error);
-    });
+    }
   };
 
-  
-
   return (
-    <div>
-      <h2>게시글 작성 폼</h2>
+    <div className={styles.formContainer}>
+      <h2>당신의 사랑 고민은 무엇인가요?</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">제목</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="title" className={styles.label}>
+            제목
+          </label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            className={styles.inputField}
           />
         </div>
-        <div>
-          <label htmlFor="content">내용</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="content" className={styles.label}>
+            내용
+          </label>
           <textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
+            className={styles.textAreaField}
           />
         </div>
         <div>
-          <button type="submit">저장</button>
+          <button type="submit" className={styles.submitButton}>
+            저장
+          </button>
         </div>
       </form>
     </div>
