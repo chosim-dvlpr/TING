@@ -47,6 +47,13 @@ import TutorialPage from './pages/TutorialPage';
 
 // 내 프로필
 import MyProfilePage from './pages/MyProfilePage';
+import DeleteAccount from './component/profile/DeleteAccount';
+import MyArticle from './component/profile/MyArticle';
+import MyInformation from './component/profile/MyInformation';
+import MyInformationUpdate from './component/profile/MyInformationUpdate';
+import PasswordUpdate from './component/profile/PasswordUpdate';
+import QnaBoard from './component/profile/QnaBoard';
+import QnaCreate from './component/profile/QnaCreate';
 
 // 아이템
 import ItemPage from './pages/ItemPage';
@@ -128,7 +135,13 @@ function App() {
         </Route>
 
         {/* 마이페이지 */}
-        <Route path="/mypage" element={<MyProfilePage/>}></Route>
+        <Route path="/mypage" element={<MyProfilePage/>}>
+          <Route path="" element={<MyInformation />}></Route>
+          <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
+          <Route path="qna" element={<QnaBoard />}></Route>
+          <Route path="myarticle" element={<MyArticle />}></Route>
+          <Route path="deleteaccount" element={<DeleteAccount />}></Route>
+        </Route>
         
       </Routes>
 
