@@ -1,15 +1,13 @@
 package com.ssafy.tingbackend.entity.matching;
 
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"user", "totalScore"})
 public class MatchingUser {
@@ -26,4 +24,9 @@ public class MatchingUser {
     private User user;
 
     private Integer totalScore;
+
+    public MatchingUser(Matching matching, User user) {
+        this.matching = matching;
+        this.user = user;
+    }
 }

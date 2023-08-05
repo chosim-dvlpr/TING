@@ -1,17 +1,16 @@
 package com.ssafy.tingbackend.entity.matching;
 
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {})
+@ToString(of = {"questionOrder","question", "score"})
+@Builder
+@AllArgsConstructor
 public class MatchingScoreHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
