@@ -31,10 +31,7 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-<<<<<<< HEAD
   const [disableaButton, setDisableButton] = useState(false)
-=======
->>>>>>> ed01f596c8fa048ad5871963fc51ef17b23c936c
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -116,6 +113,9 @@ function MatchingStart() {
 
   // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
+    // 버튼 재활성화
+    setDisableButton(false)
+
     if (questionNumber === 11) {
       setCount(5);
     }
