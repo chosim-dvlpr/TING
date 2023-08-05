@@ -6,6 +6,8 @@ export let openviduReducer = createSlice({
   reducers : {
     setOpenviduToken: (state, action) => {
       state.token = action.payload
+      console.log("++++++++++++++ Redux OpenviduToken 저장 +++++++++++++++")
+      console.log(state.token)
     }
   }
 })
