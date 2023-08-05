@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 
 import styles from "./AdviceBoard.module.css";
 import Sidebar from "../common/Sidebar";
 import Pagination from "../common/Pagination";
+import tokenHttp from "../../../api/tokenHttp";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
@@ -13,6 +14,7 @@ function AdviceBoard() {
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
+ 
 
   useEffect(() => {
     getAllAdviceData();
@@ -22,7 +24,7 @@ function AdviceBoard() {
     try {
       const response = await axios.get(
         "https://i9b107.p.ssafy.io:5157/advice",
-        { params: { pageNo: currentPage } }
+        { params: { pageNo: currentPage} }
       );
       const responseData = response.data.data;
 
@@ -34,10 +36,9 @@ function AdviceBoard() {
       console.error("Error fetching advice data:", error);
     }
   };
-  //로그인 되어 있어도 로그인이 필요합니다 뜬다..
+  
   const handleLinkClick = (adviceId, event) => {
     event.preventDefault();
-
     console.log("handleLinkClick called");
     console.log(userdata);
     if (userdata) {
@@ -54,15 +55,35 @@ function AdviceBoard() {
     }
   };
 
+  // 케밥 게시글 닉네임과 유저 닉네임 일치하는지 
+  const showKebab = (nickname) => {
+    return userdata && userdata.nickname === nickname; 
+      
+    };
+
+  
+  // 글 수정
+      const handleUpdate = (adviceId) => {
+      navigate(`/community/advice/update/${adviceId}`);
+    };
+    
+    // 글 삭제
+    const handleDelete = async (adviceId) => {
+      try {
+        await tokenHttp.delete(`https://i9b107.p.ssafy.io:5157/advice/${adviceId}`);
+        console.log("delete성공")
+        await getAllAdviceData(); 
+      } catch (error) {
+        console.error("Error deleting advice:", error);
+      }
+    };
+
   return (
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
-      <button
-        className={styles.createButton}
-        onClick={() => navigate("/community/advice/create")}
-      >
-        글 작성하기
-      </button>
+      <button className={styles.createButton} onClick={() => navigate("/community/advice/create")}>
+        글 작성하기</button>
+
       <table className={styles.adviceTable}>
         <thead>
           <tr>
@@ -85,7 +106,18 @@ function AdviceBoard() {
                 </span>
               </td>
               <td>{advice.hit}</td>
-              <td>{advice.createdTime}</td>
+              <td>{advice.createdTime}
+              {showKebab(advice.nickname) && (
+                <div className={styles.dropdownContainer}>
+                <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab}/>
+                <div className={styles.dropdownContent}>
+                  <span onClick={() => handleUpdate(advice.adviceId)}>Update</span>
+                  <span onClick={() => handleDelete(advice.adviceId)}>Delete</span>
+                </div>
+              </div>
+            )}
+  
+              </td>
             </tr>
           ))}
         </tbody>
@@ -95,6 +127,8 @@ function AdviceBoard() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+    
+    
     </div>
   );
 }

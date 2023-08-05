@@ -41,6 +41,7 @@ import CommunityPage from './pages/CommunityPage.js';
 import AdviceBoard from './component/community/advice/AdviceBoard';
 import AdviceDetail from './component/community/advice/AdviceDetail';
 import AdviceCreate from './component/community/advice/AdviceCreate';
+import AdviceUpdate from './component/community/advice/AdviceUpdate';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -119,6 +120,7 @@ function App() {
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
         <Route path="/community/advice" element={<AdviceBoard/>} />
         <Route path="/community/advice/create" element = {<AdviceCreate/>} />
+        <Route path="/community/advice/update/:adviceId" element = {<AdviceUpdate/>} />
 
         
         {/* 친구목록 임시 */}
