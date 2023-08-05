@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession, setMyScore, setYourScore } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
+import Report from "./common/Report.js";
 
 function MatchingStart() {
   // redux 관련 state 불러오기
@@ -31,13 +32,16 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-  const [disableaButton, setDisableButton] = useState(false)
+  const [disableaButton, setDisableButton] = useState(false);
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [session, setSession] = useState(undefined);
+
+  // 신고 모달창 관련 state
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // 초기화 useEffect hook
   useEffect(() => {
@@ -114,10 +118,15 @@ function MatchingStart() {
   // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
     // 버튼 재활성화
-    setDisableButton(false)
-    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false])
-    setCount(30)
+    setDisableButton(false);
+    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
+    if (questionNumber !== 0) {
+      setCount(30);
+    }
     if (questionNumber === 11) {
+      setCount(5);
+    }
+    if (questionNumber === 12) {
       setCount(5);
     }
   }, [questionNumber]);
@@ -230,6 +239,18 @@ function MatchingStart() {
       let data = JSON.parse(event.data);
     });
 
+    // 상대방이 신고 후 나가기를 했을 때 실행되는 로직
+    newSession.on("signal:report", (event) => {
+      console.log("======================signal:report=====================");
+      const data = JSON.parse(event.data);
+
+      // 내가 던진 점수 시그널은 무시
+      if (data.userId === userData.userId) return;
+
+      alert("상대방과의 연결이 끊어졌습니다.");
+      navigate("/");
+    });
+
     // --- 4) Connect to the session with a valid user token ---
     // Get a token from the OpenVidu deployment
     try {
@@ -283,13 +304,17 @@ function MatchingStart() {
     setPublisher(undefined);
   };
 
+  const report = () => {
+    setShowReportModal(true);
+  };
+
   return (
     <div className="container">
       {showAlert && <div>{alertMessage}</div>}
 
       <div id="session">
         <div id="session-header">
-          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={leaveSession} value="Leave session" />
+          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
         </div>
 
         {/* 질문 카드 */}
@@ -299,7 +324,7 @@ function MatchingStart() {
         </div>
         {/* 질문 카드 -- end */}
 
-        <div id="video-container">
+        <div className={styles.videoContainer}>
           {publisher !== undefined ? (
             <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
               <UserVideoComponent streamManager={publisher} />
@@ -314,7 +339,11 @@ function MatchingStart() {
         </div>
       </div>
 
-      {/* 점수 체크판 -- start*/}
+      {/* 인사 할 때 인삿말  */}
+
+
+
+      {/* 점수 체크판 -- start */}
       {/* <ScoreCheck></ScoreCheck> */}
       <div className="wrapper">
         <div className={styles.ScoreCheckBox}>
@@ -324,30 +353,43 @@ function MatchingStart() {
             {/* timerBar -- end */}
           </div>
 
-          <div className={styles.ScoreBox}>
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
-              return (
-                <div className={styles.HeartScore}>
-                  <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
+          {questionNumber === 0 ? (
+            <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
+          ) : questionNumber === 11 ? (
+            <h1>끝이 났습니다.</h1>
+          ) : questionNumber === 12 ? (
+            <h1>최종 점수</h1>
+          ) : questionNumber === 13 ? (
+            <h1>서로 마지막 어필을 해주세요</h1>
+          ) : 0 <= questionNumber <= 10 ? (
+            <div className={styles.ScoreBox}>
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
+                return (
+                  <div className={styles.HeartScore}>
+                    <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
-                  <button
-                    className={styles.ScoreText}
-                    disabled={disableaButton}
-                    onClick={() => {
-                      setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                      setDisableButton(true)
-                      handleScoreSelect(score);
-                    }}
-                  >
-                    {score}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+                    <button
+                      className={styles.ScoreText}
+                      disabled={disableaButton}
+                      onClick={() => {
+                        setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                        setDisableButton(true)
+                        handleScoreSelect(score);
+                      }}
+                    >
+                      {score}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
+        {/* 점수 체크판 -- end */}
+
+        {/* 신고 모달창 */}
+        {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
       </div>
-      {/* 점수 체크판 -- end */}
     </div>
   );
 }
