@@ -115,7 +115,7 @@ function MatchingStart() {
   useEffect(() => {
     // 버튼 재활성화
     setDisableButton(false)
-
+    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false])
     if (questionNumber === 11) {
       setCount(5);
     }
