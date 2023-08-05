@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession, setMyScore, setYourScore } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
+import Report from "./common/Report.js";
 
 function MatchingStart() {
   // redux 관련 state 불러오기
@@ -31,13 +32,16 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-  const [disableaButton, setDisableButton] = useState(false)
+  const [disableaButton, setDisableButton] = useState(false);
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [session, setSession] = useState(undefined);
+
+  // 신고 모달창 관련 state
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // 초기화 useEffect hook
   useEffect(() => {
@@ -114,8 +118,8 @@ function MatchingStart() {
   // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
     // 버튼 재활성화
-    setDisableButton(false)
-    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false])
+    setDisableButton(false);
+    setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
       setCount(30);
     }
@@ -232,6 +236,18 @@ function MatchingStart() {
       let data = JSON.parse(event.data);
     });
 
+    // 상대방이 신고 후 나가기를 했을 때 실행되는 로직
+    newSession.on("signal:report", (event) => {
+      console.log("======================signal:report=====================");
+      const data = JSON.parse(event.data);
+
+      // 내가 던진 점수 시그널은 무시
+      if (data.userId === userData.userId) return;
+
+      alert("상대방과의 연결이 끊어졌습니다.");
+      navigate("/");
+    });
+
     // --- 4) Connect to the session with a valid user token ---
     // Get a token from the OpenVidu deployment
     try {
@@ -285,13 +301,17 @@ function MatchingStart() {
     setPublisher(undefined);
   };
 
+  const report = () => {
+    setShowReportModal(true);
+  };
+
   return (
     <div className="container">
       {showAlert && <div>{alertMessage}</div>}
 
       <div id="session">
         <div id="session-header">
-          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={leaveSession} value="Leave session" />
+          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
         </div>
 
         {/* 질문 카드 */}
@@ -337,7 +357,7 @@ function MatchingStart() {
                     disabled={disableaButton}
                     onClick={() => {
                       setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                      setDisableButton(true)
+                      setDisableButton(true);
                       handleScoreSelect(score);
                     }}
                   >
@@ -350,6 +370,9 @@ function MatchingStart() {
         </div>
       </div>
       {/* 점수 체크판 -- end */}
+
+      {/* 신고 모달창 */}
+      {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
     </div>
   );
 }
