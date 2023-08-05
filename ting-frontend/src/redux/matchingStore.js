@@ -15,33 +15,38 @@ export let matchingReducer = createSlice({
   reducers: {
     setQuestionData: (state, action) => {
       state.questionData = action.payload;
-      console.log("데이터 저장 됫나");
-      console.log(action.payload);
+      console.log("++++++++++++++ Redux QuestionData 저장 +++++++++++++++")
+      console.log(state.questionData)
     },
     setQuestionNumber: (state, action) => {
       state.questionNumber = action.payload;
-      console.log("리덕스 안 카드 숫자", state.questionNumber);
+      console.log("++++++++++++++ Redux QuestionNumber 저장 +++++++++++++++")
+      console.log(state.questionNumber)
     },
     setMatchingId: (state, action) => {
       state.matchingId = action.payload;
+      console.log("++++++++++++++ Redux Matching ID 저장 +++++++++++++++")
+      console.log(state.matchingId)
     },
     setYourData: (state, action) => {
       state.yourData = action.payload;
+      console.log("++++++++++++++ Redux YourData 저장 +++++++++++++++")
+      console.log(state.yourData)
     },
     setOpenviduSession: (state, action) => {
       state.openviduSession = action.payload;
-      console.log("세션", state.openviduSession);
+      console.log("++++++++++++++ Redux OpenviduSession 저장 +++++++++++++++")
+      console.log(state.openviduSession)
     },
     setMyScore:(state,action)=>{
       state.myScore = [...state.myScore, action.payload];
-      console.log('redux 안 내점수 저장', state.myScore)
+      console.log("++++++++++++++ Redux myScore 저장 +++++++++++++++")
+      console.log(state.myScore)
     },
     setYourScore:(state,action)=>{
-      console.log("111111111111111111111111111111111111111111");
-      console.log("yourScore", state.yourScore);      
-      console.log("action.payload", action.payload);
       state.yourScore = [...state.yourScore, action.payload];
-      console.log('redux 안 상대방 점수 저장', state.yourScore)
+      console.log("++++++++++++++ Redux yourScore 저장 +++++++++++++++")
+      console.log(state.yourScore)
     },
   },
 });
