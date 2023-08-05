@@ -4,7 +4,6 @@ export let matchingReducer = createSlice({
   name: "matchingReducer",
 
   initialState: {
-    openviduSession: null,
     questionData: {},
     questionNumber: 0,
     matchingId: null,
@@ -13,6 +12,15 @@ export let matchingReducer = createSlice({
     yourData: {},
   },
   reducers: {
+    resetMatchingStore: (state) => {
+      state.questionData = {};
+      state.questionNumber = 0;
+      state.matchingId = null;
+      state.myScore = [];
+      state.yourScore = [];
+      state.yourData = {};
+    },
+
     setQuestionData: (state, action) => {
       state.questionData = action.payload;
       console.log("++++++++++++++ Redux QuestionData 저장 +++++++++++++++")
@@ -33,11 +41,6 @@ export let matchingReducer = createSlice({
       console.log("++++++++++++++ Redux YourData 저장 +++++++++++++++")
       console.log(state.yourData)
     },
-    setOpenviduSession: (state, action) => {
-      state.openviduSession = action.payload;
-      console.log("++++++++++++++ Redux OpenviduSession 저장 +++++++++++++++")
-      console.log(state.openviduSession)
-    },
     setMyScore:(state,action)=>{
       state.myScore = [...state.myScore, action.payload];
       console.log("++++++++++++++ Redux myScore 저장 +++++++++++++++")
@@ -55,9 +58,9 @@ export let { setQuestionData,
   setQuestionNumber, 
   setMatchingId, 
   setYourData, 
-  setOpenviduSession, 
   setMyScore, 
-  setYourScore 
+  setYourScore,
+  resetMatchingStore
 } = matchingReducer.actions;
 
 export default matchingReducer;
