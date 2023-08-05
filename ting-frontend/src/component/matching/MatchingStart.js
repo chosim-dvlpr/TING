@@ -1,32 +1,37 @@
-import OpenVideo from "../../pages/openvidu/openvidu-main.js";
-
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
-import axios from "axios";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
-
 import { useDispatch, useSelector } from "react-redux";
-import "./MatchingStart.css";
+import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession, setMyScore, setYourScore } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
-import ScoreCheck from "./asset/ScoreCheck.js";
 import tokenHttp from "../../api/tokenHttp.js";
-import {
-  setQuestionData,
-  setQuestionNumber,
-  setMatchingId,
-  setYourData,
-  setOpenviduSession,
-  setMyScore,
-  setYourScore,
-} from "../../redux/matchingStore.js";
-import QuestionCard from "./asset/QuestionCard.js";
-
-const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
+import styles from "./MatchingStart.module.css";
 
 function MatchingStart() {
-  // redux
-  const state = useSelector((state) => state);
+  // redux 관련 state 불러오기
   const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+
+  const userData = state.userdataReducer.userdata;
+  const myScore = state.matchingReducer.myScore;
+  const yourScore = state.matchingReducer.yourScore;
+  const questionData = state.matchingReducer.questionData;
+  const questionNumber = state.matchingReducer.questionNumber;
+
+  // react-router
+  const navigate = useNavigate();
+
+  //  점수 알림창 관련 state
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  // timerBar 관련 state
+  const [count, setCount] = useState(0);
+  const [startTimer, setStartTimer] = useState(false);
+
+  // ScoreCheck 점수 클릭 관련 state
+  const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -34,20 +39,9 @@ function MatchingStart() {
   const [subscribers, setSubscribers] = useState([]);
   const [session, setSession] = useState(undefined);
 
-  // redux state
-  const userdata = state.userdataReducer.userdata;
-  const yourData = state.matchingReducer.yourData;
-  const myScore = state.matchingReducer.myScore;
-  const yourScore = state.matchingReducer.yourScore;
-
-  // react-router
-  const navigate = useNavigate();
-
-  //  점수 알림창
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-
+  // 초기화 useEffect hook
   useEffect(() => {
+    console.log("====================useEffect (초기화) ======================");
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
     let matchingId = state.matchingReducer.matchingId;
@@ -69,56 +63,103 @@ function MatchingStart() {
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
-      // 초기화 하는 로직 작성
-      dispatch(setOpenviduSession(null));
-      dispatch(setQuestionData({}));
-      dispatch(setQuestionNumber(0));
-      dispatch(setMatchingId(null));
-      dispatch(setMyScore([]));
-      dispatch(setYourScore([]));
-      dispatch(setYourData({}));
     };
   }, []);
 
-  // 질문카드를 제어하는 로직
+  // 질문카드를 제어하는 useEffect hook
   useEffect(() => {
-    console.log("================score 변경=====================");
-    console.log(myScore.length, "===============", yourScore.length);
+    console.log("================useEffect (score 변경)=====================");
     dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
   }, [myScore, yourScore]);
 
+  // timerBar를 제어하는 useEffect hook
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((count) => count - 1);
+    }, 1000);
+
+    if (questionNumber === 0 && startTimer == false) {
+      setCount(10);
+      setStartTimer(true);
+    }
+
+    if (count === -1) {
+      clearInterval(timer);
+      setCount(30);
+      // 타임이 끝나면 5점을 자동으로 상대에게 전달
+      session.signal({
+        data: JSON.stringify({ score: 5, userId: userData.userId }),
+        to: [],
+        type: "score",
+      });
+
+      // TODO: myScore에 5점 추가하는 로직
+      dispatch(setMyScore(5));
+
+      // TODO: API로 점수 저장하는 로직
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [count]);
+
+  useEffect(() => {
+    if (questionNumber === 11) {
+      setCount(5);
+    }
+  }, [questionNumber]);
+
+  const handleScoreSelect = (score) => {
+    // TODO: 점수를 서버로 전송하는 로직
+
+    // TODO: myScore에 추가하는 로직
+    dispatch(setMyScore(score));
+
+    // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
+    session.signal({
+      data: JSON.stringify({ score: score, userId: userData.userId }),
+      to: [],
+      type: "score",
+    });
+
+    // TODO: 선택이 불가능하도록 state 변경
+  };
+
   const onbeforeunload = (event) => {
+    console.log("==================onbeforeunload====================");
     leaveSession();
   };
 
   const handleMainVideoStream = (stream) => {
+    console.log("==================handleMainVideoStream====================");
     if (mainStreamManager !== stream) {
       setMainStreamManager(stream);
     }
   };
 
   const deleteSubscriber = (streamManager) => {
+    console.log("==================deleteSubscriber====================");
     setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
   };
 
   const joinSession = async (accessToken) => {
+    console.log("==================joinSession====================");
     // --- 1) Get an OpenVidu object ---
     const OV = new OpenVidu();
 
     // --- 2) Init a session ---
     const newSession = OV.initSession();
-    setSession(newSession);
 
     // --- 3) Specify the actions when events take place in the session ---
     // On every new Stream received...
     newSession.on("streamCreated", (event) => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
-      // so OpenVidu doesn't create an HTML video by its own
-      console.log("상대방이 들어옴");
+      // so OpenVidu doesn't create an HTML video by its own\
+      console.log("======================streamCreated=====================");
       const subscriber = newSession.subscribe(event.stream, undefined);
       setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
       newSession.signal({
-        data: JSON.stringify(userdata),
+        data: JSON.stringify(userData),
         to: [],
         type: "init",
       });
@@ -126,42 +167,38 @@ function MatchingStart() {
 
     // On every Stream destroyed...
     newSession.on("streamDestroyed", (event) => {
-      console.log("상대방이 나감");
+      console.log("======================streamDestroyed=====================");
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
     newSession.on("exception", (exception) => {
+      console.log("======================exception=====================");
       console.warn(exception);
     });
 
     // 최초 연결시 데이터 동기화를 위한 로직 (상대방 정보를 redux에 세팅)
     newSession.on("signal:init", (event) => {
+      console.log("======================signal:init=====================");
       let data = JSON.parse(event.data);
-      if (data.userId !== userdata.userId) {
+      if (data.userId !== userData.userId) {
         dispatch(setYourData(data));
       }
     });
 
     // 상대방이 점수를 선택했을때 실행되는 함수
     newSession.on("signal:score", (event) => {
-      console.log("signal:score 실행", event.data);
+      console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
 
-      if (data.userId !== yourData.userId) return;
+      // 내가 던진 점수 시그널은 무시
+      if (data.userId === userData.userId) return;
 
       // 점수를 yourScore에 저장
-      console.log("yourScore에 저장", yourScore);
       dispatch(setYourScore(data.score));
 
-      // TODO: 상대방이 선택한 점수 표시 (이 부분에 음성 출력)
-      alert("상대방이 " + data.score + "점을 선택했습니다.");
-
-      // 점수 저장 api 호출
-      // tokenHttp.post("/date/score");
-
       // 경고창 자동 삭제
-      setAlertMessage(data.score);
+      setAlertMessage(data.score + "점");
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
@@ -170,14 +207,14 @@ function MatchingStart() {
 
     // 최종점수를 받는 로직
     newSession.on("signal:lastScore", (event) => {
+      console.log("======================signal:lastScore=====================");
       let data = JSON.parse(event.data);
-      console.log(data);
     });
 
     // 최종선택의 결과를 받는 로직
     newSession.on("signal:choice", (event) => {
+      console.log("======================signal:choice=====================");
       let data = JSON.parse(event.data);
-      console.log(data);
     });
 
     // --- 4) Connect to the session with a valid user token ---
@@ -187,7 +224,7 @@ function MatchingStart() {
       const token = accessToken;
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      await newSession.connect(token, { clientData: userdata });
+      await newSession.connect(token, { clientData: userData });
 
       // --- 5) Get your own camera stream ---
       // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
@@ -216,6 +253,7 @@ function MatchingStart() {
       setMainStreamManager(newPublisher);
       setPublisher(newPublisher);
       dispatch(setOpenviduSession(newSession));
+      setSession(newSession);
     } catch (error) {
       console.log("There was an error connecting to the session:", error.code, error.message);
     }
@@ -243,7 +281,11 @@ function MatchingStart() {
         </div>
 
         {/* 질문 카드 */}
-        <QuestionCard />
+        {/* <QuestionCard /> */}
+        <div className={styles.cardOuter}>
+          <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
+        </div>
+        {/* 질문 카드 -- end */}
 
         <div id="video-container">
           {publisher !== undefined ? (
@@ -260,8 +302,38 @@ function MatchingStart() {
         </div>
       </div>
 
-      {/* 점수 체크판 */}
-      <ScoreCheck></ScoreCheck>
+      {/* 점수 체크판 -- start*/}
+      {/* <ScoreCheck></ScoreCheck> */}
+      <div className="wrapper">
+        <div className={styles.ScoreCheckBox}>
+          <div>
+            {/* <TimerBar totalTime={30000} /> */}
+            <h3>{count}</h3>
+            {/* timerBar -- end */}
+          </div>
+
+          <div className={styles.ScoreBox}>
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
+              return (
+                <div className={styles.HeartScore}>
+                  <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
+
+                  <div
+                    className={styles.ScoreText}
+                    onClick={() => {
+                      setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                      handleScoreSelect(score);
+                    }}
+                  >
+                    {score}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      {/* 점수 체크판 -- end */}
     </div>
   );
 }

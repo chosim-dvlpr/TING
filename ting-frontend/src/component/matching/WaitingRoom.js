@@ -135,6 +135,8 @@ function WaitingRoom() {
   return (
     <div>
       <h1>대기실</h1>
+      <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
+      <button onClick={()=>{navigate("/")}}>나가기</button>
       <Container className="box">
         <Row>
           <Col className="leftBox">
@@ -190,56 +192,6 @@ function WaitingRoom() {
     </div>
   );
 }
-
-const MatchingStartButton = ({ start, setStart, ticket, setTicket, navigate }) => {
-  let [micandVideo, setMicandVideo] = useState(0);
-
-  navigator.mediaDevices
-    .getUserMedia({ audio: true, video: true })
-    .then(() => {
-      setMicandVideo(1);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  let 남은시간 = "07:21";
-  let 예상대기시간 = 5;
-  // 잔여 티켓 0
-  if (ticket === 0 && start === 0) {
-    return;
-  }
-  // 잔여 티켓 1 이상
-  else if (ticket > 0 && start === 0 && micandVideo === 1) {
-    return (
-      <button
-        onClick={() => {
-          setTicket(ticket - 1);
-          setStart(1);
-        }}
-      >
-        매칭 시작
-      </button>
-    );
-  }
-
-  // 매칭시작 버튼 눌렀을 때
-  if (start === 1) {
-    return (
-      <div>
-        <p>{남은시간}</p>
-        <p>예상 대기 시간 : {예상대기시간}분</p>
-        <button
-          onClick={() => {
-            alert(navigate);
-          }}
-        >
-          임시 시작
-        </button>
-      </div>
-    );
-  }
-};
 
 const TimerComponent = () => {
   const [time, setTime] = useState(0);
