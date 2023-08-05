@@ -122,6 +122,9 @@ function MatchingStart() {
     if (questionNumber === 11) {
       setCount(5);
     }
+    if (questionNumber === 12) {
+      setCount(5);
+    }
   }, [questionNumber]);
 
   const handleScoreSelect = (score) => {
@@ -316,7 +319,11 @@ function MatchingStart() {
         </div>
       </div>
 
-      {/* 점수 체크판 -- start*/}
+      {/* 인사 할 때 인삿말  */}
+      
+
+      
+      {/* 점수 체크판 -- start */}
       {/* <ScoreCheck></ScoreCheck> */}
       <div className="wrapper">
         <div className={styles.ScoreCheckBox}>
@@ -326,30 +333,41 @@ function MatchingStart() {
             {/* timerBar -- end */}
           </div>
 
-          <div className={styles.ScoreBox}>
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
-              return (
-                <div className={styles.HeartScore}>
-                  <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
+          { questionNumber === 0 ? (
+              <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1> 
+            ) : questionNumber === 11 ? (
+              <h1>끝이 났습니다.</h1>
+            ) : questionNumber === 12 ? (
+              <h1>최종 점수</h1>
+            ) : questionNumber === 13 ? (
+              <h1>서로 마지막 어필을 해주세요</h1>
+            ) : 0 <= questionNumber <= 10 ? (
+            <div className={styles.ScoreBox}>
+              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
+                return (
+                  <div className={styles.HeartScore}>
+                    <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
-                  <button
-                    className={styles.ScoreText}
-                    disabled={disableaButton}
-                    onClick={() => {
-                      setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                      setDisableButton(true)
-                      handleScoreSelect(score);
-                    }}
-                  >
-                    {score}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
+                    <button
+                      className={styles.ScoreText}
+                      disabled={disableaButton}
+                      onClick={() => {
+                        setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                        setDisableButton(true)
+                        handleScoreSelect(score);
+                      }}
+                    >
+                      {score}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            ) : null}
+
         </div>
       </div>
-      {/* 점수 체크판 -- end */}
+      // {/* 점수 체크판 -- end */}
     </div>
   );
 }
