@@ -10,7 +10,15 @@ import "./MatchingStart.css";
 import { useNavigate } from "react-router-dom";
 import ScoreCheck from "./asset/ScoreCheck.js";
 import tokenHttp from "../../api/tokenHttp.js";
-import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession, setYourScore } from "../../redux/matchingStore.js";
+import {
+  setQuestionData,
+  setQuestionNumber,
+  setMatchingId,
+  setYourData,
+  setOpenviduSession,
+  setMyScore,
+  setYourScore,
+} from "../../redux/matchingStore.js";
 import QuestionCard from "./asset/QuestionCard.js";
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -42,7 +50,7 @@ function MatchingStart() {
   useEffect(() => {
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
-    let matchingId = state.matchingReducer.matchingId
+    let matchingId = state.matchingReducer.matchingId;
 
     // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
     if (accessToken === null) {
@@ -61,6 +69,14 @@ function MatchingStart() {
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
+      // 초기화 하는 로직 작성
+      dispatch(setOpenviduSession(null));
+      dispatch(setQuestionData({}));
+      dispatch(setQuestionNumber(0));
+      dispatch(setMatchingId(null));
+      dispatch(setMyScore([]));
+      dispatch(setYourScore([]));
+      dispatch(setYourData({}));
     };
   }, []);
 
