@@ -10,13 +10,7 @@ import "./MatchingStart.css";
 import { useNavigate } from "react-router-dom";
 import ScoreCheck from "./asset/ScoreCheck.js";
 import tokenHttp from "../../api/tokenHttp.js";
-import {
-  setQuestionData,
-  setQuestionNumber,
-  setYourData,
-  setOpenviduSession,
-  setYourScore,
-} from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setOpenviduSession, setYourScore } from "../../redux/matchingStore.js";
 import QuestionCard from "./asset/QuestionCard.js";
 
 const APPLICATION_SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -34,6 +28,7 @@ function MatchingStart() {
 
   // redux state
   const userdata = state.userdataReducer.userdata;
+  const yourData = state.matchingReducer.yourData;
   const myScore = state.matchingReducer.myScore;
   const yourScore = state.matchingReducer.yourScore;
 
@@ -41,8 +36,8 @@ function MatchingStart() {
   const navigate = useNavigate();
 
   //  점수 알림창
-  const [showAlert, setShowAlert] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     // redux에서 오픈 비두 입장 토큰 가져오기
@@ -131,19 +126,26 @@ function MatchingStart() {
 
     // 상대방이 점수를 선택했을때 실행되는 함수
     newSession.on("signal:score", (event) => {
+      console.log("signal:score 실행", event.data);
       let data = JSON.parse(event.data);
-      // TODO: 점수를 yourScore에 저장
-      dispatch(setYourScore(data.score))
-      console.log('상대방 준 점수 리스트', yourScore)
-      // TODO: 상대방이 선택한 점수 표시
+
+      if (data.userId !== yourData.userId) return;
+
+      // 점수를 yourScore에 저장
+      dispatch(setYourScore(data.score));
+
+      // TODO: 상대방이 선택한 점수 표시 (이 부분에 음성 출력)
+      alert("상대방이 " + data.score + "점을 선택했습니다.");
+
+      // 점수 저장 api 호출
+      // tokenHttp.post("/date/score");
 
       // 경고창 자동 삭제
-      setAlertMessage(data.score)
-      setShowAlert(true)
-      setTimeout(()=>{
+      setAlertMessage(data.score);
+      setShowAlert(true);
+      setTimeout(() => {
         setShowAlert(false);
-      },2000);
-      // alert(data.score);
+      }, 2000);
     });
 
     // 최종점수를 받는 로직
@@ -187,13 +189,8 @@ function MatchingStart() {
       // Obtain the current video device in use
       const devices = await OV.getDevices();
       const videoDevices = devices.filter((device) => device.kind === "videoinput");
-      const currentVideoDeviceId = newPublisher.stream
-        .getMediaStream()
-        .getVideoTracks()[0]
-        .getSettings().deviceId;
-      const currentVideoDevice = videoDevices.find(
-        (device) => device.deviceId === currentVideoDeviceId
-      );
+      const currentVideoDeviceId = newPublisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
+      const currentVideoDevice = videoDevices.find((device) => device.deviceId === currentVideoDeviceId);
 
       // Set the main video in the page to display our webcam and store our Publisher
       setMainStreamManager(newPublisher);
@@ -219,16 +216,10 @@ function MatchingStart() {
   return (
     <div className="container">
       {showAlert && <div>{alertMessage}</div>}
-      
+
       <div id="session">
         <div id="session-header">
-          <input
-            className="btn btn-large btn-danger"
-            type="button"
-            id="buttonLeaveSession"
-            onClick={leaveSession}
-            value="Leave session"
-          />
+          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={leaveSession} value="Leave session" />
         </div>
 
         {/* 질문 카드 */}
@@ -236,20 +227,13 @@ function MatchingStart() {
 
         <div id="video-container">
           {publisher !== undefined ? (
-            <div
-              className="stream-container col-md-6 col-xs-6"
-              onClick={() => handleMainVideoStream(publisher)}
-            >
+            <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
               <UserVideoComponent streamManager={publisher} />
             </div>
           ) : null}
 
           {subscribers.map((sub, i) => (
-            <div
-              key={sub.id}
-              className="stream-container col-md-6 col-xs-6"
-              onClick={() => handleMainVideoStream(sub)}
-            >
+            <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
               <UserVideoComponent streamManager={sub} />
             </div>
           ))}

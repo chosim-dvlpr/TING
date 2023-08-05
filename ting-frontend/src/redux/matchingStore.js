@@ -30,7 +30,7 @@ export let matchingReducer = createSlice({
     },
     setOpenviduSession: (state, action) => {
       state.openviduSession = action.payload;
-      console.log('세션',state.openviduSession)
+      console.log("세션", state.openviduSession);
     },
     setMyScore:(state,action)=>{
       state.myScore = [...state.myScore, action.payload];
@@ -39,6 +39,9 @@ export let matchingReducer = createSlice({
     setYourScore:(state,action)=>{
       state.yourScore = [...state.yourScore, action.payload];
       console.log('redux 안 상대방 점수 저장', state.yourScore)
+    },
+    setYourScore: (state, action) => {
+      state.yourScore = action.payload;
     },
   },
 });
