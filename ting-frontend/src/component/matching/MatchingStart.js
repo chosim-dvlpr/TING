@@ -82,6 +82,8 @@ function MatchingStart() {
 
   // 질문카드를 제어하는 로직
   useEffect(() => {
+    console.log("================score 변경=====================");
+    console.log(myScore.length, "===============", yourScore.length);
     dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
   }, [myScore, yourScore]);
 
@@ -149,6 +151,7 @@ function MatchingStart() {
       if (data.userId !== yourData.userId) return;
 
       // 점수를 yourScore에 저장
+      console.log("yourScore에 저장", yourScore);
       dispatch(setYourScore(data.score));
 
       // TODO: 상대방이 선택한 점수 표시 (이 부분에 음성 출력)

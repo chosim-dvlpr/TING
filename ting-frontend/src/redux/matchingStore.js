@@ -37,11 +37,11 @@ export let matchingReducer = createSlice({
       console.log('redux 안 내점수 저장', state.myScore)
     },
     setYourScore:(state,action)=>{
+      console.log("111111111111111111111111111111111111111111");
+      console.log("yourScore", state.yourScore);      
+      console.log("action.payload", action.payload);
       state.yourScore = [...state.yourScore, action.payload];
       console.log('redux 안 상대방 점수 저장', state.yourScore)
-    },
-    setYourScore: (state, action) => {
-      state.yourScore = action.payload;
     },
   },
 });

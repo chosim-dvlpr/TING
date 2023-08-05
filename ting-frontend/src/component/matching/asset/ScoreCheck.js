@@ -38,6 +38,7 @@ function HeartScore(props){
   
   const openviduSession = useSelector((state) => state.matchingReducer.openviduSession)
   const myScore = useSelector((state) => state.matchingReducer.myScore);
+  const userData = useSelector((state) => state.userdataReducer.userdata);
 
   // useEffect 로 questionNumber 가 바뀌면 토글을 풀어야 함
   const dispatch = useDispatch()
@@ -57,7 +58,7 @@ function HeartScore(props){
 
     // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
     openviduSession.signal({
-      data: JSON.stringify({ score: score }),
+      data: JSON.stringify({ score: score, userId: userData.userId }),
       to: [],
       type: "score",
     });
