@@ -116,7 +116,9 @@ function MatchingStart() {
     // 버튼 재활성화
     setDisableButton(false)
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false])
-    setCount(30)
+    if (questionNumber !== 0) {
+      setCount(30);
+    }
     if (questionNumber === 11) {
       setCount(5);
     }
@@ -299,7 +301,7 @@ function MatchingStart() {
         </div>
         {/* 질문 카드 -- end */}
 
-        <div id="video-container">
+        <div className={styles.videoContainer}>
           {publisher !== undefined ? (
             <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
               <UserVideoComponent streamManager={publisher} />
