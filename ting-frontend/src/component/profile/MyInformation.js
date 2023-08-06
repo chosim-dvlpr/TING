@@ -1,6 +1,9 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function MyInformation() {
+  let Navigate = useNavigate();
+
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let regionList = [{regionEn: "SEOUL", regionKor: "서울"}, {regionEn: "DAEJEON", regionKor: "대전"},
   {regionEn: "BUSAN", regionKor: "부산"}, {regionEn: "DAEGU", regionKor: "대구"}, {regionEn: "INCHEON", regionKor: "인천"},
@@ -19,6 +22,8 @@ function MyInformation() {
   return (
     <div>
       <h2>내 정보 페이지</h2>
+      <button onClick={() => Navigate("/mypage/update")}>편집</button>
+
       <p>이름 : { userdata.name }</p>
       <p>성별 : { userdata.gender }</p>
       <p>이메일 : { userdata.email }</p>

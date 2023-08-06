@@ -137,6 +137,7 @@ function App() {
         {/* 마이페이지 */}
         <Route path="/mypage" element={<MyProfilePage/>}>
           <Route path="" element={<MyInformation />}></Route>
+          <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
           <Route path="qna" element={<QnaBoard />}></Route>
           <Route path="myarticle" element={<MyArticle />}></Route>
