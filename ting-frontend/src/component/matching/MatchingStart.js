@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
 import Report from "./common/Report.js";
+import MatchingChoice from "./common/MatchingChoice.js";
 
 function MatchingStart() {
   // redux 관련 state 불러오기
@@ -18,6 +19,7 @@ function MatchingStart() {
   const yourScore = state.matchingReducer.yourScore;
   const questionData = state.matchingReducer.questionData;
   const questionNumber = state.matchingReducer.questionNumber;
+  const matchingResult = state.matchingReducer.matchingResult;
 
   // react-router
   const navigate = useNavigate();
@@ -42,6 +44,9 @@ function MatchingStart() {
 
   // 신고 모달창 관련 state
   const [showReportModal, setShowReportModal] = useState(false);
+
+  // 최종 선택 모달창 관련 state
+  const [showMatchingChoiceModal, setShowMatchingChoiceModal] = useState(false)
 
   // 초기화 useEffect hook
   useEffect(() => {
@@ -129,6 +134,10 @@ function MatchingStart() {
     if (questionNumber === 12) {
       setCount(5);
     }
+    if (questionNumber === 14) {
+      setShowMatchingChoiceModal(true)
+      setCount(20)
+    }
   }, [questionNumber]);
 
   const handleScoreSelect = (score) => {
@@ -143,8 +152,6 @@ function MatchingStart() {
       to: [],
       type: "score",
     });
-
-    // TODO: 선택이 불가능하도록 state 변경
   };
 
   const onbeforeunload = (event) => {
@@ -212,7 +219,7 @@ function MatchingStart() {
     newSession.on("signal:score", (event) => {
       console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
-
+      
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
 
@@ -250,6 +257,18 @@ function MatchingStart() {
       alert("상대방과의 연결이 끊어졌습니다.");
       navigate("/");
     });
+
+    // 최종 선택 정보를 받는 로직
+    newSession.on("signal:select", (event) => {
+      console.log("======================signal:select=====================");
+      const data = JSON.parse(event.data)
+
+      // 내가 선택한 시그널은 무시
+      if (data.userId === userData.userId) return;
+
+      dispatch(setMatchingResult(data))
+    })
+
 
     // --- 4) Connect to the session with a valid user token ---
     // Get a token from the OpenVidu deployment
@@ -338,20 +357,15 @@ function MatchingStart() {
           ))}
         </div>
       </div>
-
-      {/* 인사 할 때 인삿말  */}
-
-
-
+      
+      <div className="wrapper">
+      <div>
+        <h3>{count}</h3>
+      </div>
       {/* 점수 체크판 -- start */}
       {/* <ScoreCheck></ScoreCheck> */}
-      <div className="wrapper">
+      { showMatchingChoiceModal ? null : (
         <div className={styles.ScoreCheckBox}>
-          <div>
-            {/* <TimerBar totalTime={30000} /> */}
-            <h3>{count}</h3>
-            {/* timerBar -- end */}
-          </div>
 
           {questionNumber === 0 ? (
             <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
@@ -384,14 +398,23 @@ function MatchingStart() {
               })}
             </div>
           ) : null}
-        </div>
+        </div> )
+        }
         {/* 점수 체크판 -- end */}
 
         {/* 신고 모달창 */}
         {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
+
+        {/* 최종 선택 */}
+        {showMatchingChoiceModal && <MatchingChoice session={session} count={count}/>}
+
       </div>
     </div>
   );
 }
+
+
+
+
 
 export default MatchingStart;

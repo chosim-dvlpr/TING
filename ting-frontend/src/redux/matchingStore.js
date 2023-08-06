@@ -10,6 +10,7 @@ export let matchingReducer = createSlice({
     myScore: [],
     yourScore: [],
     yourData: {},
+    matchingResult:null,
   },
   reducers: {
     resetMatchingStore: (state) => {
@@ -19,6 +20,7 @@ export let matchingReducer = createSlice({
       state.myScore = [];
       state.yourScore = [];
       state.yourData = {};
+      state.matchingResult = null;
     },
 
     setQuestionData: (state, action) => {
@@ -51,6 +53,12 @@ export let matchingReducer = createSlice({
       console.log("++++++++++++++ Redux yourScore 저장 +++++++++++++++")
       console.log(state.yourScore)
     },
+    setMatchingResult:(state,action)=>{
+      state.matchingResult = action.payload;
+      console.log("++++++++++++++ matchingResult 저장 +++++++++++++++")
+      console.log(state.matchingResult)
+    }
+
   },
 });
 
@@ -60,6 +68,7 @@ export let { setQuestionData,
   setYourData, 
   setMyScore, 
   setYourScore,
+  setMatchingResult,
   resetMatchingStore
 } = matchingReducer.actions;
 
