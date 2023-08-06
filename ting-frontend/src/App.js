@@ -137,6 +137,8 @@ function App() {
         {/* 마이페이지 */}
         <Route path="/mypage" element={<MyProfilePage/>}></Route>
         
+        {/* 아이템 페이지 */}
+        <Route path="/item" element={<ItemPage/>}></Route>
       </Routes>
 
     </div>
