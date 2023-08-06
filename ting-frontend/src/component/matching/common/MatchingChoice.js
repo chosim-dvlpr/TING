@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import styles from "./MatchingChoice.js"
 import { useSelector } from "react-redux/es/hooks/useSelector"
 import { useNavigate } from "react-router-dom"
+import tokenHttp from "../../../api/tokenHttp.js"
 
 function MatchingChoice({session, count}){
   const navigate = useNavigate()
@@ -9,6 +10,7 @@ function MatchingChoice({session, count}){
   const state = useSelector((state)=>state)
   const yourData = state.matchingReducer.yourData
   const userData = state.userdataReducer.userdata
+  const matchingId = state.matchingReducer.matchingId
   const matchingResult = state.matchingReducer.matchingResult
   
   const [finish, setFinish] = useState(false) 
@@ -18,6 +20,7 @@ function MatchingChoice({session, count}){
   useEffect(()=>{
     if (count === 0){
       setFinish(true)
+      becomeFriend()
     }
   },[count]);
 
@@ -25,6 +28,28 @@ function MatchingChoice({session, count}){
   useEffect(()=>{
     sendResult(result)
   },[result])
+
+  // 최종 결과 비동기로 친구 매칭 보내는 함수
+  const becomeFriend = async ()=>{
+    let resultData;
+    if (result) {
+      resultData={
+        matchingId: matchingId,
+        choice : 'yes'
+      };
+    } else {
+      resultData={
+        matchingId: matchingId,
+        choice : 'no'
+      };
+    }
+    try {
+      const response = await tokenHttp.post('/date/result',resultData)
+      console.log(response.data);
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   // 상대에게 최종 결과를 전송하는 로직
   const sendResult = (result) => {

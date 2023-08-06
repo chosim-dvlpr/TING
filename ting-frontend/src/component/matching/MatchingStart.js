@@ -19,7 +19,7 @@ function MatchingStart() {
   const yourScore = state.matchingReducer.yourScore;
   const questionData = state.matchingReducer.questionData;
   const questionNumber = state.matchingReducer.questionNumber;
-  const matchingResult = state.matchingReducer.matchingResult;
+  const matchingId = state.matchingReducer.matchingId;
 
   // react-router
   const navigate = useNavigate();
@@ -130,7 +130,8 @@ function MatchingStart() {
     setDisableButton(false);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
-      setCount(30);
+      // 3초의 딜레이
+      setTimeout(setCount(30),3000);
     }
     if (questionNumber === 11) {
       setCount(5);
@@ -140,6 +141,14 @@ function MatchingStart() {
       // 결과 최종합
       setSumMyScore(myScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
       setSumYourScore(yourScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
+      // 최종 점수 DB에 저장
+      const totalScoreData = {
+        matchingId : matchingId,
+        totalScore : sumYourScore,
+      }
+      tokenHttp.post('/date/score/total',totalScoreData)
+        .then((response)=>{console.log(response.data.message)})
+        .catch((err)=>{console.log(err)})
     }
     if (questionNumber === 14) {
       setShowMatchingChoiceModal(true)
@@ -381,8 +390,8 @@ function MatchingStart() {
           ) : questionNumber === 12 ? (
             <div>
               <h1>최종 점수</h1>
-              <h1>내 점수 : {sumMyScore} </h1>
-              <h1>상대 점수 : {sumYourScore} </h1>
+              <h1>내가 받은 점수 : {sumYourScore} </h1>
+              <h1>상대가 받은 점수 : {sumMyScore} </h1>
             </div>
           ) : questionNumber === 13 ? (
             <h1>서로 마지막 어필을 해주세요</h1>
