@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    width: 100%;
+  }
+  
+  .expandableArea {
+    transition: flex-basis 0.5s;
+    border: 1px solid black;
+    overflow: hidden;
+  }
+  
+  .voteButton {
+    width: 100%;
+    padding: 10px;
+    background-color: lightgray;
+    border: none;
+    cursor: pointer;
+  }
+  

@@ -1,13 +1,13 @@
 import React from 'react';
-// jsx를 자바스크립트로 변환해주는 react 라이브러리를 현재 파일에서 사용하겠다는 의미임
 
-import './Sidebar.module.css'
+
+import styles from './Sidebar.module.css'
 
 import {Link} from 'react-router-dom';
 
 const Sidebar = () => {
     return (
-        <div className="sidebar">
+        <div className={styles.sidebar}>
           <aside>
           <ul>
             <li>

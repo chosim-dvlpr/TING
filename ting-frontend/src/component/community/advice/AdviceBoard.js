@@ -7,6 +7,7 @@ import styles from "./AdviceBoard.module.css";
 import Sidebar from "../common/Sidebar";
 import Pagination from "../common/Pagination";
 import tokenHttp from "../../../api/tokenHttp";
+import basicHttp from "../../../api/basicHttp";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
@@ -22,7 +23,7 @@ function AdviceBoard() {
 
   const getAllAdviceData = async () => {
     try {
-      const response = await axios.get(
+      const response = await basicHttp.get(
         "https://i9b107.p.ssafy.io:5157/advice",
         { params: { pageNo: currentPage} }
       );
@@ -70,7 +71,7 @@ function AdviceBoard() {
     // 글 삭제
     const handleDelete = async (adviceId) => {
       try {
-        await tokenHttp.delete(`https://i9b107.p.ssafy.io:5157/advice/${adviceId}`);
+        await tokenHttp.delete(`advice/${adviceId}`);
         console.log("delete성공")
         await getAllAdviceData(); 
       } catch (error) {
@@ -106,7 +107,13 @@ function AdviceBoard() {
                 </span>
               </td>
               <td>{advice.hit}</td>
-              <td>{advice.createdTime}
+              <td> {advice.modifiedTime ? (
+                  <>
+              {advice.modifiedTime} (수정됨)
+              </>
+        ) : (
+          advice.createdTime
+        )}
               {showKebab(advice.nickname) && (
                 <div className={styles.dropdownContainer}>
                 <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab}/>
