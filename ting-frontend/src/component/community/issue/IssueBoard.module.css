@@ -1,19 +1,86 @@
-.container {
-    display: flex;
-    width: 100%;
-  }
-  
-  .expandableArea {
-    transition: flex-basis 0.5s;
-    border: 1px solid black;
-    overflow: hidden;
-  }
-  
-  .voteButton {
-    width: 100%;
-    padding: 10px;
-    background-color: lightgray;
-    border: none;
-    cursor: pointer;
-  }
-  
+.issueBoardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.createButton {
+  margin-bottom: 20px;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px; /* 최대 너비 설정 (필요한 경우 조정) */
+  margin: 0 auto;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.link {
+  cursor: pointer;
+  color: #007bff;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.cardVotes {
+  display: flex;
+  gap: 20px;
+}
+
+.agree,
+.oppose {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownContainer {
+  position: relative;
+}
+
+.dropdownKebab {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.dropdownContent {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.dropdownContainer:hover .dropdownContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownContent span {
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownContent span:hover {
+  background-color: #f8f8f8;
+}
