@@ -1,4 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import tokenHttp from "../api/tokenHttp";
 
 export let matchingReducer = createSlice({
   name: "matchingReducer",
@@ -52,7 +53,22 @@ export let matchingReducer = createSlice({
       state.yourScore = [...state.yourScore, action.payload];
       console.log("++++++++++++++ Redux yourScore 저장 +++++++++++++++")
       console.log(state.yourScore)
+
+      // DB에 질문에 대해 받은 점수 저장
+      const data = {
+        matchingId : state.matchingId,
+        questionId : state.questionData[state.questionNumber].id,
+        score: action.payload,
+        questionOrder : state.questionNumber 
+      }
+      if ( data.questionOrder > 0 &&  data.questionOrder < 12 ){
+        tokenHttp.post('/date/score', data)
+          .then((response)=>{
+            console.log(response.data.message)
+          }).catch(err => console.log(err))
+      }
     },
+
     setMatchingResult:(state,action)=>{
       state.matchingResult = action.payload;
       console.log("++++++++++++++ matchingResult 저장 +++++++++++++++")
