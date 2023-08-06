@@ -36,6 +36,10 @@ function MatchingStart() {
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
   const [disableaButton, setDisableButton] = useState(false);
 
+  // 최종 점수 관련 state
+  const [sumMyScore, setSumMyScore] = useState(0)
+  const [sumYourScore, setSumYourScore] = useState(0) 
+
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
@@ -133,6 +137,9 @@ function MatchingStart() {
     }
     if (questionNumber === 12) {
       setCount(5);
+      // 결과 최종합
+      setSumMyScore(myScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
+      setSumYourScore(yourScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
     }
     if (questionNumber === 14) {
       setShowMatchingChoiceModal(true)
@@ -372,7 +379,11 @@ function MatchingStart() {
           ) : questionNumber === 11 ? (
             <h1>끝이 났습니다.</h1>
           ) : questionNumber === 12 ? (
-            <h1>최종 점수</h1>
+            <div>
+              <h1>최종 점수</h1>
+              <h1>내 점수 : {sumMyScore} </h1>
+              <h1>상대 점수 : {sumYourScore} </h1>
+            </div>
           ) : questionNumber === 13 ? (
             <h1>서로 마지막 어필을 해주세요</h1>
           ) : 0 <= questionNumber <= 10 ? (
