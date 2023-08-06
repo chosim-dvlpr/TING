@@ -130,7 +130,8 @@ function MatchingStart() {
     setDisableButton(false);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
-      setCount(30);
+      // 3초의 딜레이
+      setTimeout(setCount(30),3000);
     }
     if (questionNumber === 11) {
       setCount(5);
