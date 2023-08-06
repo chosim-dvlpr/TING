@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 function MyInformation() {
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let regionList = [{regionEn: "SEOUL", regionKor: "서울"}, {regionEn: "DAEJEON", regionKor: "대전"},
-  {regionEn: "BUSAN", regionKor: "부산"}, {regionEn: "SEOUL", regionKor: "대구"}, {regionEn: "SEOUL", regionKor: "인천"},
-  {regionEn: "SEOUL", regionKor: "광주"}, {regionEn: "SEOUL", regionKor: "울산"},{regionEn: "SEOUL", regionKor: "경기"},
-  {regionEn: "SEOUL", regionKor: "강원"}, {regionEn: "SEOUL", regionKor: "충복"}, {regionEn: "SEOUL", regionKor: "충남"},
-  {regionEn: "SEOUL", regionKor: "세종"}, {regionEn: "SEOUL", regionKor: "전북"}, {regionEn: "SEOUL", regionKor: "전남"},
-  {regionEn: "SEOUL", regionKor: "경북"}, {regionEn: "SEOUL", regionKor: "경남"}, {regionEn: "SEOUL", regionKor: "제주"},
+  {regionEn: "BUSAN", regionKor: "부산"}, {regionEn: "DAEGU", regionKor: "대구"}, {regionEn: "INCHEON", regionKor: "인천"},
+  {regionEn: "GWANGJU", regionKor: "광주"}, {regionEn: "ULSAN", regionKor: "울산"},{regionEn: "GYEONGGI", regionKor: "경기"},
+  {regionEn: "GANGWON", regionKor: "강원"}, {regionEn: "CHUNGBUK", regionKor: "충북"}, {regionEn: "CHUNGNAM", regionKor: "충남"},
+  {regionEn: "SEJONG", regionKor: "세종"}, {regionEn: "JEONBUK", regionKor: "전북"}, {regionEn: "JEONNAM", regionKor: "전남"},
+  {regionEn: "GYEONGBUK", regionKor: "경북"}, {regionEn: "GYEONGNAM", regionKor: "경남"}, {regionEn: "JEJU", regionKor: "제주"},
 ]
 
   // 지역 영어를 한글로 변환
