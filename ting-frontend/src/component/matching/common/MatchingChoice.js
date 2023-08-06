@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react"
 import styles from "./MatchingChoice.js"
 import { useSelector } from "react-redux/es/hooks/useSelector"
+import { useNavigate } from "react-router-dom"
 
 function MatchingChoice({session, count}){
-  const state = useSelector((state)=>state.matchingReducer)
-  const yourData = state.yourData
-  const matchingResult = state.matchingResult
+  const navigate = useNavigate()
+
+  const state = useSelector((state)=>state)
+  const yourData = state.matchingReducer.yourData
+  const userData = state.userdataReducer.userdata
+  const matchingResult = state.matchingReducer.matchingResult
+  
   const [finish, setFinish] = useState(false) 
   const [result,setResult] = useState(false)
 
+  // 최종 선택 타이머 끝내는 로직
   useEffect(()=>{
     if (count === 0){
       setFinish(true)
-      sendResult(result)
     }
   },[count]);
+
+  // 결과 선택 로직
+  useEffect(()=>{
+    sendResult(result)
+  },[result])
 
   // 상대에게 최종 결과를 전송하는 로직
   const sendResult = (result) => {
     session.signal({
-      data:JSON.stringify({ result : result }),
+      data:JSON.stringify({ result : result, userId : userData.userId }),
       to:[],
       type:"select",
     })
@@ -31,17 +41,17 @@ function MatchingChoice({session, count}){
       <div classNave={styles.InnerBox}>
         <h1>최종 선택</h1>
         { finish ? (
-          matchingResult ? ( 
+          matchingResult.result ? ( 
             <div>
               <h3>{yourData.nickname}님이 수락하셨습니다.</h3>
               <h3>자동으로 어항에 추가됩니다.</h3>
-              <button>메인으로 돌아가기</button>
+              <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
             </div>
           ) : (
             <div>
               <h3>{yourData.nickname}님이 거절하셨습니다.</h3>
               <h3>다음 기회에....</h3>
-              <button>메인으로 돌아가기</button>
+              <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
             </div>
           )
         ) : (
