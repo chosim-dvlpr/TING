@@ -42,6 +42,8 @@ import AdviceBoard from './component/community/advice/AdviceBoard';
 import AdviceDetail from './component/community/advice/AdviceDetail';
 import AdviceCreate from './component/community/advice/AdviceCreate';
 import AdviceUpdate from './component/community/advice/AdviceUpdate';
+import IssueBoard from './component/community/issue/IssueBoard';
+import IssueCreate from './component/community/issue/IssueCreate';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -121,6 +123,9 @@ function App() {
         <Route path="/community/advice" element={<AdviceBoard/>} />
         <Route path="/community/advice/create" element = {<AdviceCreate/>} />
         <Route path="/community/advice/update/:adviceId" element = {<AdviceUpdate/>} />
+
+        <Route path='/community/issue' element={<IssueBoard/>} />
+        <Route path="/community/issue/create" element = {<IssueCreate/>} />
 
         
         {/* 친구목록 임시 */}

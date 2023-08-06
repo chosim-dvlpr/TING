@@ -24,7 +24,7 @@ function AdviceBoard() {
   const getAllAdviceData = async () => {
     try {
       const response = await basicHttp.get(
-        "https://i9b107.p.ssafy.io:5157/advice",
+        "/advice",
         { params: { pageNo: currentPage} }
       );
       const responseData = response.data.data;
@@ -45,6 +45,14 @@ function AdviceBoard() {
     if (userdata) {
       console.log(userdata);
       navigate(`/community/advice/detail/${adviceId}`);
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
+
+  const handleCreateClick = () => {
+    if (userdata) {
+      navigate("/community/advice/create");
     } else {
       alert("로그인이 필요합니다.");
     }
@@ -82,7 +90,7 @@ function AdviceBoard() {
   return (
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
-      <button className={styles.createButton} onClick={() => navigate("/community/advice/create")}>
+      <button className={styles.createButton} onClick={handleCreateClick}>
         글 작성하기</button>
 
       <table className={styles.adviceTable}>

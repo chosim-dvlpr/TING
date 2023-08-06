@@ -11,7 +11,7 @@ function CommunityPage() {
 
   return (
     <div className="community-container">
-      <Sidebar/>
+     
       <div className="community-content">
         <Routes>
          
