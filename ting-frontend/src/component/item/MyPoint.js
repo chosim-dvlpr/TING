@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import tokenHttp from "../../api/tokenHttp";
 import { setPoint } from "../../redux/itemStore";
+import { setPointPaymentId } from '../../redux/itemStore';
 import styles from "./MyPoint.module.css"
 
 function MyPoint() {
@@ -49,19 +50,52 @@ function MyPoint() {
   )
 }
 
+
 // 컴포넌트는 대문자로 시작해야 인식함
 // 
 function SelectMoney(){
-  const money = [1000,3000,5000,10000,50000]
+  const dispatch = useDispatch()
+
+  // api로 충전할 돈의 정보
+  const [chargeMoneyData, setChargeMoneyData] = useState([])
+  
+  // 충전하기 위해 보낼 정보
+  const [selectChargeMoneyData, setSelectChargeMoneyData] = useState({})
+  
+  useEffect(()=>{
+    tokenHttp.get('/point/charge/list')
+      .then(response => {
+        setChargeMoneyData(response.data.data)
+        console.log(response.data.data)
+      })
+      .catch(err => console.log(err))
+  },[])
+
+  // 카카오 페이로 보내기 위한 함수
+  const sendToKakaoPay = () => {
+    let data = {
+      pointCode: selectChargeMoneyData.pointCode
+    }
+    tokenHttp.post('/point/kakaopay/ready', data)
+      .then(response => {
+        console.log(response.data.data)
+        dispatch(setPointPaymentId(response.data.data.pointPaymentId))
+        window.open(response.data.data.redirectUrl, '_blank');
+      })
+      .catch(err => console.log(err))
+    
+  }
 
   return(
     <div>
       <div>
-        {money.map((money,idx) => (
-          <button key={idx}>{money}</button>
+        {chargeMoneyData.map((money,idx) => (
+          <button key={idx} onClick={()=>{
+            setSelectChargeMoneyData(money)
+          }}>{money.totalAmount}</button>
         ))}
       </div>
-      <div>카카오페이 버튼</div>
+      <button onClick={()=>{sendToKakaoPay()}}>카카오페이 버튼</button>
     </div>
   )
 }

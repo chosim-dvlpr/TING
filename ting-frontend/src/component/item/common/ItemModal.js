@@ -26,6 +26,11 @@ function ItemModal({closeModal, clickedItem}) {
           <div className={styles.QuantityNum}>{quantity}</div>
           <div className={styles.PlusButton} onClick={()=>{changeQuantity('+')}}>+</div>
         </div>
+        {/* 구매하기 버튼 */}
+        <div>
+          <div>구매하기</div>
+          <div>{clickedItem.price}</div>
+        </div>
       </div>
     </div>
   )
