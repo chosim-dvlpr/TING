@@ -81,8 +81,11 @@ payment:
   kakaopay:
     admin:
       key: 68c2aade4f26ed122b7aa651eedaf2fa
-    cid: TC0NETIME
+    cid: TC0ONETIME
     url:
+      ready: https://kapi.kakao.com/v1/payment/ready
+      approve: https://kapi/kakao.com/v1/payment/approve
+    redirectUrl:
       approval: https://i9b107.p.ssafy.io/payment/kakaoPaySuccess
       cancel: https://i9b107.p.ssafy.io/payment/kakaoPayCancel
       fail: https://i9b107.p.ssafy.io/payment/kakaoPayFail

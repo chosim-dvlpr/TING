@@ -48,6 +48,9 @@ public enum ExceptionType {
     ITEM_NOT_FOUND(4801, "아이템이 존재하지 않습니다."),
     USER_ITEM_NOT_FOUND(4802, "사용자가 해당 아이템을 보유하고 있지 않습니다."),
 
+    POINT_CODE_NOT_EXIST(4900, "포인트 코드가 존재하지 않습니다."),
+    KAKAO_READY_JSON_PARSE_EXCEPTION(4901, "카카오 결제 준비 응답 JSON 파싱에 실패하였습니다."),
+
     REPORT_NOT_FOUND(4900, "신고 내역이 존재하지 않습니다"),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");

@@ -154,7 +154,11 @@ public class HttpUtil {
         Iterator<String> itr = params.keySet().iterator();
         while (itr.hasNext()) {
             String key = itr.next();
-            body.add(key, (String) params.get(key));
+            if (params.get(key) instanceof String) {
+                body.add(key, (String) params.get(key));
+            } else {
+                body.add(key, String.valueOf(params.get(key)));
+            }
         }
         return this;
     }

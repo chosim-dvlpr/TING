@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"user", "pointCode"})
 public class PointPayment {
 
     @Id
