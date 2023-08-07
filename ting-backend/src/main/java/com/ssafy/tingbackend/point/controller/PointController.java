@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -71,12 +72,16 @@ public class PointController {
      */
     @PostMapping("/point/kakaopay/ready")
     public DataResponse<PaymentDto.ReadyResponse> chargePointByKakaoPay(@RequestBody PaymentDto.ReadyRequest ready,
-                                                                        Principal principal) {
+                                                                        Principal principal,
+                                                                        HttpServletRequest request) {
+        String domain = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        log.info("domain: {}", domain);
+
         Long userId = Long.parseLong(principal.getName());
         Long pointCode = ready.getPointCode();
 
         return new DataResponse<>(200, "카카오페이 결제 준비 API 호출 성공",
-                kakaoPaymentService.ready(userId, pointCode));
+                kakaoPaymentService.ready(userId, pointCode, domain));
     }
 
     @PostMapping("/point/kakaopay/approve")

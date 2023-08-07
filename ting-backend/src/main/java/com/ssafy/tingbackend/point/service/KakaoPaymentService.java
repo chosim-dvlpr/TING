@@ -42,13 +42,6 @@ public class KakaoPaymentService {
     @Value("${payment.kakaopay.url.approve}")
     private String approveUrl;
 
-//    @Value("${payment.kakaopay.redirectUrl.dev.approvalRedirectUrl}")
-//    private String approvalRedirectUrl;
-//    @Value("${payment.kakaopay.redirectUrl.dev.cancelRedirectUrl}")
-//    private String cancelRedirectUrl;
-//    @Value("${payment.kakaopay.redirectUrl.dev.failRedirectUrl}")
-//    private String failRedirectUrl;
-
     @Value("${payment.kakaopay.redirectUrl.approvalRedirectUrl}")
     private String approvalRedirectUrl;
     @Value("${payment.kakaopay.redirectUrl.cancelRedirectUrl}")
@@ -57,7 +50,7 @@ public class KakaoPaymentService {
     private String failRedirectUrl;
 
     @Transactional
-    public PaymentDto.ReadyResponse ready(Long userId, Long pointCode) {
+    public PaymentDto.ReadyResponse ready(Long userId, Long pointCode, String domain) {
         PointCode pointItem = pointCodeRepository.findById(pointCode)
                 .orElseThrow(() -> new CommonException(ExceptionType.POINT_CODE_NOT_EXIST));
 
@@ -74,7 +67,7 @@ public class KakaoPaymentService {
         pointPaymentRepository.save(pointPayment);
 
         // 카카오페이 결제 준비 API 호출
-        PaymentDto.KakaoApiReadyResponse kakaoApiReadyResponse = callKakaoPayReadyApi(pointItem, pointPayment, user);
+        PaymentDto.KakaoApiReadyResponse kakaoApiReadyResponse = callKakaoPayReadyApi(pointItem, pointPayment, user, domain);
 
         // pointPayment 업데이트
         pointPayment.setTid(kakaoApiReadyResponse.getTid());
@@ -147,7 +140,7 @@ public class KakaoPaymentService {
         return kakaoApiReadyResponse;
     }
 
-    private PaymentDto.KakaoApiReadyResponse callKakaoPayReadyApi(PointCode pointItem, PointPayment pointPayment, User user) {
+    private PaymentDto.KakaoApiReadyResponse callKakaoPayReadyApi(PointCode pointItem, PointPayment pointPayment, User user, String domain) {
         // 카카오페이 Ready API 요청 본문
         HashMap<String, Object> jsonBody = new HashMap<>();
         jsonBody.put("cid", pointPayment.getCid());
@@ -157,9 +150,9 @@ public class KakaoPaymentService {
         jsonBody.put("quantity", pointPayment.getQuantity());
         jsonBody.put("total_amount", pointItem.getTotalAmount());
         jsonBody.put("tax_free_amount", pointItem.getTaxFreeAmount());
-        jsonBody.put("approval_url", approvalRedirectUrl);
-        jsonBody.put("cancel_url", cancelRedirectUrl);
-        jsonBody.put("fail_url", failRedirectUrl);
+        jsonBody.put("approval_url", domain + approvalRedirectUrl);
+        jsonBody.put("cancel_url", domain + cancelRedirectUrl);
+        jsonBody.put("fail_url", domain + failRedirectUrl);
 
         HashMap<String, Object> response = new HttpUtil()
                 .header("Authorization", "KakaoAK " + adminKey)
