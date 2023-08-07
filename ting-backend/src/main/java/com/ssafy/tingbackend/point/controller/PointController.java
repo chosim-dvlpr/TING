@@ -84,6 +84,13 @@ public class PointController {
                 kakaoPaymentService.ready(userId, pointCode, domain));
     }
 
+    /**
+     * 카카오페이 결제 승인 API 호출
+     *
+     * @param approve   결제 승인 정보
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @return 결제 승인 응답 정보
+     */
     @PostMapping("/point/kakaopay/approve")
     public DataResponse<PaymentDto.ApproveResponse> approvePointByKakaoPay(@RequestBody PaymentDto.ApproveRequest approve, Principal principal) {
         PaymentDto.ApproveResponse response = kakaoPaymentService.approve(approve, principal.getName());
