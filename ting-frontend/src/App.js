@@ -87,7 +87,7 @@ function App() {
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
         <Route path="/tutorial" element={ <TutorialPage/> }></Route>
-        <Route path="/community/" element={ <CommunityPage /> }></Route>
+        <Route path="/community//*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
         {/* 회원가입 */}
@@ -122,7 +122,7 @@ function App() {
 
         {/* 커뮤니티 페이지 */}
 
-        <Route path="/community/" element={<CommunityPage />} />
+        <Route path="/community//*" element={<CommunityPage />} />
 
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
         <Route path="/community/advice" element={<AdviceBoard/>} />
