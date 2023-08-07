@@ -83,6 +83,11 @@ public class PointController {
         String domain = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         log.info("domain: {}", domain);
 
+        StringBuffer requestURL = request.getRequestURL();
+        String uri = request.getRequestURI();
+        log.info("requestURL: {}", requestURL);
+        log.info("uri: {}", uri);
+
         Long userId = Long.parseLong(principal.getName());
         Long pointCode = ready.getPointCode();
 
