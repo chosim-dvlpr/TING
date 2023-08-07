@@ -77,3 +77,15 @@ cloud:
     credentials:
       location: classpath:service-account-key.json
 
+payment:
+  kakaopay:
+    admin:
+      key: 68c2aade4f26ed122b7aa651eedaf2fa
+    cid: TC0ONETIME
+    url:
+      ready: https://kapi.kakao.com/v1/payment/ready
+      approve: https://kapi.kakao.com/v1/payment/approve
+    redirectUrl:
+      approvalRedirectUrl: /payment/kakaoPaySuccess
+      cancelRedirectUrl: /payment/kakaoPayCancel
+      failRedirectUrl: /payment/kakaoPayFail
