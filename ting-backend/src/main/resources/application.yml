@@ -77,3 +77,16 @@ cloud:
     credentials:
       location: classpath:service-account-key.json
 
+payment:
+  kakaopay:
+    admin:
+      key: 68c2aade4f26ed122b7aa651eedaf2fa
+    cid: TC0NETIME
+    url:
+      approval: https://i9b107.p.ssafy.io/payment/kakaoPaySuccess
+      cancel: https://i9b107.p.ssafy.io/payment/kakaoPayCancel
+      fail: https://i9b107.p.ssafy.io/payment/kakaoPayFail
+      dev:
+        approval: http://localhost:3000/payment/kakaoPaySuccess
+        cancel: http://localhost:3000/payment/kakaoPayCancel
+        fail: http://localhost:3000/payment/kakaoPayFail
