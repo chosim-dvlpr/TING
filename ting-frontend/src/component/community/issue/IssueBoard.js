@@ -19,14 +19,14 @@ function IssueBoard() {
     getAllIssueData();
   }, [currentPage]);
 
-
   const getAllIssueData = async () => {
     try {
-      const response = await basicHttp.get("/issue", { params: { pageNo: currentPage } });
+      const response = await basicHttp.get("/issue", {
+        params: { pageNo: currentPage },
+      });
       const responseData = response.data.data;
 
       if (responseData.issueBoardList) {
-        
         setIssueList(responseData.issueBoardList);
         setTotalPages(responseData.totalPages);
       }
@@ -52,7 +52,6 @@ function IssueBoard() {
     }
   };
 
-
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -63,11 +62,11 @@ function IssueBoard() {
     return userdata && userdata.nickname === nickname;
   };
 
-//  글 수정은 불가
+  //  글 수정은 불가
   const handleDelete = async (issueId) => {
     try {
       await tokenHttp.delete(`issue/${issueId}`);
-      
+
       await getAllIssueData();
     } catch (error) {
       console.error("Error deleting issue:", error);
@@ -86,97 +85,108 @@ function IssueBoard() {
           keyword,
         },
       });
-      
-        
+
       const searchData = response.data;
       console.log("===========Search Data:", searchData);
-      
+
       console.log("============", searchData.issueBoardList);
-      setSearchResult(searchData.data.issueBoardList); 
+      setSearchResult(searchData.data.issueBoardList);
 
       console.log("============Search Result:", searchResult);
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      console.error("Error fetching search results:", error);
     }
-    
   };
   useEffect(() => {
-    console.log("============Search Resulthhhhhhhhhhhhh:", searchResult);
-  },[searchResult])
-  
-  
+    console.log("============Search Result:", searchResult);
+  }, [searchResult]);
 
   return (
     <div>
-  <Sidebar />
-  <div className={styles.issueBoardContainer}>
-    <button className={styles.createButton} onClick={handleCreateClick}>
-      글 작성하기
-    </button>
-    <div className={styles.cardList}>
-      {searchResult.length > 0 ? (
-        searchResult.map((issue) => (
-          <div key={issue.issueId} className={styles.card}>
-            <span className={styles.link} onClick={(event) => handleLinkClick(issue.issueId, event)}>
-              {issue.title}
-            </span>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardVotes}>
-                <div className={styles.agree}>
-                  <span>{issue.agree_title}</span>
-                  <span>{issue.agree_count}</span>
-                </div>
-                <div className={styles.oppose}>
-                  <span>{issue.oppose_title}</span>
-                  <span>{issue.oppose_count}</span>
+      <Sidebar />
+      <div className={styles.cardList}>
+        {searchResult.length > 0
+          ? searchResult.map((issue) => (
+              <div key={issue.issueId} className={styles.card}>
+                <span
+                  className={styles.link}
+                  onClick={(event) => handleLinkClick(issue.issueId, event)}
+                >
+                  {issue.title}
+                </span>
+                <div className={styles.cardFooter}>
+                  <div className={styles.cardVotes}>
+                    <div className={styles.agree}>
+                      <span>{issue.agree_title}</span>
+                      <span>{issue.agree_count}</span>
+                    </div>
+                    <div className={styles.oppose}>
+                      <span>{issue.oppose_title}</span>
+                      <span>{issue.oppose_count}</span>
+                    </div>
+                  </div>
+                  {showKebab(issue.nickname) && (
+                    <div className={styles.dropdownContainer}>
+                      <img
+                        src="/img/kebab.png"
+                        alt="kebab"
+                        className={styles.dropdownKebab}
+                      />
+                      <div className={styles.dropdownContent}>
+                        <span onClick={() => handleDelete(issue.issueId)}>
+                          Delete
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              {showKebab(issue.nickname) && (
-                <div className={styles.dropdownContainer}>
-                  <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab} />
-                  <div className={styles.dropdownContent}>
-                    <span onClick={() => handleDelete(issue.issueId)}>Delete</span>
+            ))
+          : issueList.map((issue) => (
+              <div key={issue.issueId} className={styles.card}>
+                <span
+                  className={styles.link}
+                  onClick={(event) => handleLinkClick(issue.issueId, event)}
+                >
+                  {issue.title}
+                </span>
+                <div className={styles.cardFooter}>
+                  <div className={styles.cardVotes}>
+                    <div className={styles.agree}>
+                      <span>{issue.agree_title}</span>
+                      <span>{issue.agree_count}</span>
+                    </div>
+                    <div className={styles.oppose}>
+                      <span>{issue.oppose_title}</span>
+                      <span>{issue.oppose_count}</span>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ))
-      ) : (
-        issueList.map((issue) => (
-          <div key={issue.issueId} className={styles.card}>
-            <span className={styles.link} onClick={(event) => handleLinkClick(issue.issueId, event)}>
-              {issue.title}
-            </span>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardVotes}>
-                <div className={styles.agree}>
-                  <span>{issue.agree_title}</span>
-                  <span>{issue.agree_count}</span>
-                </div>
-                <div className={styles.oppose}>
-                  <span>{issue.oppose_title}</span>
-                  <span>{issue.oppose_count}</span>
+                  {showKebab(issue.nickname) && (
+                    <div className={styles.dropdownContainer}>
+                      <img
+                        src="/img/kebab.png"
+                        alt="kebab"
+                        className={styles.dropdownKebab}
+                      />
+                      <div className={styles.dropdownContent}>
+                        <span onClick={() => handleDelete(issue.issueId)}>
+                          Delete
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              {showKebab(issue.nickname) && (
-                <div className={styles.dropdownContainer}>
-                  <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab} />
-                  <div className={styles.dropdownContent}>
-                    <span onClick={() => handleDelete(issue.issueId)}>Delete</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-    <SearchBar onSearch={handleSearch}/>        
-    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-  </div>
-</div>
+            ))}
+      </div>
 
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+      <SearchBar onSearch={handleSearch} />
+    </div>
   );
 }
 
