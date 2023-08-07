@@ -30,6 +30,13 @@
 
 .App {
   text-align: center;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.5),
+    /* rgba(254, 104, 160, 0.5), */
+    rgba(0, 131, 159, 0.5)
+  ),
+  url("../public/img/main_background_2_zip.jpg");
+  background-size: cover;
 }
 
 .App-logo {

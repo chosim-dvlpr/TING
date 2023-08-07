@@ -1,43 +1,100 @@
+@font-face {
+  font-family: 'HANAMDAUM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/HANAMDAUM.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .logo {
-  height: 60px;
+  height: 70px;
+  margin-left: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 100px;
+  /* margin-left: 100px; */
 }
 
 .navMenu {
   cursor: pointer;
-  margin-left: 64px;
-  font-size: 20px;
-  font-weight: 500;
-  width: 64px;
+  /* margin-left: 64px; */
+  font-size: 40px;
+  font-weight: 700;
+  width: 120px;
   text-decoration: none;
-  color: #888888;
+  /* color: #888888; */
+  font-family: 'UhBeeSe_hyun';
+  color: black;
+  position: relative;
+}
+
+.menuItem,
+.profileImage {
+  height: 70px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.menuName {
+  font-family: 'UhBeeSe_hyun';
+  font-size: 18px;
+  font-weight: 100;
+  width: 100%;
+  /* margin: 0 5px; */
+  padding: 0;
+  display: none;
+  background-color: rgba(245, 245, 245, 0.6);
+  border-radius: 7px;
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  font-weight: 600;
+  z-index: 1002;
+}
+
+/* .menuItem:hover {
+  visibility: hidden;
+} */
+.menuItem:hover + .menuName {
+  display: inline-block;
 }
 
 .navLeft {
-  margin-left: 150px;
+  margin-top: 50px;
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
 }
 
 .navRight {
-  margin-left: auto;
-  margin-right: 150px;
+  /* margin-left: auto;
+  margin-right: 150px; */
+  margin-left: 30px;
+  display: flex;
+  flex-direction: column;
 }
 
 .mainNav {
-  width: 100%;
-  height: 60px;
+  width: 120px;
+  height: 100vh;
+  position: fixed;
   display: flex;
-  background-color: #fee5ef;
+  /* background-color: #fee5ef; */
+  flex-direction: column;
   align-items: center;
+  z-index: 10;
 }
 
-.profileImage {
+/* .profileImage {
   width: 30px;
   height: 30px;
   cursor: pointer;
-}
+} */
 
 .nickname {
   color: #2572cf;
