@@ -1,12 +1,16 @@
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
-import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-import Dropdown from "react-bootstrap/Dropdown";
 import tokenHttp from "../../api/tokenHttp";
 import { getCurrentUserdata } from "../../redux/userdata";
+import { dataCode, drinkingCodeList, hobbyCodeList, jobCodeList, mbtiCodeList, personalityCodeList, regionList, religionCodeList, smokingCodeList } from "../../SelectionDataList";
+
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+// import DropdownItem from "react-bootstrap/esm/DropdownItem";
+// import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 
 function MyInformationUpdate() {
   let Navigate = useNavigate();
@@ -15,6 +19,13 @@ function MyInformationUpdate() {
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [nickname, setNickname] = useState(userdata.nickname);
   let [height, setHeight] = useState(userdata.height);
+  let [currentMbti, setCurrentMbti] = useState(userdata.mbtiCode.name);
+  let [currentDrinking, setCurrentDrinking] = useState(userdata.drinkingCode.name);
+  let [currentSmoking, setCurrentSmoking] = useState(userdata.smokingCode.name);
+  let [currentReligion, setCurrentReligion] = useState(userdata.religionCode.name);
+  let [currentHobbyList, setCurrentHobbyList] = useState(userdata.userHobbys);
+  let [currentPersonalityList, setCurrentPersonalityList] = useState(userdata.userPersonalities);
+  console.log(userdata.userPersonalities)
 
   let newProfileData = {
     phoneNumber: userdata.phoneNumber,
@@ -26,20 +37,14 @@ function MyInformationUpdate() {
     jobCode: userdata.job, // 변경 필요
     drinkingCode: userdata.drinkingCode, // 변경 필요
     religionCode: userdata.religionCode, // 변경 필요
-    mbtiCode: userdata.mbtiCode, // 변경 필요
+    mbtiCode: currentMbti,
     smokingCode: userdata.smokingCode, // 변경 필요
     hobbyCodeList: userdata.hobbyCodeList, // 변경 필요
     styleCodeList: userdata.styleCodeList, // 변경 필요
     personalityCodeLIst: userdata.personalityCodeLIst, // 변경 필요
   };
 
-  let regionList = [{regionEn: "SEOUL", regionKor: "서울"}, {regionEn: "DAEJEON", regionKor: "대전"},
-  {regionEn: "BUSAN", regionKor: "부산"}, {regionEn: "DAEGU", regionKor: "대구"}, {regionEn: "INCHEON", regionKor: "인천"},
-  {regionEn: "GWANGJU", regionKor: "광주"}, {regionEn: "ULSAN", regionKor: "울산"},{regionEn: "GYEONGGI", regionKor: "경기"},
-  {regionEn: "GANGWON", regionKor: "강원"}, {regionEn: "CHUNGBUK", regionKor: "충북"}, {regionEn: "CHUNGNAM", regionKor: "충남"},
-  {regionEn: "SEJONG", regionKor: "세종"}, {regionEn: "JEONBUK", regionKor: "전북"}, {regionEn: "JEONNAM", regionKor: "전남"},
-  {regionEn: "GYEONGBUK", regionKor: "경북"}, {regionEn: "GYEONGNAM", regionKor: "경남"}, {regionEn: "JEJU", regionKor: "제주"},
-]
+
 
   // 지역 영어를 한글로 변환
   const matchRegion = (regionData) => {
@@ -72,6 +77,8 @@ function MyInformationUpdate() {
     dispatch(getCurrentUserdata(newProfileData));
   };
 
+  console.log(currentHobbyList)
+
   return (
     <div>
       <h2>정보 수정 페이지</h2>
@@ -102,46 +109,104 @@ function MyInformationUpdate() {
         onChange={(e) => setHeight(e.target.value)}
       ></input>
 
-      <label>MBTI</label>
-      <Dropdown.Menu show>MBTI
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>
+      <p>
+        <DropdownButton id="dropdown-item-button" title="MBTI">
+        {dataCode
+        .filter((data) => data.category.includes("MBTI"))
+        .map((data, i) => 
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data.name)}>{ data.name }</Dropdown.Item>
+        )
+        }
+        </DropdownButton>
+        { currentMbti }
+      </p>
       <br/>
 
-      <label>주량</label>
-      <Dropdown.Menu show>주량
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>
+      <p>
+      <DropdownButton id="dropdown-item-button" title="주량">
+        {dataCode
+        .filter((data) => data.category.includes("DRINKING"))
+        .map((data, i) => 
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentDrinking(data.name)}>{ data.name }</Dropdown.Item>
+        )
+        }
+        </DropdownButton>
+        { currentDrinking }
+      </p>
       <br/>
 
-      <label>흡연</label>
-      <Dropdown.Menu show>흡연
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>
+      <p>
+      <DropdownButton id="dropdown-item-button" title="흡연">
+        {dataCode
+        .filter((data) => data.category.includes("SMOKING"))
+        .map((data, i) => 
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentSmoking(data.name)}>{ data.name }</Dropdown.Item>
+        )
+        }
+        </DropdownButton>
+        { currentSmoking }
+      </p>
       <br/>
 
-      <label>종교</label>
-      <Dropdown.Menu show>종교
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>
+      <p>
+      <DropdownButton id="dropdown-item-button" title="종교">
+        {dataCode
+        .filter((data) => data.category.includes("RELIGION"))
+        .map((data, i) => 
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentReligion(data.name)}>{ data.name }</Dropdown.Item>
+        )
+        }
+        </DropdownButton>
+        { currentReligion }
+      </p>
       <br/>
 
-      <label>취미</label>
-      <Dropdown.Menu show>취미
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>
+      <p>
+      <DropdownButton id="dropdown-item-button" title="취미">
+        {dataCode
+        .filter((data) => data.category.includes("HOBBY"))
+        .map((data, i) => 
+          { let addData = {
+            code: data.code,
+            category: data.category,
+            name: data.name
+          }
+          return (
+            <Dropdown.Item key={i} as="button" onClick={() => setCurrentHobbyList([...currentHobbyList, addData])}>{ data.name }</Dropdown.Item>
+          )
+          }
+        )
+        }
+        </DropdownButton>
+        { currentHobbyList.map((hobby, i) => (
+          hobby.name
+        )) }
+      </p>
       <br/>
-      
-      <label>성격</label>
-      <Dropdown.Menu show>성격
-        <Dropdown.Item eventKey="1">임시1</Dropdown.Item>
-        <Dropdown.Item eventKey="2">임시2</Dropdown.Item>
-      </Dropdown.Menu>    
+
+      <p>
+      <DropdownButton id="dropdown-item-button" title="성격">
+        {dataCode
+        .filter((data) => data.category.includes("PERSONALITY"))
+        .map((data, i) => 
+          { let addData = {
+            code: data.code,
+            category: data.category,
+            name: data.name
+          }
+          return (
+            <Dropdown.Item key={i} as="button" onClick={() => setCurrentPersonalityList([...currentPersonalityList, addData])}>{ data.name }</Dropdown.Item>
+          )
+          }
+        )
+        }
+        </DropdownButton>
+        { currentPersonalityList.map((personality, i) => (
+          personality.name
+        )) }
+      </p>
+      <br/>
+
     </div>
   )
 }

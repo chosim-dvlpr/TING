@@ -1,21 +1,15 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { religionCodeList } from "../../SelectionDataList";
 
 function MyInformation() {
   let Navigate = useNavigate();
 
   let userdata = useSelector((state) => state.userdataReducer.userdata);
-  let regionList = [{regionEn: "SEOUL", regionKor: "서울"}, {regionEn: "DAEJEON", regionKor: "대전"},
-  {regionEn: "BUSAN", regionKor: "부산"}, {regionEn: "DAEGU", regionKor: "대구"}, {regionEn: "INCHEON", regionKor: "인천"},
-  {regionEn: "GWANGJU", regionKor: "광주"}, {regionEn: "ULSAN", regionKor: "울산"},{regionEn: "GYEONGGI", regionKor: "경기"},
-  {regionEn: "GANGWON", regionKor: "강원"}, {regionEn: "CHUNGBUK", regionKor: "충북"}, {regionEn: "CHUNGNAM", regionKor: "충남"},
-  {regionEn: "SEJONG", regionKor: "세종"}, {regionEn: "JEONBUK", regionKor: "전북"}, {regionEn: "JEONNAM", regionKor: "전남"},
-  {regionEn: "GYEONGBUK", regionKor: "경북"}, {regionEn: "GYEONGNAM", regionKor: "경남"}, {regionEn: "JEJU", regionKor: "제주"},
-]
 
   // 지역 영어를 한글로 변환
   const matchRegion = (regionData) => {
-    const regionName = regionList.map((region) => region.regionEn === regionData && region.regionKor)
+    const regionName = religionCodeList.map((region) => region.regionEn === regionData && region.regionKor)
     return regionName
   };
 
