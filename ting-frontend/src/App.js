@@ -69,6 +69,10 @@ import ItemShop from './component/item/ItemShop';
 import MyItem from './component/item/MyItem';
 import MyPoint from './component/item/MyPoint';
 
+// 카카오 페이 결제
+import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+
+
 function App() {
   let accessToken = localStorage.getItem('access-token');
   // accessToken이 있다면 isLogin에 true 저장
@@ -87,7 +91,7 @@ function App() {
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
         <Route path="/tutorial" element={ <TutorialPage/> }></Route>
-        <Route path="/community/" element={ <CommunityPage /> }></Route>
+        <Route path="/community//*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
         {/* 회원가입 */}
@@ -122,7 +126,7 @@ function App() {
 
         {/* 커뮤니티 페이지 */}
 
-        <Route path="/community/" element={<CommunityPage />} />
+        <Route path="/community//*" element={<CommunityPage />} />
 
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
         <Route path="/community/advice" element={<AdviceBoard/>} />
@@ -152,6 +156,9 @@ function App() {
           {/* 포인트 충전 및 관리 */}
           <Route path="mypoint" element={<MyPoint/>}></Route>
         </Route>
+        
+        <Route path="/payment/kakaoPaySuccess" element={<KakaoPaySuccess/>}/>
+        
       </Routes>
 
     </div>
