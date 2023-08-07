@@ -92,6 +92,7 @@ function AdviceBoard() {
     };
 
   return (
+    <div className={styles.adviceBoardBackground}>
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
       <button className={styles.createButton} onClick={handleCreateClick}>
@@ -143,7 +144,7 @@ function AdviceBoard() {
         onPageChange={handlePageChange}
       />
     
-    
+    </div>
     </div>
   );
 }
