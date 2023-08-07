@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.isRemoved = true, u.removedTime = :removedTime WHERE u.id = :userId")
     void softDeleteUser(@Param("userId") Long userId, @Param("removedTime") LocalDateTime removedTime);
+
+    Optional<User> findByNickname(String keyword);
 }
