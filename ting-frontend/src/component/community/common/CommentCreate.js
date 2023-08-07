@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../../api/tokenHttp";
 import styles from "./CommentCreate.module.css";
 
-function CommentCreate({ boardTypeProp, boardIdProp, getCommentList, parentCommentId  }) { // 글 작성 시 바로 commentlist로 
+function CommentCreate({
+  boardTypeProp,
+  boardIdProp,
+  getCommentList,
+  parentCommentId,
+}) {
+  // 글 작성 시 바로 commentlist로
   const [comment, setComment] = useState("");
   const [user, setUser] = useState(null);
   const [depth, setDepth] = useState(0);
