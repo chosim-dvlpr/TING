@@ -9,7 +9,7 @@ function DeleteAccount() {
   const [password, setPassword] = useState("");
   const [checkData, setCheckData] = useState([false, false]);
   let userdata = useSelector((state) => state.userdataReducer.userdata);
-
+ 
   let Navigate = useNavigate();
   let dispatch = useDispatch();
 
