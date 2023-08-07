@@ -2,7 +2,7 @@
 
 .sidebar {
   
-  margin-top: 60px;
+  /* margin-top: 60px;
    
     float: left;
    
@@ -14,7 +14,7 @@
 
     color: white;
 
-    margin-right: 100px;
+    margin-right: 100px; */
   }
   
   /* 사이드바 내부의 ul 요소 스타일 지정 */
@@ -32,7 +32,7 @@
   /* 사이드바 내부의 링크 스타일 지정 */
   .sidebar a {
     text-decoration: none;
-    color: white;
+    color: black;
   }
   
   /* 사이드바 내부의 링크 호버(hover) 스타일 지정 */

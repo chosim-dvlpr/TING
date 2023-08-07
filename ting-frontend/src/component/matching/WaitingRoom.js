@@ -133,7 +133,7 @@ function WaitingRoom() {
   }, [socket]);
 
   return (
-    <div>
+    <div className="waitingContainer">
       <h1>대기실</h1>
       <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
       <button onClick={()=>{navigate("/")}}>나가기</button>

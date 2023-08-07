@@ -110,6 +110,7 @@ function AdviceBoard() {
   }, [searchResult]);
 
   return (
+    <div className={styles.adviceBoardBackground}>
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
       <button className={styles.createButton} onClick={handleCreateClick}>
@@ -177,6 +178,9 @@ function AdviceBoard() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+
+    
+    </div>
       <SearchBar onSearch={handleSearch} />
     </div>
   );
