@@ -65,7 +65,8 @@ const NavBar = () => {
             {dropdown ? (
               <Dropdown.Menu show>
                 <Dropdown.Item eventKey="1" onClick={() => {navigate("/mypage"); setDropdown(false)}}>마이페이지</Dropdown.Item>
-                <Dropdown.Item eventKey="2" onClick={handleLogout}>로그아웃</Dropdown.Item>
+                <Dropdown.Item eventKey="2" onClick={() => {navigate("/item/shop"); setDropdown(false)}}>아이템샵</Dropdown.Item>
+                <Dropdown.Item eventKey="3" onClick={handleLogout}>로그아웃</Dropdown.Item>
               </Dropdown.Menu>
             ) : null}
           </div>

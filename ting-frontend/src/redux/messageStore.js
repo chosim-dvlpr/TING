@@ -74,7 +74,7 @@ export default class MessageStore {
         this.isList = true;
         
         // 엔터 입력 시 메세지 전송하기
-        // this.sendMessage({ type: 'enter' });
+        this.sendMessage({ type: 'enter' });
       },
     );
   }
@@ -154,7 +154,7 @@ export default class MessageStore {
     const message = JSON.parse(messageReceived.body);
     this.messageLogs = [...this.messageLogs, this.formatMessage(message)];
     this.messageLogsObject = { ...this.messageLogsObject, [message.chattingId]: this.messageLogs, }
-    this.updateUnreadCount(message.chattingId);
+    // this.updateUnreadCount(message.chattingId);
 
     this.publish();
     console.log('message',message)
