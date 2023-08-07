@@ -72,8 +72,9 @@ function IssueBoard() {
   };
 
   return (
-    <div className={styles.issueBoardContainer}>
+    <div>
       <Sidebar />
+    <div className={styles.issueBoardContainer}>
       <button className={styles.createButton} onClick={handleCreateClick}>
         글 작성하기
       </button>
@@ -110,6 +111,8 @@ function IssueBoard() {
 
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
     </div>
+  </div>              
+
   );
 }
 

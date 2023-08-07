@@ -37,7 +37,7 @@ function AdviceBoard() {
       console.error("Error fetching advice data:", error);
     }
   };
-  
+
   const handleLinkClick = (adviceId, event) => {
     event.preventDefault();
     console.log("handleLinkClick called");
@@ -49,6 +49,8 @@ function AdviceBoard() {
       alert("로그인이 필요합니다.");
     }
   };
+  
+  
 
   const handleCreateClick = () => {
     if (userdata) {
@@ -107,21 +109,15 @@ function AdviceBoard() {
             <tr key={advice.adviceId}>
               <td>{advice.adviceId}</td>
               <td>
-                <span
-                  className={styles.link}
-                  onClick={(event) => handleLinkClick(advice.adviceId, event)}
-                >
+                  <span
+              className={styles.link}
+              onClick={(event) => handleLinkClick(advice.adviceId, event)}>
                   {advice.title}
                 </span>
               </td>
               <td>{advice.hit}</td>
-              <td> {advice.modifiedTime ? (
-                  <>
-              {advice.modifiedTime} (수정됨)
-              </>
-        ) : (
-          advice.createdTime
-        )}
+              <td>{advice.modifiedTime === null ? advice.createdTime : `${advice.modifiedTime} (수정됨)`}
+
               {showKebab(advice.nickname) && (
                 <div className={styles.dropdownContainer}>
                 <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab}/>
