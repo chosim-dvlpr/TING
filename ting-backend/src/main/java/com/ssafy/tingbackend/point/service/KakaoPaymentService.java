@@ -37,12 +37,12 @@ public class KakaoPaymentService {
     @Value("${payment.kakaopay.admin.key}")
     private String adminKey;
 
-    @Value("${payment.kakaopay.redirectUrl.dev.approval}")
-    private String approvalUrl;
-    @Value("${payment.kakaopay.redirectUrl.dev.cancel}")
-    private String cancelUrl;
-    @Value("${payment.kakaopay.redirectUrl.dev.fail}")
-    private String failUrl;
+    @Value("${payment.kakaopay.redirectUrl.dev.approvalRedirectUrl}")
+    private String approvalRedirectUrl;
+    @Value("${payment.kakaopay.redirectUrl.dev.cancelRedirectUrl}")
+    private String cancelRedirectUrl;
+    @Value("${payment.kakaopay.redirectUrl.dev.failRedirectUrl}")
+    private String failRedirectUrl;
 
     @Value("${payment.kakaopay.url.ready}")
     private String readyUrl;
@@ -64,26 +64,87 @@ public class KakaoPaymentService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
+        // 결제 내역 생성
         PointPayment pointPayment = PointPayment.builder()
                 .pointCode(pointItem)
                 .user(user)
                 .cid(cid)
                 .quantity(1)
                 .build();
-
         pointPaymentRepository.save(pointPayment);
 
         // 카카오페이 결제 준비 API 호출
         PaymentDto.KakaoApiReadyResponse kakaoApiReadyResponse = callKakaoPayReadyApi(pointItem, pointPayment, user);
 
+        // pointPayment 업데이트
         pointPayment.setTid(kakaoApiReadyResponse.getTid());
         pointPaymentRepository.save(pointPayment);
 
-        PaymentDto.ReadyResponse readyResponse = new PaymentDto.ReadyResponse();
-        readyResponse.setPointPaymentId(pointPayment.getId());
-        readyResponse.setRedirectUrl(kakaoApiReadyResponse.getNext_redirect_pc_url());
+        // 응답 DTO 생성
+        return PaymentDto.ReadyResponse.builder()
+                .pointPaymentId(pointPayment.getId())
+                .redirectUrl(kakaoApiReadyResponse.getNext_redirect_pc_url())
+                .build();
+    }
 
-        return readyResponse;
+    @Transactional
+    public PaymentDto.ApproveResponse approve(PaymentDto.ApproveRequest approve, String userId) {
+        PointPayment pointPayment = pointPaymentRepository.findById(approve.getPointPaymentId())
+                .orElseThrow(() -> new CommonException(ExceptionType.POINT_PAYMENT_NOT_FOUND));
+        User user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        pointPayment.setPgToken(approve.getPgToken());
+
+        // 결제 승인 API 호출
+        PaymentDto.KakaoApiApproveResponse kakaoApiApproveResponse = callKakaoPayApproveApi(pointPayment, user);
+
+        // pointPayment 업데이트
+        pointPayment.setAid(kakaoApiApproveResponse.getAid());
+        pointPayment.setPaymentMethodType(kakaoApiApproveResponse.getPayment_method_type());
+        pointPaymentRepository.save(pointPayment);
+
+        // 응답 DTO 생성
+        return PaymentDto.ApproveResponse.builder()
+                .itemName(pointPayment.getPointCode().getItemName())
+                .price(pointPayment.getPointCode().getTotalAmount())
+                .build();
+    }
+
+    private PaymentDto.KakaoApiApproveResponse callKakaoPayApproveApi(PointPayment pointPayment, User user) {
+        // 카카오페이 Approve API 요청 본문
+        HashMap<String, Object> jsonBody = new HashMap<>();
+        jsonBody.put("cid", pointPayment.getCid());
+        jsonBody.put("tid", pointPayment.getTid());
+        jsonBody.put("partner_order_id", pointPayment.getId());
+        jsonBody.put("partner_user_id", user.getId());
+        jsonBody.put("pg_token", pointPayment.getPgToken());
+
+        // kakaoPay Approve API 호출
+        HashMap<String, Object> response = new HttpUtil()
+                .header("Authorization", "KakaoAK " + adminKey)
+                .contentType("application", "x-www-form-urlencoded", "UTF-8")
+                .body(jsonBody)
+                .url(approveUrl)
+                .method("POST")
+                .build();
+
+        // 결제 승인 호출 실패시 예외처리
+        if (Integer.parseInt(response.get("status").toString().substring(0, 3)) != 200) {
+            throw new CommonException(ExceptionType.KAKAO_APPROVE_API_FAIL_EXCEPTION);
+        }
+
+        // 응답 본문 파싱
+        PaymentDto.KakaoApiApproveResponse kakaoApiReadyResponse = null;
+        try {
+            log.info("kakao approve api response : {}", response);
+            kakaoApiReadyResponse = mapper.readValue(response.get("body").toString(), PaymentDto.KakaoApiApproveResponse.class);
+        } catch (JsonProcessingException e) {
+            log.error("kakao approve api parse error : {}", e.getMessage());
+            throw new CommonException(ExceptionType.KAKAO_READY_JSON_PARSE_EXCEPTION);
+        }
+
+        return kakaoApiReadyResponse;
     }
 
     private PaymentDto.KakaoApiReadyResponse callKakaoPayReadyApi(PointCode pointItem, PointPayment pointPayment, User user) {
@@ -96,9 +157,9 @@ public class KakaoPaymentService {
         jsonBody.put("quantity", pointPayment.getQuantity());
         jsonBody.put("total_amount", pointItem.getTotalAmount());
         jsonBody.put("tax_free_amount", pointItem.getTaxFreeAmount());
-        jsonBody.put("approval_url", approvalUrl);
-        jsonBody.put("cancel_url", cancelUrl);
-        jsonBody.put("fail_url", failUrl);
+        jsonBody.put("approval_url", approvalRedirectUrl);
+        jsonBody.put("cancel_url", cancelRedirectUrl);
+        jsonBody.put("fail_url", failRedirectUrl);
 
         HashMap<String, Object> response = new HttpUtil()
                 .header("Authorization", "KakaoAK " + adminKey)
@@ -108,6 +169,12 @@ public class KakaoPaymentService {
                 .method("POST")
                 .build();
 
+        // 결제 준비 호출 실패시 예외처리
+        if (Integer.parseInt(response.get("status").toString().substring(0, 3)) != 200) {
+            throw new CommonException(ExceptionType.KAKAO_READY_API_FAIL_EXCEPTION);
+        }
+
+        // 응답 데이터 파싱
         PaymentDto.KakaoApiReadyResponse kakaoApiReadyResponse = null;
         try {
             log.info("kakao ready api response : {}", response);
@@ -119,4 +186,5 @@ public class KakaoPaymentService {
 
         return kakaoApiReadyResponse;
     }
+
 }

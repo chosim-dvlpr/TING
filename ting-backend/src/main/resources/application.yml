@@ -84,12 +84,12 @@ payment:
     cid: TC0ONETIME
     url:
       ready: https://kapi.kakao.com/v1/payment/ready
-      approve: https://kapi/kakao.com/v1/payment/approve
+      approve: https://kapi.kakao.com/v1/payment/approve
     redirectUrl:
-      approval: https://i9b107.p.ssafy.io/payment/kakaoPaySuccess
-      cancel: https://i9b107.p.ssafy.io/payment/kakaoPayCancel
-      fail: https://i9b107.p.ssafy.io/payment/kakaoPayFail
+      approvalRedirectUrl: https://i9b107.p.ssafy.io/payment/kakaoPaySuccess
+      cancelRedirectUrl: https://i9b107.p.ssafy.io/payment/kakaoPayCancel
+      failRedirectUrl: https://i9b107.p.ssafy.io/payment/kakaoPayFail
       dev:
-        approval: http://localhost:3000/payment/kakaoPaySuccess
-        cancel: http://localhost:3000/payment/kakaoPayCancel
-        fail: http://localhost:3000/payment/kakaoPayFail
+        approvalRedirectUrl: http://localhost:3000/payment/kakaoPaySuccess
+        cancelRedirectUrl: http://localhost:3000/payment/kakaoPayCancel
+        failRedirectUrl: http://localhost:3000/payment/kakaoPayFail

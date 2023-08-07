@@ -50,8 +50,12 @@ public enum ExceptionType {
 
     POINT_CODE_NOT_EXIST(4900, "포인트 코드가 존재하지 않습니다."),
     KAKAO_READY_JSON_PARSE_EXCEPTION(4901, "카카오 결제 준비 응답 JSON 파싱에 실패하였습니다."),
+    KAKAO_APPROVE_JSON_PARSE_EXCEPTION(4901, "카카오 결제 승인 응답 JSON 파싱에 실패하였습니다."),
+    KAKAO_READY_API_FAIL_EXCEPTION(4902, "카카오 결제 준비 API 호출에 실패하였습니다."),
+    KAKAO_APPROVE_API_FAIL_EXCEPTION(4902, "카카오 결제 승인 API 호출에 실패하였습니다."),
+    POINT_PAYMENT_NOT_FOUND(4903, "포인트 결제 내역이 존재하지 않습니다."),
 
-    REPORT_NOT_FOUND(4900, "신고 내역이 존재하지 않습니다"),
+    REPORT_NOT_FOUND(4950, "신고 내역이 존재하지 않습니다"),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하였습니다.");
 

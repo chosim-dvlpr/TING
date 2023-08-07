@@ -75,6 +75,14 @@ public class PointController {
         Long userId = Long.parseLong(principal.getName());
         Long pointCode = ready.getPointCode();
 
-        return new DataResponse<>(200, "카카오페이 결제 준비 API 호출 성공", kakaoPaymentService.ready(userId, pointCode));
+        return new DataResponse<>(200, "카카오페이 결제 준비 API 호출 성공",
+                kakaoPaymentService.ready(userId, pointCode));
+    }
+
+    @PostMapping("/point/kakaopay/approve")
+    public DataResponse<PaymentDto.ApproveResponse> approvePointByKakaoPay(@RequestBody PaymentDto.ApproveRequest approve, Principal principal) {
+        PaymentDto.ApproveResponse response = kakaoPaymentService.approve(approve, principal.getName());
+
+        return new DataResponse<>(200, "카카오페이 결제 승인", response);
     }
 }
