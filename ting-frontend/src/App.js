@@ -19,7 +19,7 @@ import Job from './component/signup/select/Job';
 import Hobby from './component/signup/select/Hobby';
 import Personality from './component/signup/select/Personality';
 import Style from './component/signup/select/Style';
-import Introduction from './component/signup/select/Introduction';
+import Introduce from './component/signup/select/Introduce';
 import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
@@ -110,7 +110,7 @@ function App() {
             <Route path="hobby" element={ <Hobby/> }></Route>
             <Route path="personality" element={ <Personality/> }></Route>
             <Route path="style" element={ <Style/> }></Route>
-            <Route path="introduction" element={ <Introduction/> }></Route>
+            <Route path="introduce" element={ <Introduce/> }></Route>
           </Route>
         </Route>
 
