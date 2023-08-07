@@ -68,6 +68,9 @@ import ItemShop from './component/item/ItemShop';
 import MyItem from './component/item/MyItem';
 import MyPoint from './component/item/MyPoint';
 
+// 카카오 페이 결제
+import KakaoPaySuccess from './pages/KakaoPaySuccess.js'
+
 function App() {
   let accessToken = localStorage.getItem('access-token');
   // accessToken이 있다면 isLogin에 true 저장
@@ -150,6 +153,9 @@ function App() {
           {/* 포인트 충전 및 관리 */}
           <Route path="mypoint" element={<MyPoint/>}></Route>
         </Route>
+        
+        <Route path="/payment/kakaoPaySuccess" element={<KakaoPaySuccess/>}/>
+        
       </Routes>
 
     </div>

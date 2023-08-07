@@ -56,6 +56,7 @@ function MyPoint() {
 function SelectMoney(){
   const dispatch = useDispatch()
 
+
   // api로 충전할 돈의 정보
   const [chargeMoneyData, setChargeMoneyData] = useState([])
   
@@ -80,7 +81,9 @@ function SelectMoney(){
       .then(response => {
         console.log(response.data.data)
         dispatch(setPointPaymentId(response.data.data.pointPaymentId))
-        window.open(response.data.data.redirectUrl, '_blank');
+        window.location.href = response.data.data.redirectUrl;
+        // https://i9b107.p.ssafy.io:5157/payment/kakaoPaySuccess?pg_token=c781229277b9a8a52bb9
+        // 최종 링크
       })
       .catch(err => console.log(err))
     
