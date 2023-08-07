@@ -1,23 +1,20 @@
 import React from "react"
-import { Routes, Route } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import styles from "./ItemPage.module.css"
 
-import ItemShop from '../component/item/ItemShop.js'
-import MyItem from '../component/item/MyItem.js'
-import MyPoint from '../component/item/MyPoint.js'
+import SideBar from '../component/item/common/ItemSideBar.js'
+
+
 function ItemPage(){
 
   return(
     <div className="itemContainer">
-      <Sidebar/>
-      <div className="itemContent">
-        <Routes>
-          {/* 아이템 상점 */}
-          <Route path="/shop" element={<ItemShop/>}></Route>
-          {/* 보유 아이템 관리 */}
-          <Route path="/myitem" element={<MyItem/>}></Route>
-          {/* 포인트 충전 및 관리 */}
-          <Route path="/mypoint" element={<MyPoint/>}></Route>
-        </Routes>
+      <div className={styles.SideBar}>
+        <SideBar/>
+      </div>
+      
+      <div className={styles.OutletBoard}>
+        <Outlet></Outlet>
       </div>
     </div>
 

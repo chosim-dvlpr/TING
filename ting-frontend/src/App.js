@@ -63,6 +63,10 @@ import Friend from './component/friend/Friend';
 import FriendChatting from './component/friend/FriendChatting';
 import FriendProfile from './component/friend/FriendProfile';
 
+// 아이템샵
+import ItemShop from './component/item/ItemShop';
+import MyItem from './component/item/MyItem';
+import MyPoint from './component/item/MyPoint';
 
 function App() {
   let accessToken = localStorage.getItem('access-token');
@@ -138,7 +142,14 @@ function App() {
         <Route path="/mypage" element={<MyProfilePage/>}></Route>
         
         {/* 아이템 페이지 */}
-        <Route path="/item" element={<ItemPage/>}></Route>
+        <Route path="/item" element={<ItemPage/>}>
+          {/* 아이템 상점 */}
+          <Route path="shop" element={<ItemShop/>}></Route>
+          {/* 보유 아이템 관리 */}
+          <Route path="myitem" element={<MyItem/>}></Route>
+          {/* 포인트 충전 및 관리 */}
+          <Route path="mypoint" element={<MyPoint/>}></Route>
+        </Route>
       </Routes>
 
     </div>
