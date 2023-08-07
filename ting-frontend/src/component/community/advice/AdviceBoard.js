@@ -180,8 +180,8 @@ function AdviceBoard() {
       />
 
     
-    </div>
       <SearchBar onSearch={handleSearch} />
+    </div>
     </div>
   );
 }
