@@ -1,10 +1,9 @@
 .SideBar {
+  margin:0;
   width:200px;
   height: 100%;
   background-color: #004BA1;
   color: white;
-  margin-top: 60px;
-  display: inline-block;
 }
 
 .SideBarList {
