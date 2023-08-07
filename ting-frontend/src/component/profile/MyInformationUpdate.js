@@ -85,7 +85,7 @@ function MyInformationUpdate() {
 
 
 
-  console.log(newProfileData);
+  // console.log(newProfileData);
   // console.log(JSON.stringify(newProfileData))
   // console.log(typeof Number(height))
 
@@ -118,19 +118,33 @@ function MyInformationUpdate() {
       profileImage: "",
       height: Number(height),
       introduce: "", // 어떻게 수정?
-
       jobCode: currentJob,
       drinkingCode: currentDrinking,
       religionCode: currentReligion,
       mbtiCode: currentMbti,
       smokingCode: currentSmoking,
-      hobbyCodeList: currentHobbyList,
-      styleCodeList: currentStyleList,
-      personalityCodeList: currentPersonalityList,
+      userHobbys: currentHobbyList,
+      userStyles: currentStyleList,
+      userPersonalities: currentPersonalityList,
     }
     dispatch(getCurrentUserdata(newProfileData));
     console.log("Updated profile data:", newProfileData)
   };
+
+  // 중복 제거
+  const deleteDuplicate = (List, ListFunc, checkData) => {
+    // let duplicateIndex = List.indexOf(checkData);
+    // console.log('currentHobbyList',currentHobbyList)
+    // // console.log(duplicateIndex)
+    // duplicateIndex > -1 ?
+    // ListFunc(currentHobbyList.splice(checkData, 1))
+    // : ListFunc([...List, checkData]);
+    if (List.some(item => item.code === checkData.code)) {
+      ListFunc(List.filter(item => item.code !== checkData.code))
+    } else {
+      ListFunc([...List, checkData])
+    }
+  }
 
   return (
     <div>
@@ -211,20 +225,19 @@ function MyInformationUpdate() {
       <DropdownButton id="dropdown-item-button" title="취미">
         {dataCode
         .filter((data) => data.category.includes("HOBBY"))
-        .map((data, i) => (
+        .map((obj, i) => (
             <Dropdown.Item key={i} as="button" onClick={() => 
               { 
-                currentHobbyList.includes(data) ?
-                setCurrentHobbyList([...currentHobbyList.filter(d => d !== data)])
-                : setCurrentHobbyList([...currentHobbyList, data])
+                deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj);
               }
-              }>{ data.name }</Dropdown.Item>
+              }>{ obj.name }</Dropdown.Item>
           ))
         }
         </DropdownButton>
         { currentHobbyList && currentHobbyList.map((hobby, i) => (
           hobby.name
         )) }
+
       </p>
       <br/>
 
@@ -232,13 +245,12 @@ function MyInformationUpdate() {
       <DropdownButton id="dropdown-item-button" title="성격">
         {dataCode
         .filter((data) => data.category.includes("PERSONALITY"))
-        .map((data, i) => (
+        .map((obj, i) => (
           <Dropdown.Item key={i} as="button" onClick={() => 
             { 
-              !currentPersonalityList.includes(data) &&
-              setCurrentPersonalityList([...currentPersonalityList, data])
+              deleteDuplicate(currentPersonalityList, setCurrentPersonalityList, obj);
             }
-            }>{ data.name }</Dropdown.Item>
+            }>{ obj.name }</Dropdown.Item>
           ))
         }
         </DropdownButton>
@@ -265,13 +277,12 @@ function MyInformationUpdate() {
       <DropdownButton id="dropdown-item-button" title="스타일">
         {dataCode
         .filter((data) => data.category.includes("STYLE"))
-        .map((data, i) => (
+        .map((obj, i) => (
           <Dropdown.Item key={i} as="button" onClick={() => 
             { 
-              !currentStyleList.includes(data) &&
-              setCurrentStyleList([...currentStyleList, data])
+              deleteDuplicate(currentStyleList, setCurrentStyleList, obj);
             }
-            }>{ data.name }</Dropdown.Item>
+            }>{ obj.name }</Dropdown.Item>
           ))
         }
         </DropdownButton>

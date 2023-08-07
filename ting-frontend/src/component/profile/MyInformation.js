@@ -42,6 +42,7 @@ function MyInformation() {
       <p>취미 : { userdata.userHobbys && userdata.userHobbys.map((hobby) => hobby.name) }</p>
       <br/>
       <p>성격 : { userdata.userPersonalities && userdata.userPersonalities.map((personalities) => personalities.name) }</p>
+      <p>선호 스타일 : { userdata.userStyles && userdata.userStyles.map((styles) => styles.name) }</p>
     </div>
   )
 }
