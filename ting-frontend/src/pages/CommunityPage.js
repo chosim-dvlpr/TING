@@ -1,28 +1,27 @@
-/* AdviceBoard, IssueBoard로 이동할 수 있는 사이드바 구현
-router로 라우팅 구성하기 
-/community로 이동했을 경우 어떤 페이지를 기본적으로 보여줄지 질문*/
-
-
 import React from 'react';
-import Sidebar from '../component/community/common/Sidebar';
+
 import { Routes, Route } from 'react-router-dom';
-import AdviceBoard from '../component/community/advice/AdviceBoard';
+
+
+import Sidebar from '../component/community/common/Sidebar';
 import IssueBoard from '../component/community/issue/IssueBoard';
+import AdviceBoard from '../component/community/advice/AdviceBoard';
 
 function CommunityPage() {
+
   return (
     <div className="community-container">
-      <Sidebar/>
+     
       <div className="community-content">
         <Routes>
-          {/* 커뮤니티 메인 페이지 */}
+         
           <Route path="/" element={<IssueBoard />} />
 
           {/* adivce 게시판 */}
-          <Route path="advice" element={<AdviceBoard />} />
+          <Route path="/advice" element={<AdviceBoard />} />
 
           {/* issue 게시판 */}
-          <Route path="issue" element={<IssueBoard />} />
+          <Route path="/issue" element={<IssueBoard />} />
         </Routes>
       </div>
     </div>

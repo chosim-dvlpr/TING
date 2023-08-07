@@ -40,7 +40,7 @@ const AdviceCreate = () => {
 
     try {
       const response = await tokenHttp.post('/advice', newPost);
-      if (response.status === 201) {
+      if (response.status === 200) {
         navigate('/community/advice');
       } else {
         throw new Error('Failed to save the post');
