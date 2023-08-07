@@ -3,6 +3,7 @@ package com.ssafy.tingbackend.point.controller;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.point.dto.PaymentDto;
+import com.ssafy.tingbackend.point.dto.PointCodeDto;
 import com.ssafy.tingbackend.point.dto.PointHistoryDto;
 import com.ssafy.tingbackend.point.service.KakaoPaymentService;
 import com.ssafy.tingbackend.point.service.PointService;
@@ -61,6 +62,11 @@ public class PointController {
         Long userId = Long.parseLong(principal.getName());
         List<PointHistoryDto> pointHistoryList = pointService.getPointHistory(userId, pageNo);
         return new DataResponse<>(200, "포인트 사용 내역 조회 성공", pointHistoryList);
+    }
+
+    @GetMapping("/point/charge/list")
+    public DataResponse<List<PointCodeDto>> getPointChargeList() {
+        return new DataResponse<>(200, "포인트 충전 리스트 조회 성공", pointService.getPointChargeList());
     }
 
     /**

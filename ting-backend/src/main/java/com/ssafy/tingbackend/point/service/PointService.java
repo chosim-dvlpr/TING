@@ -2,12 +2,14 @@ package com.ssafy.tingbackend.point.service;
 
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
-import com.ssafy.tingbackend.entity.board.AdviceBoard;
+import com.ssafy.tingbackend.entity.payment.PointCode;
 import com.ssafy.tingbackend.entity.point.PointCategory;
 import com.ssafy.tingbackend.entity.point.PointHistory;
 import com.ssafy.tingbackend.entity.user.User;
+import com.ssafy.tingbackend.point.dto.PointCodeDto;
 import com.ssafy.tingbackend.point.dto.PointHistoryDto;
 import com.ssafy.tingbackend.point.repository.PointCategoryRepository;
+import com.ssafy.tingbackend.point.repository.PointCodeRepository;
 import com.ssafy.tingbackend.point.repository.PointHistoryRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,8 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointHistoryRepository pointHistoryRepository;
     private final PointCategoryRepository pointCategoryRepository;
+    private final PointCodeRepository pointCodeRepository;
+
     public Long getPoint(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
@@ -72,5 +76,14 @@ public class PointService {
             pointHistoryDtoList.add(PointHistoryDto.of(pointHistory));
         }
         return pointHistoryDtoList;
+    }
+
+    public List<PointCodeDto> getPointChargeList() {
+        List<PointCode> pointCodeList = pointCodeRepository.findAll();
+
+        List<PointCodeDto> result = new ArrayList<>();
+        pointCodeList.forEach((pointCode) -> result.add(PointCodeDto.of(pointCode)));
+
+        return result;
     }
 }
