@@ -41,6 +41,9 @@ import CommunityPage from './pages/CommunityPage.js';
 import AdviceBoard from './component/community/advice/AdviceBoard';
 import AdviceDetail from './component/community/advice/AdviceDetail';
 import AdviceCreate from './component/community/advice/AdviceCreate';
+import AdviceUpdate from './component/community/advice/AdviceUpdate';
+import IssueBoard from './component/community/issue/IssueBoard';
+import IssueCreate from './component/community/issue/IssueCreate';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -79,7 +82,7 @@ function App() {
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
         <Route path="/tutorial" element={ <TutorialPage/> }></Route>
-        <Route path="/community/*" element={ <CommunityPage /> }></Route>
+        <Route path="/community/" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
         {/* 회원가입 */}
@@ -114,11 +117,15 @@ function App() {
 
         {/* 커뮤니티 페이지 */}
 
-        <Route path="/community/*" element={<CommunityPage />} />
+        <Route path="/community/" element={<CommunityPage />} />
 
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
         <Route path="/community/advice" element={<AdviceBoard/>} />
         <Route path="/community/advice/create" element = {<AdviceCreate/>} />
+        <Route path="/community/advice/update/:adviceId" element = {<AdviceUpdate/>} />
+
+        <Route path='/community/issue' element={<IssueBoard/>} />
+        <Route path="/community/issue/create" element = {<IssueCreate/>} />
 
         
         {/* 친구목록 임시 */}

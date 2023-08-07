@@ -1,0 +1,48 @@
+/* AdviceUpdate.module.css */
+
+.adviceUpdateContainer {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .adviceUpdateContainer h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .adviceUpdateContainer div {
+    margin-bottom: 20px;
+  }
+  
+  .adviceUpdateContainer label {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .adviceUpdateContainer input,
+  .adviceUpdateContainer textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+  }
+  
+  .adviceUpdateContainer button {
+    background-color: #004ba1;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
