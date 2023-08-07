@@ -1,0 +1,59 @@
+.ModalOuter {
+  position: fixed;
+  background-color: black;
+  opacity: 0.5;
+  width: 100%;
+  height:100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ModalInner {
+  z-index: +1;
+  position: fixed;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 500px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.QuantityBox {
+  display: flex;
+  justify-content: center;
+  width: 20%;
+  padding:5px;
+  margin: auto;
+  background-color: rgb(242, 242, 242);
+  border-radius: 10px;
+}
+
+.QuantityBox div {
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+}
+.QuantityNum {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.PlusButton{
+  background-color: rgb(40, 40, 89);
+  color:white;
+}
+
+.MinusButton{
+  background-color: white;
+}
+
+
+
