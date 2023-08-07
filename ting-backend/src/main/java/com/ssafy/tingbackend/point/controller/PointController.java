@@ -78,21 +78,12 @@ public class PointController {
      */
     @PostMapping("/point/kakaopay/ready")
     public DataResponse<PaymentDto.ReadyResponse> chargePointByKakaoPay(@RequestBody PaymentDto.ReadyRequest ready,
-                                                                        Principal principal,
-                                                                        HttpServletRequest request) {
-        String domain = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        log.info("domain: {}", domain);
-
-        StringBuffer requestURL = request.getRequestURL();
-        String uri = request.getRequestURI();
-        log.info("requestURL: {}", requestURL);
-        log.info("uri: {}", uri);
-
+                                                                        Principal principal) {
         Long userId = Long.parseLong(principal.getName());
         Long pointCode = ready.getPointCode();
 
         return new DataResponse<>(200, "카카오페이 결제 준비 API 호출 성공",
-                kakaoPaymentService.ready(userId, pointCode, domain));
+                kakaoPaymentService.ready(userId, pointCode, ready.getDomain()));
     }
 
     /**

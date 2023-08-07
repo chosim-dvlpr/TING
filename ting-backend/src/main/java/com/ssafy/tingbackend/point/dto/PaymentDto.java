@@ -16,6 +16,7 @@ public class PaymentDto {
     @AllArgsConstructor
     public static class ReadyRequest {
         private Long pointCode;
+        private String domain;
     }
 
     @Getter
