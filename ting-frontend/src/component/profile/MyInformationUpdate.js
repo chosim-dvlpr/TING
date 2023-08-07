@@ -1,16 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import tokenHttp from "../../api/tokenHttp";
 import { getCurrentUserdata } from "../../redux/userdata";
-import { dataCode, drinkingCodeList, hobbyCodeList, jobCodeList, mbtiCodeList, personalityCodeList, regionList, religionCodeList, smokingCodeList } from "../../SelectionDataList";
+import { dataCode, regionList } from "../../SelectionDataList";
 
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-// import DropdownItem from "react-bootstrap/esm/DropdownItem";
-// import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 
 function MyInformationUpdate() {
   let Navigate = useNavigate();
@@ -19,54 +16,96 @@ function MyInformationUpdate() {
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [nickname, setNickname] = useState(userdata.nickname);
   let [height, setHeight] = useState(userdata.height);
-  let [currentMbti, setCurrentMbti] = useState(userdata.mbtiCode.name);
-  let [currentDrinking, setCurrentDrinking] = useState(userdata.drinkingCode.name);
-  let [currentSmoking, setCurrentSmoking] = useState(userdata.smokingCode.name);
-  let [currentReligion, setCurrentReligion] = useState(userdata.religionCode.name);
+  let [currentMbti, setCurrentMbti] = useState(userdata.mbtiCode);
+  let [currentDrinking, setCurrentDrinking] = useState(userdata.drinkingCode);
+  let [currentSmoking, setCurrentSmoking] = useState(userdata.smokingCode);
+  let [currentReligion, setCurrentReligion] = useState(userdata.religionCode);
   let [currentHobbyList, setCurrentHobbyList] = useState(userdata.userHobbys);
   let [currentPersonalityList, setCurrentPersonalityList] = useState(userdata.userPersonalities);
-  console.log(userdata.userPersonalities)
+  let [currentJob, setCurrentJob] = useState(userdata.jobCode);
+  let [currentStyleList, setCurrentStyleList] = useState(userdata.userStyles);
+  
+  let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
+  let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState([]);
+  let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
+  
+  // list를 코드로 변환
+  useEffect(() => {
+    let hobbyListCode = currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
+    let personalityListCode = currentPersonalityList && currentPersonalityList.map((style, i) => style.code);
+    let styleListCode = currentStyleList && currentStyleList.map((style, i) => style.code);
+    setCurrentHobbyListCode(hobbyListCode);
+    setCurrentPersonalityListCode(personalityListCode);   
+    setCurrentStyleListCode(styleListCode);   
+  }, [currentHobbyList, currentPersonalityList, currentStyleList]);
+
+  // 지역을 한글로 변환
+  const regionToKor = (regionData) => {
+    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
+    // console.log(regionName)
+    // return regionName
+    const matchingRegion = regionList.find((region) => region.regionEn === regionData);
+    if (matchingRegion) {
+      return matchingRegion.regionKor;
+    } else {
+      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
+    }
+  };
+
+  // 지역을 영어로 변환
+  const regionToEn = (regionData) => {
+    const matchingRegion = regionList.find((region) => region.regionKor === regionData);
+    if (matchingRegion) {
+      return matchingRegion.regionEn;
+    } else {
+      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
+    }
+  };
 
   let newProfileData = {
     phoneNumber: userdata.phoneNumber,
-    region: userdata.region,
-    profileImage: userdata.profileImage,
-    height: height,
-    nickname: nickname,
-    introduction: userdata.introduction,
-    jobCode: userdata.job, // 변경 필요
-    drinkingCode: userdata.drinkingCode, // 변경 필요
-    religionCode: userdata.religionCode, // 변경 필요
-    mbtiCode: currentMbti,
-    smokingCode: userdata.smokingCode, // 변경 필요
-    hobbyCodeList: userdata.hobbyCodeList, // 변경 필요
-    styleCodeList: userdata.styleCodeList, // 변경 필요
-    personalityCodeLIst: userdata.personalityCodeLIst, // 변경 필요
+    region: regionToKor(userdata.region),
+    // profileImage: userdata.profileImage,
+    profileImage: "",
+    height: Number(height),
+    // introduction: userdata.introduction, // 어떻게 수정?
+    introduce: "", // 어떻게 수정?
+    jobCode: currentJob && currentJob.code,
+    drinkingCode: currentDrinking && currentDrinking.code,
+    religionCode: currentReligion && currentReligion.code,
+    mbtiCode: currentMbti && currentMbti.code,
+    smokingCode: currentSmoking && currentSmoking.code,
+    hobbyCodeList: currentHobbyListCode,
+    styleCodeList: currentStyleListCode,
+    personalityCodeList: currentPersonalityListCode,
   };
 
+  // console.log()
 
 
-  // 지역 영어를 한글로 변환
-  const matchRegion = (regionData) => {
-    const regionName = regionList.map((region) => region.regionEn === regionData && region.regionKor)
-    return regionName
-  };
 
-  // 변경된 프로필을 DB에 저장
+
+  console.log(newProfileData);
+  // console.log(JSON.stringify(newProfileData))
+  // console.log(typeof Number(height))
+
+  // 변경된 프로필 정보를 DB에 저장
   const storeNewProfile = () => {
     tokenHttp.put('/user', newProfileData).then((response) => {
       console.log(response)
       if (response.data.code === 200) {
-      
+        console.log('저장 완료');
+        storeNewProfileToRedux();
+        Navigate("/mypage");
       }
       else if (response.data.code === 400) {
-        console.log('확인 실패')
+        console.log('확인 실패');
       }
       else if (response.data.code === 401) {
-        console.log('로그인이 필요합니다')
+        console.log('로그인이 필요합니다');
       }
       else if (response.data.code === 403) {
-        console.log('권한이 없습니다')
+        console.log('권한이 없습니다');
       }
     })
     .catch(() => console.log("실패"));
@@ -74,33 +113,40 @@ function MyInformationUpdate() {
 
   // 변경된 프로필을 redux에 저장
   const storeNewProfileToRedux = () => {
-    dispatch(getCurrentUserdata(newProfileData));
-  };
+    newProfileData = {
+      ...userdata,
+      profileImage: "",
+      height: Number(height),
+      introduce: "", // 어떻게 수정?
 
-  console.log(currentHobbyList)
+      jobCode: currentJob,
+      drinkingCode: currentDrinking,
+      religionCode: currentReligion,
+      mbtiCode: currentMbti,
+      smokingCode: currentSmoking,
+      hobbyCodeList: currentHobbyList,
+      styleCodeList: currentStyleList,
+      personalityCodeList: currentPersonalityList,
+    }
+    dispatch(getCurrentUserdata(newProfileData));
+    console.log("Updated profile data:", newProfileData)
+  };
 
   return (
     <div>
       <h2>정보 수정 페이지</h2>
       <button onClick={() => {
-        Navigate("/mypage");
         storeNewProfile();
       }}>저장</button>
 
       <p>이름 : { userdata.name }</p>
-      <p>성별 : { userdata.gender }</p>
+      <p>성별 : { userdata.gender === "F" ? "여성" : "남성" }</p>
       <p>이메일 : { userdata.email }</p>
       <p>전화번호 : { userdata.phoneNumber }</p>
       <p>생년월일 : { userdata.birth }</p>
-      <p>지역 : { matchRegion(userdata.region) }</p>
+      <p>지역 : { regionToKor(userdata.region) }</p>
+      <p>닉네임 : { userdata.nickname }</p>
       <br/>
-
-      <label>닉네임</label>
-      <input 
-        type="text" 
-        value={ nickname }
-        onChange={(e) => setNickname(e.target.value)}
-      ></input>
 
       <label>키</label>
       <input 
@@ -114,11 +160,11 @@ function MyInformationUpdate() {
         {dataCode
         .filter((data) => data.category.includes("MBTI"))
         .map((data, i) => 
-          <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data.name)}>{ data.name }</Dropdown.Item>
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data)}>{ data.name }</Dropdown.Item>
         )
         }
         </DropdownButton>
-        { currentMbti }
+        { currentMbti && currentMbti.name }
       </p>
       <br/>
 
@@ -127,11 +173,11 @@ function MyInformationUpdate() {
         {dataCode
         .filter((data) => data.category.includes("DRINKING"))
         .map((data, i) => 
-          <Dropdown.Item key={i} as="button" onClick={() => setCurrentDrinking(data.name)}>{ data.name }</Dropdown.Item>
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentDrinking(data)}>{ data.name }</Dropdown.Item>
         )
         }
         </DropdownButton>
-        { currentDrinking }
+        { currentDrinking && currentDrinking.name }
       </p>
       <br/>
 
@@ -140,11 +186,11 @@ function MyInformationUpdate() {
         {dataCode
         .filter((data) => data.category.includes("SMOKING"))
         .map((data, i) => 
-          <Dropdown.Item key={i} as="button" onClick={() => setCurrentSmoking(data.name)}>{ data.name }</Dropdown.Item>
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentSmoking(data)}>{ data.name }</Dropdown.Item>
         )
         }
         </DropdownButton>
-        { currentSmoking }
+        { currentSmoking && currentSmoking.name }
       </p>
       <br/>
 
@@ -153,11 +199,11 @@ function MyInformationUpdate() {
         {dataCode
         .filter((data) => data.category.includes("RELIGION"))
         .map((data, i) => 
-          <Dropdown.Item key={i} as="button" onClick={() => setCurrentReligion(data.name)}>{ data.name }</Dropdown.Item>
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentReligion(data)}>{ data.name }</Dropdown.Item>
         )
         }
         </DropdownButton>
-        { currentReligion }
+      { currentReligion && currentReligion.name }
       </p>
       <br/>
 
@@ -165,20 +211,18 @@ function MyInformationUpdate() {
       <DropdownButton id="dropdown-item-button" title="취미">
         {dataCode
         .filter((data) => data.category.includes("HOBBY"))
-        .map((data, i) => 
-          { let addData = {
-            code: data.code,
-            category: data.category,
-            name: data.name
-          }
-          return (
-            <Dropdown.Item key={i} as="button" onClick={() => setCurrentHobbyList([...currentHobbyList, addData])}>{ data.name }</Dropdown.Item>
-          )
-          }
-        )
+        .map((data, i) => (
+            <Dropdown.Item key={i} as="button" onClick={() => 
+              { 
+                currentHobbyList.includes(data) ?
+                setCurrentHobbyList([...currentHobbyList.filter(d => d !== data)])
+                : setCurrentHobbyList([...currentHobbyList, data])
+              }
+              }>{ data.name }</Dropdown.Item>
+          ))
         }
         </DropdownButton>
-        { currentHobbyList.map((hobby, i) => (
+        { currentHobbyList && currentHobbyList.map((hobby, i) => (
           hobby.name
         )) }
       </p>
@@ -188,21 +232,51 @@ function MyInformationUpdate() {
       <DropdownButton id="dropdown-item-button" title="성격">
         {dataCode
         .filter((data) => data.category.includes("PERSONALITY"))
+        .map((data, i) => (
+          <Dropdown.Item key={i} as="button" onClick={() => 
+            { 
+              !currentPersonalityList.includes(data) &&
+              setCurrentPersonalityList([...currentPersonalityList, data])
+            }
+            }>{ data.name }</Dropdown.Item>
+          ))
+        }
+        </DropdownButton>
+        { currentPersonalityList && currentPersonalityList.map((personality, i) => (
+          personality.name
+        )) }
+      </p>
+      <br/>
+
+      <p>
+        <DropdownButton id="dropdown-item-button" title="직업">
+        {dataCode
+        .filter((data) => data.category.includes("JOB"))
         .map((data, i) => 
-          { let addData = {
-            code: data.code,
-            category: data.category,
-            name: data.name
-          }
-          return (
-            <Dropdown.Item key={i} as="button" onClick={() => setCurrentPersonalityList([...currentPersonalityList, addData])}>{ data.name }</Dropdown.Item>
-          )
-          }
+          <Dropdown.Item key={i} as="button" onClick={() => setCurrentJob(data)}>{ data.name }</Dropdown.Item>
         )
         }
         </DropdownButton>
-        { currentPersonalityList.map((personality, i) => (
-          personality.name
+        { currentJob && currentJob.name }
+      </p>
+      <br/>
+
+      <p>
+      <DropdownButton id="dropdown-item-button" title="스타일">
+        {dataCode
+        .filter((data) => data.category.includes("STYLE"))
+        .map((data, i) => (
+          <Dropdown.Item key={i} as="button" onClick={() => 
+            { 
+              !currentStyleList.includes(data) &&
+              setCurrentStyleList([...currentStyleList, data])
+            }
+            }>{ data.name }</Dropdown.Item>
+          ))
+        }
+        </DropdownButton>
+        { currentStyleList && currentStyleList.map((style, i) => (
+          style.name
         )) }
       </p>
       <br/>
