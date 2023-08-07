@@ -9,9 +9,11 @@
 }
 
 .OutletBoard {
+  display: flex;
+  justify-content: center;
   background-color: #7b9ec6;
   border: 1px solid black;
   border-radius: 20px;
-  width: 500px;
+  width: 800px;
   height: 600px;
 }
