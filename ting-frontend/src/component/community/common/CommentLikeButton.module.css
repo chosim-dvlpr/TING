@@ -1,0 +1,17 @@
+/* CommentLikeButton.module.css */
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .heartIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  
+  /* Modify the styles as needed */
+  
