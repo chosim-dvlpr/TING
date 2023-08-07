@@ -5,9 +5,11 @@ import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 
 import styles from "./AdviceBoard.module.css";
 import Sidebar from "../common/Sidebar";
+
 import Pagination from "../common/Pagination";
 import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
+import SearchBar from "../common/SearchBar";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
@@ -133,6 +135,8 @@ function AdviceBoard() {
           ))}
         </tbody>
       </table>
+
+      <SearchBar/>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
