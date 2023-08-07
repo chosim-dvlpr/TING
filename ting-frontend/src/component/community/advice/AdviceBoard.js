@@ -113,10 +113,12 @@ function AdviceBoard() {
     <div className={styles.adviceBoardBackground}>
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
+      <div>
       <button className={styles.createButton} onClick={handleCreateClick}>
         글 작성하기
       </button>
-
+      </div>
+      <div>
       <table className={styles.adviceTable}>
         <thead>
           <tr>
@@ -168,7 +170,7 @@ function AdviceBoard() {
           )}
         </tbody>
       </table>
-
+      </div>
       {searchResult.length === 0 && (
         <div className={styles.searchPopup}>`검색 결과가 없습니다.</div>
       )}
