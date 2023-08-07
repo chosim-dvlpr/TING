@@ -86,14 +86,38 @@ public class BoardService {
         Map<String, Object> result = new HashMap<>();
         PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
+
         Page<AdviceBoard> page = adviceBoardRepository.findList(pageRequest);
         List<AdviceBoard> adviceBoardList = page.getContent();
+
         List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
         for(AdviceBoard adviceBoard : adviceBoardList) {
             User user = userRepository.findById(adviceBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
         }
+
+        result.put("adviceBoardList", adviceBoardDtoList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
+    }
+
+    public Map<String, Object> adviceSearchList(int pageNo, String keyword) {
+        Map<String, Object> result = new HashMap<>();
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
+                "createdTime"));
+
+        Page<AdviceBoard> page = adviceBoardRepository.findByTitleContaining(keyword, pageRequest);
+        List<AdviceBoard> adviceBoardList = page.getContent();
+
+        List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
+        for(AdviceBoard adviceBoard : adviceBoardList) {
+            User user = userRepository.findById(adviceBoard.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
+        }
+
         result.put("adviceBoardList", adviceBoardDtoList);
         result.put("totalPages", page.getTotalPages());
         result.put("totalElements", page.getTotalElements());
@@ -153,6 +177,43 @@ public class BoardService {
         result.put("issueBoardList", issueBoardResponseList);
         result.put("totalPages", page.getTotalPages());
         result.put("totalElements", page.getTotalElements());
+        return result;
+    }
+
+    public Map<String, Object> issueSearchList(int pageNo, String item, String keyword) {
+        Map<String, Object> result = new HashMap<>();
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
+                "createdTime"));
+
+        Page<IssueBoard> page = null;
+        List<IssueBoard> issueBoardList = new ArrayList<>();
+        if(item.equals("nickname")) {
+            if(userRepository.findByNickname(keyword).isPresent()) {
+                User user = userRepository.findByNickname(keyword)
+                        .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+                page = issueBoardRepository.findByUserId(user.getId(), pageRequest);
+                issueBoardList = page.getContent();
+            }
+        } else {
+            page = issueBoardRepository.findByTitleContaining(keyword, pageRequest);
+            issueBoardList = page.getContent();
+        }
+
+        List<IssueBoardDto.Response> issueBoardResponseList = new ArrayList<>();
+        for(IssueBoard issueBoard : issueBoardList) {
+            User user = userRepository.findById(issueBoard.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+            issueBoardResponseList.add(IssueBoardDto.Response.of(issueBoard, user));
+        }
+
+        result.put("issueBoardList", issueBoardResponseList);
+        if(page != null) {
+            result.put("totalPages", page.getTotalPages());
+            result.put("totalElements", page.getTotalElements());
+        } else {
+            result.put("totalPages", 0);
+            result.put("totalElements", 0);
+        }
         return result;
     }
 
@@ -308,4 +369,5 @@ public class BoardService {
         }
         return commentDtoList;
     }
+
 }
