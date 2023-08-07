@@ -68,7 +68,7 @@ public class BoardController {
      * @return 상담 상세 정보
      */
     @GetMapping("/advice/{adviceId}")
-    public DataResponse<AdviceBoardDto.Response> detailQuestion(@PathVariable Long adviceId) {
+    public DataResponse<AdviceBoardDto.Response> detailAdvice(@PathVariable Long adviceId) {
         AdviceBoardDto.Response adviceBoardResponse = boardService.adviceDetail(adviceId);
         return new DataResponse<>(200, "상담글 상세 조회 성공", adviceBoardResponse);
     }
@@ -79,9 +79,20 @@ public class BoardController {
      * @return 문의 목록 리스트 adviceBoardList, totalPages, totalElements
      */
     @GetMapping("/advice")
-    public DataResponse<Map<String, Object>> listQuestion(@RequestParam("pageNo") int pageNo) {
+    public DataResponse<Map<String, Object>> listAdvice(@RequestParam("pageNo") int pageNo) {
         Map<String, Object> result = boardService.adviceList(pageNo);
-        return new DataResponse<>(200, "문의글 목록 조회 성공", result);
+        return new DataResponse<>(200, "상담글 목록 조회 성공", result);
+    }
+
+    /**
+     * 상담 검색 조회 API
+     * @param pageNo
+     * @return 문의 목록 리스트 adviceBoardList, totalPages, totalElements
+     */
+    @GetMapping("/advice/search")
+    public DataResponse<Map<String, Object>> searchAdvice(@RequestParam("pageNo") int pageNo, @RequestParam("keyword") String keyword) {
+        Map<String, Object> result = boardService.adviceSearchList(pageNo,keyword);
+        return new DataResponse<>(200, "상담글 검색 조회 성공", result);
     }
 
 
@@ -128,9 +139,20 @@ public class BoardController {
      * @return 이슈 목록 리스트 issueBoardList, totalPages, totalElements
      */
     @GetMapping("/issue")
-    public DataResponse<Map<String, Object>> listIssue(@RequestParam("pageNo") int pageNo) {
+    public DataResponse<Map<String, Object>> searchIssue(@RequestParam("pageNo") int pageNo) {
         Map<String, Object> result = boardService.issueList(pageNo);
         return new DataResponse<>(200, "이슈글 목록 조회 성공", result);
+    }
+
+    /**
+     * 이슈 검색 목록 조회 API
+     * @param pageNo
+     * @return 이슈 목록 리스트 issueBoardList, totalPages, totalElements
+     */
+    @GetMapping("/issue/search")
+    public DataResponse<Map<String, Object>> listIssue(@RequestParam("pageNo") int pageNo, @RequestParam("item") String item, @RequestParam("keyword") String keyword) {
+        Map<String, Object> result = boardService.issueSearchList(pageNo, item, keyword);
+        return new DataResponse<>(200, "이슈글 검색 목록 조회 성공", result);
     }
 
     /**
