@@ -11,9 +11,7 @@ function MyPoint() {
 
   // redux 관련 변수
   const dispatch = useDispatch()
-  const state = useSelector((state)=>state)
-  const myPoint = state.itemReducer.myPoint
-
+  const myPoint = useSelector((state) => state.itemReducer.myPoint)
 
   // 자신의 포인트가 얼마인지 가져옴(마운트 될 때 한 번)
   useEffect(()=>{
@@ -25,11 +23,6 @@ function MyPoint() {
       })
       .catch(err => console.log(err))
   },[]);
-
-  // 포인트 충전으로 보내는 함수
-  const chargePoint = () => {
-
-  }
 
   return(
     <div>
@@ -75,15 +68,14 @@ function SelectMoney(){
   // 카카오 페이로 보내기 위한 함수
   const sendToKakaoPay = () => {
     let data = {
-      pointCode: selectChargeMoneyData.pointCode
+      pointCode: selectChargeMoneyData.pointCode,
+      domain: "http://localhost:3000"
     }
     tokenHttp.post('/point/kakaopay/ready', data)
       .then(response => {
         console.log(response.data.data)
         dispatch(setPointPaymentId(response.data.data.pointPaymentId))
         window.location.href = response.data.data.redirectUrl;
-        // https://i9b107.p.ssafy.io:5157/payment/kakaoPaySuccess?pg_token=c781229277b9a8a52bb9
-        // 최종 링크
       })
       .catch(err => console.log(err))
     

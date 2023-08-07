@@ -69,7 +69,8 @@ import MyItem from './component/item/MyItem';
 import MyPoint from './component/item/MyPoint';
 
 // 카카오 페이 결제
-import KakaoPaySuccess from './pages/KakaoPaySuccess.js'
+import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+
 
 function App() {
   let accessToken = localStorage.getItem('access-token');
