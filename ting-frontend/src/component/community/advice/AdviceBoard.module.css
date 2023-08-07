@@ -12,7 +12,7 @@
   width: 80%;
   min-width: 1200px;
   height: 80%;
-  /* padding: 20px; */
+  padding: 20px;
 }
 
 /* Table styles */
@@ -40,16 +40,13 @@
 
 /* Button styles */
 .createButton {
- 
   padding: 10px 20px;
   background-color: #004BA1;
   color: #fff;
   border: none;
   cursor: pointer;
   float: right;
-  margin-right: 400px;
-  margin-bottom: 60px;
-  margin-top: 20px;
+  margin: 10px;
 }
 
 .createButton:hover {
