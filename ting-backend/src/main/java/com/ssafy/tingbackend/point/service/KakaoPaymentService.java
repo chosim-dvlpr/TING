@@ -37,24 +37,24 @@ public class KakaoPaymentService {
     @Value("${payment.kakaopay.admin.key}")
     private String adminKey;
 
-    @Value("${payment.kakaopay.redirectUrl.dev.approvalRedirectUrl}")
-    private String approvalRedirectUrl;
-    @Value("${payment.kakaopay.redirectUrl.dev.cancelRedirectUrl}")
-    private String cancelRedirectUrl;
-    @Value("${payment.kakaopay.redirectUrl.dev.failRedirectUrl}")
-    private String failRedirectUrl;
-
     @Value("${payment.kakaopay.url.ready}")
     private String readyUrl;
     @Value("${payment.kakaopay.url.approve}")
     private String approveUrl;
 
-//    @Value("${payment.kakaopay.redirectUrl.approval}")
-//    private String approvalUrl;
-//    @Value("${payment.kakaopay.redirectUrl.cancel}")
-//    private String cancelUrl;
-//    @Value("${payment.kakaopay.redirectUrl.fail}")
-//    private String failUrl;
+//    @Value("${payment.kakaopay.redirectUrl.dev.approvalRedirectUrl}")
+//    private String approvalRedirectUrl;
+//    @Value("${payment.kakaopay.redirectUrl.dev.cancelRedirectUrl}")
+//    private String cancelRedirectUrl;
+//    @Value("${payment.kakaopay.redirectUrl.dev.failRedirectUrl}")
+//    private String failRedirectUrl;
+
+    @Value("${payment.kakaopay.redirectUrl.approvalRedirectUrl}")
+    private String approvalRedirectUrl;
+    @Value("${payment.kakaopay.redirectUrl.cancelRedirectUrl}")
+    private String cancelRedirectUrl;
+    @Value("${payment.kakaopay.redirectUrl.failRedirectUrl}")
+    private String failRedirectUrl;
 
     @Transactional
     public PaymentDto.ReadyResponse ready(Long userId, Long pointCode) {
