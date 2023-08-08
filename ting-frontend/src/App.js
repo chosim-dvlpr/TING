@@ -78,6 +78,8 @@ import MyPoint from './component/item/MyPoint';
 
 // 카카오 페이 결제
 import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+import QnaDetail from './component/profile/QnaDetail';
+
 import KakaoPayCancel from './pages/pay-result-page/KakaoPayCancel';
 import KakaoPayFail from './pages/pay-result-page/KakaoPayFail';
 
@@ -158,6 +160,7 @@ function App() {
           <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
           <Route path="qna" element={<QnaBoard />}></Route>
+          <Route path="qnadetail" element = {<QnaDetail/>} />
           <Route path="myarticle" element={<MyArticle />}></Route>
           <Route path="deleteaccount" element={<DeleteAccount />}></Route>
         </Route>
