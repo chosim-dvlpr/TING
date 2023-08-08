@@ -49,30 +49,19 @@ public class DateService {
     private final Map<Long, DeferredResult<DataResponse<Boolean>>> deferredResultQueue = new ConcurrentHashMap<>();  // 키 userId
 
     public List<QuestionDto> getMatchingQuestions(Long matchingId) {
-        List<Question> etcCardList = questionRepository.findAllByCategory(QuestionType.ETC);
-
-        // 인사, 최종 점수, 마지막 어필 카드
-        Question helloCard = null, endCard = null, scoreCard = null, lastCard = null;
-        for(Question etcCard : etcCardList) {
-            if(etcCard.getQuestionCard().equals("인사")) helloCard = etcCard;
-            else if(etcCard.getQuestionCard().equals("끝")) endCard = etcCard;
-            else if(etcCard.getQuestionCard().equals("최종 점수")) scoreCard = etcCard;
-            else if(etcCard.getQuestionCard().equals("마지막 어필")) lastCard = etcCard;
-        }
-
         Matching matching = matchingRepository.findById(matchingId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
         List<MatchingQuestion> matchingQuestions = matchingQuestionRepository.findByMatchingOrderByQuestionOrder(matching);
 
         // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
         List<QuestionDto> questions = new ArrayList<>();
-        questions.add(QuestionDto.of(helloCard));
+        questions.add(new QuestionDto("인사"));
         for(int i = 0; i < 10; i++) {
             questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
         }
-        questions.add(QuestionDto.of(endCard));
-        questions.add(QuestionDto.of(scoreCard));
-        questions.add(QuestionDto.of(lastCard));
+        questions.add(new QuestionDto("끝"));
+        questions.add(new QuestionDto("최종 점수"));
+        questions.add(new QuestionDto("마지막 어필"));
 
         return questions;
     }

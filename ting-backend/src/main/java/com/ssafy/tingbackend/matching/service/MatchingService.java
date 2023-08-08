@@ -99,11 +99,6 @@ public class MatchingService {
 
     @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
     public void matchingUsers() {
-//        System.out.println("========== 매칭 전 ==========");
-//        System.out.println("fQueue=" + fQueue);
-//        System.out.println("mQueue=" + mQueue);
-//        System.out.println("acceptQueue=" + acceptQueue);
-
         // 먼저 들어온 여성 사용자들부터 순서대로 점수 계산, 가장 점수합이 높은 쌍부터 내보내기(기준 점수 50점)
         // 오래 대기하는 사용자들을 위한 가산점 -> 함수 한번 돌 떄마다 count++, 점수에 count 더해서 계산
         Iterator<String> iter = fQueue.iterator();
@@ -160,11 +155,6 @@ public class MatchingService {
         for (String mId : mQueue) {
             socketInfos.get(mId).countUp();
         }
-
-//        System.out.println("========== 매칭 후 ==========");
-//        System.out.println("fQueue=" + fQueue);
-//        System.out.println("mQueue=" + mQueue);
-//        System.out.println("acceptQueue=" + acceptQueue);
     }
 
     public User getUserAllData(Long userId) {
@@ -582,31 +572,69 @@ public class MatchingService {
     }
 
     public Question[] getQuestions() {
-        List<Question> allCardList = questionRepository.findAllCard(QuestionType.ESSENTIAL, QuestionType.RANDOM);
+        List<Question> selectedQuestions = new ArrayList<>();
 
-        // 필수 카드 3개, 랜덤 카드 7개 임의로 뽑기
-        Question[] questions = new Question[10];
-        boolean[] isSelected = new boolean[allCardList.size()];
-        int essentialCnt = 0, randomCnt = 0;
+        // 필수 카드 3개 임의로 뽑기
+        List<Question> essentialQuestions = questionRepository.findAllByCategory(QuestionType.ESSENTIAL);
+        boolean[] isSelected = new boolean[essentialQuestions.size()];
+        int cnt = 0;
 
-        while(true) {
-            if(essentialCnt >= 3 && randomCnt >= 7) break;
-
-            int number = (int) (Math.random() * allCardList.size());
+        while(cnt < 3) {
+            int number = (int) (Math.random() * essentialQuestions.size());
             if(!isSelected[number]) {
-                Question nowSelected = allCardList.get(number);
-                System.out.println("nowSelected=" + nowSelected);
-                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL) && essentialCnt >=3 ||
-                        nowSelected.getCategory().equals(QuestionType.RANDOM) && randomCnt >= 7) continue;
-
-                questions[essentialCnt + randomCnt] = nowSelected;
+                selectedQuestions.add(essentialQuestions.get(number));
                 isSelected[number] = true;
-                if(nowSelected.getCategory().equals(QuestionType.ESSENTIAL)) essentialCnt++;
-                else randomCnt++;
+                cnt++;
             }
         }
 
+        // 랜덤 카드 7개 임의로 뽑기
+        // 연애 2개
+        List<Question> loveQuestions = questionRepository.findAllByCategory(QuestionType.LOVE);
+        isSelected = new boolean[loveQuestions.size()];
+        cnt = 0;
+        while(cnt < 2) {
+            int number = (int) (Math.random() * loveQuestions.size());
+            if(!isSelected[number]) {
+                selectedQuestions.add(loveQuestions.get(number));
+                isSelected[number] = true;
+                cnt++;
+            }
+        }
+        // 생활 1개
+        selectRandomQuestion(
+                questionRepository.findAllByCategory(QuestionType.LIFE), selectedQuestions
+        );
+        // 취미 1개
+        selectRandomQuestion(
+                questionRepository.findAllByCategory(QuestionType.HOBBY), selectedQuestions
+        );
+        // 최애 1개
+        selectRandomQuestion(
+                questionRepository.findAllByCategory(QuestionType.FAVORITE), selectedQuestions
+        );
+        // 호불호 1개
+        selectRandomQuestion(
+                questionRepository.findAllByCategory(QuestionType.PREFER), selectedQuestions
+        );
+        // vs 1개
+        selectRandomQuestion(
+                questionRepository.findAllByCategory(QuestionType.VS), selectedQuestions
+        );
+
+        // 순서 섞기
+        Collections.shuffle(selectedQuestions);
+        Question[] questions = new Question[10];
+        for(int i = 0; i < 10; i++) {
+            questions[i] = selectedQuestions.get(i);
+        }
+
         return questions;
+    }
+
+    public void selectRandomQuestion(List<Question> curQuestions, List<Question> selectedQuestions) {
+        int number = (int) (Math.random() * curQuestions.size());
+        selectedQuestions.add(curQuestions.get(number));
     }
 
 }
