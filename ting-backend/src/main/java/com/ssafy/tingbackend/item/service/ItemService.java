@@ -46,6 +46,7 @@ public class ItemService {
         List<UserItem> userItemList = userItemRepository.findAllByUser(user);
 
         List<ItemDto.OwnItem> ownItemList = new ArrayList<>();
+
         outer:
         for(UserItem userItem : userItemList) {
             Item item = userItem.getItem();
