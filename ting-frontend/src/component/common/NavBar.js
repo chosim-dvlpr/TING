@@ -36,6 +36,13 @@ const NavBar = () => {
     setDropdown(false);
   };
 
+  const openClam = e => {
+    e.target.src = "img/조개.png";
+  }
+  const closeClam = e => {
+    e.target.src = "img/조개2.png";
+  }
+
   return (
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
@@ -44,11 +51,11 @@ const NavBar = () => {
           {/* <span>TING</span> */}
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
-          <img src="img/불가사리.png" className={styles.menuItem}></img>
+          <img onMouseOver={openClam} onMouseLeave={closeClam} src="img/조개2.png" className={styles.menuItem}></img>
           <div className={styles.menuName}>튜토리얼</div>
         </Link>
         <Link className={styles.navMenu} to="/community">
-          <img src="img/조개.png" className={styles.menuItem}></img>
+          <img onMouseOver={openClam} onMouseLeave={closeClam} src="img/조개2.png" className={styles.menuItem}></img>
           <div className={styles.menuName}>커뮤니티</div>
         </Link>
       </div>
@@ -59,7 +66,8 @@ const NavBar = () => {
             {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
             <img
               // src={`https://i9b107.p.ssafy.io:5157/user/profile/${userData.userId}`}
-              src="img/해마.png"
+              src="img/조개2.png"
+              onMouseOver={openClam} onMouseLeave={closeClam}
               onClick={() => setDropdown(!dropdown)}
               className={styles.profileImage}
               alt="profile"
@@ -75,7 +83,7 @@ const NavBar = () => {
         ) : (
           <>
             <span className={styles.navMenu} onClick={() => navigate("/login")}>
-              <img src="img/해마.png" className={styles.menuItem}></img>
+              <img src="img/조개2.png" onMouseOver={openClam} onMouseLeave={closeClam} className={styles.menuItem}></img>
               <div className={styles.menuName}>로그인</div>
             </span>
             {/* <span className={styles.navMenu} onClick={() => navigate("/signup")}>
