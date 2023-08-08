@@ -4,7 +4,8 @@ export let itemReducer = createSlice({
   name : "itemReducer",
   initialState: {
     myPoint : 0,
-    pointPaymentId : -1
+    pointPaymentId : -1,
+    myItemList : []
   },
   reducers:{
     setPoint: (state,action)=>{
@@ -16,11 +17,15 @@ export let itemReducer = createSlice({
       state.pointPaymentId = action.payload
       console.log("+++++++++++++++ Redux pointPaymentId +++++++++++++++")
       console.log(state.pointPaymentId)
+    },
+    setMyItemList : (state,action) => {
+      state.myItemList = action.payload
+      console.log("+++++++++++++++ Redux myItemList +++++++++++++++")
+      console.log(state.myItemList)
     }
-
   },
 });
 
-export let { setPoint, setPointPaymentId } = itemReducer.actions;
+export let { setPoint, setPointPaymentId, setMyItemList } = itemReducer.actions;
 
 export default itemReducer;
