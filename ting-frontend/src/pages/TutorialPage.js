@@ -6,7 +6,7 @@ import NavBar from '../component/common/NavBar';
 function TutorialPage() {
     return(
         <div className={styles.container}>
-                  <NavBar />
+            {/* <NavBar /> */}
             <div className={styles.content}>
                 <h1>튜토리얼 페이지</h1>
             </div>
