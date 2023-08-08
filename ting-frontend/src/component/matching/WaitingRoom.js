@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "./WaitingRoom.css";
 import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
 import { setMatchingId } from "../../redux/matchingStore";
+import styles from './WaitingRoom.module.css';
+
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
@@ -133,19 +134,19 @@ function WaitingRoom() {
   }, [socket]);
 
   return (
-    <div className="waitingContainer">
+    <div className={styles.waitingContainer}>
       <h1>대기실</h1>
-      <div className="waitingMenu">
+      <div className={styles.waitingMenu}>
       <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
       <button onClick={()=>{navigate("/")}}>나가기</button>
       </div>
-      <Container className="box">
+      <Container className={styles.box}>
         <Row>
-          <Col className="leftBox">
+          <Col className={styles.leftBox}>
             <Webcam audio={true} />
           </Col>
-          <Col className="rightBox">
-            <div className="stream-container col-md-6 col-xs-6">
+          <Col className={styles.rightBox}>
+            <div className={`col-md-6 col-xs-6 stream-container`}>
               {userdata.nickname} 님의 상태
               <p>체크박스</p>
               <p>웹캠이 확인되었습니다</p>
