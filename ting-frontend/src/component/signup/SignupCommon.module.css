@@ -1,0 +1,93 @@
+/* @font-face {
+    font-family: 'UhBeejung';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeejung.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+} */
+@font-face {
+    font-family: 'SUITE';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'IBMPlexSansKR';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.wrapper {
+    margin: 20px;
+}
+.wrapper * {
+    font-family: 'SUITE';
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.label,
+.btn,
+.disabledBtn {
+    margin: 10px;
+}
+.input,
+.btn,
+.disabledBtn,
+.selectBtn {
+    border-radius: 10px;
+    padding: 5px 15px;
+}
+
+.label {
+    color: rgb(145, 145, 145);
+}
+
+.input {
+    border: 2px solid gray;
+    margin: 5px 0;
+}
+
+.disabledBtn {
+    border: none;
+    background-color: gainsboro;
+    color: whitesmoke;
+}
+
+.btn {
+    border: none;
+    background-color: #30668A;
+    color: whitesmoke;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    5px 5px 10px 0px rgba(0, 0 ,0, .1),
+    3px 3px 5px 0px rgba(0, 0 ,0, .1);
+}
+.btn:hover {
+    background-color: #4C8DAC;
+}
+
+.rightMsg {
+    color: green;
+}
+.wrongMsg {
+    color: red;
+}
+
+#nameInput,
+#regionInput {
+    /* margin-right: 120px; */
+    width: 390px;
+}
+
+.selectBtn {
+    border: none;
+    margin: 3px;
+}
+.selectBtn:hover,
+.selectBtn:focus {
+    background-color: #98E0EF;
+}
+
+.genderBtn {
+    width: 180px;
+}
