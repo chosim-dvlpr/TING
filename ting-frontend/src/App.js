@@ -132,7 +132,7 @@ function App() {
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
 
-        <Route path="/testopenvidu" element={<Openvidu/>}></Route>
+        
 
         {/* 커뮤니티 페이지 */}
 

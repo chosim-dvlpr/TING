@@ -10,6 +10,7 @@ import Pagination from "../common/Pagination";
 import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
+import NavBar from "../../common/NavBar";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
@@ -111,6 +112,7 @@ function AdviceBoard() {
 
   return (
     <div className={styles.adviceBoardBackground}>
+      <NavBar/>
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
       <div>

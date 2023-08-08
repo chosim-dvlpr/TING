@@ -8,18 +8,20 @@ import NavBar from "../component/common/NavBar";
 
 function CommunityPage() {
   return (
-    <div className="community-container">
+    <div>
       <NavBar />
-      <div className="community-content">
-        <Routes>
-          <Route path="/" element={<IssueBoard />} />
+      <div className="community-container">
+        <div className="community-content">
+          <Routes>
+            <Route path="/" element={<IssueBoard />} />
 
-          {/* adivce 게시판 */}
-          <Route path="/advice" element={<AdviceBoard />} />
+            {/* adivce 게시판 */}
+            <Route path="/advice" element={<AdviceBoard />} />
 
-          {/* issue 게시판 */}
-          <Route path="/issue" element={<IssueBoard />} />
-        </Routes>
+            {/* issue 게시판 */}
+            <Route path="/issue" element={<IssueBoard />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );
