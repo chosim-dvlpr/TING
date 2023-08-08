@@ -69,7 +69,7 @@ function AdviceBoard() {
   // 날짜 시간 나누기
   const calculateDate = (boardTime) => {
     if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 11);
+      return boardTime.substr(11, 5);
     } else return boardTime.substr(0, 10);
   };
 
