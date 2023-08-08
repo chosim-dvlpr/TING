@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -62,11 +64,12 @@ public class PointService {
     }
 
     @Transactional
-    public List<PointHistoryDto> getPointHistory(Long userId, int pageNo) {
+    public Map<String, Object> getPointHistory(Long userId, int pageNo) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        Map<String, Object> result = new HashMap<>();
 
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 3, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<PointHistory> page = pointHistoryRepository.findByUser(pageRequest, userId);
         List<PointHistory> pointHistoryList = page.getContent();
@@ -75,7 +78,11 @@ public class PointService {
         for(PointHistory pointHistory: pointHistoryList) {
             pointHistoryDtoList.add(PointHistoryDto.of(pointHistory));
         }
-        return pointHistoryDtoList;
+
+        result.put("pointList", pointHistoryDtoList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
     }
 
     public List<PointCodeDto> getPointChargeList() {
