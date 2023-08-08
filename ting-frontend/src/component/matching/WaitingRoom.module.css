@@ -9,26 +9,118 @@
 }
 
 
-
 .Webcam {
-    width:110%;
-    height:110%;
+    width: auto;
+    height: 90%;
+    border-radius: 40px;
+    background-color: #91cad6;
+    border: 5px solid #91cad6
 }
 
-.box{
-    width : 100%;
-    margin: 100px auto 0;
+.MainBox{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     border-radius: 10px;
-    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* box shadow 효과 */
-    transform: translateY(-6px); /* 아래로 약간 튀어나온 효과 */
-    margin: 20px auto;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* 얇은 테두리 추가 */
+    backdrop-filter: blur(10px); /* 블러 효과 */
+    padding: 20px; /* 내부 여백 추가 */
+    margin: 20px;
+    transition: transform 0.2s ease-in-out; /* 부드러운 변환 효과 */
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .rightBox{
-    margin: auto;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .leftBox{
-    margin: auto;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.failMessageBox{
+    width: 330px;
+    height: 60px;
+    margin:20px;
+    display: flex;
+    align-items: center;
+    background-color: #e8e8e8;
+    padding:10px;
+    border-radius: 50px;
+}
+
+.successMessageBox{
+    width: 330px;
+    height: 60px;
+    margin:20px;
+    display: flex;
+    align-items: center;
+    background-color: #dcf1f3;
+    padding:10px;
+    border-radius: 50px;
+}
+
+.textBox {
+    width: 100%;
+    margin : 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.textBox p:first-child {
+    margin:auto;
+    margin-bottom : 5px;
+}
+.textBox p:last-child {
+    font-size: 10px;
+    margin:auto;
+}
+
+.failMessageBox img{
+    margin: 0 20px;
+    width:35px;
+    height:35px;
+}
+
+.successMessageBox img{
+    margin: 0 20px;
+    width:35px;
+    height:35px;
+}
+
+.failMessage {
+    color: #FF6367;
+}
+
+
+
+/* 로딩 화면 */
+.loadingSpinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #333;
+    animation: spin 1s linear infinite;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+  
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
