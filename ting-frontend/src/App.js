@@ -78,7 +78,8 @@ import MyPoint from './component/item/MyPoint';
 
 // 카카오 페이 결제
 import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
-
+import KakaoPayCancel from './pages/pay-result-page/KakaoPayCancel';
+import KakaoPayFail from './pages/pay-result-page/KakaoPayFail';
 
 function App() {
   let accessToken = localStorage.getItem('access-token');
@@ -170,9 +171,14 @@ function App() {
           {/* 포인트 충전 및 관리 */}
           <Route path="mypoint" element={<MyPoint/>}></Route>
         </Route>
-        
+
+        {/* 카카오페이 결과 */}
         <Route path="/payment/kakaoPaySuccess" element={<KakaoPaySuccess/>}/>
+        <Route path="/payment/kakaoPayCancel" element={<KakaoPayCancel/>}/>
+        <Route path="/payment/kakaoPayFail" element={<KakaoPayFail/>}/>
         
+        
+
       </Routes>
 
     </div>
