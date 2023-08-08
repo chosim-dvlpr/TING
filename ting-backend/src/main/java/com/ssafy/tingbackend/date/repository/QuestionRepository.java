@@ -10,6 +10,4 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllByCategory(QuestionType category);
-    @Query("SELECT q FROM Question q WHERE q.category = :essential OR q.category = :random")
-    List<Question> findAllCard(@Param("essential") QuestionType essential, @Param("random") QuestionType random);
 }
