@@ -1,0 +1,19 @@
+.ItemContainer {
+  display:flex;
+}
+
+.SideBar {
+  width:200px;
+  background-color: #004BA1;
+  color: white;
+}
+
+.OutletBoard {
+  display: flex;
+  justify-content: center;
+  background-color: #7b9ec6;
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 1200px;
+  height: 100%;
+}

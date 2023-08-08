@@ -1,0 +1,11 @@
+.matchingBackground {
+  height: 100vh;
+  padding: 50px 0;
+}
+
+.matchingContainer {
+  margin: 0 auto;
+  width: 80%;
+  height: 100%;
+  background-color: white;
+}

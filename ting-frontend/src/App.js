@@ -44,6 +44,7 @@ import AdviceCreate from './component/community/advice/AdviceCreate';
 import AdviceUpdate from './component/community/advice/AdviceUpdate';
 import IssueBoard from './component/community/issue/IssueBoard';
 import IssueCreate from './component/community/issue/IssueCreate';
+import IssueDetail from './component/community/issue/IssueDetail';
 
 // 튜토리얼
 import TutorialPage from './pages/TutorialPage';
@@ -70,6 +71,14 @@ import Friend from './component/friend/Friend';
 import FriendChatting from './component/friend/FriendChatting';
 import FriendProfile from './component/friend/FriendProfile';
 
+// 아이템샵
+import ItemShop from './component/item/ItemShop';
+import MyItem from './component/item/MyItem';
+import MyPoint from './component/item/MyPoint';
+
+// 카카오 페이 결제
+import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+
 
 function App() {
   let accessToken = localStorage.getItem('access-token');
@@ -89,7 +98,7 @@ function App() {
         {/* 네비게이션 바 */}
         <Route path="/" element={ <MainPage/> }></Route>
         <Route path="/tutorial" element={ <TutorialPage/> }></Route>
-        <Route path="/community/" element={ <CommunityPage /> }></Route>
+        <Route path="/community//*" element={ <CommunityPage /> }></Route>
         <Route path="/login" element={ <LoginPage/> }></Route>
 
         {/* 회원가입 */}
@@ -124,7 +133,7 @@ function App() {
 
         {/* 커뮤니티 페이지 */}
 
-        <Route path="/community/" element={<CommunityPage />} />
+        <Route path="/community//*" element={<CommunityPage />} />
 
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail/>} />
         <Route path="/community/advice" element={<AdviceBoard/>} />
@@ -133,6 +142,7 @@ function App() {
 
         <Route path='/community/issue' element={<IssueBoard/>} />
         <Route path="/community/issue/create" element = {<IssueCreate/>} />
+        <Route path="/community/issue/detail/:issueId" element={<IssueDetail/>} />
 
         
         {/* 친구목록 임시 */}
@@ -150,6 +160,18 @@ function App() {
           <Route path="myarticle" element={<MyArticle />}></Route>
           <Route path="deleteaccount" element={<DeleteAccount />}></Route>
         </Route>
+        
+        {/* 아이템 페이지 */}
+        <Route path="/item" element={<ItemPage/>}>
+          {/* 아이템 상점 */}
+          <Route path="shop" element={<ItemShop/>}></Route>
+          {/* 보유 아이템 관리 */}
+          <Route path="myitem" element={<MyItem/>}></Route>
+          {/* 포인트 충전 및 관리 */}
+          <Route path="mypoint" element={<MyPoint/>}></Route>
+        </Route>
+        
+        <Route path="/payment/kakaoPaySuccess" element={<KakaoPaySuccess/>}/>
         
       </Routes>
 

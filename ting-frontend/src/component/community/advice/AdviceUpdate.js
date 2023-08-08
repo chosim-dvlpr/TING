@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import styles from "./AdviceUpdate.module.css";
 import tokenHttp from "../../../api/tokenHttp";
+import basicHttp from "../../../api/basicHttp";
 
 function AdviceUpdate() {
   const { adviceId } = useParams(); 
@@ -17,7 +18,7 @@ function AdviceUpdate() {
 
   const getAdviceDetail = async () => {
     try {
-      const response = await axios.get(`https://i9b107.p.ssafy.io:5157/advice/${adviceId}`);
+      const response = await tokenHttp.get(`/advice/${adviceId}`);
       const data = response.data.data;
       setTitle(data.title);
       setContent(data.content);
@@ -29,7 +30,13 @@ function AdviceUpdate() {
   const handleUpdate = async () => {
     try {
       const updatedData = { title, content };
-      await tokenHttp.put(`https://i9b107.p.ssafy.io:5157/advice/${adviceId}`, updatedData);
+      await tokenHttp.put(`/advice/${adviceId}`, updatedData);
+  
+      // 수정이 완료되면 서버에서 수정된 데이터를 다시 가져옴
+      const response = await basicHttp.get(`/advice/${adviceId}`);
+      const data = response.data.data;
+      setTitle(data.title);
+      setContent(data.content);
       setIsUpdated(true);
     } catch (error) {
       console.error("Error updating advice:", error);

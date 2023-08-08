@@ -3,6 +3,8 @@ import signupReducer from "./signup";
 import userdataReducer from "./userdata.js";
 import openviduReducer from "./openviduStore.js";
 import matchingReducer from "./matchingStore.js";
+import itemReducer from "./itemStore.js";
+
 import storage from 'redux-persist/lib/storage';
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { persistReducer } from 'redux-persist';
@@ -19,6 +21,7 @@ const rootReducer = combineReducers({
   userdataReducer: userdataReducer.reducer,
   openviduReducer: openviduReducer.reducer,
   matchingReducer: matchingReducer.reducer,
+  itemReducer: itemReducer.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

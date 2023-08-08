@@ -4,44 +4,93 @@
   src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
 } */
 @font-face {
-  font-family: 'PFStardust';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/PFStardust.woff') format('woff');
+  font-family: 'HANAMDAUM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/HANAMDAUM.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-   
-  }
-  
-  .btn {
-    font-family: "PFStardust";
-    font-size: 30px;
-    flex: 1 1 auto;
-    margin: 10px;
-    padding: 15px;
-    text-align: center;
-    text-transform: uppercase;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color:white;
-    box-shadow: 0 0 20px #eee;
-    border-radius: 10px;
-    background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
-    border: none;
-  }
-  
 
-  .btn:hover {
-    background-position: right center;
-  }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;  
+}
   
-  .linkButton {
-    text-decoration: none;
-    color: inherit; /* 상위 요소의 색상 상속 */
-    display: inline-block;
-    
-  }
+.btn {
+  /* font-family: "PFStardust";
+  font-size: 30px; */
+  flex: 1 1 auto;
+  margin: 10px;
+  padding: 15px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color:white;
+  box-shadow: 0 0 20px #eee;
+  /* border-radius: 10px;
+  background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
+  border: none; */
+}
+
+/* .btn:hover {
+  background-position: right center;
+} */
+
+.linkButton {
+  text-decoration: none;
+  color: inherit; /* 상위 요소의 색상 상속 */
+  display: inline-block;
+}
+
+.btn {
+  font-family: "UhBeeSe_hyun";
+  font-size: 24px;
+  font-weight: 600;
+  color: #382b22;
+  text-transform: uppercase;
+  padding: 0.5em 1em;
+  background: #DAF2FE;
+  border: 2px solid #173F92;
+  border-radius: 0.75em;
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+.btn::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #76BBFD;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px #B6E2FE, 0 0 20px #eee;
+  transform: translate3d(0, 0.75em, -1em);
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+}
+.btn:hover {
+  background: #B6E2FE;
+  transform: translate(0, 0.25em);
+}
+.btn::before {
+  box-shadow: 0 0 0 2px #173F92;
+  transform: translate3d(0, 0.5em, -1em);
+}
+.btn:active {
+  background: #B6E2FE;
+  transform: translate(0em, 0.75em);
+}
+.btn:active::before {
+  box-shadow: 0 0 0 2px #173F92, 0 0 #B6E2FE;
+  transform: translate3d(0, 0, -1em);
+}

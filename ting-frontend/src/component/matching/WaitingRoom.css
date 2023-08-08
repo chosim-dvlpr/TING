@@ -1,7 +1,12 @@
+.waitingContainer {
+    padding: 20px;
+}
+
 .box{
     width : 80%;
     background-color: #fee5ef;
     border-radius: 30px;
+    margin: 100px auto 0;
 }
 
 .rightBox{
@@ -10,4 +15,13 @@
 
 .leftBox{
     margin: auto;
+}
+
+.waitingMenu {
+    float: right;
+    margin: 10px 20px;
+}
+
+.waitingMenu button {
+    margin: 10px;
 }

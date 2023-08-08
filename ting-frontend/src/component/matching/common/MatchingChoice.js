@@ -15,11 +15,13 @@ function MatchingChoice({session, count}){
   
   const [finish, setFinish] = useState(false) 
   const [result,setResult] = useState(false)
+  const [matchingFinish, setMatchingFinish] = useState(false)
 
   // 최종 선택 타이머 끝내는 로직
   useEffect(()=>{
-    if (count === 0){
+    if (count === 0 && !matchingFinish){
       setFinish(true)
+      setMatchingFinish(true)
       becomeFriend()
     }
   },[count]);

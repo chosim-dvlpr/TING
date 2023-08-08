@@ -11,15 +11,32 @@
   font-weight: normal;
   font-style: normal;
 }
-
-.h1 {
-  font-family: "PFStardust";
+@font-face {
+  font-family: 'HANAMDAUM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/HANAMDAUM.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
 }
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* .mainPage {
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.5),
+    rgba(0, 131, 159, 0.5)
+  ),
+  url("../../public/img/main_background_2_zip.jpg");
+  background-size: cover;
+} */
 
 .wrapper {
   width: auto;
-  height: 800px;
-  background-color: #FEE5EF;
+  height: 700px;
+  /* background-color: #FEE5EF; */
   
   display: flex;
   flex-direction: row;
@@ -27,46 +44,86 @@
   justify-content: center;
 }
 
-
+.backgroundFish {
+  position: absolute;
+  opacity: 0.7;
+}
+#backgroundFish1 {
+  top: 60vh;
+  left: 20vh;
+  rotate: 10deg;
+}
+#backgroundFish2 {
+  top: 5vh;
+  right: 15vh;
+  rotate: 145deg;
+  transform: scaleY(-1);
+}
+.backgroundFish img {
+  height: 37vh;
+}
 
 .section1textbox {
-  
-  width: 500px; 
+  width: 400px; 
   display: flex;
-  flex-direction: column; 
+  flex-direction: row; 
   align-items: center; 
   justify-content: center; 
- 
+}
 
+.section1textbox * {
+  font-family: "UhBeeSe_hyun";
+  /* font-family: "HANAMDAUM"; */
+  font-weight: 700;
 }
 
 .section1textbox h1 {
-  font-family: "PFStardust";
-  font-size: 60px;
-  font-weight: 900;
-  
- 
-
+  font-size: 50px;
+  font-weight: 700;
 }
 
+#textDeco {
+  animation: layerize cubic-bezier(0.4, 0, 0.2, 1) 1000ms 100ms infinite alternate;
+  opacity: 0;
+  width: 100%;
+  color: #FF665E;
+  user-select: none;
+  text-align: center;
+}
 
+@keyframes layerize {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+    text-shadow: 0 0 transparent, 0em 0em rgba(255, 179, 158, 0.4), 0em 0em rgba(255, 179, 158, 0.3), 0em 0em rgba(255, 179, 158, 0.2), 0em 0em rgba(255, 179, 158, 0.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-0.066666em, -0.066666em);
+    text-shadow: 0 0 transparent, 0.033333em 0.033333em rgba(255, 179, 158, 0.4), 0.066666em 0.066666em rgba(255, 179, 158, 0.3), 0.099999em 0.099999em rgba(255, 179, 158, 0.2), 0.133332em 0.133332em rgba(255, 179, 158, 0.1);
+  }
+}
 
 .section1imgbox {
-  height: 600px;
+  height: 300px;
   display: flex;
   flex-direction: column;
-  margin-left: 100px;
-  margin-top: 100px;
-  
-
+  /* margin-left: 10px; */
+  /* margin-top: 100px; */
+  align-items: center;
+  justify-content: center;
 }
 
+@keyframes img-ani {
+  25% { transform: skewY(4deg); }
+  50% { transform: skewY(0); }
+  70% { transform: skewY(-4deg); }
+  100% { transform: skewY(0); }
+}
 .section1imgbox img {
-  width: 600px;
-  
+  width: 300px;
+  animation: img-ani 2s infinite;
 }
-
-
 
 /*section2*/
 
@@ -78,7 +135,7 @@
 }
 
 .section2textbox {
-  font-family: "PFStardust";
+  font-family: "UhBeeSe_hyun";
   display: flex;
   flex-direction: column; 
   align-items: center; 
@@ -88,7 +145,7 @@
 }
 
 .section2textbox h1 {
-  font-family: "PFStardust";
+  font-family: "UhBeeSe_hyun";
  
 }
 
@@ -99,14 +156,12 @@
   margin-top: 20px;
 }
 
-
 .section3imgbox2 {
   width: 180px;
   display:flex;
   margin-top: 20px;
   margin-right:100px;
 }
-
 
 /*section4*/
 .section4imgbox {
@@ -115,8 +170,6 @@
   margin-top: 20px;
   margin-left:100px;
 }
-
-
 
 
 /*section5*/
@@ -128,7 +181,7 @@
 }
 
 .section5textbox {
-  font-family: "PFStardust";
+  font-family: "UhBeeSe_hyun";
   display: flex;
   flex-direction: row; 
   align-items: center; 
@@ -138,7 +191,7 @@
 }
 
 .section5textbox h1 {
-  font-family: "PFStardust";
+  font-family: "UhBeeSe_hyun";
 }
 
 

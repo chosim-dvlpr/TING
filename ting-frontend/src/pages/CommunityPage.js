@@ -3,7 +3,6 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 
-import Sidebar from '../component/community/common/Sidebar';
 import IssueBoard from '../component/community/issue/IssueBoard';
 import AdviceBoard from '../component/community/advice/AdviceBoard';
 

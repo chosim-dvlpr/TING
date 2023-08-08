@@ -40,14 +40,16 @@ const NavBar = () => {
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
         <Link className={styles.navMenu} to="/">
-        <img src="img/pixelting.png" className="logo" alt="logo"></img>
-          
+          <img src="img/ting_logo_fish.png" className={styles.logo} alt="logo"></img>
+          {/* <span>TING</span> */}
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
-          튜토리얼
+          <img src="img/불가사리.png" className={styles.menuItem}></img>
+          <div className={styles.menuName}>튜토리얼</div>
         </Link>
         <Link className={styles.navMenu} to="/community">
-          커뮤니티
+          <img src="img/조개.png" className={styles.menuItem}></img>
+          <div className={styles.menuName}>커뮤니티</div>
         </Link>
       </div>
       <div className={styles.navRight}>
@@ -56,15 +58,16 @@ const NavBar = () => {
             {/* userData에서 프로필 이미지 받아서 표시 */}
             {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
             <img
-              src={`https://i9b107.p.ssafy.io:5157/user/profile/${userData.userId}`}
+              // src={`https://i9b107.p.ssafy.io:5157/user/profile/${userData.userId}`}
+              src="img/해마.png"
               onClick={() => setDropdown(!dropdown)}
               className={styles.profileImage}
               alt="profile"
             />
-            <span><span className={styles.nickname}>{userData.nickname}</span>님</span>
+            <div><span className={styles.nickname}>{userData.nickname}</span>님</div>
             {dropdown ? (
               <Dropdown.Menu show>
-                <Dropdown.Item eventKey="1" onClick={() => {navigate("/mypage"); setDropdown(false)}}>마이페이지</Dropdown.Item>
+                <Dropdown.Item eventKey="1" onClick={() => {navigate("/mypage"); setDropdown(false)}}>Mypage</Dropdown.Item>
                 <Dropdown.Item eventKey="2" onClick={handleLogout}>로그아웃</Dropdown.Item>
               </Dropdown.Menu>
             ) : null}
@@ -72,11 +75,12 @@ const NavBar = () => {
         ) : (
           <>
             <span className={styles.navMenu} onClick={() => navigate("/login")}>
-              로그인
+              <img src="img/해마.png" className={styles.menuItem}></img>
+              <div className={styles.menuName}>로그인</div>
             </span>
-            <span className={styles.navMenu} onClick={() => navigate("/signup")}>
+            {/* <span className={styles.navMenu} onClick={() => navigate("/signup")}>
               회원가입
-            </span>
+            </span> */}
           </>
         )}
       </div>

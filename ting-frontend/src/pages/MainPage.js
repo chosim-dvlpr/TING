@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from 'react-router-dom';
 // import { useNavigate } from "react-router-dom";
 
 import AOS from "aos";
@@ -22,21 +23,23 @@ function MainPage() {
 
   return (
     <div>
-      {/*section1 */}
+            {/*section1 */}
+            <div className={styles.backgroundFish} id={styles.backgroundFish1}>
+        <img src="/img/fish_group_1.png"></img>
+      </div>
+      <div className={styles.backgroundFish} id={styles.backgroundFish2}>
+        <img src="/img/fish_group_2.png"></img>
+      </div>
       <div className={styles.wrapper}>
         <div className={styles.section1textbox}>
-          <h1>지금까지 없었던<br></br>신개념 소개팅! </h1>
-          {/* <h1>Ting</h1> */}
-          <MainButton />
+          <h1>5분 <span id={styles.textDeco}>팅!! </span>으로<br></br>사랑을 찾아봐</h1>
         </div>
-
         <div className={styles.section1imgbox}>
-          <img src="/img/maincomputer.png" alt="main" className={styles.img}></img>
-     
+          <Link to="/matching" className={styles.linkButton}>
+            <img src="/img/heart_1.png" alt="main" className={styles.img}></img>
+          </Link>
         </div>
       </div>
-
-    
 
       {/*section2 */}
       <div
