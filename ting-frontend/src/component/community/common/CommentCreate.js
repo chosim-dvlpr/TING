@@ -69,20 +69,23 @@ function CommentCreate({
   };
 
   return (
-    <div>
-      <h2>댓글을 입력해주세요.</h2>
+    <div className={styles["comment-form"]}>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="comment">댓글</label>
+          <label htmlFor="comment"></label>
           <input
             type="text"
+            placeholder="댓글 작성하기"
             id="comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            className={styles["comment-input"]}
           />
         </div>
         <div>
-          <button type="submit">저장</button>
+          <button type="submit" className={styles["comment-button"]}>
+            저장
+          </button>
         </div>
       </form>
     </div>
