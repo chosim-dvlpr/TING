@@ -58,10 +58,10 @@ public class PointController {
      * @return 포인트 사용 내역 조회 정보
      */
     @GetMapping("/point/list")
-    public DataResponse<List<PointHistoryDto>> getPointHistory(@RequestParam("pageNo") int pageNo, Principal principal) {
+    public DataResponse<Map<String, Object>> getPointHistory(@RequestParam("pageNo") int pageNo, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        List<PointHistoryDto> pointHistoryList = pointService.getPointHistory(userId, pageNo);
-        return new DataResponse<>(200, "포인트 사용 내역 조회 성공", pointHistoryList);
+        Map<String, Object> result = pointService.getPointHistory(userId, pageNo);
+        return new DataResponse<>(200, "포인트 사용 내역 조회 성공", result);
     }
 
     @GetMapping("/point/charge/list")
