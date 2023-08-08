@@ -22,7 +22,7 @@ export const signupReducer = createSlice({
     hobbyCodeList: [],
     jobCode: "",
     personalityCodeList: [],
-    introduction: "",
+    introduce: "", // introduce로 바꿈
     styleCodeList: [],
   },
   reducers: {
@@ -87,8 +87,8 @@ export const signupReducer = createSlice({
         state.personalityCodeList.push(action.payload);
       }    
     },
-    setIntroduction: (state, action) => {
-      state.introduction = action.payload;
+    setIntroduce: (state, action) => {
+      state.introduce = action.payload;
     },
     setStyleCodeList: (state, action) => {
       let styleIndex = state.styleCodeList.indexOf(action.payload);

@@ -19,7 +19,7 @@ import Job from './component/signup/select/Job';
 import Hobby from './component/signup/select/Hobby';
 import Personality from './component/signup/select/Personality';
 import Style from './component/signup/select/Style';
-import Introduction from './component/signup/select/Introduction';
+import Introduce from './component/signup/select/Introduce';
 import Openvidu from './pages/openvidu/openvidu-main.js';
 
 // 메인페이지
@@ -51,6 +51,13 @@ import TutorialPage from './pages/TutorialPage';
 
 // 내 프로필
 import MyProfilePage from './pages/MyProfilePage';
+import DeleteAccount from './component/profile/DeleteAccount';
+import MyArticle from './component/profile/MyArticle';
+import MyInformation from './component/profile/MyInformation';
+import MyInformationUpdate from './component/profile/MyInformationUpdate';
+import PasswordUpdate from './component/profile/PasswordUpdate';
+import QnaBoard from './component/profile/QnaBoard';
+import QnaCreate from './component/profile/QnaCreate';
 
 // 아이템
 import ItemPage from './pages/ItemPage';
@@ -112,7 +119,7 @@ function App() {
             <Route path="hobby" element={ <Hobby/> }></Route>
             <Route path="personality" element={ <Personality/> }></Route>
             <Route path="style" element={ <Style/> }></Route>
-            <Route path="introduction" element={ <Introduction/> }></Route>
+            <Route path="introduce" element={ <Introduce/> }></Route>
           </Route>
         </Route>
 
@@ -145,7 +152,14 @@ function App() {
         </Route>
 
         {/* 마이페이지 */}
-        <Route path="/mypage" element={<MyProfilePage/>}></Route>
+        <Route path="/mypage" element={<MyProfilePage/>}>
+          <Route path="" element={<MyInformation />}></Route>
+          <Route path="update" element={<MyInformationUpdate />}></Route>
+          <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
+          <Route path="qna" element={<QnaBoard />}></Route>
+          <Route path="myarticle" element={<MyArticle />}></Route>
+          <Route path="deleteaccount" element={<DeleteAccount />}></Route>
+        </Route>
         
         {/* 아이템 페이지 */}
         <Route path="/item" element={<ItemPage/>}>
