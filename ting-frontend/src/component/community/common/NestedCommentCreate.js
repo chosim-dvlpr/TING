@@ -1,32 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../../api/tokenHttp";
-import styles from "./CommentCreate.module.css";
 
-function CommentCreate({
-  boardTypeProp,
-  boardIdProp,
-  getCommentList,
-  parentCommentId,
-}) {
-  // 글 작성 시 바로 commentlist로
+function NestedCommentCreate({ boardType, boardId, parentCommentId, getCommentList }) {
   const [comment, setComment] = useState("");
   const [user, setUser] = useState(null);
-  const [depth, setDepth] = useState(0);
-  const [parent, setParent] = useState(null);
-
   const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchUserInfo();
-
-    setDepth(0); // 0 또는 1로 설정
-    setParent(null); // 대댓글의 부모 댓글 ID 설정 (대댓글이 아닌 경우 null)
   }, []);
 
   const fetchUserInfo = () => {
     tokenHttp
-      .get("/user")
+      .get("/user") // 사용자 정보를 가져오는 요청 (필요에 따라 수정)
       .then((response) => {
         setUser(response.data);
       })
@@ -39,44 +27,41 @@ function CommentCreate({
     e.preventDefault();
 
     if (!user) {
-      navigate("/login");
+      navigate("/login"); // 로그인 페이지로 이동하는 로직 추가
       return;
     }
 
-    const commentData = {
-      boardType: boardTypeProp,
-      boardId: boardIdProp,
+    const nestedCommentData = {
+      boardType: boardType,
+      boardId: boardId,
       content: comment,
-      depth: depth,
-      parent: parent,
+      depth: 1, // 대댓글이므로 depth는 1로 설정
+      parent: parentCommentId, // 대댓글의 부모 댓글 ID 설정
     };
 
     try {
-      console.log(commentData);
-      const response = await tokenHttp.post("/comment", commentData);
-      console.log("Server response:", response);
+      const response = await tokenHttp.post("/comment", nestedCommentData);
       if (response.status === 200) {
-        alert("댓글 작성이 완료되었습니다");
+        alert("대댓글 작성이 완료되었습니다.");
         setComment("");
-
-        getCommentList();
+        getCommentList(); // 댓글 목록을 다시 불러옴으로써 대댓글이 화면에 나타나도록 갱신
       } else {
-        throw new Error("Failed to save the post");
+        throw new Error("Failed to save the nested comment.");
       }
     } catch (error) {
-      console.error("Error saving the post", error);
+      console.error("Error saving the nested comment", error);
     }
   };
 
   return (
     <div>
-      <h2>댓글을 입력해주세요.</h2>
+      <h3>대댓글 작성</h3>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="comment">댓글</label>
+          <label htmlFor="nestedComment">대댓글</label>
           <input
             type="text"
-            id="comment"
+            id="nestedComment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
@@ -89,4 +74,4 @@ function CommentCreate({
   );
 }
 
-export default CommentCreate;
+export default NestedCommentCreate;

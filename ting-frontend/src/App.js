@@ -93,7 +93,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar/>
+
     
       <Routes>
         {/* 네비게이션 바 */}

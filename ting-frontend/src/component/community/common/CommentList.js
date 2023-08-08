@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import CommentLikeButton from "./CommentLikeButton"; 
 
+
+
+
 function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
 
+  // 댓글 수정
   const handleUpdate = (commentId, currentContent) => {
     setEditingCommentId(commentId);
     setEditedContent(currentContent);
   };
 
+  // 댓글 작성 취소
   const handleCancelUpdate = () => {
     setEditingCommentId(null);
     setEditedContent("");
   };
 
+  // 댓글 수정 저장
   const handleSaveUpdate = async (commentId) => {
     try {
       await onUpdateComment(commentId, editedContent);
@@ -26,6 +32,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
     }
   };
 
+  // 댓글 삭제
   const handleDelete = async (commentId) => {
     try {
       const confirmDelete = window.confirm("댓글을 삭제하시겠습니까?");
@@ -37,6 +44,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
     }
   };
 
+  // 댓글 좋아요
   const handleUpdateLikes = (commentId, newLikes) => {
     // 좋아요 수 업데이트를 처리하는 로직 추가
     const updatedComments = comments.map((comment) =>
@@ -45,9 +53,9 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
         : comment
     );
 
-
   };
 
+  // 댓글 없는 경우 처리
   if (!comments || comments.length === 0) {
     return <p>댓글이 없습니다.</p>;
   }
@@ -103,6 +111,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
         );
         })}
       </ul>
+      
     </div>
   );
   }

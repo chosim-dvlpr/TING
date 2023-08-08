@@ -85,6 +85,7 @@ function AdviceDetail() {
         comments={comments}
         onUpdateComment={handleUpdateComment}
         onDeleteComment={handleDeleteComment}
+        boardType="ADVICE" boardId={advice.adviceId}
       />
 
       <CommentCreate boardTypeProp="ADVICE" boardIdProp={advice.adviceId} getCommentList={getCommentList} />
