@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import basicHttp from '../../api/basicHttp';
+import styles from './SignupCommon.module.css'
 
 
 function CertificationEmail(){
@@ -34,20 +35,33 @@ function CertificationEmail(){
     .catch(() => console.log("실패"))
   };
 
+  const authCodeInput = useRef();
+  useEffect(() => {
+    authCodeInput.current.focus();
+  })
+  // 엔터키로 버튼 누를 수 있게
+  const activeEnter = (e) => {
+    if(e.key === "Enter") {
+      checkEmail();
+    }
+  }
+
   return(
-    <div>
-      <h1>이메일 인증</h1>
-      <div>
-        <label htmlFor='email'>이메일을 입력해주세요</label>
+    <div className={styles.wrapper}>
+        <label className={styles.label} htmlFor='email'>이메일로 전송된 인증번호를 입력해주세요</label>
         <br/>
         {/* 이메일 수정 불가 */}
-        <input type="text" id="email" value={ signupReducer.email } readOnly />
+        <input className={styles.input} type="text" id="email" value={ signupReducer.email } readOnly />
         <br/>
-        <input type="text" onChange={(e) => setAuthCode(e.target.value) } placeholder="인증번호 6자리"/>
+        <input 
+          ref={authCodeInput} 
+          className={styles.input} 
+          type="text" 
+          onChange={(e) => setAuthCode(e.target.value) } 
+          onKeyDown={(e) => activeEnter(e)}
+          placeholder="인증번호 6자리"/>
         <br/>
-        <button onClick={checkEmail}>인증하기</button>
-    </div>
-
+        <button className={styles.btn} onClick={checkEmail}>인증하기</button>
     </div>
   )
 }

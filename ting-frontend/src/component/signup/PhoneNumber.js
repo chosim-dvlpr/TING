@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import basicHttp from '../../api/basicHttp';
 import { setPhonenumber } from '../../redux/signup';
+
+import styles from './SignupCommon.module.css'
 
 function SignUpPhoneNumber(){
   let [inputPhonenumber, setInputPhonenumber] = useState("");
@@ -12,6 +14,10 @@ function SignUpPhoneNumber(){
   const Navigate = useNavigate()
   // let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsButtonDisabled(false);
+  })
   
   const checkPhonenumber = () => {
     // 연락처에 '-' 제거 필요
@@ -31,11 +37,16 @@ function SignUpPhoneNumber(){
     .catch(() => console.log("실패"));
   }
 
+  const phonenumInput = useRef();
+  useEffect(() => {
+    phonenumInput.current.focus();
+  })
+
   return(
-    <div>
-      <label htmlFor='phonenumber'>전화번호를 입력해주세요</label>
+    <div className={styles.wrapper}>
+      <label className={styles.label} htmlFor='phonenumber'>전화번호를 입력해주세요</label>
       <br/>
-      <input type="text" id="phonenumber" 
+      <input ref={phonenumInput} className={styles.input} type="text" id="phonenumber" 
         onChange={(e) => {
           if (e.target.value.length === 11) {
             setIsButtonDisabled(false);
@@ -43,7 +54,12 @@ function SignUpPhoneNumber(){
           };
         }}
         placeholder="전화번호('-'제외)"/>
-      <button onClick={checkPhonenumber} disabled={isButtonDisabled}>인증하기</button>
+      <button
+        className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
+        onClick={checkPhonenumber} 
+        disabled={isButtonDisabled}>
+        인증하기
+      </button>
     </div>
     )
   }
