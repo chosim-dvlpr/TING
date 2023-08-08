@@ -161,6 +161,7 @@ function App() {
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
           <Route path="qna" element={<QnaBoard />}></Route>
           <Route path="qnadetail" element = {<QnaDetail/>} />
+          <Route path="qnacreate" element = {<QnaCreate/>} />
           <Route path="myarticle" element={<MyArticle />}></Route>
           <Route path="deleteaccount" element={<DeleteAccount />}></Route>
         </Route>

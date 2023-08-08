@@ -47,7 +47,7 @@ function QnaBoard() {
   // qna 상세 페이지로 이동
   const goToQnaDetail = (qnaId, event) => {
     event.preventDefault();
-    console.log('===========')
+
     if (userdata) {
       navigate("/mypage/qnadetail", { state: { qnaId: qnaId } });
     }
@@ -56,12 +56,24 @@ function QnaBoard() {
     }
   };
 
+  // qna 작성 페이지로 이동
+  const goToQnaCreate = (event) => {
+    event.preventDefault();
+
+    if (userdata) {
+      navigate("/mypage/qnacreate");
+    }
+    else {
+      console.log('로그인 필요');
+    }
+  }
+
 
   return (
     <div style={{ margin: 'auto', width: '50%' }}>
       <h1>1:1 문의 게시판</h1>
       <h3>제목을 클릭하면 상세페이지로 넘어가요!</h3>
-
+      <button onClick={(event) => goToQnaCreate(event) }>문의 작성하기</button>
       <table>
         <thead>
           <tr>
