@@ -5,6 +5,7 @@ import basicHttp from '../../api/basicHttp';
 import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
 
 import styles from './SignupCommon.module.css';
+import { regionList } from "../../SelectionDataList";
 
 function Detail(){
   const Navigate = useNavigate()
@@ -12,9 +13,9 @@ function Detail(){
   let [inputNickname, setInputNickname] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
-  let regionList = ["서울", "부산", "대구", "인천", "광주", 
-    "대전", "울산", "경기", "강원" ,"충복", "충남", 
-    "세종", "전북", "전남", "경북", "경남", "제주"];
+  // let regionList = ["서울", "부산", "대구", "인천", "광주", 
+  //   "대전", "울산", "경기", "강원" ,"충복", "충남", 
+  //   "세종", "전북", "전남", "경북", "경남", "제주"];
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
@@ -113,9 +114,14 @@ function Detail(){
     setCheckAllContents(copy_checkAllContents);
   }
 
+  // 추가 정보 입력하기 클릭 시
+  const goToSelect = (moveTo) => {
+    // 가입 완료하고, 선택정보 입력 페이지로 이동
+    completeSignup(moveTo);
+  }
+
   // 회원가입 완료 클릭 시
-  const completeSignup = () => {
-    console.log('hi')
+  const completeSignup = (moveTo) => {
     console.log(checkAllContents)
     console.log(signupReducer)
     // 모두 true라면 회원가입 요청
@@ -150,7 +156,7 @@ function Detail(){
         console.log(data)
         if (response.data.code === 200) {
           alert("회원가입이 완료되었습니다.");
-          Navigate("/login");
+          Navigate(moveTo);
         }
         else if (response.data.code === 400) {
           alert("회원 가입 실패");
@@ -195,21 +201,21 @@ function Detail(){
           if(i % 9 == 8) {
             return (
               <span>
-                <button className={styles.selectBtn} onClick={() => regionIsExist(r)}>{r}</button>
+                <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
                 <br></br>
               </span>
             )
           }
           else {
             return (
-              <button className={styles.selectBtn} onClick={() => regionIsExist(r)}>{r}</button>
+              <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
             )
           }
         })
       }
       <br/>
-      <button className={styles.btn} onClick={() => Navigate("/signup/select/mbti")}>추가 정보 입력하기</button>
-      <button className={styles.btn} onClick={completeSignup}>로그인 하러 가기</button>
+      <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
+      <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
     </div>
   )
 }

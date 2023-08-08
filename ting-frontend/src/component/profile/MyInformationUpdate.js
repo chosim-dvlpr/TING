@@ -24,6 +24,7 @@ function MyInformationUpdate() {
   let [currentPersonalityList, setCurrentPersonalityList] = useState(userdata.userPersonalities);
   let [currentJob, setCurrentJob] = useState(userdata.jobCode);
   let [currentStyleList, setCurrentStyleList] = useState(userdata.userStyles);
+  let [currentIntroduce, setCurrentIntroduce] = useState(userdata.introduce);
   
   let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
   let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState([]);
@@ -68,8 +69,7 @@ function MyInformationUpdate() {
     // profileImage: userdata.profileImage,
     profileImage: "",
     height: Number(height),
-    // introduction: userdata.introduction, // 어떻게 수정?
-    introduce: "", // 어떻게 수정?
+    introduce: currentIntroduce,
     jobCode: currentJob && currentJob.code,
     drinkingCode: currentDrinking && currentDrinking.code,
     religionCode: currentReligion && currentReligion.code,
@@ -115,9 +115,9 @@ function MyInformationUpdate() {
   const storeNewProfileToRedux = () => {
     newProfileData = {
       ...userdata,
-      profileImage: "",
+      profileImage: "", // 수정하기
       height: Number(height),
-      introduce: "", // 어떻게 수정?
+      introduce: currentIntroduce,
       jobCode: currentJob,
       drinkingCode: currentDrinking,
       religionCode: currentReligion,
@@ -133,12 +133,6 @@ function MyInformationUpdate() {
 
   // 중복 제거
   const deleteDuplicate = (List, ListFunc, checkData) => {
-    // let duplicateIndex = List.indexOf(checkData);
-    // console.log('currentHobbyList',currentHobbyList)
-    // // console.log(duplicateIndex)
-    // duplicateIndex > -1 ?
-    // ListFunc(currentHobbyList.splice(checkData, 1))
-    // : ListFunc([...List, checkData]);
     if (List.some(item => item.code === checkData.code)) {
       ListFunc(List.filter(item => item.code !== checkData.code))
     } else {
@@ -291,7 +285,9 @@ function MyInformationUpdate() {
         )) }
       </p>
       <br/>
-
+      
+      <p>자기소개</p>
+      <input value={ currentIntroduce } onChange={(e) => setCurrentIntroduce(e.target.value)}></input>
     </div>
   )
 }

@@ -5,28 +5,46 @@ import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "./WaitingRoom.css";
 import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
 import { setMatchingId } from "../../redux/matchingStore";
+import styles from './WaitingRoom.module.css';
+
+import NavBar from "../common/NavBar";
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
 
-  const [userdata, setUserdata] = useState({});
-  let dispatch = useDispatch();
-  let navigate = useNavigate("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate("");
+
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(false)
+  const [isVideoOn, setIsVideoOn] = useState(false)
 
   // 이 티켓 redux로 불러와야할 듯
-  let [ticket, setTicket] = useState(0);
-  let state = useSelector((state) => state);
+  const [ticket, setTicket] = useState(0);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
 
-  useEffect(() => {
-    // 유저 데이터 redux에서 가져옴
-    setUserdata(state.userdataReducer.userdata);
-    console.log(state.userdataReducer.userdata);
-  }, []);
+  
+  useEffect(()=>{
+    checkStreamStatus()
+  },[isMicrophoneOn,isVideoOn])
+
+  const checkStreamStatus = async ()=>{
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:true})
+      const audio = stream.getAudioTracks()
+      const video = stream.getVideoTracks()
+      const micStatus = audio.some(track => track.readyState === 'live')
+      setIsMicrophoneOn(micStatus)
+      const videoStatus = audio.some(track => track.readyState === 'live')
+      setIsVideoOn(videoStatus)
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
 
   // 웹소켓 연결
   const handleConnectClick = () => {
@@ -66,7 +84,7 @@ function WaitingRoom() {
     // 서버로부터 메시지를 받았을 때 호출되는 함수
     ws.onmessage = ({ data }) => {
       let response = JSON.parse(data);
-      console.log('여기 토큰')
+      console.log("여기 토큰");
       console.log(response);
 
       switch (response.type) {
@@ -87,10 +105,10 @@ function WaitingRoom() {
         case "matchingSuccess":
           let enterToken = response.data.token;
           let matchingId = response.data.matchingId;
-          
+
           dispatch(setOpenviduToken(enterToken));
           dispatch(setMatchingId(matchingId));
-        
+
           navigate("/matching/start");
           break;
 
@@ -102,6 +120,18 @@ function WaitingRoom() {
     };
   };
 
+  // 컴포넌트가 언마운트 될 때 호출되는 함수
+  useEffect(() => {
+    return () => {
+      // 컴포넌트가 언마운트될 때 웹 소켓 연결을 끊음
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [socket]);
+
+
+  // 경고창을 호출하는 함수
   function findPairModal(socket) {
     Swal.fire({
       icon: "success",
@@ -123,67 +153,83 @@ function WaitingRoom() {
     });
   }
 
-  useEffect(() => {
-    return () => {
-      // 컴포넌트가 언마운트될 때 웹 소켓 연결을 끊음
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, [socket]);
 
   return (
-    <div className="waitingContainer">
-      <h1>대기실</h1>
-      <div className="waitingMenu">
-      <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
-      <button onClick={()=>{navigate("/")}}>나가기</button>
+    <div>
+
+      <div className={styles.waitingMenu}>
+        <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
+        <button onClick={()=>{navigate("/")}}>나가기</button>
       </div>
-      <Container className="box">
+      <div className={styles.MainBox}>
+      <Container>
         <Row>
-          <Col className="leftBox">
-            <Webcam audio={true} />
+
+          {/* 오른쪽 영상 박스 */}
+          <Col className={`col-7 ${styles.leftBox}`}>
+            { isVideoOn ?  (
+              <Webcam className={styles.Webcam} audio={true} video={true}/>
+            ) : (
+              <div className={styles.loadingSpinner}>
+                <div className={styles.spinner}></div>
+              </div>
+            )}
           </Col>
-          <Col className="rightBox">
-            <div className="stream-container col-md-6 col-xs-6">
-              {userdata.nickname} 님의 상태
-              <p>체크박스</p>
-              <p>웹캠이 확인되었습니다</p>
-              <p>체크박스</p>
-              <p>마이크가 확인되었습니다.</p>
-              <p>체크박스</p>
+
+          {/* 왼쪽 체크 박스 */}
+          <Col className={`col-5 ${styles.rightBox}`}>
+            <div className={`stream-container`}>
+
+              {/* 마이크 확인 */}
+              { isMicrophoneOn ? (
+                  <div className={styles.successMessageBox}>
+                    <img src="/img/VoiceOnIcon.png" alt="Voice on icon"/>
+                    <p className={styles.textBox}>마이크가 켜져있습니다</p>
+                  </div>
+                ) : (
+                <div className={styles.failMessageBox}>
+                  <img src="/img/VoiceOffIcon.png" alt="Voice off icon"/>
+                  <div className={styles.textBox}>
+                    <p className={styles.failMessage}>마이크가 꺼져있습니다</p>
+                    <p>설정에서 권한 허용 후에 새로고침 해주세요</p>
+                  </div>
+                </div>
+              )}
+
+              {/* 비디오 확인 */}
+              { isVideoOn ? (
+                <div className={styles.successMessageBox}>
+                  <img src="/img/VideoOnIcon.png" alt="Video on icon"/>
+                  <p className={styles.textBox}>웹캠이 켜져있습니다.</p>
+                </div>
+                ) : (
+                <div className={styles.failMessageBox}>
+                  <img src="/img/VideoOffIcon.png" alt="Video off icon"/>
+                  <div className={styles.textBox}>
+                    <p className={styles.failMessage}>비디오가 꺼져있습니다</p>
+                    <p>설정에서 권한 허용 후에 새로고침 해주세요</p>
+                  </div>
+                </div>
+              )}
+              
               <p>잔여티켓 {ticket}개</p>
-              {/* <MatchingStartButton
-                ticket={ticket}
-                setTicket={setTicket}
-                start={start}
-                setStart={setStart}
-                navigate={navigate}
-              /> */}
-              {/* 소켓에 연결이 안되어있으면 매칭 시작 버튼,
-                연결이 되어 있다면 예상시간과 대기시간 출력
-              */}
-              {socket == null ? (
+
+              {
+              socket == null ? (
                 <button onClick={handleConnectClick}>매칭 시작</button>
               ) : (
                 <>
-                  <div>
-                    매칭 시간 : <TimerComponent />
-                  </div>
+                  <div>매칭 시간 : <TimerComponent /></div>
                   <div>예상 대기시간 :{expectTime}</div>
-                  <button
-                    onClick={() => {
-                      findPairModal(navigate);
-                    }}
-                  >
-                    테스트 버튼
-                  </button>
                 </>
-              )}
+              )
+              }
+
             </div>
           </Col>
         </Row>
       </Container>
+      </div>
       <div id="video-container"></div>
       <div>
         {/* 3가지 경우 */}
@@ -191,6 +237,7 @@ function WaitingRoom() {
         {/* 잔여 티켓 1개 이상 */}
         {/* 매칭 시작 버튼 눌렀을 때 */}
       </div>
+
     </div>
   );
 }

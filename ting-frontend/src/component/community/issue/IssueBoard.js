@@ -7,6 +7,7 @@ import Pagination from "../common/Pagination";
 import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
+import NavBar from "../../common/NavBar";
 
 function IssueBoard() {
   const [issueList, setIssueList] = useState([]);
@@ -103,6 +104,7 @@ function IssueBoard() {
 
   return (
     <div>
+      <NavBar/>
       <Sidebar />
       <div className={styles.cardList}>
         {searchResult.length > 0

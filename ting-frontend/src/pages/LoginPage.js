@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { getCurrentUserdata } from "../redux/userdata";
+import NavBar from "../component/common/NavBar";
 
 function LoginPage() {
   let [email, setEmail] = useState("");
@@ -62,6 +63,7 @@ function LoginPage() {
 
   return (
     <div>
+      <NavBar/>
       <h1>여기는 로그인입니다.</h1>
 
       <input

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tokenHttp from '../../../api/tokenHttp';
 import styles from './IssueCreate.module.css'; 
+import NavBar from '../../common/NavBar';
 
 
 
@@ -57,7 +58,10 @@ const IssueCreate = () => {
     };
   
     return (
+      <div>
+      <NavBar/>
       <div className={styles.formContainer}>
+       
         <h2>논쟁 글 작성하기</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
@@ -111,6 +115,7 @@ const IssueCreate = () => {
           </div>
         </form>
       </div>
+      </div> 
     );
   };
   

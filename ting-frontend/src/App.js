@@ -78,6 +78,8 @@ import MyPoint from './component/item/MyPoint';
 
 // 카카오 페이 결제
 import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+import QnaDetail from './component/profile/QnaDetail';
+
 import KakaoPayCancel from './pages/pay-result-page/KakaoPayCancel';
 import KakaoPayFail from './pages/pay-result-page/KakaoPayFail';
 
@@ -93,7 +95,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar/>
+
     
       <Routes>
         {/* 네비게이션 바 */}
@@ -130,7 +132,7 @@ function App() {
           <Route path="start" element={ <MatchingStart/> }></Route>
         </Route>
 
-        <Route path="/testopenvidu" element={<Openvidu/>}></Route>
+        
 
         {/* 커뮤니티 페이지 */}
 
@@ -158,6 +160,8 @@ function App() {
           <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
           <Route path="qna" element={<QnaBoard />}></Route>
+          <Route path="qnadetail" element = {<QnaDetail/>} />
+          <Route path="qnacreate" element = {<QnaCreate/>} />
           <Route path="myarticle" element={<MyArticle />}></Route>
           <Route path="deleteaccount" element={<DeleteAccount />}></Route>
         </Route>
