@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useRef } from "react";
 // import { useNavigate } from "react-router-dom";
 
@@ -12,8 +12,9 @@ import styles from "./MainPage.module.css";
 import CountdownTimer from "../component/main/CountdownTimer";
 import MainButton from "../component/main/MainButton";
 
+import NavBar from "../component/common/NavBar";
+
 function MainPage() {
-  
   useEffect(() => {
     AOS.init();
     return () => {
@@ -33,20 +34,26 @@ function MainPage() {
         // 스크롤 내릴 때
         if (scrollTop >= 0 && scrollTop < pageHeight - 5) {
           //현재 1페이지
-          console.log(scrollTop, pageHeight)
+          console.log(scrollTop, pageHeight);
           outerDivRef.current.scrollTo({
             top: pageHeight,
             left: 0,
             behavior: "smooth",
           });
-        } else if (scrollTop >= pageHeight - 5 && scrollTop < pageHeight * 2 - 5) {
+        } else if (
+          scrollTop >= pageHeight - 5 &&
+          scrollTop < pageHeight * 2 - 5
+        ) {
           //현재 2페이지
           outerDivRef.current.scrollTo({
             top: pageHeight * 2,
             left: 0,
             behavior: "smooth",
           });
-        } else if (scrollTop >= pageHeight * 2 - 5 && scrollTop < pageHeight * 3 - 5) {
+        } else if (
+          scrollTop >= pageHeight * 2 - 5 &&
+          scrollTop < pageHeight * 3 - 5
+        ) {
           // 현재 3페이지
           outerDivRef.current.scrollTo({
             top: pageHeight * 3,
@@ -70,14 +77,20 @@ function MainPage() {
             left: 0,
             behavior: "smooth",
           });
-        } else if (scrollTop >= pageHeight + 5 && scrollTop < pageHeight * 2 + 5) {
+        } else if (
+          scrollTop >= pageHeight + 5 &&
+          scrollTop < pageHeight * 2 + 5
+        ) {
           //현재 2페이지
           outerDivRef.current.scrollTo({
             top: pageHeight,
             left: 0,
             behavior: "smooth",
           });
-        } else if (scrollTop >= pageHeight * 2 + 5 && scrollTop < pageHeight * 3 + 5) {
+        } else if (
+          scrollTop >= pageHeight * 2 + 5 &&
+          scrollTop < pageHeight * 3 + 5
+        ) {
           // 현재 3페이지
           outerDivRef.current.scrollTo({
             top: pageHeight * 2,
@@ -102,6 +115,7 @@ function MainPage() {
 
   return (
     <div ref={outerDivRef} className={styles.outer}>
+      <NavBar />
       {/*section1 */}
       <div className={styles.wrapper}>
         <div class={styles.snowflake}>
@@ -141,7 +155,10 @@ function MainPage() {
           <img src="/img/fish_group_2.png"></img>
         </div> */}
         <div className={styles.section1textbox}>
-          <h1>5분 <span id={styles.textDeco}> TING!! </span>으로<br></br>사랑을 찾아봐</h1>
+          <h1>
+            5분 <span id={styles.textDeco}> TING!! </span>으로<br></br>사랑을
+            찾아봐
+          </h1>
         </div>
         <div className={styles.section1imgbox}>
           {/* <Link to="/matching" className={styles.linkButton}>
@@ -149,7 +166,9 @@ function MainPage() {
           </Link> */}
           <MainButton></MainButton>
         </div>
-        <div className={styles.down}><span>팅은 어떤 서비스인가요?</span>↓</div>
+        <div className={styles.down}>
+          <span>팅은 어떤 서비스인가요?</span>↓
+        </div>
         {/* <div>
           <img src="/img/arrow.png"></img>
         </div> */}
@@ -168,9 +187,10 @@ function MainPage() {
         ></img>
 
         <div className={styles.section2textbox}>
-        <CountdownTimer />
+          <CountdownTimer />
           <h2>
-            5분 동안 어떤 일을<br></br>할 수 있을까요?</h2>
+            5분 동안 어떤 일을<br></br>할 수 있을까요?
+          </h2>
         </div>
       </div>
 
@@ -190,16 +210,16 @@ function MainPage() {
           alt="cards_left"
           className={styles.section3imgbox2}
         ></img>
-         <div className={styles.section2textbox}>
-        <h2>
-          팅에서는
-          <br />
-          5분 안에
-          <br />
-          상대의 취미부터 취향까지
-          <br />
-          바로 확인 할 수 있습니다
-        </h2>
+        <div className={styles.section2textbox}>
+          <h2>
+            팅에서는
+            <br />
+            5분 안에
+            <br />
+            상대의 취미부터 취향까지
+            <br />
+            바로 확인 할 수 있습니다
+          </h2>
         </div>
       </div>
 
@@ -211,12 +231,12 @@ function MainPage() {
         className={styles.wrapper}
       >
         <div className={styles.section2textbox}>
-        <h2>
-          5분 후<br />
-          상대에게
-          <br />
-          마음을 표현해보세요
-        </h2>
+          <h2>
+            5분 후<br />
+            상대에게
+            <br />
+            마음을 표현해보세요
+          </h2>
         </div>
         <img
           src="/img/hearthand.png"
@@ -243,7 +263,8 @@ function MainPage() {
         ></img>
 
         <div className={styles.section5textbox}>
-        <h1>지금 바로</h1><MainButton />
+          <h1>지금 바로</h1>
+          <MainButton />
         </div>
       </div>
     </div>

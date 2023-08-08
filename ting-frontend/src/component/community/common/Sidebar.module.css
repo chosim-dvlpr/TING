@@ -1,9 +1,14 @@
 /* Sidebar.css */
 
+.selected {
+  background-color: rgb(234, 185, 134);
+  padding: 10px 15px;
+  border-radius: 20px;
+}
 .sidebar {
-  width: 80%;
-  height: 100px;
-  margin: 0 auto;
+  width: 85%;
+  margin: 0 auto 10px;
+  border-bottom: 1px solid black;
   /* margin-top: 60px;
    
     float: left;
@@ -36,6 +41,7 @@
   .sidebar a {
     text-decoration: none;
     color: black;
+    /* margin: 0 20px; */
   }
   
   /* 사이드바 내부의 링크 호버(hover) 스타일 지정 */

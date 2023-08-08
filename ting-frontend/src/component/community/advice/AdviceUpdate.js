@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "./AdviceUpdate.module.css";
 import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
+import NavBar from "../../common/NavBar";
 
 function AdviceUpdate() {
   const { adviceId } = useParams(); 
@@ -55,7 +56,10 @@ function AdviceUpdate() {
   }, [isUpdated]);
 
   return (
+    <div>
+    <NavBar/>
     <div className={styles.adviceUpdateContainer}>
+     
       <h2>글 수정</h2>
       <div>
         <label htmlFor="title">제목:</label>
@@ -76,6 +80,7 @@ function AdviceUpdate() {
       </div>
       <button onClick={handleUpdate}>수정 완료</button>
     </div>
+    </div> 
   );
 }
 

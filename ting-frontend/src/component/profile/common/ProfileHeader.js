@@ -10,7 +10,7 @@ function ProfileHeader() {
       <p>프로필 이미지</p>
 
       <p>이름 : { userdata.name }</p>
-      <p>자기소개 : { userdata.introduce }</p>
+      {/* <p>자기소개 : { userdata.introduce }</p> */}
     </div>
   )
 }

@@ -1,0 +1,31 @@
+/* styles.module.css */
+
+.comment-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #f0f0f0;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  
+  .comment-input {
+    flex: 1;
+    border: none;
+    background-color: #f0f0f0;
+    box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
+    border-radius: 8px;
+    padding: 8px;
+    margin-right: 10px;
+  }
+  
+  .comment-button {
+    background-color: #f0f0f0;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
