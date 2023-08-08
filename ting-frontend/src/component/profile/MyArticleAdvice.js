@@ -1,183 +1,105 @@
-// import axios from "axios";
+// 상담 게시판
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 
 import Pagination from "../community/common/Pagination";
-import tokenHttp from "../../api/tokenHttp";
-import basicHttp from "../../api/basicHttp";
 import SearchBar from "../community/common/SearchBar";
+import tokenHttp from "../../api/tokenHttp";
 
 function MyArticleAdvice() {
-  const [adviceList, setAdviceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [myAdviceArticleList, setMyAdviceArticleList] = useState([]);
+
   const navigate = useNavigate();
-  const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
+
+  // 내가 쓴 상담 게시글 불러오기
+  const getMyAdviceArticle = () => {
+    const params = {
+      pageNo: currentPage,
+    }
+    
+    tokenHttp.get('/advice/my', { params: params }).then((response) => {
+      if (response.data.code === 200) {
+        console.log('성공');
+        setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
+        setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+      }
+      else if (response.data.code === 400) {
+        console.log('실패');
+      }
+      else if (response.data.code === 403) {
+        console.log('권한 없음');
+      }
+      // else { console.log('문의글이 없습니다.') }
+    })
+    .catch(() => console.log("실패"));
+  };
 
   useEffect(() => {
-    getAllAdviceData();
-  }, [currentPage]);
+    getMyAdviceArticle();
+  }, [])
 
-  const getAllAdviceData = async () => {
-    try {
-      const response = await basicHttp.get("/advice/search", {
-        params: { pageNo: currentPage },
-        // keyword: 
-      });
-      const responseData = response.data.data;
-      console.log(responseData);
 
-      if (responseData.adviceBoardList) {
-        setAdviceList(responseData.adviceBoardList);
-        setTotalPages(responseData.totalPages);
-      }
-    } catch (error) {
-      console.error("Error fetching advice data:", error);
-    }
-  };
-
-  const handleLinkClick = (adviceId, event) => {
-    event.preventDefault();
-    console.log("handleLinkClick called");
-    console.log(userdata);
-    if (userdata) {
-      console.log(userdata);
-      navigate(`/community/advice/detail/${adviceId}`);
-    } else {
-      alert("로그인이 필요합니다.");
-    }
-  };
-
-  // const handleCreateClick = () => {
-  //   if (userdata) {
-  //     navigate("/community/advice/create");
-  //   } else {
-  //     alert("로그인이 필요합니다.");
-  //   }
-  // };
-
+  // 페이지 이동
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
 
-  // // 케밥 게시글 닉네임과 유저 닉네임 일치하는지
-  // const showKebab = (nickname) => {
-  //   return userdata && userdata.nickname === nickname;
-  // };
-
-  // 글 수정
-  const handleUpdate = (adviceId) => {
-    navigate(`/community/advice/update/${adviceId}`);
-  };
-
-  // 글 삭제
-  const handleDelete = async (adviceId) => {
-    try {
-      await tokenHttp.delete(`advice/${adviceId}`);
-      console.log("delete성공");
-      await getAllAdviceData();
-    } catch (error) {
-      console.error("Error deleting advice:", error);
-    }
-  };
-
-  // 검색 기능 추가
-  const [searchResult, setSearchResult] = useState([]);
-
-  const handleSearch = async ({ keyword, item }) => {
-    try {
-      const response = await tokenHttp.get(`/advice/search/`, {
-        params: {
-          pageNo: currentPage,
-          keyword: userdata.nickname,
-          item: 'nickname',
-        },
-      });
-      console.log('response',response)
-
-      const searchData = response.data.data;
-      setSearchResult(searchData.adviceBoardList);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
-  };
-  useEffect(() => {
-    console.log("============search Result", searchResult);
-  }, [searchResult]);
-
   return (
     <div>
-    <div>
-      <div>
-      </div>
-      <div>
+      <h1>내가 쓴 상담 게시글</h1>
+      <h3>게시글 제목을 누르면 해당 페이지로 이동</h3>
       <table>
         <thead>
           <tr>
-            <th>게시글 번호</th>
-            <th>title</th>
+            <th>게시글 Id</th>
+            <th>Title</th>
             <th>hit</th>
             <th>createdTime</th>
           </tr>
         </thead>
 
         <tbody>
-          {/* {(searchResult.length > 0 ? searchResult : adviceList).map(
-            (advice, index) => (
-              <tr key={advice.adviceId}>
-                <td>{advice.adviceId}</td>
-                <td>
-                  <span
-                    onClick={(event) => handleLinkClick(advice.adviceId, event)}
-                  >
-                    {advice.title}
-                  </span>
-                </td>
-                <td>{advice.hit}</td>
-                <td>
-                  {advice.modifiedTime === null
-                    ? advice.createdTime
-                    : `${advice.modifiedTime} (수정됨)`}
-
-                    <div>
-                      <img
-                        src="/img/kebab.png"
-                        alt="kebab"
-                      />
-                      <div>
-                        <span onClick={() => handleUpdate(advice.adviceId)}>
-                          Update
-                        </span>
-                        <span onClick={() => handleDelete(advice.adviceId)}>
-                          Delete
-                        </span>
-                      </div>
-                    </div>
-                </td>
+          {
+            myAdviceArticleList ?
+            myAdviceArticleList.map((article, i) => (
+              <tr key={i}>
+                <td>{ article.adviceId }</td>
+                <td onClick={() => navigate(`/community/advice/detail/${article.adviceId}`)}>{ article.title }</td>
+                <td>{ article.hit }</td>
+                <td>{ article.createdTime }</td>
               </tr>
-            )
-          )} */}
+            ))
+            : <p>작성된 게시글이 없다!</p>
+          }
+          <tr>
+            <td></td>
+          </tr>
         </tbody>
       </table>
-      </div>
-      {searchResult.length === 0 && (
-        <div>검색 결과가 없습니다.</div>
-      )}
+
+
+
+
+      <div>
+
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
-      />
+        />
 
     
-      <SearchBar onSearch={handleSearch} />
+      {/* <SearchBar onSearch={handleSearch} /> */}
+      </div>
     </div>
-    </div>
-  );
+  )
 }
 
 export default MyArticleAdvice;

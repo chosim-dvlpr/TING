@@ -43,6 +43,10 @@ function MyInformation() {
       <br/>
       <p>성격 : { userdata.userPersonalities && userdata.userPersonalities.map((personalities) => personalities.name) }</p>
       <p>선호 스타일 : { userdata.userStyles && userdata.userStyles.map((styles) => styles.name) }</p>
+      <p>자기소개 : { userdata.introduce !== "" ?
+        userdata.introduce
+        : '자기소개가 없어요!'
+      }</p>
     </div>
   )
 }
