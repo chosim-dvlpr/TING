@@ -1,10 +1,12 @@
 
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 import basicHttp from '../../api/basicHttp';
 import { setPhonenumber } from '../../redux/signup';
+
+import styles from './SignupCommon.module.css'
 
 function CertificationPhonenumber(){
   let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
@@ -57,23 +59,23 @@ function CertificationPhonenumber(){
     .catch(() => console.log("실패"));
   }
 
+  const authCodeInput = useRef();
+  useEffect(() => {
+    authCodeInput.current.focus();
+  })
 
   return(
-    <div>
-      <h1>전화번호 인증</h1>
-      <div>
-        <p>{ phonenumber }</p>
-        <label htmlFor='phonenumber'>전화번호를 입력해주세요</label>
-        <br/>
-        <input type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />
-        <br/>
-        <input type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 6자리"/>
-        <br/>
-        <button onClick={checkPhonenumberCode}>인증확인</button>
-        <button onClick={checkPhonenumber}>재전송</button>
-    </div>
-
-    </div>
+    <div className={styles.wrapper}>
+      {/* <p>{ phonenumber }</p> */}
+      <label className={styles.label} htmlFor='phonenumber'>문자로 발송된 인증번호를 입력해주세요</label>
+      <br/>
+      <input className={styles.input} type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />
+      <br/>
+      <input ref={authCodeInput} className={styles.input} type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 6자리"/>
+      <br/>
+      <button className={styles.btn} onClick={checkPhonenumberCode}>인증확인</button>
+      <button className={styles.btn} onClick={checkPhonenumber}>재전송</button>
+  </div>
   )
 }
 

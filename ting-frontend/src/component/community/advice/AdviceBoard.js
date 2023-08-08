@@ -66,6 +66,23 @@ function AdviceBoard() {
     }
   };
 
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if (isSameDate(boardTime)) {
+      return boardTime.substr(11, 11);
+    } else return boardTime.substr(0, 10);
+  };
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return (
+      time.getFullYear() === currentTime.getFullYear() &&
+      time.getMonth() === currentTime.getMonth() &&
+      time.getDate() === currentTime.getDate()
+    );
+  };
+
   // 케밥 게시글 닉네임과 유저 닉네임 일치하는지
   const showKebab = (nickname) => {
     return userdata && userdata.nickname === nickname;
@@ -112,80 +129,77 @@ function AdviceBoard() {
 
   return (
     <div className={styles.adviceBoardBackground}>
-      <NavBar/>
-    <div className={styles.adviceBoardContainer}>
-      <Sidebar />
-      <div>
-      <button className={styles.createButton} onClick={handleCreateClick}>
-        글 작성하기
-      </button>
-      </div>
-      <div>
-      <table className={styles.adviceTable}>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>title</th>
-            <th>hit</th>
-            <th>createdTime</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(searchResult.length > 0 ? searchResult : adviceList).map(
-            (advice, index) => (
-              <tr key={advice.adviceId}>
-                <td>{advice.adviceId}</td>
-                <td>
-                  <span
-                    className={styles.link}
-                    onClick={(event) => handleLinkClick(advice.adviceId, event)}
-                  >
-                    {advice.title}
-                  </span>
-                </td>
-                <td>{advice.hit}</td>
-                <td>
-                  {advice.modifiedTime === null
-                    ? advice.createdTime
-                    : `${advice.modifiedTime} (수정됨)`}
-
-                  {showKebab(advice.nickname) && (
-                    <div className={styles.dropdownContainer}>
-                      <img
-                        src="/img/kebab.png"
-                        alt="kebab"
-                        className={styles.dropdownKebab}
-                      />
-                      <div className={styles.dropdownContent}>
-                        <span onClick={() => handleUpdate(advice.adviceId)}>
-                          Update
-                        </span>
-                        <span onClick={() => handleDelete(advice.adviceId)}>
-                          Delete
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </td>
+      {/* <NavBar /> */}
+      <div className={styles.adviceBoardContainer}>
+        <Sidebar />
+        <div className={styles.adviceTopTable}>
+          <SearchBar onSearch={handleSearch} />
+          <button className={styles.createButton} onClick={handleCreateClick}>
+            글 작성하기
+          </button>
+        </div>
+        <div>
+          <table className={styles.adviceTable}>
+            <thead>
+              <tr>
+                <th className={styles.table_1}>Id</th>
+                <th className={styles.table_2}>title</th>
+                <th className={styles.table_3}>hit</th>
+                <th className={styles.table_4}>createdTime</th>
               </tr>
-            )
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {(searchResult.length > 0 ? searchResult : adviceList).map(
+                (advice, index) => (
+                  <tr key={advice.adviceId}>
+                    <td>{advice.adviceId}</td>
+                    <td>
+                      <span
+                        className={styles.link}
+                        onClick={(event) =>
+                          handleLinkClick(advice.adviceId, event)
+                        }
+                      >
+                        {advice.title}
+                      </span>
+                    </td>
+                    <td>{advice.hit}</td>
+                    <td>
+                      {advice.modifiedTime === null
+                        ? calculateDate(advice.createdTime)
+                        : `${calculateDate(advice.modifiedTime)} (수정됨)`}
+
+                      {showKebab(advice.nickname) && (
+                        <div className={styles.dropdownContainer}>
+                          <img
+                            src="/img/kebab.png"
+                            alt="kebab"
+                            className={styles.dropdownKebab}
+                          />
+                          <div className={styles.dropdownContent}>
+                            <span onClick={() => handleUpdate(advice.adviceId)}>
+                              Update
+                            </span>
+                            <span onClick={() => handleDelete(advice.adviceId)}>
+                              Delete
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
-      {searchResult.length === 0 && (
-        <div className={styles.searchPopup}>`검색 결과가 없습니다.</div>
-      )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
-
-    
-      <SearchBar onSearch={handleSearch} />
-    </div>
     </div>
   );
 }

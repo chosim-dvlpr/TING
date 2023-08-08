@@ -1,6 +1,6 @@
 import React from 'react';
 import OpenViduVideoComponent from './OvVideo';
-import './UserVideo.css';
+// import './UserVideo.css';
 
 const UserVideoComponent = (props) => {
   const getNicknameTag = () => {

@@ -74,13 +74,18 @@ function AdviceDetail() {
 
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <div className={styles.adviceDetailContainer}>
         <h1>{advice.title}</h1>
         <p>Content: {advice.content}</p>
         <p>Created Time: {advice.createdTime}</p>
         <p>Modified Time: {advice.modifiedTime}</p>
 
+        <CommentCreate
+          boardTypeProp="ADVICE"
+          boardIdProp={advice.adviceId}
+          getCommentList={getCommentList}
+        />
         <CommentList
           comments={comments}
           onUpdateComment={handleUpdateComment}
@@ -89,11 +94,6 @@ function AdviceDetail() {
           boardId={advice.adviceId}
         />
 
-        <CommentCreate
-          boardTypeProp="ADVICE"
-          boardIdProp={advice.adviceId}
-          getCommentList={getCommentList}
-        />
       </div>
     </div>
   );
