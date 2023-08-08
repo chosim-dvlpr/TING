@@ -65,6 +65,21 @@ function AdviceBoard() {
     }
   };
 
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if(isSameDate(boardTime)) {
+      return boardTime.substr(11, 11);
+    } else return boardTime.substr(0, 10);
+  }
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return time.getFullYear() === currentTime.getFullYear()
+       && time.getMonth() === currentTime.getMonth()
+       && time.getDate() === currentTime.getDate();
+  }
+
   // 케밥 게시글 닉네임과 유저 닉네임 일치하는지
   const showKebab = (nickname) => {
     return userdata && userdata.nickname === nickname;
@@ -113,7 +128,8 @@ function AdviceBoard() {
     <div className={styles.adviceBoardBackground}>
     <div className={styles.adviceBoardContainer}>
       <Sidebar />
-      <div>
+      <div className={styles.adviceTopTable}>
+      <SearchBar onSearch={handleSearch} />
       <button className={styles.createButton} onClick={handleCreateClick}>
         글 작성하기
       </button>
@@ -122,10 +138,10 @@ function AdviceBoard() {
       <table className={styles.adviceTable}>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>title</th>
-            <th>hit</th>
-            <th>createdTime</th>
+            <th className={styles.table_1}>Id</th>
+            <th className={styles.table_2}>title</th>
+            <th className={styles.table_3}>hit</th>
+            <th className={styles.table_4}>createdTime</th>
           </tr>
         </thead>
         <tbody>
@@ -144,8 +160,8 @@ function AdviceBoard() {
                 <td>{advice.hit}</td>
                 <td>
                   {advice.modifiedTime === null
-                    ? advice.createdTime
-                    : `${advice.modifiedTime} (수정됨)`}
+                    ? calculateDate(advice.createdTime)
+                    : `${calculateDate(advice.modifiedTime)} (수정됨)`}
 
                   {showKebab(advice.nickname) && (
                     <div className={styles.dropdownContainer}>
@@ -180,9 +196,6 @@ function AdviceBoard() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-
-    
-      <SearchBar onSearch={handleSearch} />
     </div>
     </div>
   );
