@@ -78,6 +78,7 @@ import MyPoint from './component/item/MyPoint';
 
 // 카카오 페이 결제
 import KakaoPaySuccess from './pages/pay-result-page/KakaoPaySuccess.js'
+import QnaDetail from './component/profile/QnaDetail';
 
 
 function App() {
@@ -157,6 +158,7 @@ function App() {
           <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
           <Route path="qna" element={<QnaBoard />}></Route>
+          <Route path="qna/detail" element = {<QnaDetail/>} />
           <Route path="myarticle" element={<MyArticle />}></Route>
           <Route path="deleteaccount" element={<DeleteAccount />}></Route>
         </Route>
