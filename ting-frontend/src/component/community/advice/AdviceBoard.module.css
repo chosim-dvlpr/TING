@@ -13,6 +13,8 @@
   min-width: 1200px;
   height: 80%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Table styles */
@@ -20,10 +22,7 @@
   width: 70%;
   min-width: 1000px;
   border-collapse: collapse;
-  margin-top: 20px;
-  margin-left: 200px;
-  margin-right: 100px;
-  
+  margin: 0 auto;
 }
 
 .adviceTable th,
