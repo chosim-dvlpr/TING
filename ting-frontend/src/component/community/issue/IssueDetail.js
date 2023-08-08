@@ -4,6 +4,7 @@ import styles from "./IssueDetail.module.css";
 import CommentCreate from "../common/CommentCreate";
 import tokenHttp from "../../../api/tokenHttp";
 import CommentList from "../common/CommentList";
+import NavBar from "../../common/NavBar";
 
 function IssueDetail() {
   const { issueId } = useParams();
@@ -81,7 +82,10 @@ function IssueDetail() {
   }
 
   return (
+    <div>
+      <NavBar/>
     <div className={styles.issueDetailContainer}>
+      
       <h1>{issue.title}</h1>
       <p>작성자: {issue.nickname}</p>
       <p>{issue.agreeTitle} {issue.agreeCount}</p>
@@ -94,6 +98,7 @@ function IssueDetail() {
 
       <CommentCreate boardTypeProp="ISSUE" boardIdProp={issue.issueId} getCommentList={getCommentList}/>
 
+    </div>
     </div>
   );
 }
