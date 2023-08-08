@@ -1,10 +1,13 @@
 import { useSelector } from "react-redux";
 import tokenHttp from "../../api/tokenHttp";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function QnaDetail() {
+  const location = useLocation();
+
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
-  const [qnaId, setQndId] = useState(7); // qua ID 바꾸기
+  const qnaId = Number(location.state.qnaId);
   const [qnaDetail, setQnaDetail] = useState([]);
 
   // QNA 상세 조회 API 불러오기
