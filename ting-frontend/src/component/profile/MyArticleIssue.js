@@ -11,20 +11,24 @@ import tokenHttp from "../../api/tokenHttp";
 function MyArticleIssue() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [myAdviceArticleList, setMyAdviceArticleList] = useState([]);
+  const [myIssueArticleList, setMyIssueArticleList] = useState([]);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const navigate = useNavigate();
 
   // 내가 쓴 상담 게시글 불러오기
-  const getMyAdviceArticle = () => {
+  const getMyIssueArticle = () => {
     const params = {
       pageNo: currentPage,
+      item: "nickname",
+      keyword: userdata.nickname,
     }
     
-    tokenHttp.get('/advice/my', { params: params }).then((response) => {
+    tokenHttp.get('/issue/search', { params: params }).then((response) => {
+      // console.log(response)
       if (response.data.code === 200) {
         console.log('성공');
-        setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
+        setMyIssueArticleList(response.data.data.issueBoardList); // 내가 쓴 게시글 데이터를 저장
         setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
       }
       else if (response.data.code === 400) {
@@ -39,7 +43,7 @@ function MyArticleIssue() {
   };
 
   useEffect(() => {
-    getMyAdviceArticle();
+    getMyIssueArticle();
   }, [])
 
 
@@ -66,11 +70,11 @@ function MyArticleIssue() {
 
         <tbody>
           {
-            myAdviceArticleList ?
-            myAdviceArticleList.map((article, i) => (
+            myIssueArticleList ?
+            myIssueArticleList.map((article, i) => (
               <tr key={i}>
-                <td>{ article.adviceId }</td>
-                <td onClick={() => navigate(`/community/advice/detail/${article.adviceId}`)}>{ article.title }</td>
+                <td>{ article.issueId }</td>
+                <td onClick={() => navigate(`/community/issue/detail/${article.issueId}`)}>{ article.title }</td>
                 <td>{ article.hit }</td>
                 <td>{ article.createdTime }</td>
               </tr>
