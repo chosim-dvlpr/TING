@@ -346,11 +346,11 @@ function MatchingStart() {
   return (
     <div className="container">
       {showAlert && <div>{alertMessage}</div>}
+      <div id="session-header" className={styles.sessionHeader}>
+        <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
+      </div>
 
-      <div id="session">
-        <div id="session-header">
-          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
-        </div>
+      <div id="session" className={styles.session}>
 
         {/* 질문 카드 */}
         {/* <QuestionCard /> */}
@@ -360,17 +360,15 @@ function MatchingStart() {
         {/* 질문 카드 -- end */}
 
         <div className={styles.videoContainer}>
-          {publisher !== undefined ? (
-            <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-              <UserVideoComponent streamManager={publisher} />
-            </div>
-          ) : null}
 
-          {subscribers.map((sub, i) => (
-            <div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
-              <UserVideoComponent streamManager={sub} />
-            </div>
-          ))}
+          <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
+            <UserVideoComponent streamManager={publisher} />
+          </div>
+
+          <div className="stream-container col-md-5 col-xs-5" onClick={() => handleMainVideoStream(subscribers[0])}>
+            <UserVideoComponent streamManager={subscribers[0]} />
+          </div>
+          
         </div>
       </div>
       
