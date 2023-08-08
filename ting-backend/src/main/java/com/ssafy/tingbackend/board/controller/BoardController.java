@@ -95,6 +95,19 @@ public class BoardController {
         return new DataResponse<>(200, "상담글 검색 조회 성공", result);
     }
 
+    /**
+     * 내 상담 조회 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param pageNo
+     * @return 문의 목록 리스트 adviceBoardList, totalPages, totalElements
+     */
+    @GetMapping("/advice/my")
+    public DataResponse<Map<String, Object>> listMyAdvice(@RequestParam("pageNo") int pageNo, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        Map<String, Object> result = boardService.adviceMyList(userId, pageNo);
+        return new DataResponse<>(200, "내 상담글 검색 조회 성공", result);
+    }
+
 
     /**
      * 이슈 게시글 작성 API
