@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { useRef } from "react";
 // import { useNavigate } from "react-router-dom";
 
 import AOS from "aos";
@@ -13,7 +14,6 @@ import MainButton from "../component/main/MainButton";
 
 function MainPage() {
   
-
   useEffect(() => {
     AOS.init();
     return () => {
@@ -21,30 +21,144 @@ function MainPage() {
     };
   }, []);
 
+  const outerDivRef = useRef();
+  useEffect(() => {
+    const wheelHandler = (e) => {
+      e.preventDefault();
+      const { deltaY } = e;
+      const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
+      const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
+
+      if (deltaY > 0) {
+        // 스크롤 내릴 때
+        if (scrollTop >= 0 && scrollTop < pageHeight - 5) {
+          //현재 1페이지
+          console.log(scrollTop, pageHeight)
+          outerDivRef.current.scrollTo({
+            top: pageHeight,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else if (scrollTop >= pageHeight - 5 && scrollTop < pageHeight * 2 - 5) {
+          //현재 2페이지
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 2,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else if (scrollTop >= pageHeight * 2 - 5 && scrollTop < pageHeight * 3 - 5) {
+          // 현재 3페이지
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 3,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else {
+          // 현재 4페이지
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 4,
+            left: 0,
+            behavior: "smooth",
+          });
+        }
+      } else {
+        // 스크롤 올릴 때
+        if (scrollTop >= 0 && scrollTop < pageHeight + 5) {
+          //현재 1페이지
+          outerDivRef.current.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else if (scrollTop >= pageHeight + 5 && scrollTop < pageHeight * 2 + 5) {
+          //현재 2페이지
+          outerDivRef.current.scrollTo({
+            top: pageHeight,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else if (scrollTop >= pageHeight * 2 + 5 && scrollTop < pageHeight * 3 + 5) {
+          // 현재 3페이지
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 2,
+            left: 0,
+            behavior: "smooth",
+          });
+        } else {
+          outerDivRef.current.scrollTo({
+            top: pageHeight * 3,
+            left: 0,
+            behavior: "smooth",
+          });
+        }
+      }
+    };
+    const outerDivRefCurrent = outerDivRef.current;
+    outerDivRefCurrent.addEventListener("wheel", wheelHandler);
+    return () => {
+      outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
+    };
+  }, []);
+
   return (
-    <div>
-            {/*section1 */}
-            <div className={styles.backgroundFish} id={styles.backgroundFish1}>
-        <img src="/img/fish_group_1.png"></img>
-      </div>
-      <div className={styles.backgroundFish} id={styles.backgroundFish2}>
-        <img src="/img/fish_group_2.png"></img>
-      </div>
+    <div ref={outerDivRef} className={styles.outer}>
+      {/*section1 */}
       <div className={styles.wrapper}>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        <div class={styles.snowflake}>
+          <img src="/img/heart_1.png"></img>
+        </div>
+        {/* <div className={styles.backgroundFish} id={styles.backgroundFish1}>
+          <img src="/img/fish_group_1.png"></img>
+        </div>
+        <div className={styles.backgroundFish} id={styles.backgroundFish2}>
+          <img src="/img/fish_group_2.png"></img>
+        </div> */}
         <div className={styles.section1textbox}>
-          <h1>5분 <span id={styles.textDeco}>팅!! </span>으로<br></br>사랑을 찾아봐</h1>
+          <h1>5분 <span id={styles.textDeco}> TING!! </span>으로<br></br>사랑을 찾아봐</h1>
         </div>
         <div className={styles.section1imgbox}>
-          <Link to="/matching" className={styles.linkButton}>
+          {/* <Link to="/matching" className={styles.linkButton}>
             <img src="/img/heart_1.png" alt="main" className={styles.img}></img>
-          </Link>
+          </Link> */}
+          <MainButton></MainButton>
         </div>
+        <div className={styles.down}><span>팅은 어떤 서비스인가요?</span>↓</div>
+        {/* <div>
+          <img src="/img/arrow.png"></img>
+        </div> */}
       </div>
 
       {/*section2 */}
       <div
-        data-aos="fade-down"
-        data-aos-duration="1000"
+        // data-aos="fade-down"
+        // data-aos-duration="1000"
         className={styles.wrapper}
       >
         <img
@@ -53,18 +167,17 @@ function MainPage() {
           className={styles.section2imgbox}
         ></img>
 
-        
         <div className={styles.section2textbox}>
         <CountdownTimer />
-          <h1>
-            5분 동안 어떤 일을<br></br>할 수 있을까요?</h1>
+          <h2>
+            5분 동안 어떤 일을<br></br>할 수 있을까요?</h2>
         </div>
       </div>
 
       {/*section3 */}
       <div
-        data-aos="fade-down"
-        data-aos-duration="1000"
+        // data-aos="fade-down"
+        // data-aos-duration="1000"
         className={styles.wrapper}
       >
         <img
@@ -78,7 +191,7 @@ function MainPage() {
           className={styles.section3imgbox2}
         ></img>
          <div className={styles.section2textbox}>
-        <h1>
+        <h2>
           팅에서는
           <br />
           5분 안에
@@ -86,24 +199,24 @@ function MainPage() {
           상대의 취미부터 취향까지
           <br />
           바로 확인 할 수 있습니다
-        </h1>
+        </h2>
         </div>
       </div>
 
       {/*section4 */}
 
       <div
-        data-aos="fade-down"
-        data-aos-duration="1000"
+        // data-aos="fade-down"
+        // data-aos-duration="1000"
         className={styles.wrapper}
       >
         <div className={styles.section2textbox}>
-        <h1>
+        <h2>
           5분 후<br />
           상대에게
           <br />
           마음을 표현해보세요
-        </h1>
+        </h2>
         </div>
         <img
           src="/img/hearthand.png"
@@ -113,10 +226,16 @@ function MainPage() {
       </div>
 
       <div
-        data-aos="fade-down"
-        data-aos-duration="1000"
+        // data-aos="fade-down"
+        // data-aos-duration="1000"
         className={styles.wrapper}
       >
+        <div className={styles.backgroundFish} id={styles.backgroundFish1}>
+          <img src="/img/fish_group_1.png"></img>
+        </div>
+        <div className={styles.backgroundFish} id={styles.backgroundFish2}>
+          <img src="/img/fish_group_2.png"></img>
+        </div>
         <img
           src="/img/click.png"
           alt="click"

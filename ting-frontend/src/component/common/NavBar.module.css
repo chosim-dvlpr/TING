@@ -36,7 +36,7 @@
 .menuItem,
 .profileImage {
   height: 70px;
-  margin-top: 15px;
+  margin-top: 10px;
   cursor: pointer;
 }
 
@@ -65,8 +65,8 @@
 }
 
 .navLeft {
-  margin-top: 50px;
-  margin-left: 30px;
+  margin-top: 20px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
 }
@@ -74,7 +74,7 @@
 .navRight {
   /* margin-left: auto;
   margin-right: 150px; */
-  margin-left: 30px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
 }

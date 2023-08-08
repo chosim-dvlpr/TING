@@ -12,7 +12,6 @@ function KakaoPaySuccess(){
   const navigate = useNavigate()
   const state = useSelector(state => state)
   const pointPaymentId = state.itemReducer.pointPaymentId
-  const myPoint = state.itemReducer.myPoint
 
   useEffect(()=>{
     let data = {
