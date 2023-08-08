@@ -81,6 +81,11 @@ function AdviceDetail() {
         <p>Created Time: {advice.createdTime}</p>
         <p>Modified Time: {advice.modifiedTime}</p>
 
+        <CommentCreate
+          boardTypeProp="ADVICE"
+          boardIdProp={advice.adviceId}
+          getCommentList={getCommentList}
+        />
         <CommentList
           comments={comments}
           onUpdateComment={handleUpdateComment}
@@ -89,11 +94,6 @@ function AdviceDetail() {
           boardId={advice.adviceId}
         />
 
-        <CommentCreate
-          boardTypeProp="ADVICE"
-          boardIdProp={advice.adviceId}
-          getCommentList={getCommentList}
-        />
       </div>
     </div>
   );

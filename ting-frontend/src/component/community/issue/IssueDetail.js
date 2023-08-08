@@ -91,12 +91,13 @@ function IssueDetail() {
       <p>{issue.agreeTitle} {issue.agreeCount}</p>
       <p>{issue.opposeTitle} {issue.oppseCount}</p>
 
+      <CommentCreate boardTypeProp="ISSUE" boardIdProp={issue.issueId} getCommentList={getCommentList}/>
+      
       <CommentList comments={comments}
         onUpdateComment={handleUpdateComment}
         onDeleteComment={handleDeleteComment}
       />
 
-      <CommentCreate boardTypeProp="ISSUE" boardIdProp={issue.issueId} getCommentList={getCommentList}/>
 
     </div>
     </div>
