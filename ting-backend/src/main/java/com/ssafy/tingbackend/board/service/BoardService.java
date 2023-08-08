@@ -124,6 +124,27 @@ public class BoardService {
         return result;
     }
 
+    public Map<String, Object> adviceMyList(Long userId, int pageNo) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+        Map<String, Object> result = new HashMap<>();
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
+                "createdTime"));
+
+        Page<AdviceBoard> page = adviceBoardRepository.findListByUser(pageRequest, user);
+        List<AdviceBoard> adviceBoardList = page.getContent();
+
+        List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
+        for(AdviceBoard adviceBoard : adviceBoardList) {
+            adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
+        }
+
+        result.put("adviceBoardList", adviceBoardDtoList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
+    }
+
     public void insertIssueBoard(IssueBoardDto.Request issueBoardRequest, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
@@ -369,5 +390,4 @@ public class BoardService {
         }
         return commentDtoList;
     }
-
 }
