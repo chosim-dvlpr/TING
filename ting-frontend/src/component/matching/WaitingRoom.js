@@ -134,16 +134,17 @@ function WaitingRoom() {
   }, [socket]);
 
   return (
-    <div className={styles.waitingContainer}>
-      <h1>대기실</h1>
+    <div>
+
       <div className={styles.waitingMenu}>
-      <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
-      <button onClick={()=>{navigate("/")}}>나가기</button>
+        <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
+        <button onClick={()=>{navigate("/")}}>나가기</button>
       </div>
+      
       <Container className={styles.box}>
         <Row>
           <Col className={styles.leftBox}>
-            <Webcam audio={true} />
+            <Webcam className={styles.Webcam} audio={true} />
           </Col>
           <Col className={styles.rightBox}>
             <div className={`col-md-6 col-xs-6 stream-container`}>
@@ -192,6 +193,7 @@ function WaitingRoom() {
         {/* 잔여 티켓 1개 이상 */}
         {/* 매칭 시작 버튼 눌렀을 때 */}
       </div>
+
     </div>
   );
 }

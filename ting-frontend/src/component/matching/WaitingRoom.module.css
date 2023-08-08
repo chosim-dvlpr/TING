@@ -1,12 +1,27 @@
-.waitingContainer {
-    padding: 20px;
+/* 메뉴바 */
+.waitingMenu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.waitingMenu button {
+    margin-left: 5px;
+}
+
+
+
+.Webcam {
+    width:110%;
+    height:110%;
 }
 
 .box{
-    width : 80%;
-    background-color: #fee5ef;
-    border-radius: 30px;
+    width : 100%;
     margin: 100px auto 0;
+    border-radius: 10px;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2); /* box shadow 효과 */
+    transform: translateY(-6px); /* 아래로 약간 튀어나온 효과 */
+    margin: 20px auto;
 }
 
 .rightBox{
@@ -17,11 +32,3 @@
     margin: auto;
 }
 
-.waitingMenu {
-    float: right;
-    margin: 10px 20px;
-}
-
-.waitingMenu button {
-    margin: 10px;
-}
