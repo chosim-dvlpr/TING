@@ -54,9 +54,14 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
 
   return (
     <div>
-      <h2>댓글 목록</h2>
-      <ul>
-        {comments.map((comment) => (
+    <h2>댓글 목록</h2>
+    <ul>
+      {comments.map((comment) => {
+        if (comment.removed) {
+          return null; 
+        }
+        
+        return (
           <li key={comment.commentId}>
             <div>
               {editingCommentId === comment.commentId ? (
@@ -95,10 +100,11 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
               )}
             </div>
           </li>
-        ))}
+        );
+        })}
       </ul>
     </div>
   );
-}
+  }
 
 export default CommentList;
