@@ -2,15 +2,15 @@ package com.ssafy.tingbackend.entity.item;
 
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Inventory {
     @Id
@@ -22,7 +22,7 @@ public class Inventory {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private ItemType item;
+    private ItemType itemType;
 
     private int quantity;
 }
