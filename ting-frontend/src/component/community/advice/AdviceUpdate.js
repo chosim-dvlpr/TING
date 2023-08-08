@@ -57,7 +57,7 @@ function AdviceUpdate() {
 
   return (
     <div>
-    <NavBar/>
+    {/* <NavBar/> */}
     <div className={styles.adviceUpdateContainer}>
      
       <h2>글 수정</h2>

@@ -129,7 +129,7 @@ function AdviceBoard() {
 
   return (
     <div className={styles.adviceBoardBackground}>
-      <NavBar />
+      {/* <NavBar /> */}
       <div className={styles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.adviceTopTable}>
