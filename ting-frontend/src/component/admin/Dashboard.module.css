@@ -1,0 +1,29 @@
+.summaryContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: blueviolet;
+}
+
+.summaryBox {
+    position: relative;
+    width: 350px;
+    background-color: aquamarine;
+    padding-top: 30px;
+    margin: 0 10px;
+}
+
+.summaryIcon {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: bisque;
+    left: 30px;
+}
+
+.summaryInfo {
+    width: 100%;
+    height: 150px;
+    background-color: blue;
+    margin-top: 20px;
+}

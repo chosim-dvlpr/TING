@@ -1,0 +1,21 @@
+.adminContainer {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.logoContainer {
+    /* background-color: aliceblue; */
+}
+
+.sidebar {
+    width: 260px;
+    /*min-height: 800px;*/
+    background-color: aqua;
+    text-align: left;
+}
+
+.sidebarMenu {
+    text-align: center;
+}
