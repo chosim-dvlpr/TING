@@ -106,13 +106,23 @@ function IssueBoard() {
 
   return (
     <div>
+
+      {/* <NavBar/> */}
+     
+        
+      <div className={styles.issueBoardContainer}>
+
       <NavBar/>
+
       <Sidebar />
-      <SearchBar onSearch={handleSearch} boardType={boardType}/>
       <div className={styles.cardList}>
+      <button className={styles.createButton} onClick={handleCreateClick}>
+            글 작성하기
+          </button>
+        
         {searchResult.length > 0
           ? searchResult.map((issue) => (
-              <div key={issue.issueId} className={styles.card}>
+            <div key={issue.issueId} className={styles.card}>
                 <span
                   className={styles.link}
                   onClick={(event) => handleLinkClick(issue.issueId, event)}
@@ -147,7 +157,7 @@ function IssueBoard() {
                 </div>
               </div>
             ))
-          : issueList.map((issue) => (
+            : issueList.map((issue) => (
               <div key={issue.issueId} className={styles.card}>
                 <span
                   className={styles.link}
@@ -184,12 +194,14 @@ function IssueBoard() {
               </div>
             ))}
       </div>
+            <SearchBar onSearch={handleSearch} boardType={boardType}/>
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      </div>
      
     </div>
   );

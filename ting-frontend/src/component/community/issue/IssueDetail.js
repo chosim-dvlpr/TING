@@ -73,23 +73,58 @@ function IssueDetail() {
   };
 
 
+  // 투표 기능 추가
+  
+const handleAgree = async () => {
+  try {
+    const response = await tokenHttp.post(`/issue/vote/${issueId}`, { isAgree: true });
+    console.log("Agree response:", response);
 
+    // Issue 데이터 업데이트
+    setIssue((prevIssue) => ({
+      ...prevIssue,
+      isAgree: true,
+      agreeCount: prevIssue.agreeCount + 1,
+    }));
+  } catch (error) {
+    console.error("Error agreeing to issue:", error);
+  }
+};
 
+const handleOppose = async () => {
+  try {
+    const response = await tokenHttp.post(`/issue/vote/${issueId}`, { isAgree: false });
+    console.log("Oppose response:", response);
 
+    // Issue 데이터 업데이트
+    setIssue((prevIssue) => ({
+      ...prevIssue,
+      isAgree: false,
+      opposeCount: prevIssue.opposeCount + 1,
+    }));
+  } catch (error) {
+    console.error("Error opposing issue:", error);
+  }
+};
 
   if (!issue) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <NavBar/>
-    <div className={styles.issueDetailContainer}>
-      
-      <h1>{issue.title}</h1>
-      <p>작성자: {issue.nickname}</p>
-      <p>{issue.agreeTitle} {issue.agreeCount}</p>
-      <p>{issue.opposeTitle} {issue.oppseCount}</p>
+
+      <div>
+      <div className={styles.issueDetailContainer}>
+        <h1>{issue.title}</h1>
+        <p>작성자: {issue.nickname}</p>
+        <p>
+          {issue.agreeTitle} {issue.agreeCount}{" "}
+          <button onClick={handleAgree}>찬성</button>
+        </p>
+        <p>
+          {issue.opposeTitle} {issue.opposeCount}{" "}
+          <button onClick={handleOppose}>반대</button>
+        </p>
 
       <CommentCreate boardTypeProp="ISSUE" boardIdProp={issue.issueId} getCommentList={getCommentList}/>
       
