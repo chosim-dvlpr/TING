@@ -73,13 +73,13 @@ public class BoardService {
     }
 
     @Transactional
-    public AdviceBoardDto.Response adviceDetail(Long adviceId) {
+    public AdviceBoardDto.DetailResponse adviceDetail(Long adviceId) {
         AdviceBoard adviceBoard = adviceBoardRepository.findById(adviceId)
                 .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
         User user = userRepository.findById(adviceBoard.getUser().getId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-        adviceBoard.setHit(adviceBoard.getHit()+1);
-        return AdviceBoardDto.Response.of(adviceBoard, user);
+        adviceBoardRepository.updateHit(adviceBoard.getHit()+1, adviceBoard.getId());
+        return AdviceBoardDto.DetailResponse.of(adviceBoard, user);
     }
 
     public Map<String, Object> adviceList(int pageNo) {
