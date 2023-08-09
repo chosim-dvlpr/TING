@@ -3,15 +3,13 @@ package com.ssafy.tingbackend.admin.service;
 import com.ssafy.tingbackend.admin.dto.AdminLoginLogDto;
 import com.ssafy.tingbackend.admin.dto.AdminQnaDto;
 import com.ssafy.tingbackend.admin.dto.AdminReportDto;
-import com.ssafy.tingbackend.admin.repository.AdminLoginLogRepository;
-import com.ssafy.tingbackend.admin.repository.AdminPointPaymentRepository;
-import com.ssafy.tingbackend.admin.repository.AdminQnaRepository;
-import com.ssafy.tingbackend.admin.repository.AdminReportRepository;
+import com.ssafy.tingbackend.admin.repository.*;
 import com.ssafy.tingbackend.common.dto.PageResult;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.QnA;
 import com.ssafy.tingbackend.entity.Report;
+import com.ssafy.tingbackend.entity.matching.Matching;
 import com.ssafy.tingbackend.entity.payment.PointPayment;
 import com.ssafy.tingbackend.entity.user.LoginLog;
 import com.ssafy.tingbackend.entity.user.User;
@@ -44,6 +42,7 @@ public class AdminService {
     private final AdminLoginLogRepository loginLogRepository;
     private final AdminQnaRepository qnaRepository;
     private final AdminPointPaymentRepository pointPaymentRepository;
+    private final AdminMatchingRepository matchingRepository;
 
     public Map<String, Object> getReportList(PageRequest pageRequest) {
         Page<Report> reportList = reportRepository.findAll(pageRequest);
@@ -143,7 +142,7 @@ public class AdminService {
 
     @Transactional
     public Map<String, Object> pointPaymentHistoryFor20Day() {
-        LocalDateTime dateTime = LocalDateTime.now().minusDays(21);
+        LocalDateTime dateTime = LocalDateTime.now().minusDays(20);
         List<PointPayment> pointPaymentList = pointPaymentRepository.findPaymentHistory(dateTime);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
 
@@ -173,6 +172,42 @@ public class AdminService {
 
         List<String> labelList = pointPaymentMap.keySet().stream().sorted().collect(Collectors.toList());
         List<Integer> countList = labelList.stream().map(pointPaymentMap::get).collect(Collectors.toList());
+
+        return Map.of(
+                "labelList", labelList,
+                "countList", countList
+        );
+    }
+
+    @Transactional
+    public Map<String, Object> matchingHistoryFor20Day() {
+        LocalDateTime dateTime = LocalDateTime.now().minusDays(20);
+        List<Matching> matchingHistoryList = matchingRepository.findMatchingHistory(dateTime);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd");
+
+        // 일별 포인트 내역 합계 리스트
+        // label, count
+        Map<String, Integer> MatchingMap = new HashMap<>();
+        matchingHistoryList.forEach(m -> {
+            String date = m.getCreatedTime().format(formatter);
+            MatchingMap.put(date, MatchingMap.getOrDefault(date, 0) + 1);
+        });
+
+        LocalDate endDate = LocalDate.now();  // 오늘 날짜
+        LocalDate startDate = endDate.minusDays(20);  // 오늘 날짜로부터 20일 전의 날짜
+
+        LocalDate currentDate = startDate;
+
+        while (!currentDate.isAfter(endDate)) {
+            currentDate = currentDate.plusDays(1);  // 다음 날짜로 이동
+            String date = currentDate.format(formatter);
+            if (!MatchingMap.containsKey(date)) {
+                MatchingMap.put(date, 0);
+            }
+        }
+
+        List<String> labelList = MatchingMap.keySet().stream().sorted().collect(Collectors.toList());
+        List<Integer> countList = labelList.stream().map(MatchingMap::get).collect(Collectors.toList());
 
         return Map.of(
                 "labelList", labelList,
