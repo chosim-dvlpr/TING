@@ -1,27 +1,16 @@
 /* Sidebar.css */
 
 .selected {
-  background-color: rgb(234, 185, 134);
+  background-color: #fae6e8;
+  /* background-color: rgb(234, 185, 134); */
   padding: 10px 15px;
   border-radius: 20px;
 }
 .sidebar {
   width: 85%;
-  margin: 0 auto 10px;
-  border-bottom: 1px solid black;
-  /* margin-top: 60px;
-   
-    float: left;
-   
-    width: 200px;
-    
-    height: 100%;
-    
-    background-color: #004BA1;
-
-    color: white;
-
-    margin-right: 100px; */
+  margin: 0 auto 24px;
+  border-bottom: 2px solid #fae6e8;
+  font-family: "UhBeeSe_hyun";
   }
   
   /* 사이드바 내부의 ul 요소 스타일 지정 */
