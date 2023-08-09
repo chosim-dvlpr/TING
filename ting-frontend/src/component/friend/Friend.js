@@ -51,8 +51,8 @@ function Friend({ onSearch }){
       {/* 닫기 버튼 누르면 뒤로가기로 일단 만들어놨음 */}
       {/* <button onClick={() => Navigate(-1)}>닫기버튼</button> */}
       <br/>
-      <div className={styles.Modal}>
-        <div className={styles.modalBody} onClick={(e) => e.stopPropagation()}>
+      <div>
+        <div onClick={(e) => e.stopPropagation()}>
           <h3>내 어항</h3>
           {/* <button id="modalCloseBtn" onClick={closeModal}>
             채팅 모달 닫기

@@ -117,7 +117,7 @@ function MainPage() {
   return (
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
-      {/* <FriendButton /> */}
+      <FriendButton />
       {/*section1 */}
       <div className={styles.wrapper}>
         <div class={styles.snowflake}>
