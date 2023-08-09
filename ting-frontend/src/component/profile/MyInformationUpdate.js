@@ -33,6 +33,8 @@ function MyInformationUpdate() {
   let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState([]);
   let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
 
+  let [openMbti, setOpenMbti] = useState(false);
+
   // list를 코드로 변환
   useEffect(() => {
     let hobbyListCode = currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
@@ -42,6 +44,64 @@ function MyInformationUpdate() {
     setCurrentPersonalityListCode(personalityListCode);
     setCurrentStyleListCode(styleListCode);
   }, [currentHobbyList, currentPersonalityList, currentStyleList]);
+
+  const CustomDropDown = (props) => {
+    let callback;
+    switch (props.type) {
+      case "MBTI":
+        callback = setCurrentMbti;
+        break;
+      case "DRINKING":
+        callback = setCurrentDrinking;
+        break;
+      case "SMOKING":
+        callback = setCurrentSmoking;
+        break;
+      case "RELIGION":
+        callback = setCurrentReligion;
+        break;
+      case "JOB":
+        callback = setCurrentJob;
+        break;
+    }
+
+    if (props.type === "HOBBY") {
+      return (
+        <>
+          {props.items.map((obj, i) =>
+            <button className={styles.dropDownBtn} key={i} as="button"
+              onClick={() => { deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj); }}>{obj.name}</button>)
+          }
+        </>
+      );
+    } else if (props.type === "PERSONALITY") {
+      return (
+        <>
+          {props.items.map((obj, i) =>
+            <button className={styles.dropDownBtn} key={i} as="button"
+              onClick={() => { deleteDuplicate(currentPersonalityList, setCurrentPersonalityList, obj); }}>{obj.name}</button>)
+          }
+        </>
+      );
+    } else if (props.type === "STYLE") {
+      return (
+        <>
+          {props.items.map((obj, i) =>
+            <button className={styles.dropDownBtn} key={i} as="button"
+              onClick={() => { deleteDuplicate(currentStyleList, setCurrentStyleList, obj); }}>{obj.name}</button>)
+          }
+        </>
+      );
+    } else {
+      return (
+        <>
+          {props.items.map((data, i) =>
+            <button className={styles.dropDownBtn} key={i} as="button" onClick={() => callback(data)}>{data.name}</button>)
+          }
+        </>
+      );
+    }
+  }
 
   // 지역을 한글로 변환
   const regionToKor = (regionData) => {
@@ -161,137 +221,156 @@ function MyInformationUpdate() {
           <tr><th className={styles.title}>지역</th> <td>{regionToKor(userdata.region)}</td></tr>
         </table>
       </div>
-      <br />
+      <hr />
 
-      <label>키</label>
-      <input
-        type="text"
-        value={height}
-        onChange={(e) => setHeight(e.target.value)}
-      ></input>
+      <div className={styles.updateWrapper}>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>키</p>
+          <input
+            type="text"
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
+          ></input>
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="MBTI">
-          {dataCode
-            .filter((data) => data.category.includes("MBTI"))
-            .map((data, i) =>
-              <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data)}>{data.name}</Dropdown.Item>
-            )
-          }
-        </DropdownButton>
-        {currentMbti && currentMbti.name}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>MBTI</p>
+          <div>
+            <div className={styles.dropDownMenu} onClick={() => { setOpenMbti(!openMbti) }}>{currentMbti && currentMbti.name}</div>
+            <div className={openMbti ? styles.isOpen : styles.isClose}>
+              <CustomDropDown items={dataCode.filter((data) => data.category.includes("MBTI"))} type="MBTI" />
+            </div>
+          </div>
+          {/* <DropdownButton id="dropdown-item-button" title="MBTI">
+            {dataCode
+              .filter((data) => data.category.includes("MBTI"))
+              .map((data, i) =>
+                <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data)}>{data.name}</Dropdown.Item>
+              )
+            }
+          </DropdownButton> */}
+          {/* <p>{currentMbti && currentMbti.name}</p> */}
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="주량">
-          {dataCode
-            .filter((data) => data.category.includes("DRINKING"))
-            .map((data, i) =>
-              <Dropdown.Item key={i} as="button" onClick={() => setCurrentDrinking(data)}>{data.name}</Dropdown.Item>
-            )
-          }
-        </DropdownButton>
-        {currentDrinking && currentDrinking.name}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>주량</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("DRINKING"))} type="DRINKING" />
+          {/* <DropdownButton id="dropdown-item-button" title="주량">
+            {dataCode
+              .filter((data) => data.category.includes("DRINKING"))
+              .map((data, i) =>
+                <Dropdown.Item key={i} as="button" onClick={() => setCurrentDrinking(data)}>{data.name}</Dropdown.Item>
+              )
+            }
+          </DropdownButton> */}
+          {currentDrinking && currentDrinking.name}
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="흡연">
-          {dataCode
-            .filter((data) => data.category.includes("SMOKING"))
-            .map((data, i) =>
-              <Dropdown.Item key={i} as="button" onClick={() => setCurrentSmoking(data)}>{data.name}</Dropdown.Item>
-            )
-          }
-        </DropdownButton>
-        {currentSmoking && currentSmoking.name}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>흡연</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("SMOKING"))} type="SMOKING" />
+          {/* <DropdownButton id="dropdown-item-button" title="흡연">
+            {dataCode
+              .filter((data) => data.category.includes("SMOKING"))
+              .map((data, i) =>
+                <Dropdown.Item key={i} as="button" onClick={() => setCurrentSmoking(data)}>{data.name}</Dropdown.Item>
+              )
+            }
+          </DropdownButton> */}
+          {currentSmoking && currentSmoking.name}
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="종교">
-          {dataCode
-            .filter((data) => data.category.includes("RELIGION"))
-            .map((data, i) =>
-              <Dropdown.Item key={i} as="button" onClick={() => setCurrentReligion(data)}>{data.name}</Dropdown.Item>
-            )
-          }
-        </DropdownButton>
-        {currentReligion && currentReligion.name}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>종교</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("RELIGION"))} type="RELIGION" />
+          {/* <DropdownButton id="dropdown-item-button" title="종교">
+            {dataCode
+              .filter((data) => data.category.includes("RELIGION"))
+              .map((data, i) =>
+                <Dropdown.Item key={i} as="button" onClick={() => setCurrentReligion(data)}>{data.name}</Dropdown.Item>
+              )
+            }
+          </DropdownButton> */}
+          {currentReligion && currentReligion.name}
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="취미">
-          {dataCode
-            .filter((data) => data.category.includes("HOBBY"))
-            .map((obj, i) => (
-              <Dropdown.Item key={i} as="button" onClick={() => {
-                deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj);
-              }
-              }>{obj.name}</Dropdown.Item>
-            ))
-          }
-        </DropdownButton>
-        {currentHobbyList && currentHobbyList.map((hobby, i) => (
-          hobby.name
-        ))}
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>직업</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("JOB"))} type="JOB" />
+          {/* <DropdownButton id="dropdown-item-button" title="직업">
+            {dataCode
+              .filter((data) => data.category.includes("JOB"))
+              .map((data, i) =>
+                <Dropdown.Item key={i} as="button" onClick={() => setCurrentJob(data)}>{data.name}</Dropdown.Item>
+              )
+            }
+          </DropdownButton> */}
+          {currentJob && currentJob.name}
+        </div>
 
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>취미</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("HOBBY"))} type="HOBBY" />
+          {/* <DropdownButton id="dropdown-item-button" title="취미">
+            {dataCode
+              .filter((data) => data.category.includes("HOBBY"))
+              .map((obj, i) => (
+                <Dropdown.Item key={i} as="button" onClick={() => {
+                  deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj);
+                }
+                }>{obj.name}</Dropdown.Item>
+              ))
+            }
+          </DropdownButton> */}
+          {currentHobbyList && currentHobbyList.map((hobby, i) => (
+            hobby.name
+          ))}
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="성격">
-          {dataCode
-            .filter((data) => data.category.includes("PERSONALITY"))
-            .map((obj, i) => (
-              <Dropdown.Item key={i} as="button" onClick={() => {
-                deleteDuplicate(currentPersonalityList, setCurrentPersonalityList, obj);
-              }
-              }>{obj.name}</Dropdown.Item>
-            ))
-          }
-        </DropdownButton>
-        {currentPersonalityList && currentPersonalityList.map((personality, i) => (
-          personality.name
-        ))}
-      </p>
-      <br />
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="직업">
-          {dataCode
-            .filter((data) => data.category.includes("JOB"))
-            .map((data, i) =>
-              <Dropdown.Item key={i} as="button" onClick={() => setCurrentJob(data)}>{data.name}</Dropdown.Item>
-            )
-          }
-        </DropdownButton>
-        {currentJob && currentJob.name}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>성격</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("PERSONALITY"))} type="PERSONALITY" />
+          {/* <DropdownButton id="dropdown-item-button" title="성격">
+            {dataCode
+              .filter((data) => data.category.includes("PERSONALITY"))
+              .map((obj, i) => (
+                <Dropdown.Item key={i} as="button" onClick={() => {
+                  deleteDuplicate(currentPersonalityList, setCurrentPersonalityList, obj);
+                }
+                }>{obj.name}</Dropdown.Item>
+              ))
+            }
+          </DropdownButton> */}
+          {currentPersonalityList && currentPersonalityList.map((personality, i) => (
+            personality.name
+          ))}
+        </div>
 
-      <p>
-        <DropdownButton id="dropdown-item-button" title="스타일">
-          {dataCode
-            .filter((data) => data.category.includes("STYLE"))
-            .map((obj, i) => (
-              <Dropdown.Item key={i} as="button" onClick={() => {
-                deleteDuplicate(currentStyleList, setCurrentStyleList, obj);
-              }
-              }>{obj.name}</Dropdown.Item>
-            ))
-          }
-        </DropdownButton>
-        {currentStyleList && currentStyleList.map((style, i) => (
-          style.name
-        ))}
-      </p>
-      <br />
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>스타일</p>
+          <CustomDropDown items={dataCode.filter((data) => data.category.includes("STYLE"))} type="STYLE" />
+          {/* <DropdownButton id="dropdown-item-button" title="스타일">
+            {dataCode
+              .filter((data) => data.category.includes("STYLE"))
+              .map((obj, i) => (
+                <Dropdown.Item key={i} as="button" onClick={() => {
+                  deleteDuplicate(currentStyleList, setCurrentStyleList, obj);
+                }
+                }>{obj.name}</Dropdown.Item>
+              ))
+            }
+          </DropdownButton> */}
+          {currentStyleList && currentStyleList.map((style, i) => (
+            style.name
+          ))}
+        </div>
 
-      <p>자기소개</p>
-      <input value={currentIntroduce} onChange={(e) => setCurrentIntroduce(e.target.value)}></input>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>자기소개</p>
+          <input value={currentIntroduce} onChange={(e) => setCurrentIntroduce(e.target.value)}></input>
+        </div>
+      </div>
     </div>
   )
 }
