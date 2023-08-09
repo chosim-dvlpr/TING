@@ -1,4 +1,5 @@
 import styles from "./Dashboard.module.css";
+import { PriceChart } from "./PriceChart";
 
 const Dashboard = () => {
   return (
@@ -26,9 +27,9 @@ const Dashboard = () => {
           </div>
           <div className={styles.summaryInfo}>
             <div className={styles.summaryText}>
-              <div className={styles.text}>총 매칭 횟수</div>
+              <div className={styles.text}>총 회원수</div>
               <div className={styles.info}>
-                <span>4,819</span> 회
+                <span>2,891</span> 명
               </div>
             </div>
             <hr className={styles.summaryHr} />
@@ -40,9 +41,9 @@ const Dashboard = () => {
           </div>
           <div className={styles.summaryInfo}>
             <div className={styles.summaryText}>
-              <div className={styles.text}>총 매칭 횟수</div>
+              <div className={styles.text}>미확인 문의 내역</div>
               <div className={styles.info}>
-                <span>4,819</span> 회
+                <span>27</span>
               </div>
             </div>
             <hr className={styles.summaryHr} />
@@ -54,9 +55,9 @@ const Dashboard = () => {
           </div>
           <div className={styles.summaryInfo}>
             <div className={styles.summaryText}>
-              <div className={styles.text}>총 매칭 횟수</div>
+              <div className={styles.text}>총 매출액</div>
               <div className={styles.info}>
-                <span>4,819</span> 회
+                &#8361;<span>203,102,000</span>
               </div>
             </div>
             <hr className={styles.summaryHr} />
@@ -66,7 +67,9 @@ const Dashboard = () => {
 
       <div className={styles.chartContainer}>
         <div className={styles.chartOuterBox}>
-          <div className={styles.chart}> </div>
+          <div className={styles.chart}>
+            <PriceChart />
+          </div>
           <div className={styles.chartDescription}></div>
         </div>
         <div className={styles.chartOuterBox}>
