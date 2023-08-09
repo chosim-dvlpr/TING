@@ -13,6 +13,7 @@ import CountdownTimer from "../component/main/CountdownTimer";
 import MainButton from "../component/main/MainButton";
 
 import NavBar from "../component/common/NavBar";
+import FriendButton from "../component/common/FriendButton"
 
 function MainPage() {
   useEffect(() => {
@@ -116,6 +117,7 @@ function MainPage() {
   return (
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
+      {/* <FriendButton /> */}
       {/*section1 */}
       <div className={styles.wrapper}>
         <div class={styles.snowflake}>

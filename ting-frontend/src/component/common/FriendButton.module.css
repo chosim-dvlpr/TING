@@ -1,0 +1,35 @@
+.friendContainer {
+
+}
+
+.button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+
+.hide {
+  display: none;
+}
+
+.chatConainer {
+  width: 360px;
+  height: 600px;
+  background-color: white;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+
+.friendContainer {
+  width: 360px;
+  height: 600px;
+  background-color: white;
+  position: fixed;
+  bottom: 30px;
+  right: 390px;
+}
