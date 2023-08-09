@@ -1,6 +1,13 @@
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 video {
   width: 100%;
-  margin:20px 0;
+  margin:10px 0;
   height: auto;
   border-radius: 40px;
   background-color: #91cad6;
@@ -20,9 +27,29 @@ video {
   align-items: center;
 }
 
-
 p{
   margin: 0;
+}
+
+.container {
+  position: relative;
+  height: 88vh;
+  background-color: white;
+  margin-left: 100px;
+  /* padding-right: 130px; */
+  margin-right: 100px;
+  border-radius: 50px;
+  border: 3px solid #30668A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+  padding-top: 40px;
+}
+
+.session {
+  display: flex;
+  align-items: center;
 }
 
 .sessionHeader{
@@ -32,13 +59,12 @@ p{
 }
 
 .videoContainer {
+  margin: 50px;
   display: flex;
   justify-content: space-between;
 }
 
 .cardOuter{
-  border : 1px solid black;
-  background-color: #FEF1F6;
   filter: drop-shadow(10px 20px 5px #CCCCCC);
   width : 200px;
   height: 300px;
@@ -51,6 +77,20 @@ p{
   transform: translate(-50%, 0);
 }
 
+.trumpCard {
+  position: absolute;
+  width : 200px;
+  height: 300px;
+}
+
+.cardContent {
+  margin: 10px;
+  z-index: 1;
+  font-family: UhBeeSe_hyun;
+  font-size: 20px;
+}
+
+
 /* ScoreCheck module */
 
 .wrapper {
@@ -61,10 +101,7 @@ p{
 
 .ScoreCheckBox {
   width:100%;
-  background-color: #FEF1F6;
-  border: 1px solid #4F4F4F;
   border-radius: 10px;
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .ScoreBox {
@@ -86,7 +123,10 @@ p{
 .HeartScore img{
   width:100%;
   vertical-align: middle;
-  
+}
+
+.clickedHeart {
+  scale: 1.4;
 }
 
 .HeartScore:hover{
@@ -94,6 +134,8 @@ p{
 }
 
 .ScoreText {
+  font-family: UhBeeSe_hyun;
+  color: white;
   background: none;
   border : none;
   font-size: 1.5rem;
@@ -105,4 +147,45 @@ p{
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
+}
+
+.HeartScoreAni:hover{
+  animation-name: 흔들확대;
+  z-index: 10;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes 흔들확대 {
+  0% {
+    transform: scale(1.2);
+  }
+  30% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+
+.alertScore {
+  position: absolute;
+  top: 0;
+  width:100px;
+  height: 100px;
+  /* background-color: #30668A; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alertScore img{
+  width: 100px;
+  height: 100px;
+}
+
+.timer {
+  font-family: UhBeeSe_hyun;
+  font-size: 32px;
 }

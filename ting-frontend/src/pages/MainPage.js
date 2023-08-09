@@ -13,6 +13,7 @@ import CountdownTimer from "../component/main/CountdownTimer";
 import MainButton from "../component/main/MainButton";
 
 import NavBar from "../component/common/NavBar";
+import FriendButton from "../component/common/FriendButton"
 
 function MainPage() {
   useEffect(() => {
@@ -119,6 +120,9 @@ function MainPage() {
       {/* 어항 이미지 테스트용 시작 */}
       <img className={styles.friendBtn} src={process.env.PUBLIC_URL + '/img/fish bowl.png'}></img>
       {/* 어항 이미지 테스트용 끝 */}
+
+      {/* <FriendButton /> */}
+
       {/*section1 */}
       <div className={styles.wrapper}>
         <div class={styles.snowflake}>
