@@ -3,6 +3,9 @@ import tokenHttp from "../../api/tokenHttp";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import commonStyles from "./ProfileCommon.module.css";
+import styles from "./QnaBoard.module.css";
+
 function QnaDetail() {
   const location = useLocation();
 
@@ -26,7 +29,7 @@ function QnaDetail() {
       }
       else { console.log('문의글이 없습니다.') }
     })
-    .catch(() => console.log("실패"));
+      .catch(() => console.log("실패"));
   };
 
   // 렌더링 시 게시글 불러오기
@@ -35,16 +38,26 @@ function QnaDetail() {
   }, [])
 
   return (
-    <div>
-      <h1>문의 상세</h1>
-      <p>qnaId: { qnaDetail.qnaId }</p>
-      <p>title: { qnaDetail.title }</p>
-      <p>content: { qnaDetail.content }</p>
-      <p>createdTime: { qnaDetail.createdTime }</p>
-      <br/>
-      <p>answer: { qnaDetail.answer }</p>
-      <p>completedTime: { qnaDetail.completedTime }</p>
-    </div>
+    <div className={commonStyles.wrapper}>
+      <div className={styles.detailWrapper}>
+        <table>
+          <tr><th>번호</th> <td>{qnaDetail.qnaId}</td></tr>
+          <tr><th>제목</th> <td>{qnaDetail.title}</td></tr>
+          <tr><th>작성시간</th> <td>{qnaDetail.createdTime}</td></tr>
+          <tr><th>내용</th> <td>{qnaDetail.content}</td></tr>
+        </table>
+      </div>
+      <br />
+      {qnaDetail.answer ?
+        <div className={styles.detailWrapper}>
+          <h4>답변({qnaDetail.completedTime})</h4>
+          <div className={styles.answerDiv}>{qnaDetail.answer}답변답변</div>
+        </div> :
+        <div className={styles.detailWrapper}>
+          <h4>아직 답변이 등록되지 않았습니다.</h4>
+        </div>
+      }
+    </div >
   )
 }
 

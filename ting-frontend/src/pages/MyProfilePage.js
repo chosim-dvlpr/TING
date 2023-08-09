@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { getCurrentUserdata } from "../redux/userdata";
 
 
-function MyProfilePage(){
+function MyProfilePage() {
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   let dispatch = useDispatch();
@@ -28,18 +28,15 @@ function MyProfilePage(){
     });
   })
 
-  return(
+  return (
     <div className={styles.outer}>
-      <NavBar/>
-      <h1>여기는 프로필 페이지</h1>
-      
-      <hr />
-      <button onClick={() => setIsModalOpened(true)}>채팅 목록 버튼</button>
+      <NavBar />
+      {/* <button onClick={() => setIsModalOpened(true)}>채팅 목록 버튼</button>
       {
         isModalOpened &&
         <Friend onSearch={setIsModalOpened} />
       }
-      <hr />
+      <hr /> */}
       <div className={styles.container}>
         <ProfileHeader />
         <div className={styles.innerContainer}>
