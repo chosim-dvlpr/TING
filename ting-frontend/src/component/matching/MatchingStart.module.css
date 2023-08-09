@@ -84,7 +84,10 @@ p{
 }
 
 .cardContent {
+  margin: 10px;
   z-index: 1;
+  font-family: UhBeeSe_hyun;
+  font-size: 20px;
 }
 
 
@@ -165,3 +168,24 @@ p{
   }
 }
 
+
+.alertScore {
+  position: absolute;
+  top: 0;
+  width:100px;
+  height: 100px;
+  /* background-color: #30668A; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alertScore img{
+  width: 100px;
+  height: 100px;
+}
+
+.timer {
+  font-family: UhBeeSe_hyun;
+  font-size: 32px;
+}

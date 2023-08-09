@@ -25,8 +25,8 @@ function MatchingStart() {
   const navigate = useNavigate();
 
   //  점수 알림창 관련 state
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [showScoreMessage, setShowScoreMessage] = useState(false);
+  const [alertScore, setAlertScore] = useState("");
 
   // timerBar 관련 state
   const [count, setCount] = useState(0);
@@ -90,7 +90,7 @@ function MatchingStart() {
       // questionNumber 바로 안바뀌게 잠시 시간 텀 줌
       setTimeout(()=>{
         dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
-      },1000)
+      },2000)
     }
   }, [myScore, yourScore]);
 
@@ -108,6 +108,7 @@ function MatchingStart() {
     if (count === -1) {
       clearInterval(timer);
       setCount(30);
+      
       // 타임이 끝나면 5점을 자동으로 상대에게 전달
 
       // 이미 점수를 선택했다면 상대에게 점수를 전송하지 않음
@@ -140,7 +141,6 @@ function MatchingStart() {
     setDisableHover([false, false, false, false, false, false, false, false, false, false, false]);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
-      // 3초의 딜레이
       setCount(30);
     }
     if (questionNumber === 11) {
@@ -253,10 +253,10 @@ function MatchingStart() {
       dispatch(setYourScore(data.score));
 
       // 경고창 자동 삭제
-      setAlertMessage(data.score + "점");
-      setShowAlert(true);
+      setAlertScore(data.score + "점");
+      setShowScoreMessage(true);
       setTimeout(() => {
-        setShowAlert(false);
+        setShowScoreMessage(false);
       }, 2000);
     });
 
@@ -355,7 +355,17 @@ function MatchingStart() {
 
   return (
     <div className={`${styles.container}`}>
-      {showAlert && <div>{alertMessage}</div>}
+
+      <div>
+        <h3 className={styles.timer}>{count}</h3>
+      </div>
+      { questionNumber>0 && questionNumber<11 && showScoreMessage &&
+          <div className={styles.alertScore}>
+            <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`}/>
+            <span className={styles.ScoreText}>{alertScore}</span>
+          </div>
+      }
+
       <div id="session-header" className={styles.sessionHeader}>
         <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
       </div>
@@ -370,6 +380,7 @@ function MatchingStart() {
         </div>
         {/* 질문 카드 -- end */}
 
+        {/* 비디오 화면 */}
         <div className={styles.videoContainer}>
 
           <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
@@ -384,9 +395,6 @@ function MatchingStart() {
       </div>
       
       <div className="wrapper">
-      <div>
-        <h3>{count}</h3>
-      </div>
       {/* 점수 체크판 -- start */}
       {/* <ScoreCheck></ScoreCheck> */}
       { showMatchingChoiceModal ? null : (
@@ -427,7 +435,6 @@ function MatchingStart() {
                     >
                       {score}
                     </button>
-                    <span className={styles.dot}></span>
                   </div>
                 );
               })}
@@ -447,9 +454,6 @@ function MatchingStart() {
     </div>
   );
 }
-
-
-
 
 
 export default MatchingStart;
