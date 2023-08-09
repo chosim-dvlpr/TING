@@ -1,5 +1,7 @@
 .friendContainer {
-
+  bottom: 20px;
+  right: 20px;
+  z-index: 200;
 }
 
 .button {
@@ -10,6 +12,7 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
+  z-index: 200;
 }
 
 .hide {
@@ -22,10 +25,12 @@
   background-color: white;
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  right: 120px;
+  z-index: 200;
+  overflow-y: scroll;
 }
 
-.friendContainer {
+.profileContainer {
   width: 360px;
   height: 600px;
   background-color: white;
