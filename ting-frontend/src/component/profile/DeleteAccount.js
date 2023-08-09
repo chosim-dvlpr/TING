@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/userdata";
 
+import commonStyles from "./ProfileCommon.module.css";
+
 function DeleteAccount() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkData, setCheckData] = useState([false, false]);
   let userdata = useSelector((state) => state.userdataReducer.userdata);
- 
+
   let Navigate = useNavigate();
   let dispatch = useDispatch();
 
@@ -18,11 +20,11 @@ function DeleteAccount() {
     let data = {
       password: password
     };
-  
+
     try {
       const response = await tokenHttp.post('/user/check', data);
       console.log('비밀번호 불러오기', response);
-  
+
       if (response.data.code === 200) {
         console.log('불러오기 성공');
         // 비밀번호 일치 시
@@ -48,7 +50,7 @@ function DeleteAccount() {
       return false;
     }
   };
-  
+
 
   // 입력한 이메일과 비밀번호가 일치한지 확인
   const checkUserInput = async () => {
@@ -58,7 +60,7 @@ function DeleteAccount() {
 
     if (isEmailValid && isPasswordValid) {
       console.log('회원 탈퇴 axios 실행')
-      checkUserAxios();
+      if (window.confirm('탈퇴하시겠습니까?')) checkUserAxios();
     }
     else {
       console.log('유효한 이메일과 비밀번호 입력바람');
@@ -88,16 +90,15 @@ function DeleteAccount() {
   }
 
   return (
-    <div>
-      <h1>회원 탈퇴</h1>
+    <div className={commonStyles.wrapper}>
       <p>이메일과 비밀번호를 확인해주세요.</p>
-      <label htmlFor='email'>이메일 확인</label>
-      <input type="text" id="email" onChange={(e) => setEmail(e.target.value)}></input>
-
-      <label htmlFor='password'>비밀번호 확인</label>
-      <input type="password" id="password" onChange={(e) => setPassword(e.target.value)}></input>
-
-      <button type="submit" onClick={() => checkUserInput()}>회원 탈퇴</button>
+      {/* <label className={commonStyles.label} htmlFor='email'>이메일</label> */}
+      <input className={commonStyles.input} type="text" id="email" placeholder="이메일" onChange={(e) => setEmail(e.target.value)}></input>
+      <br></br>
+      {/* <label className={commonStyles.label} htmlFor='password'>비밀번호</label> */}
+      <input className={commonStyles.input} type="password" id="password" placeholder="비밀번호" onChange={(e) => setPassword(e.target.value)}></input>
+      <br></br>
+      <button className={commonStyles.btn} type="submit" onClick={() => checkUserInput()}>회원 탈퇴</button>
     </div>
   )
 }

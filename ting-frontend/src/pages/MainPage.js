@@ -117,7 +117,12 @@ function MainPage() {
   return (
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
+      {/* 어항 이미지 테스트용 시작 */}
+      <img className={styles.friendBtn} src={process.env.PUBLIC_URL + '/img/fish bowl.png'}></img>
+      {/* 어항 이미지 테스트용 끝 */}
+
       {/* <FriendButton /> */}
+
       {/*section1 */}
       <div className={styles.wrapper}>
         <div class={styles.snowflake}>

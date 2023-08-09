@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tokenHttp from '../../api/tokenHttp';
 
+import commonStyles from "./ProfileCommon.module.css";
+import styles from "./QnaBoard.module.css";
+
 function QnaCreate() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [user, setUser] = useState(null);
 
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,7 +51,7 @@ function QnaCreate() {
       } else if (response.status === 403) {
         console.log('권한 없음')
       } else {
-      throw new Error('Failed to save the post');
+        throw new Error('Failed to save the post');
       }
     } catch (error) {
       console.error('Error saving the post:', error);
@@ -56,12 +59,12 @@ function QnaCreate() {
   };
 
   return (
-    <div>
-      <h1>문의 작성하기</h1>
-      
-      <form onSubmit={handleSubmit}>
+    <div className={commonStyles.wrapper}>
+      <h1 className={commonStyles.title}>문의 작성하기</h1>
+
+      <form className={styles.formWrapper} onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="title">
+          <label className={commonStyles.label} htmlFor="title">
             제목
           </label>
           <input
@@ -72,8 +75,8 @@ function QnaCreate() {
             required
           />
         </div>
-        <div>
-          <label htmlFor="content">
+        <div className={styles.textareaWrapper}>
+          <label className={commonStyles.label} htmlFor="content">
             내용
           </label>
           <textarea
@@ -84,7 +87,7 @@ function QnaCreate() {
           />
         </div>
         <div>
-          <button type="submit">
+          <button className={commonStyles.btn} type="submit">
             저장
           </button>
         </div>

@@ -11,20 +11,20 @@ body {
 }
 
 .logo {
-  height:60px;
+  height: 60px;
 }
 
 .navMenu {
   margin-left: 64px;
   font-size: 16px;
   font-weight: 500;
-  width:64px;
+  width: 64px;
   text-decoration: none;
   color: #888888;
 }
 
 .navLeft {
-  margin-left:150px;
+  margin-left: 150px;
 }
 
 .navRight {
@@ -33,7 +33,7 @@ body {
 }
 
 .mainNav {
-  width:100%;
+  width: 100%;
   height: 60px;
   display: flex;
   background-color: #fee5ef;
@@ -43,10 +43,8 @@ body {
 .App {
   position: absolute;
   text-align: center;
-  background-image: linear-gradient(
-    rgba(216, 253, 251, 0.2),
-    rgba(0, 131, 159, 0.5)
-  );
+  background-image: linear-gradient(rgba(216, 253, 251, 0.2),
+      rgba(0, 131, 159, 0.5));
   background-size: cover;
   margin: 0;
   padding: 0;
@@ -85,6 +83,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

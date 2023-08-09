@@ -5,8 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 
 import Pagination from "../community/common/Pagination";
-import SearchBar from "../community/common/SearchBar";
 import tokenHttp from "../../api/tokenHttp";
+
+import commonStyles from "./ProfileCommon.module.css"
+import styles from "./MyArticle.module.css";
 
 function MyArticleIssue() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +25,7 @@ function MyArticleIssue() {
       item: "nickname",
       keyword: userdata.nickname,
     }
-    
+
     tokenHttp.get('/issue/search', { params: params }).then((response) => {
       // console.log(response)
       if (response.data.code === 200) {
@@ -39,7 +41,7 @@ function MyArticleIssue() {
       }
       // else { console.log('문의글이 없습니다.') }
     })
-    .catch(() => console.log("실패"));
+      .catch(() => console.log("실패"));
   };
 
   useEffect(() => {
@@ -55,52 +57,40 @@ function MyArticleIssue() {
   };
 
   return (
-    <div>
-      <h1>내가 쓴 논쟁 게시글</h1>
-      <h3>게시글 제목을 누르면 해당 페이지로 이동</h3>
+    <div className={styles.innerWrapper}>
+      <h3>게시글 제목을 누르면 해당 페이지로 이동합니다.</h3>
       <table>
         <thead>
           <tr>
-            <th>게시글 Id</th>
-            <th>Title</th>
-            <th>hit</th>
-            <th>createdTime</th>
+            <th>번호</th>
+            <th>제목</th>
+            <th>조회수</th>
+            <th>작성시간</th>
           </tr>
         </thead>
 
         <tbody>
           {
-            myIssueArticleList ?
-            myIssueArticleList.map((article, i) => (
-              <tr key={i}>
-                <td>{ article.issueId }</td>
-                <td onClick={() => navigate(`/community/issue/detail/${article.issueId}`)}>{ article.title }</td>
-                <td>{ article.hit }</td>
-                <td>{ article.createdTime }</td>
-              </tr>
-            ))
-            : <p>작성된 게시글이 없다!</p>
+            myIssueArticleList > 0 ?
+              myIssueArticleList.map((article, i) => (
+                <tr key={i}>
+                  <td>{article.issueId}</td>
+                  <td className={commonStyles.clickable} onClick={() => navigate(`/community/issue/detail/${article.issueId}`)}>{article.title}</td>
+                  <td>{article.hit}</td>
+                  <td>{article.createdTime}</td>
+                </tr>
+              ))
+              : <tr><td colSpan={4}>작성한 게시글이 없습니다.</td></tr>
           }
-          <tr>
-            <td></td>
-          </tr>
         </tbody>
       </table>
 
-
-
-
       <div>
-
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
-
-    
-      {/* <SearchBar onSearch={handleSearch} /> */}
       </div>
     </div>
   )
