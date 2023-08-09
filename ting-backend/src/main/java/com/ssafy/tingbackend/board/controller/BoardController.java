@@ -68,8 +68,8 @@ public class BoardController {
      * @return 상담 상세 정보
      */
     @GetMapping("/advice/{adviceId}")
-    public DataResponse<AdviceBoardDto.Response> detailAdvice(@PathVariable Long adviceId) {
-        AdviceBoardDto.Response adviceBoardResponse = boardService.adviceDetail(adviceId);
+    public DataResponse<AdviceBoardDto.DetailResponse> detailAdvice(@PathVariable Long adviceId) {
+        AdviceBoardDto.DetailResponse adviceBoardResponse = boardService.adviceDetail(adviceId);
         return new DataResponse<>(200, "상담글 상세 조회 성공", adviceBoardResponse);
     }
 
