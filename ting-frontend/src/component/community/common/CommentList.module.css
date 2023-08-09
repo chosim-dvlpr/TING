@@ -5,8 +5,14 @@
     border-radius: 10px;
     background: #f2f2f2;
     box-shadow: 10px 10px 20px #d9d9d9, -10px -10px 20px #ffffff;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    width: 100%;
   }
   
   .comment-container p {
@@ -14,10 +20,12 @@
   }
   
   .comment-container button {
-    margin-right: 10px;
     padding: 5px 10px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    background-color: #fae6e8;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
   }
   
   .comment-container textarea {
@@ -26,18 +34,23 @@
     resize: none;
     border-radius: 5px;
     padding: 5px;
-    margin-bottom: 10px;
   }
   
   .comment-details {
     display: flex;
     justify-content: center;
   }
-  
-  .comment-details p {
-    margin-right: 20px;
+
+  .comment-details textarea {
+    height: 40px;
+    width: 690px;
   }
   
+  .comment-details button {
+    width: 60px;
+    margin: 0 10px;
+  }
+
   /* 좋아요 버튼 스타일 */
   .like-button {
     background-color: #f2f2f2;
@@ -70,31 +83,34 @@
     color: #777;
   }
 
+  .comment * {
+    margin: 0 5px;
+  }
 
   /*comment 내부 부분*/
   /* styles.module.css */
-
-
   
   .nickname {
     font-weight: bold;
+    width: 120px;
   }
   
   .comment-content {
-    margin-top: 5px;
+    width: 320px;
+    text-align: left;
   }
   
   .comment-like-button {
-    margin-top: 10px;
+    width: 100px;
   }
   
   .comment-time {
-    margin-top: 5px;
+    width: 160px;
   }
   
   .edit-button,
   .delete-button {
-    margin-top: 10px;
     cursor: pointer;
+    width: 60px;
   }
   

@@ -41,18 +41,18 @@ body {
 }
 
 .App {
+  position: absolute;
   text-align: center;
   background-image: linear-gradient(
     rgba(216, 253, 251, 0.2),
-    /* rgb(216, 253, 251), */
-    /* rgba(254, 104, 160, 0.5), */
     rgba(0, 131, 159, 0.5)
   );
-  /* url("../public/img/main_background_2_zip.webp"); */
   background-size: cover;
   margin: 0;
   padding: 0;
   min-width: 1500px;
+  width: 100%;
+  height: auto;
 }
 
 .App-logo {
