@@ -71,7 +71,6 @@ function CommentCreate({
   return (
     <div className={styles["comment-form"]}>
       <form onSubmit={handleSubmit}>
-        <div>
           <label htmlFor="comment"></label>
           <input
             type="text"
@@ -81,12 +80,9 @@ function CommentCreate({
             onChange={(e) => setComment(e.target.value)}
             className={styles["comment-input"]}
           />
-        </div>
-        <div>
           <button type="submit" className={styles["comment-button"]}>
             저장
           </button>
-        </div>
       </form>
     </div>
   );
