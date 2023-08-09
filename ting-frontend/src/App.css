@@ -41,6 +41,7 @@ body {
 }
 
 .App {
+  position: absolute;
   text-align: center;
   background-image: linear-gradient(
     rgba(216, 253, 251, 0.2),
@@ -50,6 +51,8 @@ body {
   margin: 0;
   padding: 0;
   min-width: 1500px;
+  width: 100%;
+  height: auto;
 }
 
 .App-logo {

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import tokenHttp from "../../api/tokenHttp";
+import { getCurrentUserdata } from "../../redux/userdata";
 
 import styles from "./NavBar.module.css";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -34,7 +36,19 @@ const NavBar = () => {
     localStorage.removeItem("refresh-token"); // localStorage의 refresh-token 삭제
     dispatch(logout()); // redux의 user 정보 삭제
     setDropdown(false);
+    navigate("/"); // 로그인 완료되면 메인으로 이동
   };
+
+  const handleMypage = () => {
+    // 유저 데이터 redux에 저장
+    tokenHttp.get("/user").then((response) => {
+      dispatch(getCurrentUserdata(response.data.data));
+      localStorage.setItem("userId", response.data.data.userId);
+    });
+
+    navigate("/mypage"); 
+    setDropdown(false)
+  }
 
   const openClam = e => {
     e.target.src = process.env.PUBLIC_URL + '/img/조개.png';
@@ -82,7 +96,7 @@ const NavBar = () => {
             <div><span className={styles.nickname}>{userData.nickname}</span>님</div>
             {dropdown ? (
               <Dropdown.Menu show>
-                <Dropdown.Item eventKey="1" onClick={() => {navigate("/mypage"); setDropdown(false)}}>Mypage</Dropdown.Item>
+                <Dropdown.Item eventKey="1" onClick={handleMypage}>Mypage</Dropdown.Item>
                 <Dropdown.Item eventKey="2" onClick={() => {navigate("/item/shop"); setDropdown(false)}}>아이템샵</Dropdown.Item>
                 <Dropdown.Item eventKey="3" onClick={handleLogout}>로그아웃</Dropdown.Item>
               </Dropdown.Menu>
