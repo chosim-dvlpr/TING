@@ -74,7 +74,7 @@ function AdviceDetail() {
 
   return (
     <div>
-      {/* <NavBar /> */}
+      <NavBar />
       <div className={styles.adviceDetailContainer}>
         <h1>{advice.title}</h1>
         <p>Content: {advice.content}</p>

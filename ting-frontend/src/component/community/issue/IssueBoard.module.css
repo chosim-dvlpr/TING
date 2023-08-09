@@ -1,18 +1,37 @@
 .issueBoardContainer {
+  margin: 0 auto;
+  background-color: white;
+  width: 80%;
+  min-width: 1200px;
+  height: 1000pxs;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
 }
 
 .createButton {
-  margin-bottom: 20px;
+  width: 120px;
+  height: 50px;
+  padding: 8px 16px;
+  background-color: rgb(0, 131, 159);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 15px;
+  /* margin: 10px; */
+}
+
+.createButton:hover {
+  background-color: #0056b3;
 }
 
 .cardList {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 800px; /* 최대 너비 설정 (필요한 경우 조정) */
+  max-width: 800px; 
   margin: 0 auto;
 }
 
