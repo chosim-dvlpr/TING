@@ -95,7 +95,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar/>
+      {/* <NavBar/> */}
     
       <Routes>
         {/* 네비게이션 바 */}

@@ -83,7 +83,7 @@ function IssueDetail() {
 
   return (
     <div>
-      {/* <NavBar/> */}
+      <NavBar/>
     <div className={styles.issueDetailContainer}>
       
       <h1>{issue.title}</h1>

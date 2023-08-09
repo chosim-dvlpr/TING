@@ -104,7 +104,7 @@ function IssueBoard() {
 
   return (
     <div>
-      {/* <NavBar/> */}
+      <NavBar/>
       <Sidebar />
       <div className={styles.cardList}>
         {searchResult.length > 0

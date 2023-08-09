@@ -10,7 +10,7 @@ function ItemPage(){
 
   return(
     <div>
-    {/* <NavBar/> */}
+    <NavBar/>
     <div className={styles.ItemContainer}>
       {/* <NavBar/> */}
       <ItemSideBar/>
