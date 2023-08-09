@@ -5,6 +5,9 @@ import styles from "./AdviceUpdate.module.css";
 import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import NavBar from "../../common/NavBar";
+import Sidebar from "../common/Sidebar";
+import adviceStyles from "./AdviceBoard.module.css";
+
 
 function AdviceUpdate() {
   const { adviceId } = useParams(); 
@@ -58,11 +61,15 @@ function AdviceUpdate() {
   return (
     <div>
     {/* <NavBar/> */}
-    <div className={styles.adviceUpdateContainer}>
-     
+    <div className={adviceStyles.adviceBoardBackground}>
+      <NavBar />
+      <div className={adviceStyles.adviceBoardContainer}>
+        <Sidebar />
+    <div className={styles.adviceUpdateContainer}>   
       <h2>글 수정</h2>
-      <div>
-        <label htmlFor="title">제목:</label>
+      <div className={styles.updateTop}>
+        제목  | 
+        {/* <label htmlFor="title">제목:</label> */}
         <input
           type="text"
           id="title"
@@ -70,15 +77,17 @@ function AdviceUpdate() {
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <div>
-        <label htmlFor="content">내용:</label>
+      <div className={styles.updateContent}>
+        {/* <label htmlFor="content">내용:</label> */}
         <textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
       </div>
-      <button onClick={handleUpdate}>수정 완료</button>
+      <button onClick={handleUpdate}>저장</button>
+    </div>
+    </div>
     </div>
     </div> 
   );
