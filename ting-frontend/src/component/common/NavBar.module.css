@@ -1,0 +1,103 @@
+@font-face {
+  font-family: 'HANAMDAUM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/HANAMDAUM.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.mainNav {
+  width: 120px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  /* background-color: #fee5ef; */
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+}
+
+.logo {
+  height: 70px;
+  margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-left: 100px; */
+}
+
+.navMenu {
+  cursor: pointer;
+  /* margin-left: 64px; */
+  font-size: 40px;
+  font-weight: 700;
+  width: 120px;
+  text-decoration: none;
+  /* color: #888888; */
+  font-family: 'UhBeeSe_hyun';
+  color: black;
+  position: relative;
+}
+
+.menuItem,
+.profileImage {
+  height: 70px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.menuName {
+  font-family: 'UhBeeSe_hyun';
+  font-size: 16px;
+  font-weight: 100;
+  width: 100%;
+  /* margin: 0 5px; */
+  padding: 3px 0;
+  display: none;
+  background-color: rgba(245, 245, 245, 0.6);
+  border-radius: 7px;
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  font-weight: 600;
+  z-index: 1002;
+}
+
+/* .menuItem:hover {
+  visibility: hidden;
+} */
+.menuItem:hover + .menuName {
+  display: inline-block;
+}
+
+.navLeft {
+  margin-top: 20px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.navRight {
+  /* margin-left: auto;
+  margin-right: 150px; */
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .profileImage {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+} */
+
+.nickname {
+  color: #2572cf;
+}

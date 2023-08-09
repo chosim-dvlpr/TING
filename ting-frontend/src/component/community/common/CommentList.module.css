@@ -1,0 +1,116 @@
+/* CommentList.module.css */
+
+/* 공통 스타일 */
+.comment-container {
+    border-radius: 10px;
+    background: #f2f2f2;
+    box-shadow: 10px 10px 20px #d9d9d9, -10px -10px 20px #ffffff;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .comment-container p {
+    margin: 0;
+  }
+  
+  .comment-container button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fae6e8;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+  }
+  
+  .comment-container textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .comment-details {
+    display: flex;
+    justify-content: center;
+  }
+
+  .comment-details textarea {
+    height: 40px;
+    width: 690px;
+  }
+  
+  .comment-details button {
+    width: 60px;
+    margin: 0 10px;
+  }
+
+  /* 좋아요 버튼 스타일 */
+  .like-button {
+    background-color: #f2f2f2;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .like-button.active {
+    background-color: #4285f4; /* 좋아요 활성화 시 색상 변경 */
+    color: #fff;
+    box-shadow: none;
+  }
+  
+  /* 삭제 여부 스타일 */
+  .removed-status {
+    color: #ff5252;
+  }
+  
+  /* 수정 시간 없음 스타일 */
+  .no-modified-time {
+    color: #777;
+  }
+
+  .comment * {
+    margin: 0 5px;
+  }
+
+  /*comment 내부 부분*/
+  /* styles.module.css */
+  
+  .nickname {
+    font-weight: bold;
+    width: 120px;
+  }
+  
+  .comment-content {
+    width: 320px;
+    text-align: left;
+  }
+  
+  .comment-like-button {
+    width: 100px;
+  }
+  
+  .comment-time {
+    width: 160px;
+  }
+  
+  .edit-button,
+  .delete-button {
+    cursor: pointer;
+    width: 60px;
+  }
+  

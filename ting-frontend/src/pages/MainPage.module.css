@@ -1,0 +1,425 @@
+/*메인 비트비트 폰트*/
+/* @font-face{
+  font-family:'bitbit';
+  src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
+}  */
+
+@font-face {
+  font-family: 'PFStardust';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/PFStardust.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HANAMDAUM';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/HANAMDAUM.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+body {
+  margin: 0;
+  /* overflow-y: hidden; */
+}
+
+.outer {
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  /* background-color: #FEE5EF; */
+
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.down {
+  margin-left: 20%;
+  position: absolute;
+  bottom: 5vh;
+  font-family: "UhBeeSe_hyun";
+  font-size: 44px;
+  color: #686969;
+  display: flex;
+  align-items: center;
+  /* animation: down-ani 1s infinite linear alternate; */
+  opacity: 0.8;
+  z-index: 100;
+}
+
+.down span {
+  font-family: "UhBeeSe_hyun";
+  font-size: 20px;
+  display: inline-block;
+}
+
+@keyframes down-ani {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-10px);
+  }
+}
+
+
+.backgroundFish {
+  position: absolute;
+  opacity: 0.65;
+}
+
+#backgroundFish1 {
+  top: 60vh;
+  left: 25vh;
+  rotate: 10deg;
+}
+
+#backgroundFish2 {
+  top: 5vh;
+  right: 15vh;
+  rotate: 145deg;
+  transform: scaleY(-1);
+}
+
+.backgroundFish img {
+  height: 37vh;
+}
+
+.section1textbox {
+  max-width: 40%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.section1textbox * {
+  font-family: "UhBeeSe_hyun";
+  /* font-family: "HANAMDAUM"; */
+  font-weight: 700;
+  z-index: 100;
+}
+
+.section1textbox h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+#textDeco {
+  animation: layerize cubic-bezier(0.4, 0, 0.2, 1) 1000ms 100ms infinite alternate;
+  opacity: 0;
+  width: 100%;
+  color: #FF665E;
+  user-select: none;
+  text-align: center;
+}
+
+@keyframes layerize {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+    text-shadow: 0 0 transparent, 0em 0em rgba(255, 179, 158, 0.4), 0em 0em rgba(255, 179, 158, 0.3), 0em 0em rgba(255, 179, 158, 0.2), 0em 0em rgba(255, 179, 158, 0.1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-0.066666em, -0.066666em);
+    text-shadow: 0 0 transparent, 0.033333em 0.033333em rgba(255, 179, 158, 0.4), 0.066666em 0.066666em rgba(255, 179, 158, 0.3), 0.099999em 0.099999em rgba(255, 179, 158, 0.2), 0.133332em 0.133332em rgba(255, 179, 158, 0.1);
+  }
+}
+
+.section1imgbox {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  /* margin-left: 10px; */
+  /* margin-top: 100px; */
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+@keyframes img-ani {
+  50% {
+    transform: rotate(5deg);
+  }
+
+  /* 50% { transform: rotate(0); } */
+  100% {
+    transform: rotate(-5deg);
+  }
+
+  /* 100% { transform: rotate(0); } */
+}
+
+.section1imgbox img {
+  width: 300px;
+  animation: img-ani 2s infinite alternate-reverse;
+}
+
+/* customizable snowflake styling */
+.snowflake img {
+  /* color: #fff;
+  font-size: 1em;
+  text-shadow: 0 0 1px #000; */
+  height: 80px;
+}
+
+/* 하트 날리는 효과 시작 */
+@-webkit-keyframes snowflakes-fall {
+  0% {
+    top: -10%
+  }
+
+  100% {
+    top: 90%
+  }
+}
+
+@-webkit-keyframes snowflakes-shake {
+  0% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px)
+  }
+
+  50% {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px)
+  }
+
+  100% {
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px)
+  }
+}
+
+@keyframes snowflakes-fall {
+  0% {
+    top: -10%
+  }
+
+  100% {
+    top: 90%
+  }
+}
+
+@keyframes snowflakes-shake {
+  0% {
+    transform: translateX(0px)
+  }
+
+  50% {
+    transform: translateX(20px)
+  }
+
+  100% {
+    transform: translateX(0px)
+  }
+}
+
+.snowflake {
+  /* width: 100%; */
+  position: absolute;
+  top: -10%;
+  /* z-index:9999; */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  -webkit-animation-name: snowflakes-fall, snowflakes-shake;
+  -webkit-animation-duration: 10s, 3s;
+  -webkit-animation-timing-function: linear, ease-in-out;
+  -webkit-animation-iteration-count: infinite, infinite;
+  -webkit-animation-play-state: running, running;
+  animation-name: snowflakes-fall, snowflakes-shake;
+  animation-duration: 10s, 3s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running
+}
+
+.snowflake:nth-of-type(0) {
+  left: 1%;
+  -webkit-animation-delay: 0s, 0s;
+  animation-delay: 0s, 0s
+}
+
+.snowflake:nth-of-type(1) {
+  left: 10%;
+  -webkit-animation-delay: 1s, 1s;
+  animation-delay: 1s, 1s
+}
+
+.snowflake:nth-of-type(2) {
+  left: 20%;
+  -webkit-animation-delay: 6s, .5s;
+  animation-delay: 6s, .5s
+}
+
+.snowflake:nth-of-type(3) {
+  left: 30%;
+  -webkit-animation-delay: 4s, 2s;
+  animation-delay: 4s, 2s
+}
+
+.snowflake:nth-of-type(4) {
+  left: 40%;
+  -webkit-animation-delay: 2s, 2s;
+  animation-delay: 2s, 2s
+}
+
+.snowflake:nth-of-type(5) {
+  left: 50%;
+  -webkit-animation-delay: 8s, 3s;
+  animation-delay: 8s, 3s
+}
+
+.snowflake:nth-of-type(6) {
+  left: 60%;
+  -webkit-animation-delay: 6s, 2s;
+  animation-delay: 6s, 2s
+}
+
+.snowflake:nth-of-type(7) {
+  left: 70%;
+  -webkit-animation-delay: 2.5s, 1s;
+  animation-delay: 2.5s, 1s
+}
+
+.snowflake:nth-of-type(8) {
+  left: 80%;
+  -webkit-animation-delay: 1s, 0s;
+  animation-delay: 1s, 0s
+}
+
+.snowflake:nth-of-type(9) {
+  left: 90%;
+  -webkit-animation-delay: 3s, 1.5s;
+  animation-delay: 3s, 1.5s
+}
+
+/* 하트 날리는 효과 끝 */
+
+/*section2*/
+.section2imgbox {
+  width: 300px;
+  display: flex;
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.section2textbox {
+  font-family: "UhBeeSe_hyun";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 50px;
+
+}
+
+.section2textbox h2 {
+  font-family: "UhBeeSe_hyun";
+}
+
+/*section3*/
+.section3imgbox1 {
+  width: 200px;
+  display: flex;
+  margin-top: 20px;
+  animation: img-ani 2s infinite alternate;
+}
+
+.section3imgbox2 {
+  width: 180px;
+  display: flex;
+  margin-top: 20px;
+  margin-right: 100px;
+  animation: img-ani 2s infinite alternate;
+}
+
+/*section4*/
+@keyframes scale-ani {
+  50% {
+    transform: scale(0.9);
+  }
+
+  /* 50% { transform: rotate(0); } */
+  100% {
+    transform: scale(1.0);
+  }
+
+  /* 100% { transform: rotate(0); } */
+}
+
+.section4imgbox {
+  width: 300px;
+  display: flex;
+  margin-top: 20px;
+  margin-left: 100px;
+  animation: scale-ani 2s infinite alternate;
+}
+
+
+/*section5*/
+@keyframes skew-ani {
+  25% {
+    transform: skew(-3deg, 5deg);
+  }
+
+  /* 50% { transform: skewX(0); } */
+  70% {
+    transform: skewX(3deg, -5deg);
+  }
+
+  /* 100% { transform: skewX(0); } */
+}
+
+.section5imgbox {
+  width: 200px;
+  display: flex;
+  margin-top: 20px;
+  /* margin-right:50px; */
+  animation: skew-ani 2s infinite alternate;
+}
+
+.section5textbox {
+  font-family: "UhBeeSe_hyun";
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 50px;
+
+}
+
+.section5textbox h1 {
+  font-family: "UhBeeSe_hyun";
+}
+
+/* 어항 버튼 테스트 */
+.friendBtn {
+  position: fixed;
+  height: 100px;
+  bottom: 50px;
+  right: 50px;
+}

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { setPassword } from "../../redux/signup";
 import { useDispatch } from "react-redux";
+
+import styles from './SignupCommon.module.css';
 
 function Password() {
   let Navigate = useNavigate();
@@ -12,6 +14,9 @@ function Password() {
   let [isButtonDisabled, setIsButtonDisabled] = useState(true); // 버튼 활성화 여부
 
   let dispatch = useDispatch();
+
+  const checkPwdMsgP = useRef();
+  const confirmPwdMsgP = useRef();
   
   // 비밀번호 형식 확인
   useEffect(() => {
@@ -19,9 +24,11 @@ function Password() {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (!passwordRegex.test(inputPassword)) {
       setCheckPasswordMsg("비밀번호가 형식에 맞지 않습니다.");
+      checkPwdMsgP.current.className = styles.wrongMsg;
     }
     else {
       setCheckPasswordMsg("안전한 비밀번호입니다.");
+      checkPwdMsgP.current.className = styles.rightMsg;
     } 
   }, [inputPassword])
 
@@ -30,9 +37,11 @@ function Password() {
     if (inputPassword && inputPassword === inputPasswordCheck) {
       setConfirmPasswordMsg("비밀번호가 일치합니다.");
       setIsButtonDisabled(false); // 일치하면 다음 버튼 활성화
+      confirmPwdMsgP.current.className = styles.rightMsg;
     }
     else {
       setConfirmPasswordMsg("비밀번호가 일치하지 않습니다.");
+      confirmPwdMsgP.current.className = styles.wrongMsg;
     }
   }, [inputPassword, inputPasswordCheck])
 
@@ -42,20 +51,23 @@ function Password() {
   };
 
   return(
-        <div>
-          <label htmlFor='password'>비밀번호를 입력해주세요</label>
-          <br/>
-          <input type="password" id="password" onChange={(e) => setInputPassword(e.target.value)} placeholder="비밀번호"/>
-          <p>영문/숫자/특수문자 모두 포함, 8자 이상</p>
-          <p>{ checkPasswordMsg }</p>
-          <input type="password" id="passwordCheck" onChange={(e) => setInputPasswordCheck(e.target.value)} placeholder="비밀번호 확인"/>
-          <p>{ confirmPasswordMsg }</p>
-          <button onClick={()=>{
-            Navigate("/signup/phonenum");
-            storePassword();
-          }} disabled={isButtonDisabled}>다음</button>
-        </div>
-    )
+    <div className={styles.wrapper}>
+      <label className={styles.label} htmlFor='password'>비밀번호를 입력해주세요</label>
+      <br/>
+      <input className={styles.input} type="password" id="password" onChange={(e) => setInputPassword(e.target.value)} placeholder="비밀번호"/>
+      <p>영문/숫자/특수문자 모두 포함, 8자 이상</p>
+      <p ref={checkPwdMsgP} className={styles.wrongMsg}>{ checkPasswordMsg }</p>
+      <input className={styles.input} type="password" id="passwordCheck" onChange={(e) => setInputPasswordCheck(e.target.value)} placeholder="비밀번호 확인"/>
+      <p ref={confirmPwdMsgP} className={styles.wrongMsg}>{ confirmPasswordMsg }</p>
+      <button
+        className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
+        onClick={()=>{
+          Navigate("/signup/phonenum");
+          storePassword();
+        }} 
+        disabled={isButtonDisabled}>다음</button>
+    </div>
+  )
 }
 
 

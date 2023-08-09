@@ -1,59 +1,210 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // axios를 import
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 
-import AdvicePostForm from './AdviceCreate'; // AdvicePostForm 컴포넌트 import
-import Pagination from '../common/Pagination';
+import styles from "./AdviceBoard.module.css";
+import Sidebar from "../common/Sidebar";
 
-const AdviceBoard = () => {
-  const [posts, setPosts] = useState([]);
+import Pagination from "../common/Pagination";
+import tokenHttp from "../../../api/tokenHttp";
+import basicHttp from "../../../api/basicHttp";
+import SearchBar from "../common/SearchBar";
+import NavBar from "../../common/NavBar";
+
+function AdviceBoard() {
+  const [adviceList, setAdviceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showPostForm, setShowPostForm] = useState(false); // showPostForm 상태 변수 추가
-  const postsPerPage = 10;
+  const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
+  const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
+
+
+  const boardType = "advice"
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    getAllAdviceData();
+  }, [currentPage]);
 
-  const fetchPosts = async () => {
+  const getAllAdviceData = async () => {
     try {
-      const response = await axios.get('https://jsonplaceholder.typicode.com/posts'); // axios로 GET 요청 보내기
-      setPosts(response.data);
+      const response = await basicHttp.get("/advice", {
+        params: { pageNo: currentPage },
+      });
+      const responseData = response.data.data;
+      console.log(responseData);
+
+      if (responseData.adviceBoardList) {
+        setAdviceList(responseData.adviceBoardList);
+        setTotalPages(responseData.totalPages);
+      }
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error("Error fetching advice data:", error);
+    }
+  };
+
+  const handleLinkClick = (adviceId, event) => {
+    event.preventDefault();
+    console.log("handleLinkClick called");
+    console.log(userdata);
+    if (userdata) {
+      console.log(userdata);
+      navigate(`/community/advice/detail/${adviceId}`);
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
+
+  const handleCreateClick = () => {
+    if (userdata) {
+      navigate("/community/advice/create");
+    } else {
+      alert("로그인이 필요합니다.");
     }
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-  const handleCreatePost = () => {
-    setShowPostForm(true); // "작성하기" 버튼 클릭 시 AdvicePostForm을 보여주도록 상태 변경
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if (isSameDate(boardTime)) {
+      return boardTime.substr(11, 5);
+    } else return boardTime.substr(0, 10);
   };
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return (
+      time.getFullYear() === currentTime.getFullYear() &&
+      time.getMonth() === currentTime.getMonth() &&
+      time.getDate() === currentTime.getDate()
+    );
+  };
+
+  // 케밥 게시글 닉네임과 유저 닉네임 일치하는지
+  const showKebab = (nickname) => {
+    return userdata && userdata.nickname === nickname;
+  };
+
+  // 글 수정
+  const handleUpdate = (adviceId) => {
+    navigate(`/community/advice/update/${adviceId}`);
+  };
+
+  // 글 삭제
+  const handleDelete = async (adviceId) => {
+    try {
+      await tokenHttp.delete(`advice/${adviceId}`);
+      console.log("delete성공");
+      await getAllAdviceData();
+    } catch (error) {
+      console.error("Error deleting advice:", error);
+    }
+  };
+
+  // 검색 기능 추가
+  const [searchResult, setSearchResult] = useState([]);
+
+  const handleSearch = async ({ keyword}) => {
+    try {
+      const response = await tokenHttp.get(`/advice/search/`, {
+        params: {
+          pageNo: currentPage,
+          keyword,
+        },
+      });
+
+      const searchData = response.data.data;
+      setSearchResult(searchData.adviceBoardList);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+  useEffect(() => {
+    console.log("============search Result", searchResult);
+  }, [searchResult]);
 
   return (
-    <div>
-      {/* "작성하기" 버튼을 클릭하면 AdvicePostForm 컴포넌트를 렌더링 */}
-      {showPostForm ? (
-        <AdvicePostForm />
-      ) : (
-        <button onClick={handleCreatePost}>작성하기</button>
-      )}
-
-      {currentPosts.map((post) => (
-        <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>{post.body}</p>
+    <div className={styles.adviceBoardBackground}>
+      <NavBar />
+      <div className={styles.adviceBoardContainer}>
+        <Sidebar />
+        <div className={styles.adviceTopTable}>
+          <SearchBar onSearch={handleSearch} boardType={boardType}/>
+          <button className={styles.createButton} onClick={handleCreateClick}>
+            글 작성하기
+          </button>
         </div>
-      ))}
+        <div>
+          <table className={styles.adviceTable}>
+            {/* <thead>
+              <tr>
+                <th className={styles.table_1}>Id</th>
+                <th className={styles.table_2}>title</th>
+                <th className={styles.table_3}>hit</th>
+                <th className={styles.table_4}>createdTime</th>
+              </tr>
+            </thead> */}
+            <tbody>
+              {(searchResult.length > 0 ? searchResult : adviceList).map(
+                (advice, index) => (
+                  <tr key={advice.adviceId}>
+                    <td className={styles.table_1}>{advice.adviceId}</td>
+                    <td className={styles.table_2}>
+                      <span
+                        className={styles.link}
+                        onClick={(event) =>
+                          handleLinkClick(advice.adviceId, event)
+                        }
+                      >
+                        {advice.title}
+                      </span>
+                    </td>
+                    <td className={styles.table_3}>{advice.hit}</td>
+                    <td className={styles.table_4}>
+                      {advice.modifiedTime === null
+                        ? calculateDate(advice.createdTime)
+                        : `${calculateDate(advice.modifiedTime)} (수정됨)`}
+                    </td>
+                    <td>
+                    {showKebab(advice.nickname) && (
+                        <div className={styles.dropdownContainer}>
+                          <img
+                            src="/img/kebab.png"
+                            alt="kebab"
+                            className={styles.dropdownKebab}
+                          />
+                          <div className={styles.dropdownContent}>
+                            <span onClick={() => handleUpdate(advice.adviceId)}>
+                              Update
+                            </span>
+                            <span onClick={() => handleDelete(advice.adviceId)}>
+                              Delete
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
 
-      <Pagination currentPage={currentPage} totalPages={Math.ceil(posts.length / postsPerPage)} onPageChange={handlePageChange} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </div>
   );
-};
+}
 
 export default AdviceBoard;

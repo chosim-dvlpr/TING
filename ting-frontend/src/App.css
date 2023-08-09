@@ -1,14 +1,30 @@
+@font-face {
+  font-family: 'SUITE';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+body {
+  font-family: 'SUITE';
+}
+
+.logo {
+  height: 60px;
+}
+
 .navMenu {
   margin-left: 64px;
   font-size: 16px;
   font-weight: 500;
-  width:64px;
+  width: 64px;
   text-decoration: none;
   color: #888888;
 }
 
 .navLeft {
-  margin-left:150px;
+  margin-left: 150px;
 }
 
 .navRight {
@@ -17,7 +33,7 @@
 }
 
 .mainNav {
-  width:100%;
+  width: 100%;
   height: 60px;
   display: flex;
   background-color: #fee5ef;
@@ -25,7 +41,16 @@
 }
 
 .App {
+  position: absolute;
   text-align: center;
+  background-image: linear-gradient(rgba(216, 253, 251, 0.2),
+      rgba(0, 131, 159, 0.5));
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  min-width: 1500px;
+  width: 100%;
+  height: auto;
 }
 
 .App-logo {
@@ -58,6 +83,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
