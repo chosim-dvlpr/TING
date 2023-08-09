@@ -63,7 +63,7 @@ function LoginPage() {
 
   return (
     <div>
-      {/* <NavBar/> */}
+      <NavBar/>
       <h1>여기는 로그인입니다.</h1>
 
       <input
