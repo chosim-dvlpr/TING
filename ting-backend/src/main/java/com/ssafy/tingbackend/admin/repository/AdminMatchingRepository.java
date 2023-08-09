@@ -13,4 +13,6 @@ public interface AdminMatchingRepository extends JpaRepository<Matching, Long> {
     @Query("SELECT m FROM Matching m WHERE m.createdTime >= :dateTime AND m.isSuccess = true ORDER BY m.createdTime ASC")
     List<Matching> findMatchingHistory(LocalDateTime dateTime);
 
+    @Query("SELECT COUNT(m) FROM Matching m WHERE m.isSuccess = true")
+    Integer findMatchingCount();
 }

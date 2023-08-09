@@ -84,4 +84,10 @@ public class AdminController {
         Map<String, Object> history = adminService.matchingHistoryFor20Day();
         return new DataResponse<>(200, "매칭 리스트 조회 성공", history);
     }
+
+    @GetMapping("/admin/matching/count")
+    public DataResponse<Map<String, Integer>> getMatchingCount() {
+        Integer count = adminService.matchingCount();
+        return new DataResponse<>(200, "매칭 수 조회 성공", Map.of("totalCount", count));
+    }
 }

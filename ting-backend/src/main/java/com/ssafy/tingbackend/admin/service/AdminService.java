@@ -214,4 +214,8 @@ public class AdminService {
                 "countList", countList
         );
     }
+
+    public Integer matchingCount() {
+        return matchingRepository.findMatchingCount();
+    }
 }
