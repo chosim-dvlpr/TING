@@ -61,20 +61,8 @@ function IssueBoard() {
     }
   };
 
-  const showKebab = (nickname) => {
-    return userdata && userdata.nickname === nickname;
-  };
 
-  //  글 수정은 불가
-  const handleDelete = async (issueId) => {
-    try {
-      await tokenHttp.delete(`issue/${issueId}`);
 
-      await getAllIssueData();
-    } catch (error) {
-      console.error("Error deleting issue:", error);
-    }
-  };
 
   //검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
@@ -106,13 +94,23 @@ function IssueBoard() {
 
   return (
     <div>
+
+      {/* <NavBar/> */}
+     
+        
+      <div className={styles.issueBoardContainer}>
+
       <NavBar/>
+
       <Sidebar />
-      <SearchBar onSearch={handleSearch} boardType={boardType}/>
       <div className={styles.cardList}>
+      <button className={styles.createButton} onClick={handleCreateClick}>
+            글 작성하기
+          </button>
+        
         {searchResult.length > 0
           ? searchResult.map((issue) => (
-              <div key={issue.issueId} className={styles.card}>
+            <div key={issue.issueId} className={styles.card}>
                 <span
                   className={styles.link}
                   onClick={(event) => handleLinkClick(issue.issueId, event)}
@@ -130,24 +128,11 @@ function IssueBoard() {
                       <span>{issue.oppose_count}</span>
                     </div>
                   </div>
-                  {showKebab(issue.nickname) && (
-                    <div className={styles.dropdownContainer}>
-                      <img
-                        src="/img/kebab.png"
-                        alt="kebab"
-                        className={styles.dropdownKebab}
-                      />
-                      <div className={styles.dropdownContent}>
-                        <span onClick={() => handleDelete(issue.issueId)}>
-                          Delete
-                        </span>
-                      </div>
-                    </div>
-                  )}
+          
                 </div>
               </div>
             ))
-          : issueList.map((issue) => (
+            : issueList.map((issue) => (
               <div key={issue.issueId} className={styles.card}>
                 <span
                   className={styles.link}
@@ -166,30 +151,19 @@ function IssueBoard() {
                       <span>{issue.oppose_count}</span>
                     </div>
                   </div>
-                  {showKebab(issue.nickname) && (
-                    <div className={styles.dropdownContainer}>
-                      <img
-                        src="/img/kebab.png"
-                        alt="kebab"
-                        className={styles.dropdownKebab}
-                      />
-                      <div className={styles.dropdownContent}>
-                        <span onClick={() => handleDelete(issue.issueId)}>
-                          Delete
-                        </span>
-                      </div>
-                    </div>
-                  )}
+              
                 </div>
               </div>
             ))}
       </div>
+            <SearchBar onSearch={handleSearch} boardType={boardType}/>
 
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      </div>
      
     </div>
   );

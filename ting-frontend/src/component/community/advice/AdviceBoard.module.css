@@ -11,10 +11,11 @@
   background-color: white;
   width: 80%;
   min-width: 1200px;
-  height: 1000pxs;
-  padding: 20px;
+  /* height: 800px; */
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
+  border-radius: 50px;
 }
 
 .adviceTopTable {
@@ -26,28 +27,35 @@
 }
 
 /* Table styles */
-table th:first-child, 
-table td:first-child {
-  border-left: 0;
+.adviceTable th:first-child, 
+.adviceTable td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
-table th:last-child, 
-table td:last-child {
-  border-right: 0;
+.adviceTable th:last-child, 
+.adviceTable td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .adviceTable {
   width: 70%;
   min-width: 1000px;
-  border-collapse: collapse;
-  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  margin: 4px auto 16px;
+  font-size: 14px;
 }
 
 .adviceTable th,
 .adviceTable td {
   padding: 10px;
-  border: 1px solid rgb(0, 131, 159);
+  /* border: 1px solid rgb(0, 131, 159); */
   text-align: center;
+  background-color: #fae6e8;
+  margin: 10px 0;
+  
 }
 
 .adviceTable th {
@@ -57,14 +65,17 @@ table td:last-child {
 
 .table_1 {
   width: 10%;
+  border-right: 1px solid white;
 }
 
 .table_2 {
   width: 50%;
+  border-right: 1px solid white;
 }
 
 .table_3 {
   width: 10%;
+  border-right: 1px solid white;
 }
 
 .table_4 {
@@ -82,10 +93,9 @@ table td:last-child {
 
 /* Button styles */
 .createButton {
-  width: 120px;
-  height: 50px;
+  height: 44px;
   padding: 8px 16px;
-  background-color: rgb(0, 131, 159);
+  background-color: #e58490;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -95,7 +105,7 @@ table td:last-child {
 }
 
 .createButton:hover {
-  background-color: #0056b3;
+  background-color: #d75c6b;
 }
 
 /* Link styles */
