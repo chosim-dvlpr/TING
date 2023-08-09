@@ -32,13 +32,12 @@ p{
 }
 
 .videoContainer {
+  margin: 50px;
   display: flex;
   justify-content: space-between;
 }
 
 .cardOuter{
-  border : 1px solid black;
-  background-color: #FEF1F6;
   filter: drop-shadow(10px 20px 5px #CCCCCC);
   width : 200px;
   height: 300px;
@@ -50,6 +49,17 @@ p{
   left : 50%;
   transform: translate(-50%, 0);
 }
+
+.trumpCard {
+  position: absolute;
+  width : 200px;
+  height: 300px;
+}
+
+.cardContent {
+  z-index: 1;
+}
+
 
 /* ScoreCheck module */
 

@@ -355,6 +355,7 @@ function MatchingStart() {
         {/* 질문 카드 */}
         {/* <QuestionCard /> */}
         <div className={styles.cardOuter}>
+          <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard}/>
           <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
         </div>
         {/* 질문 카드 -- end */}
