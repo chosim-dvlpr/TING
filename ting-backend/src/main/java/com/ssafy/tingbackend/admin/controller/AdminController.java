@@ -72,4 +72,10 @@ public class AdminController {
 
         return new CommonResponse(200, "QnA 답변 성공");
     }
+
+    @GetMapping("/admin/payment/history20")
+    public DataResponse<Map<String, Object>> getPointPaymentHistory() {
+        Map<String, Object> history = adminService.pointPaymentHistoryFor20Day();
+        return new DataResponse<>(200, "매출 리스트 조회 성공", history);
+    }
 }

@@ -102,6 +102,7 @@ public class KakaoPaymentService {
         // pointPayment 업데이트
         pointPayment.setAid(kakaoApiApproveResponse.getAid());
         pointPayment.setPaymentMethodType(kakaoApiApproveResponse.getPayment_method_type());
+        pointPayment.setCreatedTime(LocalDateTime.now());
         pointPaymentRepository.save(pointPayment);
 
         // 포인트 변동 기록, 회원 DB의 Point DB에 반영
