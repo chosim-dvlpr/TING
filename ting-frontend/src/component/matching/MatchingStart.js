@@ -161,7 +161,10 @@ function MatchingStart() {
         .catch((err)=>{console.log(err)})
     }
     if (questionNumber === 14) {
+      // 최종 선택 모달창 on
       setShowMatchingChoiceModal(true)
+      // 사용자 video audio off
+      toggleAudioAndVideo(false,false)
       setCount(20)
     }
   }, [questionNumber]);
@@ -348,6 +351,14 @@ function MatchingStart() {
     setMainStreamManager(undefined);
     setPublisher(undefined);
   };
+
+  // 오디오 비디오 미팅 후 끄는 함수
+  const toggleAudioAndVideo = (isAudioOn, isVideoOn) => {
+    if (publisher) {
+      publisher.publishAudio(isAudioOn)
+      publisher.publishVideo(isVideoOn)
+    }
+  }
 
   const report = () => {
     setShowReportModal(true);
