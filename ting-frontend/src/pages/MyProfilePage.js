@@ -1,18 +1,37 @@
+import { useEffect } from "react";
+import tokenHttp from "../api/tokenHttp";
+
 import { Outlet } from "react-router-dom"
 import ProfileHeader from "../component/profile/common/ProfileHeader"
 import ProfileSideBar from "../component/profile/common/ProfileSideBar"
 import NavBar from "../component/common/NavBar"
+import styles from "./MyProfilePage.module.css"
+
+import { useDispatch } from "react-redux";
+import { getCurrentUserdata } from "../redux/userdata";
 
 function MyProfilePage(){
 
-  return(
-    <div>
-      <NavBar/>
-      <h1>여기는 프로필 페이지</h1>
+  let dispatch = useDispatch();
 
-      <ProfileHeader />
-      <ProfileSideBar />
-      <Outlet></Outlet>
+  useEffect(() => {
+    // 유저 데이터 redux에 저장
+    tokenHttp.get("/user").then((response) => {
+      dispatch(getCurrentUserdata(response.data.data));
+      localStorage.setItem("userId", response.data.data.userId);
+    });
+  })
+
+  return(
+    <div className={styles.outer}>
+      <NavBar/>
+      <div className={styles.container}>
+        <ProfileHeader />
+        <div className={styles.innerContainer}>
+          <ProfileSideBar />
+          <Outlet></Outlet>
+        </div>
+      </div>
     </div>
 
   )
