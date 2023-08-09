@@ -283,7 +283,6 @@ public class UserService {
 
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
-        user.setProfileImage(userDto.getProfileImage());
         user.setHeight(userDto.getHeight());
         user.setIntroduce(userDto.getIntroduce());
         user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
