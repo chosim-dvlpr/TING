@@ -6,22 +6,21 @@
   }
 
 .outer {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .container {
     position: relative;
-    height: 95vh;
+    min-height: 95vh;
     top: 5vh;
     background-color: white;
     margin-left: 130px;
-    /* padding-right: 130px; */
     margin-right: 130px;
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
-    border-left: 3px solid #30668A;
-    border-right: 3px solid #30668A;
-    border-top: 3px solid #30668A;
+    border-left: 3px solid #2e6070;
+    border-right: 3px solid #2e6070;
+    border-top: 3px solid #2e6070;
     display: flex;
     flex-direction: column;
     /* justify-content: center; */

@@ -66,10 +66,10 @@ import AdminPage from "./pages/AdminPage";
 import Dashboard from "./component/admin/Dashboard";
 
 // 친구
-import FriendList from "./component/friend/FriendList";
-import Friend from "./component/friend/Friend";
-import FriendChatting from "./component/friend/FriendChatting";
-import FriendProfile from "./component/friend/FriendProfile";
+import Friend from './component/friend/Friend';
+import FriendList from './component/friend/FriendList';
+import FriendChatting from './component/friend/FriendChatting';
+import FriendProfile from './component/friend/FriendProfile';
 
 // 아이템샵
 import ItemShop from "./component/item/ItemShop";

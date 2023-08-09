@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
-function FriendList(){
+function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingObj }){
   let [friendList, setFriendList] = useState([]);
   // let [isModal, setIsModal] = useState(true);
   // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
@@ -64,7 +64,11 @@ function FriendList(){
       messageStore.disconnect(currentRoomIndex);
     }
     messageStore.connect(roomIndex.roomIndex);
-    Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
+    showFriendList(false);
+    showFriendChatting(true);
+    setChattingObj(roomIndex.friend);
+    // console.log(roomIndex.friend)
+    // Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
 
   // 리스트 렌더링 되면 모든 채팅방 연결
@@ -79,10 +83,18 @@ function FriendList(){
   //   connectSocket();
   // }, [])
 
+  // closeModal
+  const closeModal = () => {
+    showFriendList(false) ;
+    showFriendChatting(false);
+    onSearch(false);
+  };
+
   return (
     <div>
       <h3>여기는 친구리스트</h3>
-      <button onClick={() => Navigate("/")}>친구 목록 닫기</button>
+      <button onClick={() => closeModal()}>close Modal</button>
+      {/* <button onClick={() => Navigate("/")}>친구 목록 닫기</button> */}
       {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}
       { isSearchFriend &&
       <input type="text" 

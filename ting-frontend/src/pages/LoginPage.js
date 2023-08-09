@@ -62,6 +62,13 @@ function LoginPage() {
     }
   };
 
+    // 엔터키로 버튼 누를 수 있게
+    const activeEnter = (e) => {
+      if(e.key === "Enter") {
+        loginFunc();
+      }
+    }
+
   return (
     <div className={styles.outer}>
       <NavBar/>
@@ -85,6 +92,7 @@ function LoginPage() {
               setPassword(e.target.value);
             }}
             placeholder="비밀번호"
+            onKeyDown={(e) => activeEnter(e)}
           />
           <br />
           <button

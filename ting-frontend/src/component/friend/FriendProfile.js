@@ -31,14 +31,24 @@ function FriendProfile(props){
       {/* 프로필 이미지 추가 필요 */}
       <p>닉네임 : { friendProfile.nickname }</p>
       <p>자기소개 : { friendProfile.introduce }</p>
+      <p>#{ friendProfile.region }</p>
       <p>#{ friendProfile.height }</p>
-      <p>#{ friendProfile.mbtiCode }</p>
-      <p>#{ friendProfile.drinkingCode }</p>
-      <p>#{ friendProfile.religionCode }</p>
-      <p>#{ friendProfile.jobCode }</p>
-      <p>#{ friendProfile.userHobbys }</p>
-      <p>#{ friendProfile.userStyles }</p>
-      <p>#{ friendProfile.userPersonalities }</p>
+      <p>#{ friendProfile.mbtiCode && friendProfile.mbtiCode.name }</p>
+      <p>#{ friendProfile.drinkingCode && friendProfile.drinkingCode.name }</p>
+      <p>#{ friendProfile.religionCode && friendProfile.religionCode.name }</p>
+      <p>#{ friendProfile.jobCode && friendProfile.jobCode.name }</p>
+      <p>#{ friendProfile.userHobbys &&
+        friendProfile.userHobbys.map((hobby, i) => (
+        hobby.name
+      )) }</p>
+      <p>#{ friendProfile.userStyles && 
+        friendProfile.userStyles.map((style, i) => (
+        style.name
+      )) }</p>
+      <p>#{ friendProfile.userPersonalities && 
+        friendProfile.userPersonalities.map((personality, i) => (
+        personality.name
+      )) }</p>
       {/* 온도 추가 필요 */}
       <hr/>
     </div>

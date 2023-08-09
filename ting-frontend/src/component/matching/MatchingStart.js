@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult, resetMatchingStore } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
@@ -25,8 +25,8 @@ function MatchingStart() {
   const navigate = useNavigate();
 
   //  점수 알림창 관련 state
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [showScoreMessage, setShowScoreMessage] = useState(false);
+  const [alertScore, setAlertScore] = useState("");
 
   // timerBar 관련 state
   const [count, setCount] = useState(0);
@@ -34,6 +34,8 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+  const [disableHover, setDisableHover] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+  const trueList = [true, true, true, true, true, true, true, true, true, true, true];
   const [disableaButton, setDisableButton] = useState(false);
 
   // 최종 점수 관련 state
@@ -55,6 +57,8 @@ function MatchingStart() {
   // 초기화 useEffect hook
   useEffect(() => {
     console.log("====================useEffect (초기화) ======================");
+    dispatch(resetMatchingStore())
+
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
     let matchingId = state.matchingReducer.matchingId;
@@ -82,7 +86,12 @@ function MatchingStart() {
   // 질문카드를 제어하는 useEffect hook
   useEffect(() => {
     console.log("================useEffect (score 변경)=====================");
-    dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
+    if (questionNumber < Math.min(myScore.length, yourScore.length)) {
+      // questionNumber 바로 안바뀌게 잠시 시간 텀 줌
+      setTimeout(()=>{
+        dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
+      },2000)
+    }
   }, [myScore, yourScore]);
 
   // timerBar를 제어하는 useEffect hook
@@ -99,6 +108,7 @@ function MatchingStart() {
     if (count === -1) {
       clearInterval(timer);
       setCount(30);
+      
       // 타임이 끝나면 5점을 자동으로 상대에게 전달
 
       // 이미 점수를 선택했다면 상대에게 점수를 전송하지 않음
@@ -128,10 +138,10 @@ function MatchingStart() {
   useEffect(() => {
     // 버튼 재활성화
     setDisableButton(false);
+    setDisableHover([false, false, false, false, false, false, false, false, false, false, false]);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
-      // 3초의 딜레이
-      setTimeout(setCount(30),3000);
+      setCount(30);
     }
     if (questionNumber === 11) {
       setCount(5);
@@ -243,10 +253,10 @@ function MatchingStart() {
       dispatch(setYourScore(data.score));
 
       // 경고창 자동 삭제
-      setAlertMessage(data.score + "점");
-      setShowAlert(true);
+      setAlertScore(data.score + "점");
+      setShowScoreMessage(true);
       setTimeout(() => {
-        setShowAlert(false);
+        setShowScoreMessage(false);
       }, 2000);
     });
 
@@ -344,8 +354,18 @@ function MatchingStart() {
   };
 
   return (
-    <div className="container">
-      {showAlert && <div>{alertMessage}</div>}
+    <div className={`${styles.container}`}>
+
+      <div>
+        <h3 className={styles.timer}>{count}</h3>
+      </div>
+      { questionNumber>0 && questionNumber<11 && showScoreMessage &&
+          <div className={styles.alertScore}>
+            <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`}/>
+            <span className={styles.ScoreText}>{alertScore}</span>
+          </div>
+      }
+
       <div id="session-header" className={styles.sessionHeader}>
         <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
       </div>
@@ -355,10 +375,12 @@ function MatchingStart() {
         {/* 질문 카드 */}
         {/* <QuestionCard /> */}
         <div className={styles.cardOuter}>
+          <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard}/>
           <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
         </div>
         {/* 질문 카드 -- end */}
 
+        {/* 비디오 화면 */}
         <div className={styles.videoContainer}>
 
           <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
@@ -373,9 +395,6 @@ function MatchingStart() {
       </div>
       
       <div className="wrapper">
-      <div>
-        <h3>{count}</h3>
-      </div>
       {/* 점수 체크판 -- start */}
       {/* <ScoreCheck></ScoreCheck> */}
       { showMatchingChoiceModal ? null : (
@@ -397,14 +416,19 @@ function MatchingStart() {
             <div className={styles.ScoreBox}>
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
                 return (
-                  <div className={styles.HeartScore}>
-                    <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
+                  <div className={`${styles.HeartScore} ${ !disableHover[i] ? styles.HeartScoreAni : null}`}>
+                    <img 
+                      src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"} 
+                      id={`buttonImg-${score}`} 
+                      className={buttonToggleSign[i] ? styles.clickedHeart : null}
+                      />
 
                     <button
                       className={styles.ScoreText}
                       disabled={disableaButton}
                       onClick={() => {
                         setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                        setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
                         setDisableButton(true)
                         handleScoreSelect(score);
                       }}
@@ -430,9 +454,6 @@ function MatchingStart() {
     </div>
   );
 }
-
-
-
 
 
 export default MatchingStart;

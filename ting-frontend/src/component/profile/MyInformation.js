@@ -2,6 +2,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { regionList } from "../../SelectionDataList";
 
+import commonStyles from "./ProfileCommon.module.css";
+import styles from "./MyInformation.module.css";
+
 function MyInformation() {
   let Navigate = useNavigate();
 
@@ -20,33 +23,82 @@ function MyInformation() {
 
 
   return (
-    <div>
-      <h2>내 정보 페이지</h2>
-      <button onClick={() => Navigate("/mypage/update")}>편집</button>
+    <div className={commonStyles.wrapper}>
+      <div className={styles.btnWrapper}>
+        <button className={commonStyles.btn} onClick={() => Navigate("/mypage/update")}>수정하기</button>
+      </div>
 
-      <p>이름 : { userdata.name }</p>
-      <p>성별 : { userdata.gender === "F" ? "여성" : "남성" }</p>
-      <p>이메일 : { userdata.email }</p>
-      <p>전화번호 : { userdata.phoneNumber }</p>
-      <p>생년월일 : { userdata.birth }</p>
-      <p>지역 : { englishPattern.test(userdata.region) ? matchRegion(userdata.region) : userdata.region }</p>
-      <br/>
-      <p>닉네임 : { userdata.nickname }</p>
-      <p>키 : { userdata.height }</p>
-      <p>MBTI : { userdata.mbtiCode && userdata.mbtiCode.name }</p>
-      <p>주량 : { userdata.drinkingCode && userdata.drinkingCode.name }</p>
-      <p>흡연 : { userdata.smokingCode && userdata.smokingCode.name }</p>
-      <p>종교 : { userdata.religionCode && userdata.religionCode.name }</p>
-      <p>직업 : { userdata.jobCode && userdata.jobCode.name }</p>
-      <br/>
-      <p>취미 : { userdata.userHobbys && userdata.userHobbys.map((hobby) => hobby.name) }</p>
-      <br/>
-      <p>성격 : { userdata.userPersonalities && userdata.userPersonalities.map((personalities) => personalities.name) }</p>
-      <p>선호 스타일 : { userdata.userStyles && userdata.userStyles.map((styles) => styles.name) }</p>
-      <p>자기소개 : { userdata.introduce !== "" ?
-        userdata.introduce
-        : '자기소개가 없어요!'
-      }</p>
+      <div className={styles.innerWrapper}>
+        <table>
+          <tr><th className={styles.title}>이름</th> <td>{userdata.name}</td></tr>
+          <tr><th className={styles.title}>성별</th> <td>{userdata.gender === "F" ? "여성" : "남성"}</td></tr>
+          <tr><th className={styles.title}>이메일</th> <td>{userdata.email}</td></tr>
+          <tr><th className={styles.title}>전화번호</th> <td>{userdata.phoneNumber}</td></tr>
+          <tr><th className={styles.title}>생년월일</th> <td>{userdata.birth}</td></tr>
+          <tr><th className={styles.title}>지역</th> <td>{englishPattern.test(userdata.region) ? matchRegion(userdata.region) : userdata.region}</td></tr>
+        </table>
+      </div>
+      <hr />
+
+      <div className={styles.innerWrapper}>
+        {/* <p>닉네임 : { userdata.nickname }</p> */}
+        <table id={styles.moreInfo}>
+          <tr>
+            <th className={styles.title}>키</th>
+            <td>{userdata.height}</td>
+          </tr>
+          <tr>
+            <th className={styles.title}>MBTI</th>
+            <td>{userdata.mbtiCode && userdata.mbtiCode.name}</td>
+          </tr>
+          <tr>
+            <th className={styles.title}>주량</th>
+            <td>{userdata.drinkingCode && userdata.drinkingCode.name}</td>
+          </tr>
+          <tr>
+            <th className={styles.title}>흡연</th>
+            <td>{userdata.smokingCode && userdata.smokingCode.name}</td>
+          </tr>
+          <tr>
+            <th className={styles.title}>종교</th>
+            <td>{userdata.religionCode && userdata.religionCode.name}</td>
+          </tr>
+          <tr>
+            <th className={styles.title}>직업</th>
+            <td>{userdata.jobCode && userdata.jobCode.name}</td>
+          </tr>
+        </table>
+        <table className={styles.moreInfo}>
+          <tr>
+            <th className={styles.title}>취미</th>
+            <td className={styles.hashtag}>
+              {userdata.userHobbys &&
+                userdata.userHobbys.map((hobby) => <span>#{hobby.name}</span>)}
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>성격</th>
+            <td className={styles.hashtag}>
+              {userdata.userPersonalities &&
+                userdata.userPersonalities.map((personalities) => <span>#{personalities.name}</span>)}
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>선호 스타일</th>
+            <td className={styles.hashtag}>
+              {userdata.userStyles &&
+                userdata.userStyles.map((styles) => <span>#{styles.name}</span>)}
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>자기소개</th>
+            <td>{userdata.introduce !== "" ?
+              userdata.introduce
+              : '자기소개가 없어요!'
+            }</td>
+          </tr>
+        </table>
+      </div>
     </div>
   )
 }

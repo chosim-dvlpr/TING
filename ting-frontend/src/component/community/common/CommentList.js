@@ -11,6 +11,25 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const [editedContent, setEditedContent] = useState("");
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
 
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if (!boardTime) return "";
+    console.log(boardTime);
+    if (isSameDate(boardTime)) {
+      return boardTime.substr(11, 5);
+    } else return boardTime.substr(0, 10);
+  };
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return (
+      time.getFullYear() === currentTime.getFullYear() &&
+      time.getMonth() === currentTime.getMonth() &&
+      time.getDate() === currentTime.getDate()
+    );
+  };
+
   // 댓글 수정
   const handleUpdate = (commentId, currentContent) => {
     setEditingCommentId(commentId);
@@ -65,13 +84,10 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
 
   return (
     <div>
-    
-    <ul>
       {comments.map((comment) => {
         if (comment.removed) {
           return null;
         }
-
         return (
           <div key={comment.commentId} className={styles["comment-container"]}>
             <div className={styles["comment-details"]}>
@@ -91,10 +107,13 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
                 </div>
               ) : (
                 // 댓글 div
-                <div>
+                <div className={styles.comment}>
                 <span className={styles["nickname"]}>{userdata.nickname}</span>
-                  <span className={styles["comment-time"]}>{comment.createdTime}</span>
-                <p className={styles["comment-content"]}>{comment.content}</p>
+                  <p className={styles["comment-content"]}>{comment.content}</p>
+                  <span className={styles["comment-time"]}>
+                    {comment.modifiedTime === null
+                      ? calculateDate(comment.createdTime)
+                      : `${calculateDate(comment.modifiedTime)} (수정됨)`}</span>
                 <span className={styles["comment-like-button"]}>
                   <CommentLikeButton commentId={comment.commentId}
                     initialLikes={comment.likeCount}
@@ -112,7 +131,6 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
           </div>
         );
       })}
-    </ul>
   </div>
 );
 }

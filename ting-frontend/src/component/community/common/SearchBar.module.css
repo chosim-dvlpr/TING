@@ -11,11 +11,12 @@
   }
   
   .searchButton {
-
     padding: 8px 16px;
     background-color: #e58490;
     color: white;
-    /* border: none;
+    border: none;
+    border-radius: 15px;
+    /* 
     background-color: #2e6070;
     color: whitesmoke;
     box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
