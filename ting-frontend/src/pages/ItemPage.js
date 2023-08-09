@@ -10,9 +10,9 @@ function ItemPage(){
 
   return(
     <div>
-      <NavBar/>
+    <NavBar/>
     <div className={styles.ItemContainer}>
-      <NavBar/>
+      {/* <NavBar/> */}
       <ItemSideBar/>
       <div className={styles.OutletBoard}>
         <Outlet></Outlet>

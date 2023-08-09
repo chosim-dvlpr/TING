@@ -59,7 +59,7 @@ const IssueCreate = () => {
   
     return (
       <div>
-      <NavBar/>
+      {/* <NavBar/> */}
       <div className={styles.formContainer}>
        
         <h2>논쟁 글 작성하기</h2>

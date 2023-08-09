@@ -53,7 +53,7 @@ const AdviceCreate = () => {
 
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <div className={styles.formContainer}>
         <h2>당신의 사랑 고민은 무엇인가요?</h2>
         <form onSubmit={handleSubmit}>

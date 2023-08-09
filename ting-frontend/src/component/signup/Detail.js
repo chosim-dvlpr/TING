@@ -1,9 +1,10 @@
-
 import { useNavigate } from "react-router-dom"
 import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import basicHttp from '../../api/basicHttp';
 import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
+
+import styles from './SignupCommon.module.css';
 import { regionList } from "../../SelectionDataList";
 
 function Detail(){
@@ -168,40 +169,53 @@ function Detail(){
       console.log(signupReducer);
     }
   }
-    
 
   return(
-    <div>
+    <div className={styles.wrapper}>
       <p>상세정보를 입력해주세요</p>
-      <input type="text" onChange={(e) => { nameIsExist(e.target.value) }} placeholder="이름"></input>
-        
-      <input type="text" onChange={(e) => setInputNickname(e.target.value)} placeholder="닉네임"></input>
-      <button onClick={nicknameIsExist}>중복확인</button>
+      <input className={styles.input} id={styles.nameInput} type="text" onChange={(e) => { nameIsExist(e.target.value) }} placeholder="이름"></input>
+      <br></br>
+      <input className={styles.input} type="text" onChange={(e) => setInputNickname(e.target.value)} placeholder="닉네임"></input>
+      <button className={styles.btn} onClick={nicknameIsExist}>중복확인</button>
       <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
       
-      <button onClick={() => {
-        dispatch(setGender("M"));
-        genderIsExist();
+      <button
+        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
+        onClick={() => {
+          dispatch(setGender("M"));
+          genderIsExist();
       }}>남</button>
-      <button onClick={() => {
-        dispatch(setGender("F"));
-        genderIsExist();
+      <button
+        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
+        onClick={() => {
+          dispatch(setGender("F"));
+          genderIsExist();
       }}>여</button>
       <br/>
 
-      <input type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리, 슬래시"></input>
+      <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input>
 
       <h3>지역 선택</h3>
       {
         regionList.map((r,i) => {
-          return (
-            <button key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
-          )
+          if(i % 9 == 8) {
+            return (
+              <span>
+                <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
+                <br></br>
+              </span>
+            )
+          }
+          else {
+            return (
+              <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
+            )
+          }
         })
       }
       <br/>
-      <button onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
-      <button onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
+      <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
+      <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
     </div>
   )
 }

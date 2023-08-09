@@ -9,7 +9,7 @@ import NavBar from "../component/common/NavBar";
 function CommunityPage() {
   return (
     <div>
-      <NavBar />
+      {/* <NavBar /> */}
       <div className="community-container">
         <div className="community-content">
           <Routes>
