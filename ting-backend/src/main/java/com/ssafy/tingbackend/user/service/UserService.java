@@ -11,14 +11,28 @@ import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -28,6 +42,7 @@ import java.util.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LoginLogRepository loginLogRepository;
     private final AdditionalInfoRepository additionalInfoRepository;
     private final UserHobbyRepository userHobbyRepository;
     private final UserPersonalityRepository userPersonalityRepository;
@@ -36,12 +51,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
-    private final PhoneNumberRepository phoneNumberRepository;
+    private final PhoneNumberAuthRepository phoneNumberRepository;
 
     private final SmsService smsService;
 
-    public Map<String, String> login(UserDto userDto) {
-        log.info("{} 유저 로그인 시도", userDto.getEmail());
+    @Value("${file.path}")
+    private String uploadPath;
+
+    public Map<String, String> login(UserDto.Basic userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
 
@@ -55,10 +72,28 @@ public class UserService {
         result.put("access-token", accessToken);
         result.put("refresh-token", refreshToken);
 
+        // 로그인 기록 저장
+        log.info("{} 유저 로그인 시도", userDto.getEmail());
+        loginLogRepository.save(LoginLog.builder()
+                .user(principal)
+                .build());
+
         return result;
     }
 
-    public void signUp(UserDto userDto) {
+    public Map<String, String> refreshToken(String userId) {
+        String accessToken = JwtUtil.generateAccessToken(String.valueOf(userId));
+        String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
+
+        Map<String, String> result = new HashMap<>();
+        result.put("access-token", accessToken);
+        result.put("refresh-token", refreshToken);
+
+        // 로그인 기록 저장
+        return result;
+    }
+
+    public void signUp(UserDto.Signup userDto) {
         userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
         // 기본 정보 UserDto -> User 변환
@@ -113,7 +148,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto userDetail(Long userId) {
+    public UserDto.Detail userDetail(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -125,27 +160,7 @@ public class UserService {
         user.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
         user.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
 
-        return UserResponseDto.builder()
-                .userId(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .nickname(user.getNickname())
-                .phoneNumber(user.getPhoneNumber())
-                .gender(user.getGender())
-                .region(user.getRegion() == null ? "" : user.getRegion().getName())
-                .birth(user.getBirth())
-                .profileImage(user.getProfileImage())
-                .height(user.getHeight())
-                .introduce(user.getIntroduce())
-                .mbtiCode(AdditionalInfoDto.of(user.getMbtiCode()))
-                .drinkingCode(AdditionalInfoDto.of(user.getDrinkingCode()))
-                .smokingCode(AdditionalInfoDto.of(user.getSmokingCode()))
-                .religionCode(AdditionalInfoDto.of(user.getReligionCode()))
-                .jobCode(AdditionalInfoDto.of(user.getJobCode()))
-                .userHobbys(hobbyAdditional)
-                .userStyles(styleAdditional)
-                .userPersonalities(personalityAdditional)
-                .build();
+        return UserDto.Detail.of(user, hobbyAdditional, styleAdditional, personalityAdditional);
     }
 
     @Transactional
@@ -171,7 +186,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
     }
 
-    public String findEmail(UserDto userDto) {
+    public String findEmail(UserDto.Basic userDto) {
         String name = userDto.getName();
         String phoneNumber = userDto.getPhoneNumber();
 
@@ -225,19 +240,19 @@ public class UserService {
 
         // 문자 전송 - 과금 조심!
         String messageContent = "TING 전화번호 인증 코드입니다.\n" +
-                                "[" + authCode + "]";
+                "[" + authCode + "]";
         Long time = System.currentTimeMillis();
         try {
-            SmsResponseDto response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
-            if(!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
-        } catch(Exception e) {
+            SmsDto.Response response = smsService.sendSms(time, new MessageDto(phoneNumber, messageContent));
+            if (!response.getStatusCode().equals("202")) throw new CommonException(ExceptionType.SMS_SEND_FAILED);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new CommonException(ExceptionType.SMS_SEND_FAILED);
         }
 
         // 같은 전화번호로 이미 인증코드가 존재하는 경우 이전 코드 삭제
         Optional<PhoneNumberAuthDto> findPhoneNumberAuth = phoneNumberRepository.findByPhoneNumber(phoneNumber);
-        if(findPhoneNumberAuth.isPresent()) {
+        if (findPhoneNumberAuth.isPresent()) {
             phoneNumberRepository.delete(findPhoneNumberAuth.get());
         }
         // 인증코드 몽고 DB에 저장
@@ -260,7 +275,7 @@ public class UserService {
     }
 
     @Transactional
-    public void modifyUser(Long userId, UserDto userDto) {
+    public void modifyUser(Long userId, UserDto.Put userDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -268,7 +283,6 @@ public class UserService {
 
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
-        user.setProfileImage(userDto.getProfileImage());
         user.setHeight(userDto.getHeight());
         user.setIntroduce(userDto.getIntroduce());
         user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
@@ -306,7 +320,7 @@ public class UserService {
         userPersonalityRepository.saveAll(userPersonalities);
     }
 
-    public void findPassword(UserDto userDto) {
+    public void findPassword(UserDto.Basic userDto) {
         String name = userDto.getName();
         String phoneNumber = userDto.getPhoneNumber();
         String email = userDto.getEmail();
@@ -349,5 +363,81 @@ public class UserService {
             }
         }
         return key.toString();
+    }
+
+
+    @Transactional
+    public void saveProfile(MultipartFile file, Principal principal) throws IOException {
+        if (file == null) {
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        if (!file.isEmpty()) {
+            String today = new SimpleDateFormat("yyMMdd").format(new Date());
+            String saveFolder = uploadPath + File.separator + today;
+
+            // 폴더가 없다면 저장경로의 폴더를 생성
+            File folder = new File(saveFolder);
+            if (!folder.exists()) folder.mkdirs();
+
+            String originalFileName = file.getOriginalFilename();
+            if (!originalFileName.isEmpty()) {
+                // 파일 저장
+                String saveFileName = UUID.randomUUID().toString()
+                        + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                file.transferTo(new File(folder, saveFileName));
+
+                // 프로필 세팅
+                User user = userRepository.findById(Long.parseLong(principal.getName()))
+                        .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+                user.setProfileImage(today + File.separator + saveFileName);
+                userRepository.save(user);
+            }
+        }
+
+    }
+
+    public ResponseEntity<Resource> getProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if (user.getProfileImage() == null) {
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        String[] userProfilePath = user.getProfileImage().split("/");
+
+        // 다운로드할 이미지 파일의 경로 생성
+        Path filePath = Paths.get(uploadPath, userProfilePath[0], userProfilePath[1]);
+        Resource resource;
+        try {
+            resource = new UrlResource(filePath.toUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        // 이미지 파일의 MIME 타입 지정
+        // 이미지의 Content-Type을 확인하여 적절한 MIME 타입을 지정합니다.
+        String contentType = "image/jpeg"; // 예시로 jpeg 이미지를 사용합니다.
+        if (userProfilePath[1].endsWith(".png")) {
+            contentType = "image/png";
+        } else if (userProfilePath[1].endsWith(".gif")) {
+            contentType = "image/gif";
+        }
+
+//        String contentType;
+//        try {
+//            contentType = Files.probeContentType(filePath);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+//        }
+
+        // 다운로드할 이미지 파일의 HTTP 헤더 설정
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }

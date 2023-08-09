@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface PhoneNumberRepository extends MongoRepository<PhoneNumberAuthDto, String> {
+public interface PhoneNumberAuthRepository extends MongoRepository<PhoneNumberAuthDto, String> {
    Optional<PhoneNumberAuthDto> findByPhoneNumber(String phoneNumber);
 }

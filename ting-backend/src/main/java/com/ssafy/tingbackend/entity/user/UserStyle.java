@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@ToString(of = {"additionalInfo"})
 public class UserStyle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

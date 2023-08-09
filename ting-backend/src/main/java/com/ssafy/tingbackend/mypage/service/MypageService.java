@@ -14,8 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -64,12 +67,14 @@ public class MypageService {
                 .build();
     }
 
-    public List<QnADto> qnaList(int pageNo, Long userId) {
+    @Transactional
+    public Map<String, Object> qnaList(int pageNo, Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
+        Map<String, Object> result = new HashMap<>();
         // 페이징
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 2, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<QnA> page = qnaRepository.findByUserId(userId, pageRequest);
         List<QnA> qnaList = page.getContent();
@@ -77,6 +82,10 @@ public class MypageService {
         for(QnA qna : qnaList) {
             qnADtoList.add(QnADto.of(qna, userId));
         }
-        return qnADtoList;
+
+        result.put("qnaList", qnADtoList);
+        result.put("totalPages", page.getTotalPages());
+        result.put("totalElements", page.getTotalElements());
+        return result;
     }
 }

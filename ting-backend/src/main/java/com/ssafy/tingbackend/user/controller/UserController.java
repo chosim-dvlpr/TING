@@ -1,16 +1,27 @@
 package com.ssafy.tingbackend.user.controller;
 
+import com.ssafy.tingbackend.common.exception.CommonException;
+import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
+import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.user.dto.UserDto;
-import com.ssafy.tingbackend.user.dto.UserResponseDto;
 import com.ssafy.tingbackend.user.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,9 +37,31 @@ public class UserController {
      * @return access-token, refresh-token
      */
     @PostMapping("/user/login")
-    public DataResponse<Map<String, String>> login(@RequestBody UserDto userDto) {
+    public DataResponse<Map<String, String>> login(@RequestBody UserDto.Basic userDto) {
         Map<String, String> token = userService.login(userDto);
         return new DataResponse<>(200, "로그인 성공", token);
+    }
+
+    /**
+     * Refresh Token 재발급 API
+     *
+     * @param request 요청 http
+     * @return access-token, refresh-token
+     */
+    @PostMapping("/user/refresh")
+    public DataResponse<Map<String, String>> refreshToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new CommonException(ExceptionType.JWT_TOKEN_INVALID);
+        }
+        String token = bearerToken.substring(7);
+        Claims claims = JwtUtil.getPayloadAndCheckExpired(token);
+        if (!"refresh-token".equals(claims.getSubject())) {
+            throw new CommonException(ExceptionType.JWT_TOKEN_INVALID);
+        }
+
+        Map<String, String> result = userService.refreshToken(claims.get("userId", String.class));
+        return new DataResponse<>(200, "토큰 재발급 성공", result);
     }
 
     /**
@@ -38,10 +71,26 @@ public class UserController {
      * @return Only code and message
      */
     @PostMapping("/user/signup")
-    public CommonResponse signUp(@RequestBody UserDto userDto) {
+    public CommonResponse signUp(@RequestBody UserDto.Signup userDto) {
         userService.signUp(userDto);
 
         return new CommonResponse(200, "회원가입 성공");
+    }
+
+    @PostMapping("/user/profile")
+    public CommonResponse profile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
+        userService.saveProfile(file, principal);
+        return new CommonResponse(200, "프로필 등록 성공");
+    }
+
+    @GetMapping("/user/profile")
+    public ResponseEntity<Resource> getProfile(Principal principal) {
+        return userService.getProfile(Long.parseLong(principal.getName()));
+    }
+
+    @GetMapping("/user/profile/{userId}")
+    public ResponseEntity<Resource> getProfile(@PathVariable Long userId) {
+        return userService.getProfile(userId);
     }
 
     /**
@@ -64,9 +113,9 @@ public class UserController {
      * @return 유저 상세 정보
      */
     @GetMapping("/user")
-    public DataResponse<UserResponseDto> userDetail(Principal principal) {
+    public DataResponse<UserDto.Detail> userDetail(Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        UserResponseDto userResponseDto = userService.userDetail(userId);
+        UserDto.Detail userResponseDto = userService.userDetail(userId);
 
         return new DataResponse<>(200, "유저 정보 조회 성공", userResponseDto);
     }
@@ -79,7 +128,7 @@ public class UserController {
      * @return Only code and message
      */
     @PutMapping("/user")
-    public CommonResponse modifyUser(Principal principal, @RequestBody UserDto userDto) {
+    public CommonResponse modifyUser(Principal principal, @RequestBody UserDto.Put userDto) {
         Long userId = Long.parseLong(principal.getName());
         userService.modifyUser(userId, userDto);
 
@@ -137,7 +186,7 @@ public class UserController {
      * @return 이메일
      */
     @PostMapping("/user/email")
-    public DataResponse<String> findEmail(@RequestBody UserDto userDto) {
+    public DataResponse<String> findEmail(@RequestBody UserDto.Basic userDto) {
         String email = userService.findEmail(userDto);
 
         return new DataResponse<>(200, "이메일 찾기 성공", email);
@@ -195,11 +244,12 @@ public class UserController {
 
     /**
      * 비밀번호 찾기 API (인증코드 확인)
+     *
      * @param request 이메일, 이름, 전화번호
      * @return Only code and message
      */
     @PostMapping("/user/password")
-    public CommonResponse findPassword(@RequestBody UserDto userDto) {
+    public CommonResponse findPassword(@RequestBody UserDto.Basic userDto) {
         userService.findPassword(userDto);
         return new CommonResponse(200, "임시 비밀번호 전송 성공");
     }

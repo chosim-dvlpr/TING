@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.entity.common;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
+@Setter
 @DynamicInsert
 public class BaseUnmodifidableTimeEntity {
     @CreatedDate
