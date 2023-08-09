@@ -33,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void softDeleteUser(@Param("userId") Long userId, @Param("removedTime") LocalDateTime removedTime);
 
     Optional<User> findByNickname(String keyword);
+
+    @Query("SELECT COUNT(u) FROM User u WHERE u.isRemoved = false")
+    Integer findUserCount();
 }

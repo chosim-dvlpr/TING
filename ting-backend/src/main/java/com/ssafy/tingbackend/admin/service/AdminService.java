@@ -218,4 +218,16 @@ public class AdminService {
     public Integer matchingCount() {
         return matchingRepository.findMatchingCount();
     }
+
+    public Integer userCount() {
+        return userRepository.findUserCount();
+    }
+
+    public Integer reportCount() {
+        return reportRepository.findReportCount();
+    }
+
+    public Long totalProfit() {
+        return pointPaymentRepository.findTotalProfit();
+    }
 }

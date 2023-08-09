@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface AdminPointPaymentRepository extends JpaRepository<PointPayment, Long> {
 
-    @Query("SELECT p FROM PointPayment p JOIN FETCH p.pointCode WHERE p.createdTime >= :dateTime  ORDER BY p.createdTime ASC")
+    @Query("SELECT p FROM PointPayment p JOIN FETCH p.pointCode WHERE p.createdTime >= :dateTime AND p.aid is not null ORDER BY p.createdTime ASC")
     List<PointPayment> findPaymentHistory(@Param("dateTime") LocalDateTime dateTime);
 
+    @Query("SELECT SUM(p.pointCode.totalAmount) FROM PointPayment p WHERE p.aid is not null")
+    Long findTotalProfit();
 }
