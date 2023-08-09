@@ -117,7 +117,7 @@ p{
   align-items: center; /* Center vertically */
 }
 
-.HeartScore:cue{
+.HeartScoreAni:hover{
   animation-name: 흔들확대;
   animation-duration: 2s;
 }

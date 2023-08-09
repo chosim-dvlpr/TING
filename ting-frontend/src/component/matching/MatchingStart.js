@@ -34,7 +34,8 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-  const [disableaButton, setDisableButton] = useState(false);
+  const [disableaButton, setDisableButton] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+  const trueList = [true, true, true, true, true, true, true, true, true, true, true];
 
   // 최종 점수 관련 state
   const [sumMyScore, setSumMyScore] = useState(0)
@@ -129,7 +130,7 @@ function MatchingStart() {
   // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
     // 버튼 재활성화
-    setDisableButton(false);
+    setDisableButton([false, false, false, false, false, false, false, false, false, false, false]);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
       // 3초의 딜레이
@@ -400,15 +401,15 @@ function MatchingStart() {
             <div className={styles.ScoreBox}>
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
                 return (
-                  <div className={`${styles.HeartScore}`}>
+                  <div className={`${styles.HeartScore} ${ !disableaButton[i] ? styles.HeartScoreAni : null}`}>
                     <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
                     <button
                       className={styles.ScoreText}
-                      disabled={disableaButton}
+                      disabled={disableaButton[i]}
                       onClick={() => {
                         setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                        setDisableButton(true)
+                        setDisableButton([...trueList.slice(0, i), false, ...trueList.slice(i + 1)])
                         handleScoreSelect(score);
                       }}
                     >
