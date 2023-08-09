@@ -19,6 +19,9 @@ function AdviceBoard() {
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
 
+
+  const boardType = "advice"
+
   useEffect(() => {
     getAllAdviceData();
   }, [currentPage]);
@@ -107,13 +110,12 @@ function AdviceBoard() {
   // 검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
 
-  const handleSearch = async ({ keyword, item }) => {
+  const handleSearch = async ({ keyword}) => {
     try {
       const response = await tokenHttp.get(`/advice/search/`, {
         params: {
           pageNo: currentPage,
           keyword,
-          item,
         },
       });
 
@@ -133,27 +135,27 @@ function AdviceBoard() {
       <div className={styles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.adviceTopTable}>
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} boardType={boardType}/>
           <button className={styles.createButton} onClick={handleCreateClick}>
             글 작성하기
           </button>
         </div>
         <div>
           <table className={styles.adviceTable}>
-            <thead>
+            {/* <thead>
               <tr>
                 <th className={styles.table_1}>Id</th>
                 <th className={styles.table_2}>title</th>
                 <th className={styles.table_3}>hit</th>
                 <th className={styles.table_4}>createdTime</th>
               </tr>
-            </thead>
+            </thead> */}
             <tbody>
               {(searchResult.length > 0 ? searchResult : adviceList).map(
                 (advice, index) => (
                   <tr key={advice.adviceId}>
-                    <td>{advice.adviceId}</td>
-                    <td>
+                    <td className={styles.table_1}>{advice.adviceId}</td>
+                    <td className={styles.table_2}>
                       <span
                         className={styles.link}
                         onClick={(event) =>
@@ -163,13 +165,14 @@ function AdviceBoard() {
                         {advice.title}
                       </span>
                     </td>
-                    <td>{advice.hit}</td>
-                    <td>
+                    <td className={styles.table_3}>{advice.hit}</td>
+                    <td className={styles.table_4}>
                       {advice.modifiedTime === null
                         ? calculateDate(advice.createdTime)
                         : `${calculateDate(advice.modifiedTime)} (수정됨)`}
-
-                      {showKebab(advice.nickname) && (
+                    </td>
+                    <td>
+                    {showKebab(advice.nickname) && (
                         <div className={styles.dropdownContainer}>
                           <img
                             src="/img/kebab.png"

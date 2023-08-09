@@ -5,6 +5,8 @@ import CommentCreate from "../common/CommentCreate";
 import tokenHttp from "../../../api/tokenHttp";
 import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
+import Sidebar from "../common/Sidebar";
+import adviceStyles from "./AdviceBoard.module.css";
 
 function AdviceDetail() {
   const { adviceId } = useParams();
@@ -19,6 +21,25 @@ function AdviceDetail() {
   useEffect(() => {
     console.log("==========", advice);
   }, [advice]);
+
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if (!boardTime) return "";
+    console.log(boardTime);
+    if (isSameDate(boardTime)) {
+      return boardTime.substr(11, 5);
+    } else return boardTime.substr(0, 10);
+  };
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return (
+      time.getFullYear() === currentTime.getFullYear() &&
+      time.getMonth() === currentTime.getMonth() &&
+      time.getDate() === currentTime.getDate()
+    );
+  };
 
   const getAdviceDetail = async () => {
     try {
@@ -73,27 +94,32 @@ function AdviceDetail() {
   };
 
   return (
-    <div>
+    <div className={adviceStyles.adviceBoardBackground}>
       <NavBar />
-      <div className={styles.adviceDetailContainer}>
-        <h1>{advice.title}</h1>
-        <p>Content: {advice.content}</p>
-        <p>Created Time: {advice.createdTime}</p>
-        <p>Modified Time: {advice.modifiedTime}</p>
-
-        <CommentCreate
-          boardTypeProp="ADVICE"
-          boardIdProp={advice.adviceId}
-          getCommentList={getCommentList}
-        />
-        <CommentList
-          comments={comments}
-          onUpdateComment={handleUpdateComment}
-          onDeleteComment={handleDeleteComment}
-          boardType="ADVICE"
-          boardId={advice.adviceId}
-        />
-
+      <div className={adviceStyles.adviceBoardContainer}>
+        <Sidebar />
+        <div className={styles.adviceDetailContainer}>
+          <div className={styles.detailTop}>
+            <div className={styles.title}>{advice.title}</div>
+            <div className={styles.time}>{advice.modifiedTime === null
+              ? calculateDate(advice.createdTime)
+              : `${calculateDate(advice.modifiedTime)} (수정됨)`}</div>
+            <div className={styles.hit}>{advice.hit}</div>
+          </div>
+          <div className={styles.content}>{advice.content}</div>
+          <CommentCreate
+            boardTypeProp="ADVICE"
+            boardIdProp={advice.adviceId}
+            getCommentList={getCommentList}
+          />
+          <CommentList
+            comments={comments}
+            onUpdateComment={handleUpdateComment}
+            onDeleteComment={handleDeleteComment}
+            boardType="ADVICE"
+            boardId={advice.adviceId}
+          />
+        </div>
       </div>
     </div>
   );

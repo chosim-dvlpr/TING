@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { setPassword } from "../../redux/signup";
 import { useDispatch } from "react-redux";
@@ -15,8 +15,8 @@ function Password() {
 
   let dispatch = useDispatch();
 
-  let isPwdRight = false;
-  let isPwdConfirmed = false;
+  const checkPwdMsgP = useRef();
+  const confirmPwdMsgP = useRef();
   
   // 비밀번호 형식 확인
   useEffect(() => {
@@ -24,11 +24,11 @@ function Password() {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (!passwordRegex.test(inputPassword)) {
       setCheckPasswordMsg("비밀번호가 형식에 맞지 않습니다.");
-      isPwdRight = false;
+      checkPwdMsgP.current.className = styles.wrongMsg;
     }
     else {
       setCheckPasswordMsg("안전한 비밀번호입니다.");
-      isPwdRight = true;
+      checkPwdMsgP.current.className = styles.rightMsg;
     } 
   }, [inputPassword])
 
@@ -37,11 +37,11 @@ function Password() {
     if (inputPassword && inputPassword === inputPasswordCheck) {
       setConfirmPasswordMsg("비밀번호가 일치합니다.");
       setIsButtonDisabled(false); // 일치하면 다음 버튼 활성화
-      isPwdConfirmed = true;
+      confirmPwdMsgP.current.className = styles.rightMsg;
     }
     else {
       setConfirmPasswordMsg("비밀번호가 일치하지 않습니다.");
-      isPwdConfirmed = false;
+      confirmPwdMsgP.current.className = styles.wrongMsg;
     }
   }, [inputPassword, inputPasswordCheck])
 
@@ -56,9 +56,9 @@ function Password() {
       <br/>
       <input className={styles.input} type="password" id="password" onChange={(e) => setInputPassword(e.target.value)} placeholder="비밀번호"/>
       <p>영문/숫자/특수문자 모두 포함, 8자 이상</p>
-      <p className={isPwdRight ? styles.rightMsg : styles.wrongMsg}>{ checkPasswordMsg }</p>
+      <p ref={checkPwdMsgP} className={styles.wrongMsg}>{ checkPasswordMsg }</p>
       <input className={styles.input} type="password" id="passwordCheck" onChange={(e) => setInputPasswordCheck(e.target.value)} placeholder="비밀번호 확인"/>
-      <p className={isPwdConfirmed ? styles.rightMsg : styles.wrongMsg}>{ confirmPasswordMsg }</p>
+      <p ref={confirmPwdMsgP} className={styles.wrongMsg}>{ confirmPasswordMsg }</p>
       <button
         className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
         onClick={()=>{

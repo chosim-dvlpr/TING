@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getCurrentUserdata } from "../redux/userdata";
 import NavBar from "../component/common/NavBar";
+import styles from "./LoginPage.module.css"
 
 function LoginPage() {
   let [email, setEmail] = useState("");
@@ -61,34 +62,49 @@ function LoginPage() {
     }
   };
 
-  return (
-    <div>
-      <NavBar/>
-      <h1>여기는 로그인입니다.</h1>
+    // 엔터키로 버튼 누를 수 있게
+    const activeEnter = (e) => {
+      if(e.key === "Enter") {
+        loginFunc();
+      }
+    }
 
-      <input
-        type="text"
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        placeholder="이메일"
-      />
-      <br />
-      <input
-        type="password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        placeholder="비밀번호"
-      />
-      <br />
-      <button
-        onClick={() => {
-          loginFunc();
-        }}
-      >
-        로그인
-      </button>
+  return (
+    <div className={styles.outer}>
+      <NavBar/>
+      <div className={styles.container}>
+        <h1 className={styles.title}>로그인</h1>
+
+        <div className={styles.wrapper}>
+          <input
+            className={styles.input}
+            type="text"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            placeholder="이메일"
+          />
+          <br />
+          <input
+            className={styles.input}
+            type="password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="비밀번호"
+            onKeyDown={(e) => activeEnter(e)}
+          />
+          <br />
+          <button
+            className={styles.btn}
+            onClick={() => {
+              loginFunc();
+            }}
+          >
+            로그인
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

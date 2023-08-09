@@ -1,13 +1,15 @@
 /* styles.module.css */
 
 .comment-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
     background-color: #f0f0f0;
     box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
     border-radius: 8px;
-    padding: 10px;
+    padding: 10px 30px;
+    margin: 20px 0;
+  }
+
+  .comment-form form {
+    display: flex;
   }
   
   .comment-input {
@@ -18,10 +20,11 @@
     border-radius: 8px;
     padding: 8px;
     margin-right: 10px;
+    width: 80%;
   }
   
   .comment-button {
-    background-color: #f0f0f0;
+    background-color: #fae6e8;
     box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
     border: none;
     border-radius: 8px;
