@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom"
 
 function Friend(){
   let Navigate = useNavigate();
+  let userdata = useSelector((state) => state.userdataReducer.userdata);
 
-  // // 친구 찾기 버튼 클릭 시 true
-  // let [isSearchFriend, setIsSearchFriend] = useState(false);
+  // 렌더링 시 유저 확인
+  useEffect(() => {
+    if (!userdata) {
+      alert('로그인이 필요합니다.');
+      Navigate("/login");
+    }
+  }, [])
+
 
   return (
     <div>
