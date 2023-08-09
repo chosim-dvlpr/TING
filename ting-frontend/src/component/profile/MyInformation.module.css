@@ -4,7 +4,8 @@
     width: 120px;
 }
 
-.innerWrapper {
+.innerWrapper,
+.updateWrapper {
     width: 100%;
     padding-left: 20px;
     text-align: left;
@@ -32,4 +33,39 @@
 
 td {
     line-height: 100%;
+}
+
+.updateWrapper {
+    flex-direction: column;
+}
+
+.updateDiv {
+    display: flex;
+    align-items: center;
+}
+
+.dropDownMenu {
+    width: 100px;
+    border: 1px solid black;
+    background-color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dropDownBtn {
+    width: 100px;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px;
+    background-color: white;
+}
+
+.isOpen {
+    display: inline-block;
+}
+
+.isClose {
+    display: none;
 }

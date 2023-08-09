@@ -31,12 +31,12 @@ function MyProfilePage() {
   return (
     <div className={styles.outer}>
       <NavBar />
-      {/* <button onClick={() => setIsModalOpened(true)}>채팅 목록 버튼</button>
+      <button onClick={() => setIsModalOpened(true)}>채팅 목록 버튼</button>
       {
         isModalOpened &&
         <Friend onSearch={setIsModalOpened} />
       }
-      <hr /> */}
+      <hr />
       <div className={styles.container}>
         <ProfileHeader />
         <div className={styles.innerContainer}>
