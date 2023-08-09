@@ -20,7 +20,7 @@ function AdviceBoard() {
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
 
 
-  const boardType = "advice";
+  const boardType = "advice"
 
   useEffect(() => {
     getAllAdviceData();
