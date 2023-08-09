@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult, resetMatchingStore } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
@@ -55,6 +55,8 @@ function MatchingStart() {
   // 초기화 useEffect hook
   useEffect(() => {
     console.log("====================useEffect (초기화) ======================");
+    dispatch(resetMatchingStore())
+
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
     let matchingId = state.matchingReducer.matchingId;
@@ -398,7 +400,7 @@ function MatchingStart() {
             <div className={styles.ScoreBox}>
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
                 return (
-                  <div className={styles.HeartScore}>
+                  <div className={`${styles.HeartScore}`}>
                     <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
 
                     <button

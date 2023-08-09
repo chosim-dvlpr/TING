@@ -116,3 +116,26 @@ p{
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
 }
+
+.HeartScore:cue{
+  animation-name: 흔들확대;
+  animation-duration: 2s;
+}
+
+@keyframes 흔들확대 {
+  0% {
+    transform: rotate(0deg) scale(1.5);
+  }
+  25% {
+    transform: rotate(8deg) scale(1.5);
+  }
+  50% {
+    transform: rotate(-8deg) scale(1.5);
+  }
+  75% {
+    transform: rotate(8deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(0deg) scale(2);
+  }
+}
