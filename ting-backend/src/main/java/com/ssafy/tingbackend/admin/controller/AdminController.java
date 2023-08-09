@@ -90,4 +90,22 @@ public class AdminController {
         Integer count = adminService.matchingCount();
         return new DataResponse<>(200, "매칭 수 조회 성공", Map.of("totalCount", count));
     }
+
+    @GetMapping("/admin/user/count")
+    public DataResponse<Map<String, Integer>> getUserCount() {
+        Integer count = adminService.userCount();
+        return new DataResponse<>(200, "유저 수 조회 성공", Map.of("totalCount", count));
+    }
+
+    @GetMapping("/admin/report/count")
+    public DataResponse<Map<String, Integer>> getReportCount() {
+        Integer count = adminService.reportCount();
+        return new DataResponse<>(200, "신고 수 조회 성공", Map.of("totalCount", count));
+    }
+
+    @GetMapping("/admin/profit/total")
+    public DataResponse<Map<String, Long>> getTotalProfit() {
+        Long totalProfit = adminService.totalProfit();
+        return new DataResponse<>(200, "총 매출 조회 성공", Map.of("totalProfit", totalProfit));
+    }
 }
