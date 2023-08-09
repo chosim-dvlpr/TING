@@ -1,21 +1,37 @@
 .adminContainer {
+    text-align: left;
+    min-width: 1100px;
+
     display: flex;
     width: 100%;
     height: 100vh;
-    background-color: #f5f5f5;
+    background-color: #EEEEEE;
+    margin: 0;
+    padding: 0;
 }
 
 .logoContainer {
-    /* background-color: aliceblue; */
+    width: 220px;
+    margin: 10px;
+    margin-left: 50px;
 }
 
 .sidebar {
-    width: 260px;
+    width: 240px;
     /*min-height: 800px;*/
-    background-color: aqua;
-    text-align: left;
+    background-color: #29292A;
+    color: #CFCECD;
 }
 
 .sidebarMenu {
-    text-align: center;
+    /* text-align: center; */
+    padding: 30px;
+}
+
+.sidebarMenu>div {
+    margin: 20px;
+}
+
+.sidebarMenu img {
+    margin-right: 15px;
 }

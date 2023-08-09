@@ -10,13 +10,25 @@ function AdminPage() {
         <div className={styles.logoContainer}>
           <img src="/img/ting_logo_fish.png" alt="로고" width="70px" />
           <span>ADMIN</span>
-          <hr />
         </div>
+        <hr style={{ margin: "0 auto" }} width="200px" />
         <div className={styles.sidebarMenu}>
-          <div onClick={() => navigate("/admin/dashboard")}>Dashboard</div>
-          <div>Report</div>
-          <div>User</div>
-          <div>Q&A</div>
+          <div onClick={() => navigate("/admin/dashboard")}>
+            <img src={process.env.PUBLIC_URL + "/img/admin/image21.png"} width="30px" />
+            Dashboard
+          </div>
+          <div>
+            <img src={process.env.PUBLIC_URL + "/img/admin/image22.png"} width="30px" />
+            Report
+          </div>
+          <div>
+            <img src={process.env.PUBLIC_URL + "/img/admin/image23.png"} width="30px" />
+            User
+          </div>
+          <div>
+            <img src={process.env.PUBLIC_URL + "/img/admin/image24.png"} width="30px" />
+            Q&A
+          </div>
         </div>
       </div>
       <Outlet></Outlet>
