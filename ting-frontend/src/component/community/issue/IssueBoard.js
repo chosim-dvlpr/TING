@@ -16,6 +16,8 @@ function IssueBoard() {
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata);
 
+  const boardType = "issue";
+
   useEffect(() => {
     getAllIssueData();
   }, [currentPage]);
@@ -106,6 +108,7 @@ function IssueBoard() {
     <div>
       <NavBar/>
       <Sidebar />
+      <SearchBar onSearch={handleSearch} boardType={boardType}/>
       <div className={styles.cardList}>
         {searchResult.length > 0
           ? searchResult.map((issue) => (
@@ -187,7 +190,7 @@ function IssueBoard() {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-      <SearchBar onSearch={handleSearch} />
+     
     </div>
   );
 }
