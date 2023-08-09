@@ -34,8 +34,9 @@ function MatchingStart() {
 
   // ScoreCheck 점수 클릭 관련 state
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false, false, false, false, false, false, false, false, false, false]);
-  const [disableaButton, setDisableButton] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+  const [disableHover, setDisableHover] = useState([false, false, false, false, false, false, false, false, false, false, false]);
   const trueList = [true, true, true, true, true, true, true, true, true, true, true];
+  const [disableaButton, setDisableButton] = useState(false);
 
   // 최종 점수 관련 state
   const [sumMyScore, setSumMyScore] = useState(0)
@@ -85,7 +86,12 @@ function MatchingStart() {
   // 질문카드를 제어하는 useEffect hook
   useEffect(() => {
     console.log("================useEffect (score 변경)=====================");
-    dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
+    if (questionNumber < Math.min(myScore.length, yourScore.length)) {
+      // questionNumber 바로 안바뀌게 잠시 시간 텀 줌
+      setTimeout(()=>{
+        dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
+      },1000)
+    }
   }, [myScore, yourScore]);
 
   // timerBar를 제어하는 useEffect hook
@@ -130,11 +136,12 @@ function MatchingStart() {
   // 모든 질문이 끝났을 떄 제어하는 useEffect hook
   useEffect(() => {
     // 버튼 재활성화
-    setDisableButton([false, false, false, false, false, false, false, false, false, false, false]);
+    setDisableButton(false);
+    setDisableHover([false, false, false, false, false, false, false, false, false, false, false]);
     setButtonToggleSign([false, false, false, false, false, false, false, false, false, false, false]);
     if (questionNumber !== 0) {
       // 3초의 딜레이
-      setTimeout(setCount(30),3000);
+      setCount(30);
     }
     if (questionNumber === 11) {
       setCount(5);
@@ -347,7 +354,7 @@ function MatchingStart() {
   };
 
   return (
-    <div className="container">
+    <div className={`${styles.container}`}>
       {showAlert && <div>{alertMessage}</div>}
       <div id="session-header" className={styles.sessionHeader}>
         <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
@@ -401,20 +408,26 @@ function MatchingStart() {
             <div className={styles.ScoreBox}>
               {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
                 return (
-                  <div className={`${styles.HeartScore} ${ !disableaButton[i] ? styles.HeartScoreAni : null}`}>
-                    <img src={buttonToggleSign[i] ? "/img/heart-icon-toggle.png" : "/img/heart-icon.png"} id={`buttonImg-${score}`} />
+                  <div className={`${styles.HeartScore} ${ !disableHover[i] ? styles.HeartScoreAni : null}`}>
+                    <img 
+                      src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"} 
+                      id={`buttonImg-${score}`} 
+                      className={buttonToggleSign[i] ? styles.clickedHeart : null}
+                      />
 
                     <button
                       className={styles.ScoreText}
-                      disabled={disableaButton[i]}
+                      disabled={disableaButton}
                       onClick={() => {
                         setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                        setDisableButton([...trueList.slice(0, i), false, ...trueList.slice(i + 1)])
+                        setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
+                        setDisableButton(true)
                         handleScoreSelect(score);
                       }}
                     >
                       {score}
                     </button>
+                    <span className={styles.dot}></span>
                   </div>
                 );
               })}

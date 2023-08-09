@@ -1,6 +1,13 @@
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 video {
   width: 100%;
-  margin:20px 0;
+  margin:10px 0;
   height: auto;
   border-radius: 40px;
   background-color: #91cad6;
@@ -20,9 +27,29 @@ video {
   align-items: center;
 }
 
-
 p{
   margin: 0;
+}
+
+.container {
+  position: relative;
+  height: 88vh;
+  background-color: white;
+  margin-left: 100px;
+  /* padding-right: 130px; */
+  margin-right: 100px;
+  border-radius: 50px;
+  border: 3px solid #30668A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+  padding-top: 40px;
+}
+
+.session {
+  display: flex;
+  align-items: center;
 }
 
 .sessionHeader{
@@ -71,10 +98,7 @@ p{
 
 .ScoreCheckBox {
   width:100%;
-  background-color: #FEF1F6;
-  border: 1px solid #4F4F4F;
   border-radius: 10px;
-  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .ScoreBox {
@@ -96,7 +120,10 @@ p{
 .HeartScore img{
   width:100%;
   vertical-align: middle;
-  
+}
+
+.clickedHeart {
+  scale: 1.4;
 }
 
 .HeartScore:hover{
@@ -104,6 +131,8 @@ p{
 }
 
 .ScoreText {
+  font-family: UhBeeSe_hyun;
+  color: white;
   background: none;
   border : none;
   font-size: 1.5rem;
@@ -119,23 +148,20 @@ p{
 
 .HeartScoreAni:hover{
   animation-name: 흔들확대;
-  animation-duration: 2s;
+  z-index: 10;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
 }
 
 @keyframes 흔들확대 {
   0% {
-    transform: rotate(0deg) scale(1.5);
+    transform: scale(1.2);
   }
-  25% {
-    transform: rotate(8deg) scale(1.5);
-  }
-  50% {
-    transform: rotate(-8deg) scale(1.5);
-  }
-  75% {
-    transform: rotate(8deg) scale(1.5);
+  30% {
+    transform: scale(1.5);
   }
   100% {
-    transform: rotate(0deg) scale(2);
+    transform: scale(1.2);
   }
 }
+
