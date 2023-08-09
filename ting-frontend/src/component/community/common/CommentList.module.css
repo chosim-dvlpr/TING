@@ -40,10 +40,17 @@
     display: flex;
     justify-content: center;
   }
-  
-  .comment-details p {
+
+  .comment-details textarea {
+    height: 40px;
+    width: 690px;
   }
   
+  .comment-details button {
+    width: 60px;
+    margin: 0 10px;
+  }
+
   /* 좋아요 버튼 스타일 */
   .like-button {
     background-color: #f2f2f2;

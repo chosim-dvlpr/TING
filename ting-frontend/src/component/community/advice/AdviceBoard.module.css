@@ -63,6 +63,10 @@
   color: white;
 }
 
+.adviceTable tr {
+  height: 40px;
+}
+
 .table_1 {
   width: 10%;
   border-right: 1px solid white;
