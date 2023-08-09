@@ -5,6 +5,7 @@ import com.ssafy.tingbackend.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,5 +36,7 @@ public class PointPayment {
 
     @Enumerated(EnumType.STRING)
     private PaymentMethodType paymentMethodType;
+
+    private LocalDateTime createdTime;
 
 }
