@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Pagination from "../community/common/Pagination";
 import { useNavigate } from "react-router-dom";
 
+import commonStyles from "./ProfileCommon.module.css";
+import styles from "./QnaBoard.module.css";
+
 function QnaBoard() {
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
   const [qnaList, setQnaList] = useState([]);
@@ -30,7 +33,7 @@ function QnaBoard() {
       }
       // else { console.log('문의글이 없습니다.') }
     })
-    .catch(() => console.log("실패"));
+      .catch(() => console.log("실패"));
   };
 
   useEffect(() => {
@@ -70,42 +73,47 @@ function QnaBoard() {
 
 
   return (
-    <div style={{ margin: 'auto', width: '50%' }}>
-      <h1>1:1 문의 게시판</h1>
-      <h3>제목을 클릭하면 상세페이지로 넘어가요!</h3>
-      <button onClick={(event) => goToQnaCreate(event) }>문의 작성하기</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>title</th>
-            <th>createdTime</th>
-            <th>answer</th>
-            <th>completedTime</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            qnaList.map((qna, i) => (
-            <tr key={i}>
-              <td>{ qna.qnaId }</td>
-              <td>
-                <span onClick={(event) => goToQnaDetail(qna.qnaId, event)}>{ qna.title }</span>
-              </td>
-              <td>{ qna.createdTime }</td>
-              <td>{ qna.answer ? qna.answer : '처리 전' }</td>
-              <td>{ qna.completedTime ? qna.completedTime : '-' }</td>
-            </tr>  
-            ))
-          }
-        </tbody>
-      </table>
-      <div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
+    <div className={commonStyles.wrapper}>
+      <div className={styles.btnWrapper}>
+        <button className={commonStyles.btn} onClick={(event) => goToQnaCreate(event)}>문의 작성하기</button>
+      </div>
+      <div className={styles.innerWrapper}>
+        <h3>제목을 클릭하면 상세 내용을 확인할 수 있습니다.</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>작성시간</th>
+              <th>답변현황</th>
+              <th>답변시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              qnaList.length == 0 ?
+                <td colSpan={5}>문의 내역이 없습니다</td> :
+                qnaList.map((qna, i) => (
+                  <tr key={i}>
+                    <td>{qna.qnaId}</td>
+                    <td>
+                      <span className={commonStyles.clickable} onClick={(event) => goToQnaDetail(qna.qnaId, event)}>{qna.title}</span>
+                    </td>
+                    <td>{qna.createdTime}</td>
+                    <td>{qna.answer ? qna.answer : '처리 전'}</td>
+                    <td>{qna.completedTime ? qna.completedTime : '-'}</td>
+                  </tr>
+                ))
+            }
+          </tbody>
+        </table>
+        <div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </div>
   )

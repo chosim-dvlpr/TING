@@ -2,7 +2,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { regionList } from "../../SelectionDataList";
 
-import styles from "./ProfileCommon.module.css";
+import commonStyles from "./ProfileCommon.module.css";
+import styles from "./MyInformation.module.css";
 
 function MyInformation() {
   let Navigate = useNavigate();
@@ -22,9 +23,9 @@ function MyInformation() {
 
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.innerWrapper} id={styles.btnWrapper}>
-        <button className={styles.btn} onClick={() => Navigate("/mypage/update")}>수정하기</button>
+    <div className={commonStyles.wrapper}>
+      <div className={styles.btnWrapper}>
+        <button className={commonStyles.btn} onClick={() => Navigate("/mypage/update")}>수정하기</button>
       </div>
 
       <div className={styles.innerWrapper}>

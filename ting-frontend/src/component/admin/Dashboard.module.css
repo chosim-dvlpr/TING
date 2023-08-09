@@ -15,7 +15,7 @@
 /* 요약정보 박스 */
 .summaryBox {
     position: relative;
-    width: 300px;
+    width: 295px;
     margin: 0 10px;
 }
 
@@ -55,7 +55,9 @@
 }
 
 .info {
-    font-size: 35px;
+    margin-top: 15px;
+    font-size: 25px;
+    text-align: right;
 }
 
 .summaryHr {
@@ -85,10 +87,21 @@
     position: absolute;
     width: 560px;
     height: 250px;
-    background-color: bisque;
     left: 20px;
     top: 20px;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+}
+
+.chartPrice {
+    background-color: #FB8E03;
+}
+
+.chartMatching {
+    background-color: #49A54D;
 }
 
 .chartDescription {
@@ -97,4 +110,18 @@
     background-color: white;
     margin-top: 70px;
     border-radius: 10px;
+}
+
+.descriptionContainer {
+    position: absolute;
+    top: 280px;
+    left: 25px;
+}
+
+.descriptionTitle {
+    margin-bottom: 30px;
+}
+
+.updateTime {
+    color: #929292;
 }

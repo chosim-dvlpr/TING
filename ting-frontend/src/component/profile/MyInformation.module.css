@@ -1,0 +1,71 @@
+.title {
+    font-weight: 600;
+    /* padding-right: 30px; */
+    width: 120px;
+}
+
+.innerWrapper,
+.updateWrapper {
+    width: 100%;
+    padding-left: 20px;
+    text-align: left;
+    display: flex;
+}
+
+.btnWrapper {
+    position: absolute;
+    right: 130px;
+}
+
+#moreInfo {
+    margin-right: 200px;
+}
+
+.innerWrapper tr {
+    height: 30px;
+}
+
+.hashtag>span {
+    background-color: white;
+    padding: 2px 5px;
+    margin-right: 5px;
+}
+
+td {
+    line-height: 100%;
+}
+
+.updateWrapper {
+    flex-direction: column;
+}
+
+.updateDiv {
+    display: flex;
+    align-items: center;
+}
+
+.dropDownMenu {
+    width: 100px;
+    border: 1px solid black;
+    background-color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dropDownBtn {
+    width: 100px;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px;
+    background-color: white;
+}
+
+.isOpen {
+    display: inline-block;
+}
+
+.isClose {
+    display: none;
+}

@@ -1,0 +1,40 @@
+.yesClicked,
+.noClicked {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 5px 20px;
+}
+
+.yesClicked {
+    color: #2e6070;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.noClicked {
+    color: black;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.headerWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.innerWrapper {
+    margin: 10px;
+    text-align: start;
+}
+
+.innerWrapper>table {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.innerWrapper td,
+.innerWrapper th {
+    padding: 10px;
+    border-bottom: 1px solid rgb(173, 173, 173);
+    text-align: center;
+}
