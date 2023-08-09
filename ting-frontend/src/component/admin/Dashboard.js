@@ -108,13 +108,35 @@ const Dashboard = () => {
           <div className={`${styles.chart} ${styles.chartPrice}`}>
             <PriceChart />
           </div>
-          <div className={styles.chartDescription}></div>
+          <div className={styles.chartDescription}>
+            <div className={styles.descriptionContainer}>
+              <div className={styles.descriptionTitle}>
+                <span style={{ fontSize: "23px", fontWeight: "600", color: "#393939" }}>서비스 매출액 추이</span>
+              </div>
+              <hr style={{ width: "550px" }} />
+              <div>
+                <img src={`${process.env.PUBLIC_URL}/img/admin/image25.png`} width="20px" />
+                <span className={styles.updateTime}> updated for 3 minutes age..</span>
+              </div>
+            </div>
+          </div>
         </div>
         <div className={styles.chartOuterBox}>
           <div className={`${styles.chart} ${styles.chartMatching}`}>
             <MatchingChart />
           </div>
-          <div className={styles.chartDescription}></div>
+          <div className={styles.chartDescription}>
+            <div className={styles.descriptionContainer}>
+              <div className={styles.descriptionTitle}>
+                <span style={{ fontSize: "23px", fontWeight: "600", color: "#393939" }}>매칭 성공 추이</span>
+              </div>
+              <hr style={{ width: "550px" }} />
+              <div>
+                <img src={`${process.env.PUBLIC_URL}/img/admin/image25.png`} width="20px" />
+                <span className={styles.updateTime}> updated for 3 minutes age..</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
