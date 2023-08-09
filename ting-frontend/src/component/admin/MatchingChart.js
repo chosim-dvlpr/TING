@@ -5,7 +5,7 @@ import tokenHttp from "../../api/tokenHttp";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export function PriceChart() {
+export function MatchingChart() {
   const options = {
     responsive: true,
     plugins: {
@@ -22,17 +22,16 @@ export function PriceChart() {
     labels,
     datasets: [
       {
-        label: "sales price",
+        label: "Matching Count",
         data: dataSet,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        borderColor: "rgb(255, 255, 255)",
       },
     ],
   };
 
   useEffect(() => {
     tokenHttp
-      .get("/admin/payment/history20")
+      .get("/admin/matching/history20")
       .then((response) => {
         setLabels(response.data.data["labelList"]);
         setDataSet(response.data.data["countList"]);

@@ -1,5 +1,6 @@
 import styles from "./Dashboard.module.css";
 import { PriceChart } from "./PriceChart";
+import { MatchingChart } from "./MatchingChart";
 
 const Dashboard = () => {
   return (
@@ -67,13 +68,15 @@ const Dashboard = () => {
 
       <div className={styles.chartContainer}>
         <div className={styles.chartOuterBox}>
-          <div className={styles.chart}>
+          <div className={`${styles.chart} ${styles.chartPrice}`}>
             <PriceChart />
           </div>
           <div className={styles.chartDescription}></div>
         </div>
         <div className={styles.chartOuterBox}>
-          <div className={styles.chart}> </div>
+          <div className={`${styles.chart} ${styles.chartMatching}`}>
+            <MatchingChart />
+          </div>
           <div className={styles.chartDescription}></div>
         </div>
       </div>

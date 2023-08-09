@@ -87,10 +87,21 @@
     position: absolute;
     width: 560px;
     height: 250px;
-    background-color: bisque;
     left: 20px;
     top: 20px;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+}
+
+.chartPrice {
+    background-color: #FB8E03;
+}
+
+.chartMatching {
+    background-color: #49A54D;   
 }
 
 .chartDescription {
