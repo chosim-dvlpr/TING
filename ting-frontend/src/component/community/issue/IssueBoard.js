@@ -106,10 +106,14 @@ function IssueBoard() {
 
   return (
     <div>
+
       {/* <NavBar/> */}
      
         
       <div className={styles.issueBoardContainer}>
+
+      <NavBar/>
+
       <Sidebar />
       <div className={styles.cardList}>
       <button className={styles.createButton} onClick={handleCreateClick}>
