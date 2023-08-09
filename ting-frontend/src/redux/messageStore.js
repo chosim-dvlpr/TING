@@ -96,6 +96,21 @@ export default class MessageStore {
     this.connect();
   }
 
+  // disconnect all
+  disconnectAll() {
+    this.sendMessage({ type: 'quit' });
+
+    this.client.unsubscribe();
+    this.client.disconnect();
+
+    this.connected = false; // 연결 해제 상태
+    this.currentRoomIndex = 0; // 방번호 초기화
+    this.messageEntered = '';
+    this.messageLogs = [];
+    this.messageLogsObject = {};
+    this.publish();
+  }
+
   // 메세지 내용 작성
   // value : 입력값
   changeInput(value) {
