@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import tokenHttp from '../../api/tokenHttp';
 import FriendProfile from './FriendProfile';
 
-function FriendChatting() {
+function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChattingObj, chattingObj }) {
   const location = useLocation();
   const Navigate = useNavigate();
   const messageStore = useMessageStore();
@@ -23,7 +23,8 @@ function FriendChatting() {
 
   // 처음 렌더링 시 기존 데이터 DB에서 받아오기
   const getPreviousMessage = () => {
-    tokenHttp.get(`/chatting/${location.state.friend.chattingId}`).then((response) => {
+    tokenHttp.get(`/chatting/${chattingObj.chattingId}`).then((response) => {
+    // tokenHttp.get(`/chatting/${location.state.friend.chattingId}`).then((response) => {
       // 불러오기 성공 시 previousMessage에 대화 내용 저장
       if (response.data.code === 200) {
         console.log('로그 불러오기 성공');
@@ -40,6 +41,8 @@ function FriendChatting() {
   // 처음 렌더링 시 실행
   useEffect(() => {
     getPreviousMessage(); // 불러온 데이터를 messageLogs에 저장
+    console.log("============",chattingObj)
+
     // const messageLogs = previousMessage
     // messageLogs.push(previousMessage)
   }, [])
@@ -67,10 +70,13 @@ function FriendChatting() {
 
   // 채팅방 나가기
   const handleClickQuitRoom = async () => {
-    messageStore.disconnect(location.state.friend.chattingId);
+    // messageStore.disconnect(location.state.friend.chattingId);
+    messageStore.disconnect(chattingObj.chattingId);
     console.log('채팅 연결 해제')
     messageLogs = {};
-    Navigate("/friend");
+    showFriendList(true);
+    showFriendChatting(false);
+    // Navigate("/friend");
   };
 
   if (!connected) {
@@ -90,9 +96,10 @@ function FriendChatting() {
         연결 종료 버튼
       </button>
 
-      <p>친구 닉네임 : { location.state.friend.nickname }</p>
-      <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button>
-
+      {/* <p>친구 닉네임 : { location.state.friend.nickname }</p> */}
+      <p>친구 닉네임 : { chattingObj.nickname }</p>
+      {/* <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button> */}
+      <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { chattingObj.profileImage ? chattingObj.profileImage : '사진없음' }</button>
       <form onSubmit={handleSubmit}>
         <label htmlFor="message-to-send">
           메시지 입력
@@ -112,7 +119,8 @@ function FriendChatting() {
       {/* 프로필 모달 */}
       {
         isProfileModal &&
-        <FriendProfile userId={ location.state.friend.userId }/>
+        // <FriendProfile userId={ location.state.friend.userId }/>
+        <FriendProfile userId={ chattingObj.userId }/>
       }
 
       <ul>

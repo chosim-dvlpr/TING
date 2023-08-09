@@ -66,7 +66,7 @@ import ItemPage from './pages/ItemPage';
 import AdminPage from './pages/AdminPage';
 
 // 친구
-import Friend from './component/common/Friend';
+import Friend from './component/friend/Friend';
 import FriendList from './component/friend/FriendList';
 import FriendChatting from './component/friend/FriendChatting';
 import FriendProfile from './component/friend/FriendProfile';
