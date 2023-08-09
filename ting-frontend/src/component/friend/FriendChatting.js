@@ -125,16 +125,16 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
 
       <ul>
         {messageLogs.map((message) => (
-          <li key={message.id}>
-            {message.value}
-          </li>
+          <p key={message.id}>
+            {message.nickname} | {message.value}
+          </p>
         ))}
       </ul>
       {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
       <p>{ previousMessage.map((message) => 
-        <li key={message.id}>
-          {message.content}
-        </li>
+        <p key={message.id}>
+          {message.nickname} | {message.content}
+        </p>
       ) }</p>
     </div>
   );
