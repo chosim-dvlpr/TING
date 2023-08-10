@@ -23,7 +23,9 @@ const FriendButton = () => {
     // alert(isClosed);
     // isClosed = !isClosed;
     // console.log(isClosed);
-    if(show) setShow(false);
+    if(show) {
+      setShow(false);
+    }
     else setShow(true);
   };
 
@@ -34,6 +36,7 @@ const FriendButton = () => {
 
   return (
     <div className={styles.friendContainer}>
+      <button className={styles.button} onClick={() => changeIsClosed()}></button>
       <div>
         {/* <div className={styles.profileContainer}></div> */}
         {show && <div className={styles.chatContainer}>
@@ -48,7 +51,6 @@ const FriendButton = () => {
         <Friend />
       </div> */}
       </div>
-      <button className={styles.button} onClick={() => changeIsClosed()}>어항</button>
     </div>
   );
 };
