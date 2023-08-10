@@ -90,19 +90,6 @@ function MatchingChoice({session, count}){
               <h3>자동으로 어항에 추가됩니다.</h3>
               <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
             </div>
-            // matchingResult.result ? ( 
-            //   <div>
-            //     <h3>모두 YES일 경우</h3>
-            //     <h3>자동으로 어항에 추가됩니다.</h3>
-            //     <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
-            //   </div>
-            // ) : (
-            //   <div>
-            //     <h3>{yourData.nickname}님이 거절하셨습니다.</h3>
-            //     <h3>다음 기회에....</h3>
-            //     <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
-            //   </div>
-            // )
           ) : (
           <div>
             <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
