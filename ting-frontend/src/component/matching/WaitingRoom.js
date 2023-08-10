@@ -25,7 +25,7 @@ function WaitingRoom() {
 
   // 이 티켓 redux로 불러와야할 듯
   const [ticket, setTicket] = useState(0);
-  const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const myItemList = useSelector((state) => state.itemReducer.myItemList);
 
   
   useEffect(()=>{
