@@ -285,11 +285,21 @@ public class UserService {
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
         user.setHeight(userDto.getHeight());
         user.setIntroduce(userDto.getIntroduce());
-        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
-        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
-        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
-        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
-        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        if(userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        else user.setJobCode(null);
+
+        if(userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        else user.setDrinkingCode(null);
+
+        if(userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        else user.setReligionCode(null);
+
+        if(userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        else user.setMbtiCode(null);
+
+        if(userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+        else user.setSmokingCode(null);
 
         userHobbyRepository.deleteAll(user.getUserHobbys());
         userStyleRepository.deleteAll(user.getUserStyles());
