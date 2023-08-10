@@ -15,9 +15,13 @@ import MainButton from "../component/main/MainButton";
 import NavBar from "../component/common/NavBar";
 import FriendButton from "../component/common/FriendButton"
 import useMessageStore from "../component/friend/useMessageStore";
+import { useSelector } from "react-redux";
 
 function MainPage() {
   const messageStore = useMessageStore();
+
+  // 채팅 기능 추가 시 넣어야 하는 부분 //
+  let userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const {
     connected,
@@ -25,18 +29,20 @@ function MainPage() {
     roomIndices,
     messageLogsObject,
   } = messageStore;
-
+  
   // 모든 채팅방 연결
   const connectSocket = () => {
-    // if (connected) {
-    //   messageStore.disconnect(currentRoomIndex);
-    // }
     messageStore.connect();
   }
 
   useEffect(() => {
-    connectSocket();
-  }, [])
+    if (userdata) {
+      connectSocket();
+    }
+  }, [userdata])
+  
+  // 여기까지 추가 //
+
 
   useEffect(() => {
     AOS.init();
