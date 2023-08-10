@@ -59,7 +59,10 @@ const Report = () => {
                 <td>{report.state}</td>
                 <td>{convertTimeFormat(report.createdTime)}</td>
                 <td>
-                  <Button onClick={() => navigate(`/admin/report?id=${report.reportedUserId}&reportId=${report.reportId}`)} variant="secondary">
+                  <Button
+                    onClick={() => navigate(`/admin/report/detail?reportedUserId=${report.reportedUserId}&reportId=${report.reportId}`)}
+                    variant="secondary"
+                  >
                     상세보기
                   </Button>
                 </td>
