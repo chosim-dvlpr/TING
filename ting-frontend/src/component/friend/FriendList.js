@@ -50,7 +50,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
     if(!boardTime) return;
     if (isSameDate(boardTime)) {
       return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
+    } else return boardTime.substr(5, 2)+'월 '+boardTime.substr(8,2)+'일';
   };
 
   const isSameDate = (boardTime) => {

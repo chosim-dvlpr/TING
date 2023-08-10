@@ -104,7 +104,7 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     const calculateDate = (boardTime) => {
       if (isSameDate(boardTime)) {
         return boardTime.substr(11, 5);
-      } else return boardTime.substr(0, 10);
+      } else return boardTime.substr(5, 2)+'월 '+boardTime.substr(8,2)+'일';
     };
   
     const isSameDate = (boardTime) => {
@@ -116,6 +116,15 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
         time.getDate() === currentTime.getDate()
       );
     };
+
+    const calculateTime = (time) => {
+      if(!time) return;
+      console.log(time);
+      if(time.substr(0,2)=='오후') {
+        return toString(Number(time.substr(3,2))+12)+time.substr(5,3);
+      }
+      return time.substr(3, 5); 
+    }
 
   if (!connected) {
     return (
@@ -143,21 +152,19 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
       {/* <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button> */}
       <div className={styles.chattingArea}>
       <table>
-        <table>
-        {messageLogs.map((message) => (
-          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
-            <td className={styles.content}>{message.value}</td>
-            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
-          </tr>
-        ))}
-        </table>
         { previousMessage.map((message) => 
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
             <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
             <td className={styles.time}>{calculateDate(message.sendTime)}</td>
           </tr>
         )}
-        </table>
+        {messageLogs.map((message) => (
+          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
+            <td className={styles.content}>{message.content}</td>
+            <td className={styles.time}>{calculateTime(message.sendTime)}</td>
+          </tr>
+        ))}
+      </table>
         {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
       </div>
       <div className={styles.submitArea}>
