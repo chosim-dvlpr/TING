@@ -15,6 +15,11 @@ import java.time.LocalDateTime;
 public class AdminReportDto {
     private Long reportId;
     private Long userId;
+    private Long reportedUserId;
+
+    private String userNickname;
+    private String reportedUserNickname;
+
     private String content;
     private ReportStateType state;
     private ReportType type;
@@ -26,6 +31,7 @@ public class AdminReportDto {
         return AdminReportDto.builder()
                 .reportId(report.getId())
                 .userId(report.getUser().getId())
+                .userNickname(report.getUser().getNickname())
                 .content(report.getContent())
                 .state(report.getState())
                 .type(report.getType())

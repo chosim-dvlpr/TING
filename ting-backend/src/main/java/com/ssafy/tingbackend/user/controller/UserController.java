@@ -79,8 +79,15 @@ public class UserController {
 
     @PostMapping("/user/profile")
     public CommonResponse profile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
-        userService.saveProfile(file, principal);
+        userService.saveProfile(file, Long.parseLong(principal.getName()));
         return new CommonResponse(200, "프로필 등록 성공");
+    }
+
+    @PostMapping("/user/profile/noToken")
+    public void profileNoToken(@RequestParam("file") MultipartFile file, @RequestParam("email") String email,
+                               @RequestParam("password") String password) throws IOException {
+        userService.saveProfileNoToken(file, email, password);
+
     }
 
     @GetMapping("/user/profile")
