@@ -5,13 +5,12 @@
 .ItemCardList {
   display: flex;
   margin: 30px;
-
 }
 
 .ItemCard {
-  margin : 20px;
-  width : 200px;
-  height : 300px;
+  margin: 20px;
+  width: 200px;
+  height: 300px;
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   background-color: rgb(247, 205, 212);
@@ -30,6 +29,13 @@
   background-color: white;
   margin: 5px auto;
   border-radius: 10%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.itemCardInside > img {
+  width: 75%;
 }
 
 .name {

@@ -1,76 +1,76 @@
 .btnWrapper {
-    position: absolute;
-    right: 130px;
+  position: absolute;
+  right: 40px;
 }
 
 .innerWrapper {
-    margin: 10px;
-    text-align: start;
+  margin: 10px;
+  text-align: start;
 }
 
-.innerWrapper>table {
-    margin: 20px 0;
-    width: 100%;
+.innerWrapper > table {
+  margin: 20px 0;
+  width: 100%;
 }
 
 .innerWrapper td,
 .innerWrapper th {
-    padding: 10px;
-    border-bottom: 1px solid rgb(173, 173, 173);
-    text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid rgb(173, 173, 173);
+  text-align: center;
 }
 
 .formWrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .formWrapper input,
 .formWrapper textarea {
-    width: 60%;
-    padding: 5px 15px;
-    border-radius: 10px;
-    border: 2px solid gray;
+  width: 60%;
+  padding: 5px 15px;
+  border-radius: 10px;
+  border: 2px solid gray;
 }
 
 .formWrapper input {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .formWrapper textarea {
-    min-height: 100px;
+  min-height: 100px;
 }
 
 .textareaWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .detailWrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.detailWrapper>table {
-    width: 60%;
-    text-align: left;
+.detailWrapper > table {
+  width: 60%;
+  text-align: left;
 }
 
-.detailWrapper>h4 {
-    font-weight: 700;
+.detailWrapper > h4 {
+  font-weight: 700;
 }
 
 .answerDiv {
-    width: 80%;
-    min-height: 10vh;
-    padding: 10px;
-    margin-top: 5px;
-    border: 2px solid #f1b7be;
-    border-radius: 10px;
+  width: 80%;
+  min-height: 10vh;
+  padding: 10px;
+  margin-top: 5px;
+  border: 2px solid #f1b7be;
+  border-radius: 10px;
 }

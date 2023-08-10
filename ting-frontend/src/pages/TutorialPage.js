@@ -27,7 +27,7 @@ function TutorialPage() {
             alt="main"
           />
           <div className={styles.description}>
-            <div className={styles.numberImg}>1</div>
+            <div className={styles.numberImgPink}>1</div>
             <div>
               <img
                 style={{ height: "80px" }}
@@ -41,7 +41,7 @@ function TutorialPage() {
         {/* section2 */}
         <div className={styles.section}>
           <div className={styles.description}>
-            <div className={styles.numberImg}>2</div>
+            <div className={styles.numberImgBlue}>2</div>
             <div>
               마이크와 웹캠을 체크해주세요!
               <br />
@@ -58,11 +58,11 @@ function TutorialPage() {
         {/* section3 */}
         <div className={styles.bigImgSection}>
           <div className={styles.description}>
-            <div className={styles.numberImg}>3</div>
+            <div className={styles.numberImgPink}>3</div>
             <div>
               매칭 시작 버튼을 누르고
               <br />
-              잠시 대기해주세요!
+              잠시 대기해주세요.
               <br />
               팅의 알고리즘 기술로
               <br />
@@ -84,13 +84,48 @@ function TutorialPage() {
             alt="main"
           />
           <div className={styles.description}>
-            <div className={styles.numberImg}>4</div>
+            <div className={styles.numberImgBlue}>4</div>
             <div>
               매칭 알림을 받으면
               <br />
               15초 안에 수락 버튼을 눌러주세요
             </div>
           </div>
+        </div>
+
+        {/* section5 */}
+        <div className={styles.section}>
+          <div className={styles.description}>
+            <div className={styles.numberImgPink}>5</div>
+            <div>
+              10개의 질문카드를 통해 <br />
+              매칭 상대를 알아가 보세요!
+            </div>
+          </div>
+          <img
+            className={styles.img}
+            src={process.env.PUBLIC_URL + "/img/tutorial/tutorial_5.PNG"}
+            alt="main"
+          />
+        </div>
+
+        {/* section6 */}
+        <div className={styles.bigImgSection}>
+          <div className={styles.description}>
+            <div className={styles.numberImgBlue}>6</div>
+            <div>
+              Yes! or No!
+              <br />
+              당신의 마지막 선택으로
+              <br />
+              친구 추가 여부가 결정됩니다
+            </div>
+          </div>
+          <img
+            className={styles.img}
+            src={process.env.PUBLIC_URL + "/img/tutorial/tutorial_9.PNG"}
+            alt="main"
+          />
         </div>
       </div>
     </div>
