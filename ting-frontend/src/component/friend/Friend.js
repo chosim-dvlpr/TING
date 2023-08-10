@@ -45,23 +45,19 @@ function Friend({ onSearch }){
       {/* 닫기 버튼 누르면 뒤로가기로 일단 만들어놨음 */}
       {/* <button onClick={() => Navigate(-1)}>닫기버튼</button> */}
       <br/>
-      <div>
-        <div onClick={(e) => e.stopPropagation()}>
-          <h3>내 어항</h3>
-          {/* <button id="modalCloseBtn" onClick={closeModal}>
-            채팅 모달 닫기
-          </button> */}
-          {/* <FriendList /> */}
-          {
-            isFriendList &&
-            <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} />
-          }
-          {
-            isFriendChatting &&
-            <FriendChatting showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
-          }
-          
-        </div>
+      <div onClick={(e) => e.stopPropagation()}>
+        {/* <button id="modalCloseBtn" onClick={closeModal}>
+          채팅 모달 닫기
+        </button> */}
+        {/* <FriendList /> */}
+        {
+          isFriendList &&
+          <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} />
+        }
+        {
+          isFriendChatting &&
+          <FriendChatting showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
+        }    
       </div>
 
       {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}
