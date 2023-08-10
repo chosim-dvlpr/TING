@@ -10,17 +10,14 @@ import com.ssafy.tingbackend.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -84,10 +81,10 @@ public class UserController {
     }
 
     @PostMapping("/user/profile/noToken")
-    public void profileNoToken(@RequestParam("file") MultipartFile file, @RequestParam("email") String email,
-                               @RequestParam("password") String password) throws IOException {
+    public CommonResponse profileNoToken(@RequestParam("file") MultipartFile file, @RequestParam("email") String email,
+                                         @RequestParam("password") String password) throws IOException {
         userService.saveProfileNoToken(file, email, password);
-
+        return new CommonResponse(200, "프로필 등록 성공");
     }
 
     @GetMapping("/user/profile")
