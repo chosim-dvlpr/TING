@@ -21,7 +21,9 @@ import com.ssafy.tingbackend.entity.payment.PointPayment;
 import com.ssafy.tingbackend.entity.type.ReportType;
 import com.ssafy.tingbackend.entity.user.LoginLog;
 import com.ssafy.tingbackend.entity.user.User;
+import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.repository.UserRepository;
+import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,6 +55,7 @@ public class AdminService {
     private final AdviceBoardRepository adviceBoardRepository;
     private final IssueBoardRepository issueBoardRepository;
     private final CommentRepository commentRepository;
+    private final UserService userService;
 
     @Transactional
     public Map<String, Object> getReportList(PageRequest pageRequest) {
@@ -266,5 +269,9 @@ public class AdminService {
 
     public Long totalProfit() {
         return pointPaymentRepository.findTotalProfit();
+    }
+
+    public UserDto.Detail getUser(Long userId) {
+        return userService.userDetail(userId);
     }
 }
