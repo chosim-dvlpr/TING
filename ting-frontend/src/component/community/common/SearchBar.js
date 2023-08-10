@@ -31,8 +31,8 @@ function SearchBar({ onSearch, boardType }) {
       <select className={styles.searchInput} value={item} onChange={handleItemChange}>
       {boardType === "issue" && (
           <>
-            <option value="title">Title</option>
-            <option value="nickname">Nickname</option>
+            <option value="title">제목</option>
+            <option value="nickname">닉네임</option>
           </>
         )}
         {boardType === "advice" && (

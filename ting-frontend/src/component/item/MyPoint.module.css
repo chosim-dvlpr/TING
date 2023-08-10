@@ -43,3 +43,82 @@
   /* box-shadow: inset 0 0 20px #fae6e8; */
   box-shadow: inset 0 0 20px rgba(162, 162, 162, 0.5);
 }
+
+.moneyButton {
+  font-size: 15px;
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #fae6e8;
+  border-radius: 5px;
+  border: none;
+  margin: 10px 5px;
+}
+
+.kakaoButton {
+  border: none;
+  background-color: white;
+}
+
+.kakaoImg {
+  width: 60px;
+  height: 60px;
+}
+
+.pointList {
+  margin: 20px auto;
+  width: 600px;
+  height: 240px;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+
+.pointList th:first-child, 
+.pointList td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.pointList th:last-child, 
+.pointList td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.pointList tr {
+  height: 40px;
+}
+
+.pointList td {
+  padding: 10px;
+  /* border: 1px solid rgb(0, 131, 159); */
+  text-align: center;
+  background-color: #fae6e8;
+  margin: 10px 0;
+}
+
+.pointList .category {
+  width: 30%;
+  border-right: 1px solid white;
+}
+
+.pointList .time {
+  width: 30%;
+  border-right: 1px solid white;
+}
+
+.pointList .cost {
+  width: 20%;
+  border-right: 1px solid white;
+}
+
+.pointList .point {
+  width: 20%;
+}
+
+.plus {
+  color: green;
+}
+
+.minus {
+  color: red;
+}

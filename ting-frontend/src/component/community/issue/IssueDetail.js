@@ -17,23 +17,14 @@ function IssueDetail() {
     return userdata && userdata.nickname === nickname;
   };
   const navigate = useNavigate();
+
+
+
   // 영역 비율 계산
   const [agreeRatio, setAgreeRatio] = useState(50); // 초기에 50%로 설정
   const [opposeRatio, setOpposeRatio] = useState(50); // 초기에 50%로 설정
 
-  // const [currentSelect, setCurrentSelect] = useState("");
-  // const [newSelect, setNewSelect] = useState("");
 
-  // const checkSelect = (data) => {
-  //   // 새로 누르는 항목이 현재 선택한 것과 다를 때
-  //   if (data !== currentSelect) {
-  //     setNewSelect(data);
-  //     if (data) { // true를 선택했을 때
-  //       handleAgree();
-  //     }
-  //     else { handleOppose() }
-  //   }
-  // };
 
   useEffect(() => {
     getIssueDetail();
@@ -130,11 +121,13 @@ function IssueDetail() {
       console.error("Error agreeing to issue:", error);
     }
 
-    const totalVotes = issue.agreeCount + issue.opposeCount;
-    const newAgreeRatio = ((issue.agreeCount + 1) / totalVotes) * 100;
-    const newOpposeRatio = 100 - newAgreeRatio;
-    setAgreeRatio(newAgreeRatio);
-    setOpposeRatio(newOpposeRatio);
+
+     // 투표 후 비율 업데이트
+     const totalVotes = issue.agreeCount + issue.opposeCount + 1;
+     const newAgreeRatio = (issue.agreeCount + 1) / totalVotes * 100;
+     const newOpposeRatio = 100 - newAgreeRatio;
+     setAgreeRatio(newAgreeRatio);
+     setOpposeRatio(newOpposeRatio);
   };
 
   const handleOppose = async () => {
@@ -170,18 +163,16 @@ function IssueDetail() {
       <NavBar />
       <div className={styles.issueBoardContainer}>
         <div className={styles.issueDetailContainer}>
-              {showbutton(issue.nickname) && (
-                    <button className={styles.deleteButton}>
-                <div>
-                  <span onClick={() => handleDelete(issue.issueId)}>삭제</span>
-                </div>
+          {showbutton(issue.nickname) && (
+            <button className={styles.deleteButton}>
+              <div>
+                <span onClick={() => handleDelete(issue.issueId)}>삭제</span>
+              </div>
             </button>
-              )}
+          )}
           <div>
             <h1>{issue.title}</h1>
             <p>작성자: {issue.nickname}</p>
-
-  
           </div>
 
           {/* 투표기능 */}
@@ -208,16 +199,9 @@ function IssueDetail() {
                 </button>
               </p>
             </div>
-
-
-
-
           </div>
 
-            <div className={styles.issueContent}>
-              {issue.content}
-
-            </div>
+          <div className={styles.issueContent}>{issue.content}</div>
           <CommentCreate
             boardTypeProp="ISSUE"
             boardIdProp={issue.issueId}
