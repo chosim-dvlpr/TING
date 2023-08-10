@@ -417,16 +417,15 @@ function MatchingStart() {
         {/* <ScoreCheck></ScoreCheck> */}
         { showMatchingChoiceModal ? null : (
           <div className={styles.ScoreCheckBox}>
-
             {questionNumber === 0 ? (
               <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
             ) : questionNumber === 11 ? (
               <h1>끝이 났습니다.</h1>
             ) : questionNumber === 12 ? (
-              <div>
+              <div className={ styles.ScoreSumResult }>
+                <p> {sumYourScore}점 </p>
                 <h1>최종 점수</h1>
-                <h1>내가 받은 점수 : {sumYourScore} </h1>
-                <h1>상대가 받은 점수 : {sumMyScore} </h1>
+                <p> {sumMyScore}점 </p>
               </div>
             ) : questionNumber === 13 ? (
               <h1>서로 마지막 어필을 해주세요</h1>
