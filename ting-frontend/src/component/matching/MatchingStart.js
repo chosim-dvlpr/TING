@@ -161,7 +161,10 @@ function MatchingStart() {
         .catch((err)=>{console.log(err)})
     }
     if (questionNumber === 14) {
+      // 최종 선택 모달창 on
       setShowMatchingChoiceModal(true)
+      // 사용자 video audio off
+      toggleAudioAndVideo(false,false)
       setCount(20)
     }
   }, [questionNumber]);
@@ -349,109 +352,118 @@ function MatchingStart() {
     setPublisher(undefined);
   };
 
+  // 오디오 비디오 미팅 후 끄는 함수
+  const toggleAudioAndVideo = (isAudioOn, isVideoOn) => {
+    if (publisher) {
+      publisher.publishAudio(isAudioOn)
+      publisher.publishVideo(isVideoOn)
+    }
+  }
+
   const report = () => {
     setShowReportModal(true);
   };
 
   return (
-    <div className={`${styles.container}`}>
+    <>
 
-      <div>
-        <h3 className={styles.timer}>{count}</h3>
-      </div>
-      { questionNumber>0 && questionNumber<11 && showScoreMessage &&
-          <div className={styles.alertScore}>
-            <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`}/>
-            <span className={styles.ScoreText}>{alertScore}</span>
-          </div>
-      }
-
-      <div id="session-header" className={styles.sessionHeader}>
-        <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
-      </div>
-
-      <div id="session" className={styles.session}>
-
-        {/* 질문 카드 */}
-        {/* <QuestionCard /> */}
-        <div className={styles.cardOuter}>
-          <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard}/>
-          <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
-        </div>
-        {/* 질문 카드 -- end */}
-
-        {/* 비디오 화면 */}
-        <div className={styles.videoContainer}>
-
-          <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
-            <UserVideoComponent streamManager={publisher} />
-          </div>
-
-          <div className="stream-container col-md-5 col-xs-5" onClick={() => handleMainVideoStream(subscribers[0])}>
-            <UserVideoComponent streamManager={subscribers[0]} />
-          </div>
-          
-        </div>
-      </div>
+      <div className={`${styles.container}`}>
+      {/* 최종 선택 */}
+      {showMatchingChoiceModal && <MatchingChoice className={styles.MatchingChoice}session={session} count={count}/>}
       
-      <div className="wrapper">
-      {/* 점수 체크판 -- start */}
-      {/* <ScoreCheck></ScoreCheck> */}
-      { showMatchingChoiceModal ? null : (
-        <div className={styles.ScoreCheckBox}>
+      {/* 신고 모달창 */}
+      {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
 
-          {questionNumber === 0 ? (
-            <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
-          ) : questionNumber === 11 ? (
-            <h1>끝이 났습니다.</h1>
-          ) : questionNumber === 12 ? (
-            <div>
-              <h1>최종 점수</h1>
-              <h1>내가 받은 점수 : {sumYourScore} </h1>
-              <h1>상대가 받은 점수 : {sumMyScore} </h1>
+        <div>
+          <h3 className={styles.timer}>{count}</h3>
+        </div>
+        { questionNumber>0 && questionNumber<11 && showScoreMessage &&
+            <div className={styles.alertScore}>
+              <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`}/>
+              <span className={styles.ScoreText}>{alertScore}</span>
             </div>
-          ) : questionNumber === 13 ? (
-            <h1>서로 마지막 어필을 해주세요</h1>
-          ) : 0 <= questionNumber <= 10 ? (
-            <div className={styles.ScoreBox}>
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
-                return (
-                  <div className={`${styles.HeartScore} ${ !disableHover[i] ? styles.HeartScoreAni : null}`}>
-                    <img 
-                      src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"} 
-                      id={`buttonImg-${score}`} 
-                      className={buttonToggleSign[i] ? styles.clickedHeart : null}
-                      />
-
-                    <button
-                      className={styles.ScoreText}
-                      disabled={disableaButton}
-                      onClick={() => {
-                        setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                        setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
-                        setDisableButton(true)
-                        handleScoreSelect(score);
-                      }}
-                    >
-                      {score}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          ) : null}
-        </div> )
         }
-        {/* 점수 체크판 -- end */}
 
-        {/* 신고 모달창 */}
-        {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
+        <div id="session-header" className={styles.sessionHeader}>
+          <input className="btn btn-large btn-danger" type="button" id="buttonLeaveSession" onClick={report} value="신고 후 나가기" />
+        </div>
 
-        {/* 최종 선택 */}
-        {showMatchingChoiceModal && <MatchingChoice session={session} count={count}/>}
+        <div id="session" className={styles.session}>
 
+          {/* 질문 카드 */}
+          {/* <QuestionCard /> */}
+          <div className={styles.cardOuter}>
+            <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard}/>
+            <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
+          </div>
+          {/* 질문 카드 -- end */}
+
+          {/* 비디오 화면 */}
+          <div className={styles.videoContainer}>
+
+            <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
+              <UserVideoComponent streamManager={publisher} />
+            </div>
+
+            <div className="stream-container col-md-5 col-xs-5" onClick={() => handleMainVideoStream(subscribers[0])}>
+              <UserVideoComponent streamManager={subscribers[0]} />
+            </div>
+            
+          </div>
+        </div>
+        
+        <div className="wrapper">
+        {/* 점수 체크판 -- start */}
+        {/* <ScoreCheck></ScoreCheck> */}
+        { showMatchingChoiceModal ? null : (
+          <div className={styles.ScoreCheckBox}>
+
+            {questionNumber === 0 ? (
+              <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
+            ) : questionNumber === 11 ? (
+              <h1>끝이 났습니다.</h1>
+            ) : questionNumber === 12 ? (
+              <div>
+                <h1>최종 점수</h1>
+                <h1>내가 받은 점수 : {sumYourScore} </h1>
+                <h1>상대가 받은 점수 : {sumMyScore} </h1>
+              </div>
+            ) : questionNumber === 13 ? (
+              <h1>서로 마지막 어필을 해주세요</h1>
+            ) : 0 <= questionNumber <= 10 ? (
+              <div className={styles.ScoreBox}>
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
+                  return (
+                    <div className={`${styles.HeartScore} ${ !disableHover[i] ? styles.HeartScoreAni : null}`}>
+                      <img 
+                        src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"} 
+                        id={`buttonImg-${score}`} 
+                        className={buttonToggleSign[i] ? styles.clickedHeart : null}
+                        />
+
+                      <button
+                        className={styles.ScoreText}
+                        disabled={disableaButton}
+                        onClick={() => {
+                          setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                          setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
+                          setDisableButton(true)
+                          handleScoreSelect(score);
+                        }}
+                      >
+                        {score}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div> )
+          }
+          {/* 점수 체크판 -- end */}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

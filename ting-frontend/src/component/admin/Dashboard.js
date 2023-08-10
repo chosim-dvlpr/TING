@@ -1,4 +1,4 @@
-import styles from "./Dashboard.module.css";
+import styles from "./css/Dashboard.module.css";
 import { PriceChart } from "./PriceChart";
 import { MatchingChart } from "./MatchingChart";
 import { useEffect, useState } from "react";

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement } from "chart.js";
+import { Bar, Line } from "react-chartjs-2";
 import tokenHttp from "../../api/tokenHttp";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement);
 
 export function MatchingChart() {
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        display: false,
       },
     },
   };
@@ -25,6 +25,7 @@ export function MatchingChart() {
         label: "Matching Count",
         data: dataSet,
         borderColor: "rgb(255, 255, 255)",
+        backgroundColor: 'rgb(255, 255, 255)',
       },
     ],
   };
@@ -39,5 +40,5 @@ export function MatchingChart() {
       .catch((error) => {});
   }, []);
 
-  return <Line options={options} data={data} />;
+  return <Bar options={options} data={data} />;
 }

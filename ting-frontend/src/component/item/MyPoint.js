@@ -1,6 +1,6 @@
-import React from 'react';
-import { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import React from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import tokenHttp from "../../api/tokenHttp";
 import { setPoint } from "../../redux/itemStore";
 import { setPointPaymentId } from '../../redux/itemStore';
@@ -14,8 +14,8 @@ function MyPoint() {
   const [totalPages, setTotalPages] = useState(1);
 
   // redux 관련 변수
-  const dispatch = useDispatch()
-  const myPoint = useSelector((state) => state.itemReducer.myPoint)
+  const dispatch = useDispatch();
+  const myPoint = useSelector((state) => state.itemReducer.myPoint);
 
   // 자신의 포인트가 얼마인지 가져옴(마운트 될 때 한 번)
   useEffect(
@@ -80,18 +80,23 @@ function MyPoint() {
     else return false;
   }
 
-  return(
+  return (
     <div>
       <div className={styles.MyPoint}>
         <span className={styles.PointText}>
-        <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>
-          { myPoint } Point</span>
-        <div className={styles.ChargeButton} 
-        onClick={()=>{setChargeMenu(!chargeMenu)}}>
+          <img src={process.env.PUBLIC_URL + "/img/coin.png"} className={styles.coinImage} alt="coin"></img>
+          {myPoint} Point
+        </span>
+        <div
+          className={styles.ChargeButton}
+          onClick={() => {
+            setChargeMenu(!chargeMenu);
+          }}
+        >
           포인트 충전
         </div>
       </div>
-      { chargeMenu ? <SelectMoney/> : null }
+      {chargeMenu ? <SelectMoney /> : null}
 
       <div>
         <table className={styles.pointList}>
@@ -115,9 +120,8 @@ function MyPoint() {
         />
       </div>
     </div>
-  )
+  );
 }
-
 
 // 컴포넌트는 대문자로 시작해야 인식함
 // 
@@ -125,8 +129,8 @@ function SelectMoney(){
   const dispatch = useDispatch()
 
   // api로 충전할 돈의 정보
-  const [chargeMoneyData, setChargeMoneyData] = useState([])
-  
+  const [chargeMoneyData, setChargeMoneyData] = useState([]);
+
   // 충전하기 위해 보낼 정보
   const [selectChargeMoneyData, setSelectChargeMoneyData] = useState({})
 
@@ -140,8 +144,8 @@ function SelectMoney(){
       .then(response => {
         setChargeMoneyData(response.data.data)
       })
-      .catch(err => console.log(err))
-  },[])
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect((e) => {
     if(currentClick != null) {
@@ -163,21 +167,22 @@ function SelectMoney(){
 
   // 카카오 페이로 보내기 위한 함수
   const sendToKakaoPay = () => {
+    console.log(window.location.origin);
     let data = {
       pointCode: selectChargeMoneyData.pointCode,
-      domain: "http://localhost:3000"
-    }
-    tokenHttp.post('/point/kakaopay/ready', data)
-      .then(response => {
-        console.log(response.data.data)
-        dispatch(setPointPaymentId(response.data.data.pointPaymentId))
+      domain: window.location.origin,
+    };
+    tokenHttp
+      .post("/point/kakaopay/ready", data)
+      .then((response) => {
+        console.log(response.data.data);
+        dispatch(setPointPaymentId(response.data.data.pointPaymentId));
         window.location.href = response.data.data.redirectUrl;
       })
-      .catch(err => console.log(err))
-    
-  }
+      .catch((err) => console.log(err));
+  };
 
-  return(
+  return (
     <div>
       <div>
         {chargeMoneyData.map((money,idx) => (
@@ -190,7 +195,7 @@ function SelectMoney(){
       <button className={styles.kakaoButton} onClick={()=>{sendToKakaoPay()}}>
       <img src={process.env.PUBLIC_URL + '/img/kakaopay.png'} className={styles.kakaoImg} alt="kakaopay"></img></button>
     </div>
-  )
+  );
 }
 
-export default MyPoint
+export default MyPoint;
