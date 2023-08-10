@@ -61,9 +61,6 @@ function IssueBoard() {
     }
   };
 
-
-
-
   //검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
 
@@ -92,80 +89,98 @@ function IssueBoard() {
     console.log("============Search Result:", searchResult);
   }, [searchResult]);
 
+  
+ // 투표 비율에 따른 색상 변경
+  const calculateTotalCount = (issue) => issue.agreeCount + issue.opposeCount;
+
+  
+  const calculateRatio = (agreeCount, totalCount) =>
+    (agreeCount / totalCount) * 100;
+
+  // Get card style based on the ratio
+ // Get card style based on the ratio
+const getCardStyle = (issue) => {
+  const totalCount = calculateTotalCount(issue);
+  const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
+  const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
+
+  let cardStyle;
+
+  if (agreeRatio === 0) {
+    
+    cardStyle = {
+      background: `#c5e5ea`,
+    };
+  } else if (opposeRatio === 0) {
+   
+    cardStyle = {
+      background: `#f7d1d6`,
+    };
+  } else {
+    
+    cardStyle = {
+      background: `linear-gradient(to right, #f7d1d6 ${agreeRatio}%, #c5e5ea ${opposeRatio}%)`,
+    };
+  }
+
+  return cardStyle;
+};
+
+
   return (
     <div className={styles.issueBoardBackground}>
-     
-      <NavBar/>
-        
-      <div className={styles.issueBoardContainer}>
+      <NavBar />
 
-      <Sidebar />
-      
-      <div className={styles.cardTop}>
-      <SearchBar onSearch={handleSearch} boardType={boardType}/>
-      <button className={styles.createButton} onClick={handleCreateClick}>
+      <div className={styles.issueBoardContainer}>
+        <Sidebar />
+
+        <div className={styles.cardTop}>
+          <SearchBar onSearch={handleSearch} boardType={boardType} />
+          <button className={styles.createButton} onClick={handleCreateClick}>
             글 작성하기
           </button>
-          </div>
-          
-      <div className={styles.cardList}>
-        
-        {searchResult.length > 0
-          ? searchResult.map((issue) => (
-            <div key={issue.issueId} className={styles.card}>
-                <span
-                  className={styles.link}
-                  onClick={(event) => handleLinkClick(issue.issueId, event)}
-                >
-                  {issue.title}
-                </span>
-                <div className={styles.cardFooter}>
-                  <div className={styles.cardVotes}>
-                    <div className={styles.agree}>
-                      <span>{issue.agree_title}</span>
-                      <span>{issue.agree_count}</span>
-                    </div>
-                    <div className={styles.oppose}>
-                      <span>{issue.oppose_title}</span>
-                      <span>{issue.oppose_count}</span>
-                    </div>
-                  </div>
-          
-                </div>
-              </div>
-            ))
-            : issueList.map((issue) => (
-              <div key={issue.issueId} className={styles.card}>
-                <span
-                  className={styles.link}
-                  onClick={(event) => handleLinkClick(issue.issueId, event)}
-                >
-                  {issue.title}
-                </span>
-                <div className={styles.cardFooter}>
-                  <div className={styles.cardVotes}>
-                    <div className={styles.agree}>
-                      <span>{issue.agree_title}</span>
-                      <span>{issue.agree_count}</span>
-                    </div>
-                    <div className={styles.oppose}>
-                      <span>{issue.oppose_title}</span>
-                      <span>{issue.oppose_count}</span>
-                    </div>
-                  </div>
-              
-                </div>
-              </div>
-            ))}
-      </div>
+        </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+        <div className={styles.cardList}>
+          {searchResult.length > 0
+            ? searchResult.map((issue) => (
+                <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
+                  <div className={styles.title}>
+                    <div>{issue.agreeCount}</div>
+                    <div
+                      className={styles.link}
+                      onClick={(event) => handleLinkClick(issue.issueId, event)}
+                    >
+                      {issue.title}
+                    </div>
+
+                    <div>{issue.opposeCount}</div>
+                  </div>
+                </div>
+              ))
+            : issueList.map((issue) => (
+                <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
+                  <div className={styles.title}>
+                    <div>{issue.agreeCount}</div>
+                    <div
+                      className={styles.link}
+                      onClick={(event) => handleLinkClick(issue.issueId, event)}
+                    >
+                      {issue.title}
+                    </div>
+
+                    <div>{issue.opposeCount}</div>
+                  </div>
+                </div>
+              ))}
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
-     
     </div>
   );
 }
