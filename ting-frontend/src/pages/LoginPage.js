@@ -9,7 +9,7 @@ import { getCurrentUserdata } from "../redux/userdata";
 import NavBar from "../component/common/NavBar";
 import styles from "./LoginPage.module.css"
 
-import { setMyItemList } from '../../redux/itemStore';
+import { setMyItemList } from "../redux/itemStore";
 
 function LoginPage() {
   let [email, setEmail] = useState("");
