@@ -42,7 +42,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemCode)
                 .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_FOUND));
 
-        if (item.getPrice() > user.getPoint()) {
+        if (item.getPrice() * quantity > user.getPoint()) {
             throw new CommonException(ExceptionType.POINT_NOT_ENOUGH);
         }
 
