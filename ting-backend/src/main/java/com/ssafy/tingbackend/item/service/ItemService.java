@@ -5,6 +5,8 @@ import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.item.Item;
 import com.ssafy.tingbackend.entity.item.UserItem;
+import com.ssafy.tingbackend.entity.point.PointCategory;
+import com.ssafy.tingbackend.entity.point.PointHistory;
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.item.dto.InventoryDto;
@@ -12,6 +14,8 @@ import com.ssafy.tingbackend.item.dto.ItemDto;
 import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.item.repository.ItemRepository;
 import com.ssafy.tingbackend.item.repository.UserItemRepository;
+import com.ssafy.tingbackend.point.repository.PointCategoryRepository;
+import com.ssafy.tingbackend.point.repository.PointHistoryRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserItemRepository userItemRepository;
     private final InventoryRepository inventoryRepository;
+    private final PointHistoryRepository pointHistoryRepository;
+    private final PointCategoryRepository pointCategoryRepository;
 
     @Transactional
     public void buyItem(Long userId, Long itemCode, Integer count) {
@@ -49,8 +55,16 @@ public class ItemService {
         // 아이템 가격만큼 사용자 포인트 차감
         user.setPoint(user.getPoint() - item.getPrice() * count);
 
+        // 포인트 사용내역 등록
+        PointHistory pointHistory = new PointHistory();
+        pointHistory.setUser(user);
+        pointHistory.setResultPoint(user.getPoint());
+        pointHistory.setChangeCost(item.getPrice() * count);
+        pointHistory.setPointCategory(pointCategoryRepository.findById(2L).orElseThrow());
+        pointHistoryRepository.save(pointHistory);
+
         // 아이템 구매 내역 저장
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             UserItem userItem = UserItem.builder()
                     .user(user)
                     .item(item)
