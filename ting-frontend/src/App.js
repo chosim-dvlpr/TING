@@ -65,6 +65,7 @@ import ItemPage from "./pages/ItemPage";
 import AdminPage from "./pages/AdminPage";
 import Dashboard from "./component/admin/Dashboard";
 import Report from "./component/admin/Report";
+import ReportDetail from "./component/admin/ReportDetail";
 import User from "./component/admin/User";
 import Qna from "./component/admin/Qna";
 
@@ -184,10 +185,12 @@ function App() {
         <Route path="/payment/kakaoPayCancel" element={<KakaoPayCancel />} />
         <Route path="/payment/kakaoPayFail" element={<KakaoPayFail />} />
 
+        {/* 관리자 페이지 */}
         <Route path="/admin" element={<AdminPage />}>
           <Route path="" element={<Dashboard />}></Route>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="report" element={<Report />} />
+          <Route path="report/detail" element={<ReportDetail />} />
           <Route path="user" element={<User />} />
           <Route path="qna" element={<Qna />} />
         </Route>
