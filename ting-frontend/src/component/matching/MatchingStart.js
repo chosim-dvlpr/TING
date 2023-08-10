@@ -29,7 +29,7 @@ function MatchingStart() {
   const [alertScore, setAlertScore] = useState("");
 
   // timerBar 관련 state
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(10);
   const [startTimer, setStartTimer] = useState(false);
 
   // ScoreCheck 점수 클릭 관련 state
@@ -105,9 +105,9 @@ function MatchingStart() {
       setStartTimer(true);
     }
 
-    if (count === -1) {
+    if (count === 0) {
       clearInterval(timer);
-      setCount(30);
+      // setCount(30);
       
       // 타임이 끝나면 5점을 자동으로 상대에게 전달
 
