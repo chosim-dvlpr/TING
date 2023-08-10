@@ -19,6 +19,7 @@ public class AdminReportDto {
     private ReportStateType state;
     private ReportType type;
     private Long typeId;
+    private String comment;
     private LocalDateTime createdTime;
 
     public static AdminReportDto of(Report report) {
@@ -30,6 +31,7 @@ public class AdminReportDto {
                 .type(report.getType())
                 .typeId(report.getTypeId())
                 .createdTime(report.getCreatedTime())
+                .comment(report.getComment())
                 .build();
     }
 }
