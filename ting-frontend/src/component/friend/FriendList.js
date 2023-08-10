@@ -47,9 +47,10 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
 
   // 날짜 시간 나누기
   const calculateDate = (boardTime) => {
+    if(!boardTime) return;
     if (isSameDate(boardTime)) {
       return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
+    } else return boardTime.substr(5, 2)+'월 '+boardTime.substr(8,2)+'일';
   };
 
   const isSameDate = (boardTime) => {
@@ -118,16 +119,15 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
   return (
     <div>
       <div className={styles.top}>
-        <div><button className={styles.button} onClick={() => closeModal()}>X</button></div>
-        {/* <button onClick={() => Navigate("/")}>친구 목록 닫기</button> */}
-        {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}
-        <div>
+        <div><img src="/img/ting_logo_fish.png" alt="logo"/></div>
+        <button className={styles.closeButton} onClick={() => closeModal()}>X</button>
+      </div>
+      <div className={styles.searchArea}>
         <input type="text" 
         onChange={(e) => setSearchFriendNickname(e.target.value)} 
         onSubmit={() => searchFriend(searchFriendNickname)}>
         </input>
-        <button className={styles.button} onClick={() => setIsSearchFriend(!isSearchFriend)}>검색</button>
-        </div>
+        <button className={styles.searchButton} onClick={() => setIsSearchFriend(!isSearchFriend)}>검색</button>
       </div>
       {/* 친구 리스트 임시 버튼 */}
       {/* <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button> */}
@@ -158,7 +158,6 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                 {/* <div>친구 상태 : { friend.state }</div> */}
                 </div>
                 <button>케밥 버튼입니당</button>
-                <br/>
               </div>
             )
           })
@@ -183,20 +182,16 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                       ? messageLogsObject[friend.chattingId].length 
                       : 0 }</div>
                   </div>
-                  <button><img
-                            src="/img/kebab.png"
-                            alt="kebab"
-                            className={styles.dropdownKebab}
-                          /></button>
+                  <button>
+                    <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab}/>
+                  </button>
                 </div>
-                <br/>
               </div>
             )
           })
         }
 
       </div>
-
       <div>
         {/* {isModal === true ? <ChatRoom userId={userId} /> : null} */}
         {/* <RoomList /> */}
