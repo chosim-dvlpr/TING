@@ -13,7 +13,7 @@ import CountdownTimer from "../component/main/CountdownTimer";
 import MainButton from "../component/main/MainButton";
 
 import NavBar from "../component/common/NavBar";
-import FriendButton from "../component/common/FriendButton"
+import FriendButton from "../component/common/FriendButton";
 import useMessageStore from "../component/friend/useMessageStore";
 import { useSelector } from "react-redux";
 
@@ -22,25 +22,20 @@ function MainPage() {
   const messageStore = useMessageStore();
   let userdata = useSelector((state) => state.userdataReducer.userdata);
 
-  const {
-    connected,
-    currentRoomIndex,
-    roomIndices,
-    messageLogsObject,
-  } = messageStore;
-  
+  const { connected, currentRoomIndex, roomIndices, messageLogsObject } =
+    messageStore;
+
   // 모든 채팅방 연결
   const connectSocket = () => {
     messageStore.connect();
-  }
+  };
 
   useEffect(() => {
     if (userdata) {
       connectSocket();
     }
-  }, [userdata])
+  }, [userdata]);
   // 여기까지 채팅 //
-
 
   useEffect(() => {
     AOS.init();
@@ -144,11 +139,6 @@ function MainPage() {
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
       <FriendButton />
-      {/* 어항 이미지 테스트용 시작 */}
-      <img className={styles.friendBtn} src={process.env.PUBLIC_URL + '/img/fish bowl.png'}></img>
-      {/* 어항 이미지 테스트용 끝 */}
-
-      {/* <FriendButton /> */}
 
       {/*section1 */}
       <div className={styles.wrapper}>

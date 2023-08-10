@@ -90,7 +90,9 @@ function ItemShop() {
                   <div className={styles.itemCardInside}>
                     <img src={process.env.PUBLIC_URL + item.img} />
                   </div>
-                  <div className={styles.name}>{item.name}</div>
+                  <div className={styles.name}>
+                    <b>{item.name}</b>
+                  </div>
                   <div className={styles.price}>
                     <img
                       src={process.env.PUBLIC_URL + "/img/coin.png"}

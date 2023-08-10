@@ -9,7 +9,7 @@
   background-color: white;
   width: 80%;
   min-width: 1200px;
-  /* height: 800px; */
+  min-height: 650px;
   padding: 49px;
   display: flex;
   flex-direction: column;
@@ -17,8 +17,8 @@
 }
 
 .SideBar {
-  width:200px;
-  background-color: #004BA1;
+  width: 200px;
+  background-color: #004ba1;
   color: white;
 }
 
