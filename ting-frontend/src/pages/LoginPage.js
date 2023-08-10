@@ -9,6 +9,8 @@ import { getCurrentUserdata } from "../redux/userdata";
 import NavBar from "../component/common/NavBar";
 import styles from "./LoginPage.module.css"
 
+import { setMyItemList } from '../../redux/itemStore';
+
 function LoginPage() {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -47,6 +49,14 @@ function LoginPage() {
               dispatch(getCurrentUserdata(response.data.data));
               localStorage.setItem("userId", response.data.data.userId);
             });
+
+            // 유저 보유 아이템 redux에 저장
+            tokenHttp.get("/item/user").then((response)=>{
+              dispatch(setMyItemList(response.data.data))
+            })
+            .catch(err => console.log(err))
+
+
             navigate("/"); // 로그인 완료되면 메인으로 이동
           } else {
             // input 값 초기화
