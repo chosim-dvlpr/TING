@@ -32,7 +32,13 @@ function WaitingRoom() {
   useEffect(()=>{
     const matchingTicket = myItemList.filter(obj => obj.itemType === "MATCHING_TICKET")
     const freeMatchingTicket = myItemList.filter(obj => obj.itemType === "FREE_MATCHING_TICKET")
-    setTotalTicket(matchingTicket[0].quantity + freeMatchingTicket[0].quantity)
+    
+    // 아이템이 없을 경우 예외 처리
+    const matchingTicketQuantity = matchingTicket.length > 0 ? matchingTicket[0].quantity : 0
+    const freeMatchingTicketQuantity = freeMatchingTicket.length ? freeMatchingTicket[0].quantity : 0
+
+    setTotalTicket(matchingTicketQuantity + freeMatchingTicketQuantity)
+   
   },[])
   
   // 마이크 비디오 상태 확인
@@ -220,8 +226,22 @@ function WaitingRoom() {
                   </div>
                 </div>
               )}
-              
-              <p>잔여티켓 {totalTicket}개</p>
+
+              {/* 티켓 확인 */}
+              { totalTicket >0 ? (
+                <div className={styles.successMessageBox}>
+                  <img src="/img/TicketOnIcon.png" alt="Ticket on icon"/>
+                  <p className={styles.textBox}>잔여티켓 : {totalTicket}개</p>
+                </div>
+                ) : (
+                <div className={styles.failMessageBox}>
+                  <img src="/img/TicketOffIcon.png" alt="Ticket off icon"/>
+                  <div className={styles.textBox}>
+                    <p className={styles.failMessage}>티켓이 없습니다.</p>
+                    <p>아이템샵에서 구매 후 매칭 시작을 해보세요</p>
+                  </div>
+                </div>
+              )}
 
               {/* 티켓 있고, 비디오 켜져있고, 마이크 켜져있을 때만 매칭 시작 가능 */}
               { totalTicket >0 && isVideoOn && isMicrophoneOn ? (
