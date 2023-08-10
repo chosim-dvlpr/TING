@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import styles from "./MatchingChoice.js"
+import styles from "./MatchingChoice.module.css"
 import { useSelector } from "react-redux/es/hooks/useSelector"
 import { useNavigate } from "react-router-dom"
 import tokenHttp from "../../../api/tokenHttp.js"
