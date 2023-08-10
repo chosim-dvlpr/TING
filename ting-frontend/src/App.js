@@ -82,6 +82,7 @@ import QnaDetail from "./component/profile/QnaDetail";
 
 import KakaoPayCancel from "./pages/pay-result-page/KakaoPayCancel";
 import KakaoPayFail from "./pages/pay-result-page/KakaoPayFail";
+import ProfileImage from "./component/signup/select/profileImage";
 
 function App() {
   let accessToken = localStorage.getItem("access-token");
@@ -123,6 +124,7 @@ function App() {
             <Route path="personality" element={<Personality />}></Route>
             <Route path="style" element={<Style />}></Route>
             <Route path="introduce" element={<Introduce />}></Route>
+            <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
         </Route>
 
