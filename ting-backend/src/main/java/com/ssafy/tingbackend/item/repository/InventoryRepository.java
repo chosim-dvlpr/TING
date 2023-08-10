@@ -14,4 +14,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     @Query("select i from Inventory i where i.user.id = :userId")
     List<Inventory> findByUserId(@Param("userId") Long userId);
+
+    Optional<Inventory> findByUserIdAndItemType(Long id, ItemType itemType);
 }
