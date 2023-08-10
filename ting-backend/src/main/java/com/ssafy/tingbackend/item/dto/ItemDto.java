@@ -16,12 +16,14 @@ public class ItemDto {
         private Long code;
         private String name;
         private Long price;
+        private String description;
 
         public static Basic of(Item item) {
             return Basic.builder()
                     .code(item.getCode())
                     .name(item.getName())
                     .price(item.getPrice())
+                    .description(item.getDescription())
                     .build();
         }
     }

@@ -19,6 +19,7 @@ public class Item {
 
     private String name;
     private Long price;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private ItemType category;
