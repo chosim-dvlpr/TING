@@ -183,15 +183,16 @@ function MatchingStart() {
     });
   };
 
-   // 음성 메세지 받는 함수
-  const makeSoundMessage = (soundContent) => {
-    const message = new SpeechSynthesisUtterance()
-    message.text = `${soundContent}점`
-    message.lang = 'ko-KR';
-    message.volume = 1;
-    message.rate = 1.2;
-    message.pitch = 5;
-    window.speechSynthesis.speak(message)
+  // 음성 메세지 받는 함수
+  const makeSoundMessage = (score) => {
+    if (userData.gender === 'F') { 
+      const audio = new Audio(`/src/sound/m/${score}점_남_m4a`)
+      audio.play()
+    }
+    else {
+      const audio = new Audio(`/src/sound/w/${score}점_여.m4a`)
+      audio.play()
+    }    
   }
 
   const onbeforeunload = (event) => {
@@ -261,7 +262,7 @@ function MatchingStart() {
       let data = JSON.parse(event.data);
 
       // 점수 선택시 양쪽 다 점수 소리 들리게
-      makeSoundMessage(data.score)
+      if ( questionNumber > 0 && questionNumber < 12) makeSoundMessage(data.score);
 
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
