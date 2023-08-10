@@ -92,6 +92,10 @@
 
 .content {
   font-size: 12px;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 텍스트에 대해 ... 표시 */
+  max-width: 180px;
 }
 
 .time {

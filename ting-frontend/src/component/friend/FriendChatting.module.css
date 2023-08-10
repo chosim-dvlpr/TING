@@ -77,6 +77,8 @@
 }
 
 .content {
+  max-width: 240px;
+  white-space: normal;
   background-color: #fae6e8;
   border: none;
   border-radius: 10px;
@@ -87,6 +89,7 @@
 }
 
 .content2 {
+  max-width: 240px;
   background-color: white;
   border: 1px solid #e58490;
   border-radius: 10px;
