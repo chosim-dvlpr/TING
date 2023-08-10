@@ -1,0 +1,10 @@
+.profileConainer {
+  width: 360px;
+  height: 600px;
+  background-color: white;
+  position: fix;
+  bottom: 30px;
+  right: calc(width + 120px);
+  z-index: 200;
+  overflow-y: scroll;
+}
