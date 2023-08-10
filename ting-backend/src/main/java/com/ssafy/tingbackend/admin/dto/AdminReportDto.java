@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class AdminReportDto {
     private Long reportId;
     private Long userId;
-    private Long reportedUserId;
-
     private String userNickname;
+
+    private Long reportedUserId;
     private String reportedUserNickname;
 
     private String content;
