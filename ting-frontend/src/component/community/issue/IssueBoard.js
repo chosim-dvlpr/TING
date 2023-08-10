@@ -93,20 +93,22 @@ function IssueBoard() {
   }, [searchResult]);
 
   return (
-    <div>
-
-      {/* <NavBar/> */}
+    <div className={styles.issueBoardBackground}>
      
+      <NavBar/>
         
       <div className={styles.issueBoardContainer}>
 
-      <NavBar/>
-
       <Sidebar />
-      <div className={styles.cardList}>
+      
+      <div className={styles.cardTop}>
+      <SearchBar onSearch={handleSearch} boardType={boardType}/>
       <button className={styles.createButton} onClick={handleCreateClick}>
             글 작성하기
           </button>
+          </div>
+          
+      <div className={styles.cardList}>
         
         {searchResult.length > 0
           ? searchResult.map((issue) => (
@@ -156,7 +158,6 @@ function IssueBoard() {
               </div>
             ))}
       </div>
-            <SearchBar onSearch={handleSearch} boardType={boardType}/>
 
       <Pagination
         currentPage={currentPage}
