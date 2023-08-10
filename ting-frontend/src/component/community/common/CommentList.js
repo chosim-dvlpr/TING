@@ -120,13 +120,17 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
                   <CommentLikeButton commentId={comment.commentId}
                     initialLikes={comment.likeCount}
                     onUpdateLikes={handleUpdateLikes}/></span>
-          
-                <button onClick={() => handleUpdate(comment.commentId, comment.content)} className={styles["edit-button"]}>
+
+                        
+
+                <div>
+                {showbutton(comment.nickname) && (<button onClick={() => handleUpdate(comment.commentId, comment.content)} className={styles["edit-button"]}>
                   수정
-                </button>
-                <button onClick={() => handleDelete(comment.commentId)} className={styles["delete-button"]}>
+                </button>)}
+                {showbutton(comment.nickname) && (<button onClick={() => handleDelete(comment.commentId)} className={styles["delete-button"]}>
                  삭제
-                </button>
+                </button>)}
+                </div>
               </div>
               )}
             </div>
