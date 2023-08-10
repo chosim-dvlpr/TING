@@ -13,19 +13,19 @@ function AdminPage() {
         </div>
         <hr style={{ margin: "0 auto" }} width="200px" />
         <div className={styles.sidebarMenu}>
-          <div onClick={() => navigate("/admin/dashboard")}>
+          <div className={styles.sideList} onClick={() => navigate("/admin/dashboard")}>
             <img src={process.env.PUBLIC_URL + "/img/admin/image21.png"} width="30px" />
             Dashboard
           </div>
-          <div>
+          <div className={styles.sideList} onClick={() => navigate("/admin/report")}>
             <img src={process.env.PUBLIC_URL + "/img/admin/image22.png"} width="30px" />
             Report
           </div>
-          <div>
+          <div className={styles.sideList} onClick={() => navigate("/admin/user")}>
             <img src={process.env.PUBLIC_URL + "/img/admin/image23.png"} width="30px" />
             User
           </div>
-          <div>
+          <div className={styles.sideList} onClick={() => navigate("/admin/qna")}>
             <img src={process.env.PUBLIC_URL + "/img/admin/image24.png"} width="30px" />
             Q&A
           </div>

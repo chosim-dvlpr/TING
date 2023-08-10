@@ -10,7 +10,7 @@ export function PriceChart() {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        display: false,
       },
     },
   };

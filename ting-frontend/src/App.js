@@ -64,12 +64,15 @@ import ItemPage from "./pages/ItemPage";
 // 관리자
 import AdminPage from "./pages/AdminPage";
 import Dashboard from "./component/admin/Dashboard";
+import Report from "./component/admin/Report";
+import User from "./component/admin/User";
+import Qna from "./component/admin/Qna";
 
 // 친구
-import Friend from './component/friend/Friend';
-import FriendList from './component/friend/FriendList';
-import FriendChatting from './component/friend/FriendChatting';
-import FriendProfile from './component/friend/FriendProfile';
+import Friend from "./component/friend/Friend";
+import FriendList from "./component/friend/FriendList";
+import FriendChatting from "./component/friend/FriendChatting";
+import FriendProfile from "./component/friend/FriendProfile";
 
 // 아이템샵
 import ItemShop from "./component/item/ItemShop";
@@ -180,7 +183,10 @@ function App() {
 
         <Route path="/admin" element={<AdminPage />}>
           <Route path="" element={<Dashboard />}></Route>
-          <Route path="dashboard" element={<Dashboard />}></Route>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="report" element={<Report />} />
+          <Route path="user" element={<User />} />
+          <Route path="qna" element={<Qna />} />
         </Route>
       </Routes>
     </div>
