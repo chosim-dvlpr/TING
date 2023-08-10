@@ -83,6 +83,7 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     messageLogs = {};
     showFriendList(true);
     showFriendChatting(false);
+    dispatch(getFriendId(null)); // 친구 프로필 닫기
     // Navigate("/friend");
   };
 

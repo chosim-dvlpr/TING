@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
 import basicHttp from "../../api/basicHttp";
+import { useDispatch } from "react-redux";
+import { getFriendId } from "../../redux/friendStore";
 
 function FriendProfile(props){
+  let dispatch = useDispatch();
+
   let [friendProfile, setFriendProfile] = useState([]);
   
   const friendProfileAxios = () => {
@@ -21,12 +25,17 @@ function FriendProfile(props){
 
   useEffect(() => {
     friendProfileAxios();
-  }, [])
+  }, []);
+
+  const closeProfileModal = () => {
+    dispatch(getFriendId(null))
+  };
 
 
   return (
     <div>
       <h3>프로필</h3>
+      <button onClick={() => closeProfileModal()}>프로필 닫기</button>
 
       {/* 프로필 이미지 추가 필요 */}
       <p>닉네임 : { friendProfile.nickname }</p>
