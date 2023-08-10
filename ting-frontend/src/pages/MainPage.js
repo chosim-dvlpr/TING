@@ -18,9 +18,8 @@ import useMessageStore from "../component/friend/useMessageStore";
 import { useSelector } from "react-redux";
 
 function MainPage() {
+  // 채팅 기능 추가 //
   const messageStore = useMessageStore();
-
-  // 채팅 기능 추가 시 넣어야 하는 부분 //
   let userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const {
@@ -40,8 +39,7 @@ function MainPage() {
       connectSocket();
     }
   }, [userdata])
-  
-  // 여기까지 추가 //
+  // 여기까지 채팅 //
 
 
   useEffect(() => {
