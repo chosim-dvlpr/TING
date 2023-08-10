@@ -5,7 +5,11 @@ server:
     key-store-type: PKCS12
     key-store-password: springbackendssl
 
+
 spring:
+  jackson:
+    time-zone: Asia/Seoul
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i9b107.p.ssafy.io:3366/ting_db?serverTimezone=Asia/Seoul
