@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -78,11 +79,28 @@ public class ItemService {
 
     @Transactional
     public List<InventoryDto> getOwnItemList(Long userId) {
-        List<Inventory> inventory = inventoryRepository.findByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        List<Inventory> inventory = inventoryRepository.findByUserId(user.getId());
+
 
         List<InventoryDto> inventoryDtoList = new ArrayList<>();
 
         inventory.forEach(i -> inventoryDtoList.add(InventoryDto.of(i)));
+
+
+        // 기본 제공 아이템
+        Optional<Inventory> skin2 = inventoryRepository.findByUserIdAndItemType(user.getId(), ItemType.SKIN_2);
+        if (skin2.isEmpty()) {
+            Inventory skin2Inventory = Inventory.builder()
+                    .user(user)
+                    .itemType(ItemType.SKIN_2)
+                    .quantity(1)
+                    .build();
+            inventoryRepository.save(skin2Inventory);
+            inventoryDtoList.add(InventoryDto.of(skin2Inventory));
+        }
 
         return inventoryDtoList;
     }
