@@ -27,7 +27,9 @@ function MyPoint() {
   return(
     <div>
       <div className={styles.MyPoint}>
-        <span className={styles.PointText}>{ myPoint } Point</span>
+        <span className={styles.PointText}>
+        <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>
+          { myPoint } Point</span>
         <div className={styles.ChargeButton} 
         onClick={()=>{setChargeMenu(!chargeMenu)}}>
           포인트 충전

@@ -71,12 +71,10 @@ function ItemShop() {
   return(
     <div>
       <div className={styles.outBox}>
-        <h1>아이템샵</h1>
-        {/* 티켓 제목 */}
-        <div>
+
+      <div>
           <span>티켓</span>
         </div>
-
         {/* 티켓 아이템 리스트 */}
         <div className="container">
           <div className={`row ${styles.ItemCardList}`}>
@@ -84,9 +82,11 @@ function ItemShop() {
               ticketItems.map((ticket,idx)=>(
                 <div className={`col-4 ${styles.ItemCardOuter}`} onClick={()=>{openModal(ticket)}}>
                   <div key={idx} className={styles.ItemCard}>
-                    <div>{ticket.name}</div>
-                    <div>{ticket.content}</div>
-                    <div>{ticket.price}</div>
+                    <div className={styles.itemCardInside}></div>
+                      <div className={styles.name}>{ticket.name}</div>
+                      <div className={styles.price}>
+                        <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>{ticket.price}</div>
+                      <div>{ticket.content}</div>
                   </div>
                 </div>
               ))
@@ -106,9 +106,11 @@ function ItemShop() {
               items.map((item,idx)=>(
                 <div className={`col-4 ${styles.ItemCardOuter}`} onClick={()=>{openModal(item)}}>
                   <div key={idx} className={styles.ItemCard}>
-                    <div>{item.name}</div>
+                    <div className={styles.itemCardInside}></div>
+                    <div className={styles.name}>{item.name}</div>
+                    <div className={styles.price}>
+                    <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>{item.price}</div>
                     <div>{item.content}</div>
-                    <div>{item.price}</div>
                   </div>
                 </div>
               ))

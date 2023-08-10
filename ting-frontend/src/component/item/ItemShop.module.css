@@ -16,9 +16,35 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   background-color: rgb(247, 205, 212);
   cursor: pointer;
+  padding: 8px;
 }
 
 .ItemCardOuter {
   display: flex;
   justify-content: center;
+}
+
+.itemCardInside {
+  width: 90%;
+  height: 160px;
+  background-color: white;
+  margin: 5px auto;
+  border-radius: 10%;
+}
+
+.name {
+  border-bottom: 1px solid white;
+}
+
+.price {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coinImage {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
 }
