@@ -114,6 +114,7 @@ function IssueDetail() {
         isAgree: true,
         agreeCount: prevIssue.agreeCount + 1,
       }));
+      getIssueDetail()
     } catch (error) {
       console.error("Error agreeing to issue:", error);
     }
@@ -140,6 +141,7 @@ function IssueDetail() {
         isAgree: false,
         opposeCount: prevIssue.opposeCount + 1,
       }));
+      getIssueDetail()
     } catch (error) {
       console.error("Error opposing issue:", error);
     }
