@@ -35,7 +35,7 @@ public class ItemService {
     private final InventoryRepository inventoryRepository;
 
     @Transactional
-    public void buyItem(Long userId, Long itemCode) {
+    public void buyItem(Long userId, Long itemCode, Integer quantity) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
@@ -47,34 +47,36 @@ public class ItemService {
         }
 
         // 아이템 가격만큼 사용자 포인트 차감
-        user.setPoint(user.getPoint() - item.getPrice());
+        user.setPoint(user.getPoint() - item.getPrice() * quantity);
 
         // 아이템 구매 내역 저장
-        UserItem userItem = UserItem.builder()
-                .user(user)
-                .item(item)
-                .build();
-        userItemRepository.save(userItem);
+        for(int i = 0; i < quantity; i++) {
+            UserItem userItem = UserItem.builder()
+                    .user(user)
+                    .item(item)
+                    .build();
+            userItemRepository.save(userItem);
 
-        // 인벤토리에 아이템 등록
-        Inventory inventory = inventoryRepository.findByItemType(item.getCategory())
-                .orElse(Inventory.builder()
-                        .itemType(item.getCategory())
-                        .user(user)
-                        .quantity(0).build());
+            // 인벤토리에 아이템 등록
+            Inventory inventory = inventoryRepository.findByItemType(item.getCategory())
+                    .orElse(Inventory.builder()
+                            .itemType(item.getCategory())
+                            .user(user)
+                            .quantity(0).build());
 
-        // 매칭 티켓 아이템 부분일때
-        if (item.getCode() == 1) {
-            inventory.setQuantity(inventory.getQuantity() + 1);
-        } else if (item.getCode() == 2) {
-            inventory.setQuantity(inventory.getQuantity() + 3);
-        } else if (item.getCode() == 3) {
-            inventory.setQuantity(inventory.getQuantity() + 5);
-        } else {
-            inventory.setQuantity(inventory.getQuantity() + 1);
+            // 매칭 티켓 아이템 부분일때
+            if (item.getCode() == 1) {
+                inventory.setQuantity(inventory.getQuantity() + 1);
+            } else if (item.getCode() == 2) {
+                inventory.setQuantity(inventory.getQuantity() + 3);
+            } else if (item.getCode() == 3) {
+                inventory.setQuantity(inventory.getQuantity() + 5);
+            } else {
+                inventory.setQuantity(inventory.getQuantity() + 1);
+            }
+
+            inventoryRepository.save(inventory);
         }
-
-        inventoryRepository.save(inventory);
     }
 
     @Transactional
