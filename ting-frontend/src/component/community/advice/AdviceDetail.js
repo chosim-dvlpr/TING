@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import styles from "./AdviceDetail.module.css";
 import CommentCreate from "../common/CommentCreate";
 import tokenHttp from "../../../api/tokenHttp";
@@ -12,6 +13,11 @@ function AdviceDetail() {
   const { adviceId } = useParams();
   const [advice, setAdvice] = useState({});
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const showbutton = (nickname) => {
+    return userdata && userdata.nickname === nickname;
+  }
 
   useEffect(() => {
     getAdviceDetail();
@@ -93,11 +99,46 @@ function AdviceDetail() {
     }
   };
 
+  
+  // 글 수정
+  const handleUpdate = (adviceId) => {
+    navigate(`/community/advice/update/${adviceId}`);
+  };
+
+  // 글 삭제
+  const handleDelete = async (adviceId) => {
+    try {
+      await tokenHttp.delete(`advice/${adviceId}`);
+      console.log("delete성공");
+      alert("글이 정상적으로 삭제 되었습니다")
+      navigate("/community/advice");
+      
+    } catch (error) {
+      console.error("Error deleting advice:", error);
+    }
+  };
+
   return (
     <div className={adviceStyles.adviceBoardBackground}>
       <NavBar />
       <div className={adviceStyles.adviceBoardContainer}>
         <Sidebar />
+        <div className={styles.deleteButtonContainer}>
+        {showbutton(advice.nickname) && (
+          <button className={styles.deleteButton}>
+            <div>
+              <span onClick={() => handleUpdate(advice.adviceId)}>수정</span>
+            </div>
+          </button>
+        )}
+        {showbutton(advice.nickname) && (
+          <button className={styles.deleteButton}>
+            <div>
+              <span onClick={() => handleDelete(advice.adviceId)}>삭제</span>
+            </div>
+          </button>
+        )}
+        </div>
         <div className={styles.adviceDetailContainer}>
           <div className={styles.detailTop}>
             <div className={styles.title}>{advice.title}</div>

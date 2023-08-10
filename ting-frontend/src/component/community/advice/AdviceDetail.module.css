@@ -39,3 +39,29 @@
     text-align: left;
     padding: 36px;
   }
+
+  
+.deleteButton {
+  width: 60px;
+  height: 44px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+ 
+  border-radius: 15px;
+}
+
+.deleteButton:hover {
+  background-color: #d75c6b;
+}
+
+
+.deleteButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 90%;
+  margin-bottom: 10px;
+}
