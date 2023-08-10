@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult, resetMatchingStore } from "../../redux/matchingStore.js";
+import { setQuestionData, setQuestionNumber, setYourData, setMyScore, setYourScore, setMatchingResult, resetMatchingStore, setMatchingId } from "../../redux/matchingStore.js";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";

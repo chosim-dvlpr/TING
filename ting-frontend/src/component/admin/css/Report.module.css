@@ -21,14 +21,27 @@
 
 .table {
     height: 500px;
+    margin-left: 90px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.table th, .table td {
+    border-bottom: 1px solid #818081;
 }
 
 .tableHeader {
-    height: 50px;
+    height: 45px;
+}
+
+.tableHeader > th {
+    padding: 0 30px;
+    color: #C378D9;
+    font-weight: 600;
 }
 
 .tableBody {
-    height: 50px;
+    height: 45px;
 }
 
 .pagination {
@@ -37,3 +50,4 @@
     align-items: center;
     margin-top: 20px;
 }
+
