@@ -1,0 +1,39 @@
+/* 타이틀 */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.listContainer {
+    width: 1280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tableContainer {
+    background-color: white;
+    width: 1200px;
+    height: 600px;
+    border-radius: 15px;
+}
+
+.table {
+    height: 500px;
+}
+
+.tableHeader {
+    height: 50px;
+}
+
+.tableBody {
+    height: 50px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
