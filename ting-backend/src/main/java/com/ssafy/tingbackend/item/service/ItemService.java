@@ -35,22 +35,22 @@ public class ItemService {
     private final InventoryRepository inventoryRepository;
 
     @Transactional
-    public void buyItem(Long userId, Long itemCode, Integer quantity) {
+    public void buyItem(Long userId, Long itemCode, Integer count) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
         Item item = itemRepository.findById(itemCode)
                 .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_FOUND));
 
-        if (item.getPrice() * quantity > user.getPoint()) {
+        if (item.getPrice() * count > user.getPoint()) {
             throw new CommonException(ExceptionType.POINT_NOT_ENOUGH);
         }
 
         // 아이템 가격만큼 사용자 포인트 차감
-        user.setPoint(user.getPoint() - item.getPrice() * quantity);
+        user.setPoint(user.getPoint() - item.getPrice() * count);
 
         // 아이템 구매 내역 저장
-        for(int i = 0; i < quantity; i++) {
+        for(int i = 0; i < count; i++) {
             UserItem userItem = UserItem.builder()
                     .user(user)
                     .item(item)
@@ -58,7 +58,7 @@ public class ItemService {
             userItemRepository.save(userItem);
 
             // 인벤토리에 아이템 등록
-            Inventory inventory = inventoryRepository.findByItemType(item.getCategory())
+            Inventory inventory = inventoryRepository.findByItemTypeAndUserId(item.getCategory(), user.getId())
                     .orElse(Inventory.builder()
                             .itemType(item.getCategory())
                             .user(user)

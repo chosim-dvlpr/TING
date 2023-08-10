@@ -25,9 +25,9 @@ public class ItemController {
     /**
      * 아이템 구매
      */
-    @GetMapping("/item/{itemCode}/{quantity}")
-    public CommonResponse buyItem(Principal principal, @PathVariable Long itemCode, @PathVariable Integer quantity) {
-        itemService.buyItem(Long.parseLong(principal.getName()), itemCode, quantity);
+    @GetMapping("/item/{itemCode}/{count}")
+    public CommonResponse buyItem(Principal principal, @PathVariable Long itemCode, @PathVariable Integer count) {
+        itemService.buyItem(Long.parseLong(principal.getName()), itemCode, count);
         return new CommonResponse(200, "아이템 구매 성공");
     }
 
