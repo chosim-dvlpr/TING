@@ -167,8 +167,8 @@ function WaitingRoom() {
     <div>
       <NavBar/>
       <div className={styles.waitingMenu}>
-        <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
-        <button onClick={()=>{navigate("/")}}>나가기</button>
+        <button className={styles.button} onClick={()=>{navigate("/item/shop")}}>아이템샵</button>
+        <button className={styles.button} onClick={()=>{navigate("/")}}>나가기</button>
       </div>
       <div className={styles.MainBox}>
       <Container>
@@ -222,13 +222,15 @@ function WaitingRoom() {
               )}
               
               <p>잔여티켓 {totalTicket}개</p>
+
+              {/* 티켓 있고, 비디오 켜져있고, 마이크 켜져있을 때만 매칭 시작 가능 */}
               { totalTicket >0 && isVideoOn && isMicrophoneOn ? (
                 <>{
                   socket == null ? (
                     <button onClick={handleConnectClick} className={styles.button}>매칭 시작</button>
                     ) : (
                       <>
-                      <div>매칭 시간 : <TimerComponent /></div>
+                      <div>매칭 시간 : <TimerComponent className={styles.timer}/></div>
                       <div>예상 대기시간 :{expectTime}</div>
                     </>
                   )
@@ -251,8 +253,12 @@ function WaitingRoom() {
   );
 }
 
+
+// 매칭 시작 후 시간 표시
 const TimerComponent = () => {
   const [time, setTime] = useState(0);
+  const [second, setSecond] = useState(0);
+  const [minute, setMinute] = useState(0);
 
   // 1초마다 time 상태를 1씩 증가시키는 함수
   const increaseTime = () => {
@@ -267,10 +273,14 @@ const TimerComponent = () => {
     return () => clearInterval(timerId);
   }, []);
 
+  useEffect(()=>{
+    setMinute(Math.floor(time/60))
+    setSecond(time%60)
+
+  },[time])
+
   return (
-    <div>
-      <span>{time}초</span>
-    </div>
+      <span>{minute}분 {second}초</span>
   );
 };
 
