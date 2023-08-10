@@ -125,6 +125,33 @@
 }
 
 
+.timeBox {
+    width: 330px;
+    height: 100%;
+    margin:20px;
+    display: flex;
+    align-items: center;
+    padding:10px;
+}
+
+.miniHeart {
+    margin: 0 20px;
+    width: 50px;
+    height: 50px;
+}
+
+.time :first-child {
+    width: 100%;
+    font-family: UhBeeSe_hyun;
+    font-size: 24px;
+    margin: 10px 0;
+    text-align: left;
+}
+.time :nth-child(2) {
+    width: 100%;
+    margin: 10px 0;
+    text-align: left;
+}
 
 /* 로딩 화면 */
 .loadingSpinner {
@@ -147,3 +174,5 @@
         transform: rotate(360deg);
     }
 }
+
+

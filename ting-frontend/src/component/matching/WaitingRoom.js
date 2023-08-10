@@ -229,10 +229,13 @@ function WaitingRoom() {
                   socket == null ? (
                     <button onClick={handleConnectClick} className={styles.button}>매칭 시작</button>
                     ) : (
-                      <>
-                      <div>매칭 시간 : <TimerComponent className={styles.timer}/></div>
-                      <div>예상 대기시간 :{expectTime}</div>
-                    </>
+                    <div className={styles.timeBox}>
+                      <img src="/img/heart-icon2.png" className={styles.miniHeart}/>
+                      <div className={styles.time}>
+                        <p><TimerComponent className={styles.timer}/></p>
+                        <p>예상 대기시간 : {expectTime}</p>
+                      </div>
+                    </div>
                   )
                 }</>
               ) : null }
