@@ -24,21 +24,15 @@ function Friend({ onSearch }){
   const closeModal = () => {
     console.log('채팅 모달 닫기');
     onSearch(false);
-    messageStore.disconnectAll();
+    // messageStore.disconnectAll();
     // Navigate((-1));
   };
 
   const showFriendList = (data) => {
-    console.log('isFriendList', isFriendList)
-    console.log('data', data)
-    
     setIsFriendList(data)
   };
 
   const showFriendChatting = (data) => {
-    console.log('isFriendChatting', isFriendChatting)
-    console.log('data', data)
-    
     setIsFriendChatting(data)
   };
 

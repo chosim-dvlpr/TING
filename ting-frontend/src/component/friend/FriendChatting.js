@@ -19,6 +19,8 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     connected,
     messageEntered,
     messageLogs,
+    currentRoomIndex,
+
   } = messageStore;
 
   // 처음 렌더링 시 기존 데이터 DB에서 받아오기
@@ -40,12 +42,14 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
 
   // 처음 렌더링 시 실행
   useEffect(() => {
-    getPreviousMessage(); // 불러온 데이터를 messageLogs에 저장
+    getPreviousMessage(); // 불러온 데이터를 previousMessage에 저장
     console.log("============",chattingObj)
 
     // const messageLogs = previousMessage
     // messageLogs.push(previousMessage)
   }, [])
+
+
 
 
 
@@ -71,7 +75,11 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
   // 채팅방 나가기
   const handleClickQuitRoom = async () => {
     // messageStore.disconnect(location.state.friend.chattingId);
-    messageStore.disconnect(chattingObj.chattingId);
+    // messageStore.disconnect(chattingObj.chattingId);
+    // messageStore.disconnect(currentRoomIndex);
+    if (connected) {
+      messageStore.disconnect(currentRoomIndex);
+    }
     console.log('채팅 연결 해제')
     messageLogs = {};
     showFriendList(true);

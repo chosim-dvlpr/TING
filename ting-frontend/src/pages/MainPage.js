@@ -14,8 +14,30 @@ import MainButton from "../component/main/MainButton";
 
 import NavBar from "../component/common/NavBar";
 import FriendButton from "../component/common/FriendButton"
+import useMessageStore from "../component/friend/useMessageStore";
 
 function MainPage() {
+  const messageStore = useMessageStore();
+
+  const {
+    connected,
+    currentRoomIndex,
+    roomIndices,
+    messageLogsObject,
+  } = messageStore;
+
+  // 모든 채팅방 연결
+  const connectSocket = () => {
+    // if (connected) {
+    //   messageStore.disconnect(currentRoomIndex);
+    // }
+    messageStore.connect();
+  }
+
+  useEffect(() => {
+    connectSocket();
+  }, [])
+
   useEffect(() => {
     AOS.init();
     return () => {

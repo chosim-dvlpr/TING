@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 const FriendButton = () => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
   const navigate = useNavigate();
-
+  const [isModalOpened, setIsModalOpened] = useState(false);
   const [show, setShow] = useState(false);
 
   // let isClosed = true;
@@ -22,13 +22,18 @@ const FriendButton = () => {
     // console.log(isClosed);
     if(show) setShow(false);
     else setShow(true);
-  }
+  };
+
+  const closeModal = (data) => {
+    setIsModalOpened(data);
+    changeIsClosed();
+  };
 
   return (
     <div className={styles.friendContainer}>
       {/* <div className={styles.profileContainer}></div> */}
       {show && <div className={styles.chatConainer}>
-        <Friend />
+        <Friend onSearch={closeModal} />
       </div>}
       {/* <div className={isClosed? styles.hide : styles.chatConainer}>
         <Friend />
