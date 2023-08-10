@@ -17,14 +17,17 @@
 }
 
 .button {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background-color: white;
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 60px;
+  right: 60px;
   z-index: 200;
+  border: none;
+  box-shadow: 2px 5px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .hide {
@@ -38,10 +41,9 @@
   /* background-color: #fae6e8; */
   position: fixed;
   bottom: 30px;
-  right: 120px;
+  right: 185px;
   z-index: 200;
-  overflow-y: scroll;
-  border-radius: 5%;
+  border-radius: 20px;
   padding: 12px;
   box-shadow: 2px 5px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -50,9 +52,13 @@
 .profileContainer {
   width: 360px;
   height: 600px;
-  background-color: white;
+  background-color: #fae6e8;
   position: fixed;
   bottom: 30px;
-  right: 390px;
+  right: 545px;
   z-index: 200;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 2px 5px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }

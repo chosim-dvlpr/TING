@@ -100,6 +100,23 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     }
   };
 
+    // 날짜 시간 나누기
+    const calculateDate = (boardTime) => {
+      if (isSameDate(boardTime)) {
+        return boardTime.substr(11, 5);
+      } else return boardTime.substr(0, 10);
+    };
+  
+    const isSameDate = (boardTime) => {
+      const time = new Date(boardTime);
+      const currentTime = new Date();
+      return (
+        time.getFullYear() === currentTime.getFullYear() &&
+        time.getMonth() === currentTime.getMonth() &&
+        time.getDate() === currentTime.getDate()
+      );
+    };
+
   if (!connected) {
     return (
       null
@@ -108,48 +125,53 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
 
   return (
     <div>
-      <h4>여기는 채팅창</h4>
-      <button
-        type="button"
-        disabled={!connected}
-        onClick={() => handleClickQuitRoom()}
-      >
-        연결 종료 버튼
-      </button>
-
+      <div className={styles.top}>
+        <div><img src="/img/ting_logo_fish.png" alt="logo"/></div>
+        <button className={styles.closeButton} type="button" disabled={!connected} onClick={() => handleClickQuitRoom()}>
+          X
+        </button>
+      </div>
+      <div className={styles.infoArea}>
+        <button className={styles.imageButton} onClick={() => showProfile(chattingObj.userId)}></button>
+        <div className={styles.nickname}>{chattingObj.nickname}</div> 
+        <div>{chattingObj.temperature}℃</div>
+        <button className={styles.kebabButton}>
+          <img className={styles.kebab} src="/img/kebab.png" alt="kebab"/>
+        </button>
+      </div>
       {/* <p>친구 닉네임 : { location.state.friend.nickname }</p> */}
-      <p>친구 닉네임 : { chattingObj.nickname }</p>
       {/* <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button> */}
-      <button onClick={() => showProfile(chattingObj.userId)}>친구 프로필 사진 : { chattingObj.profileImage ? chattingObj.profileImage : '사진없음' }</button>
+      <div className={styles.chattingArea}>
+      <table>
+        { previousMessage.map((message) => 
+          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
+            <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
+            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
+          </tr>
+        )}
+        </table>
+        <table>
+        {messageLogs.map((message) => (
+          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
+            <td className={styles.content}>{message.value}</td>
+            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
+          </tr>
+        ))}
+        </table>
+        {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
+      </div>
+      <div className={styles.submitArea}>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="message-to-send">
-          메시지 입력
-        </label>
         <input
           type="text"
           value={messageEntered}
           onChange={handleChangeInput}
         />
-        <button
-          type="submit"
-        >
+        <button className={styles.sendButton} type="submit">
           전송
         </button>
       </form>
-
-      <ul>
-        {messageLogs.map((message) => (
-          <p key={message.id}>
-            {message.nickname} | {message.value}
-          </p>
-        ))}
-      </ul>
-      {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
-      <p>{ previousMessage.map((message) => 
-        <p key={message.id}>
-          {message.nickname} | {message.content}
-        </p>
-      ) }</p>
+      </div>
 
       {/* 프로필 모달 */}
       {/* {
