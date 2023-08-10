@@ -13,13 +13,11 @@ function MyPoint() {
   const [pointList, setPointList] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
 
-
   // redux 관련 변수
   const dispatch = useDispatch();
   const myPoint = useSelector((state) => state.itemReducer.myPoint);
 
   // 자신의 포인트가 얼마인지 가져옴(마운트 될 때 한 번)
-
   useEffect(
     ()=>{
     tokenHttp.get('/point')
@@ -145,7 +143,6 @@ function SelectMoney(){
     tokenHttp.get('/point/charge/list')
       .then(response => {
         setChargeMoneyData(response.data.data)
-
       })
       .catch((err) => console.log(err));
   }, []);
@@ -170,7 +167,6 @@ function SelectMoney(){
 
   // 카카오 페이로 보내기 위한 함수
   const sendToKakaoPay = () => {
-    console.log(window.location.origin);
     let data = {
       pointCode: selectChargeMoneyData.pointCode,
       domain: window.location.origin,
@@ -197,7 +193,6 @@ function SelectMoney(){
       </div>
       <button className={styles.kakaoButton} onClick={()=>{sendToKakaoPay()}}>
       <img src={process.env.PUBLIC_URL + '/img/kakaopay.png'} className={styles.kakaoImg} alt="kakaopay"></img></button>
-
     </div>
   );
 }
