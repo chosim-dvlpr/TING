@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import tokenHttp from "../../../api/tokenHttp";
-import styles from "./CommentLikeButton.module.css"; 
+import styles from "./CommentLikeButton.module.css";
 
 function CommentLikeButton({ commentId, initialLikes, onUpdateLikes }) {
   const [likes, setLikes] = useState(initialLikes);
