@@ -24,10 +24,18 @@ function WaitingRoom() {
   const [isVideoOn, setIsVideoOn] = useState(false)
 
   // 이 티켓 redux로 불러와야할 듯
-  const [ticket, setTicket] = useState(0);
+  const [totalTicket, setTotalTicket] = useState(0);
   const myItemList = useSelector((state) => state.itemReducer.myItemList);
-
   
+  
+  // 티켓 몇개인지 지속적 확인
+  useEffect(()=>{
+    const matchingTicket = myItemList.filter(obj => obj.itemType === "MATCHING_TICKET")
+    const freeMatchingTicket = myItemList.filter(obj => obj.itemType === "FREE_MATCHING_TICKET")
+    setTotalTicket(matchingTicket[0].quantity + freeMatchingTicket[0].quantity)
+  },[])
+  
+  // 마이크 비디오 상태 확인
   useEffect(()=>{
     checkStreamStatus()
   },[isMicrophoneOn,isVideoOn])
@@ -213,19 +221,19 @@ function WaitingRoom() {
                 </div>
               )}
               
-              <p>잔여티켓 {ticket}개</p>
-
-              {
-              socket == null ? (
-                <button onClick={handleConnectClick}>매칭 시작</button>
-              ) : (
-                <>
-                  <div>매칭 시간 : <TimerComponent /></div>
-                  <div>예상 대기시간 :{expectTime}</div>
-                </>
-              )
-              }
-
+              <p>잔여티켓 {totalTicket}개</p>
+              { totalTicket >0 && isVideoOn && isMicrophoneOn ? (
+                <>{
+                  socket == null ? (
+                    <button onClick={handleConnectClick} className={styles.button}>매칭 시작</button>
+                    ) : (
+                      <>
+                      <div>매칭 시간 : <TimerComponent /></div>
+                      <div>예상 대기시간 :{expectTime}</div>
+                    </>
+                  )
+                }</>
+              ) : null }
             </div>
           </Col>
         </Row>
