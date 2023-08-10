@@ -86,10 +86,7 @@ function AdviceBoard() {
     );
   };
 
-  // 케밥 게시글 닉네임과 유저 닉네임 일치하는지
-  const showKebab = (nickname) => {
-    return userdata && userdata.nickname === nickname;
-  };
+
 
   // 글 수정
   const handleUpdate = (adviceId) => {
@@ -171,25 +168,7 @@ function AdviceBoard() {
                         ? calculateDate(advice.createdTime)
                         : `${calculateDate(advice.modifiedTime)} (수정됨)`}
                     </td>
-                    <td>
-                    {showKebab(advice.nickname) && (
-                        <div className={styles.dropdownContainer}>
-                          <img
-                            src="/img/kebab.png"
-                            alt="kebab"
-                            className={styles.dropdownKebab}
-                          />
-                          <div className={styles.dropdownContent}>
-                            <span onClick={() => handleUpdate(advice.adviceId)}>
-                              Update
-                            </span>
-                            <span onClick={() => handleDelete(advice.adviceId)}>
-                              Delete
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </td>
+                
                   </tr>
                 )
               )}

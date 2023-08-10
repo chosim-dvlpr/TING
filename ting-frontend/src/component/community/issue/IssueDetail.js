@@ -6,7 +6,7 @@ import CommentCreate from "../common/CommentCreate";
 import tokenHttp from "../../../api/tokenHttp";
 import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
-// import NavBar from "../../common/NavBar";
+
 
 function IssueDetail() {
   const { issueId } = useParams();
@@ -91,7 +91,7 @@ function IssueDetail() {
   const handleDelete = async (issueId) => {
     try {
       await tokenHttp.delete(`issue/${issueId}`);
-
+      alert("글이 정상적으로 삭제 되었습니다")
       // 글 삭제 후 해당 경로로 이동
       navigate("/community/issue");
     } catch (error) {
@@ -99,10 +99,7 @@ function IssueDetail() {
     }
   };
 
-  // 투표 기능 추가
-  // const selectResult = () => {
 
-  // }
 
   const handleAgree = async () => {
     try {
