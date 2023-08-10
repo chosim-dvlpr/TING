@@ -8,6 +8,7 @@ import Room from "./Room";
 
 import useMessageStore from "./useMessageStore";
 import { useSelector } from "react-redux";
+import styles from "./FriendList.module.css";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -35,12 +36,30 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
       if (response.data.code === 200) {
         console.log('친구 목록 불러오기 성공');
         setFriendList(response.data.data); // 친구 리스트 state에 저장
+        console.log(response.data.data);
       }
       else if (response.data.code === 400) {
         console.log('실패');
       }
     })
     .catch(() => console.log("실패"));
+  };
+
+  // 날짜 시간 나누기
+  const calculateDate = (boardTime) => {
+    if (isSameDate(boardTime)) {
+      return boardTime.substr(11, 5);
+    } else return boardTime.substr(0, 10);
+  };
+
+  const isSameDate = (boardTime) => {
+    const time = new Date(boardTime);
+    const currentTime = new Date();
+    return (
+      time.getFullYear() === currentTime.getFullYear() &&
+      time.getMonth() === currentTime.getMonth() &&
+      time.getDate() === currentTime.getDate()
+    );
   };
 
   // 리스트 페이지에 들어가면 친구 목록을 불러옴
@@ -98,19 +117,21 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
 
   return (
     <div>
-      <h3>여기는 친구리스트</h3>
-      <button onClick={() => closeModal()}>close Modal</button>
-      {/* <button onClick={() => Navigate("/")}>친구 목록 닫기</button> */}
-      {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}
-      { isSearchFriend &&
-      <input type="text" 
-      onChange={(e) => setSearchFriendNickname(e.target.value)} 
-      onSubmit={() => searchFriend(searchFriendNickname)}>
-      </input> }
-      <button onClick={() => setIsSearchFriend(!isSearchFriend)}>돋보기버튼</button>
+      <div className={styles.top}>
+        <div><button className={styles.button} onClick={() => closeModal()}>X</button></div>
+        {/* <button onClick={() => Navigate("/")}>친구 목록 닫기</button> */}
+        {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}
+        <div>
+        <input type="text" 
+        onChange={(e) => setSearchFriendNickname(e.target.value)} 
+        onSubmit={() => searchFriend(searchFriendNickname)}>
+        </input>
+        <button className={styles.button} onClick={() => setIsSearchFriend(!isSearchFriend)}>검색</button>
+        </div>
+      </div>
       {/* 친구 리스트 임시 버튼 */}
       {/* <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button> */}
-      <div>
+      <div className={styles.list}>
         {/* 찾으려는 닉네임이 공백이 아닐 때 - filter */}
         {/* 입력한 값이 닉네임에 포함되어 있다면 필터링됨 */}
         { searchFriendNickname ? 
@@ -119,7 +140,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
         .map((friend, i) => {
             return ( 
               <div key={i}>
-                <div onClick={() => {handleClickEnterRoom({
+                <div className={styles.friendItem} onClick={() => {handleClickEnterRoom({
                   roomIndex: friend.chattingId,
                   friend: friend,
                   })
@@ -127,14 +148,14 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                 {/* profileImage 추가 필요 */}
                 {/* 프로필이미지 클릭 시 userId에 저장 */}
                 {/* <img></img> */}
-                <h2>여기를 클릭하면 채팅창으로 이동!</h2>
-                <h3>친구 닉네임 : { friend.nickname }</h3>
-                <h4>친구 프로필 : { friend.profileImage }</h4>
-                <h4>친구 마지막 대화 : { friend.lastChattingContent }</h4>
-                <h4>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</h4>
-                <h4>친구 아이디 번호 : { friend.userId }</h4>
-                <h4>채팅방 번호 : { friend.chattingId }</h4>
-                <h4>친구 상태 : { friend.state }</h4>
+                <div className={styles.image}>프로필 : { friend.profileImage }</div>
+                <div className={styles.nickname}>닉네임 : { friend.nickname }</div>
+                <div className={styles.content}>마지막 대화 : { friend.lastChattingContent }</div>
+                <div className={styles.time}>시간 : {calculateDate(friend.lastChattingTime)}</div>
+                <div className={styles.unread}>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</div>
+                {/* <div>친구 아이디 번호 : { friend.userId }</div> */}
+                {/* <div>채팅방 번호 : { friend.chattingId }</div> */}
+                {/* <div>친구 상태 : { friend.state }</div> */}
                 </div>
                 <button>케밥 버튼입니당</button>
                 <br/>
@@ -145,24 +166,29 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
           friendList.map((friend, i) => {
             return ( 
               <div key={i}>
-                <div onClick={() => {handleClickEnterRoom({
+                <div className={styles.friendItem} onClick={() => {handleClickEnterRoom({
                   roomIndex: friend.chattingId,
                   friend: friend,
                   })
                 }}>
-                {/* profileImage 추가 필요 */}
-                {/* 프로필이미지 클릭 시 userId에 저장 */}
-                {/* <img></img> */}
-                <h2>여기를 클릭하면 채팅창으로 이동!</h2>
-                <h3>친구 닉네임 : { friend.nickname }</h3>
-                <h4>친구 프로필 : { friend.profileImage }</h4>
-                <h4>친구 마지막 대화 : { friend.lastChattingContent }</h4>
-                <h4>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</h4>
-                <h4>친구 아이디 번호 : { friend.userId }</h4>
-                <h4>채팅방 번호 : { friend.chattingId }</h4>
-                <h4>친구 상태 : { friend.state }</h4>
+                  <div className={styles.image}>{ friend.profileImage }</div>
+                  <div className={styles.middle}>
+                    <div className={styles.nickname}>{ friend.nickname }</div>
+                    <div className={styles.content}>{ friend.lastChattingContent }</div>
+                  </div>
+                  <div>
+                    <div className={styles.time}>{calculateDate(friend.lastChattingTime)}</div>
+                    <div className={styles.unread}>
+                      { messageLogsObject[friend.chattingId]
+                      ? messageLogsObject[friend.chattingId].length 
+                      : 0 }</div>
+                  </div>
+                  <button><img
+                            src="/img/kebab.png"
+                            alt="kebab"
+                            className={styles.dropdownKebab}
+                          /></button>
                 </div>
-                <button>케밥 버튼입니당</button>
                 <br/>
               </div>
             )
