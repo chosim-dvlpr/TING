@@ -10,6 +10,7 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { persistReducer } from 'redux-persist';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import persistStore from "redux-persist/es/persistStore";
+import friendReducer from "./friendStore";
 
 const persistConfig = {
   key: 'root',
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   openviduReducer: openviduReducer.reducer,
   matchingReducer: matchingReducer.reducer,
   itemReducer: itemReducer.reducer,
+  friendReducer: friendReducer.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
