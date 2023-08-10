@@ -13,7 +13,7 @@ export const signupReducer = createSlice({
     birth: "",
     region: "",
     // 선택값
-    profileImage: "",
+    // profileImage: "",
     mbtiCode: "",
     heightCode: "",
     drinkingCode: "",
@@ -102,6 +102,9 @@ export const signupReducer = createSlice({
     setDeleteStyleCodeList: (state, action) => {
       state.styleCodeList.slice(action.payload, 1);
     },
+    // setProfileImage: (state, action) => {
+    //   state.profileImage = action.payload;
+    // },
   }
 })
 
