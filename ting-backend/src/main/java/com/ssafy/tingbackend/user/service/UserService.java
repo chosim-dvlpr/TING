@@ -452,7 +452,8 @@ public class UserService {
     }
 
     public void saveProfileNoToken(MultipartFile file, String email, String password) throws IOException {
-        User user = userRepository.findByEmailAndPassword(email, password)
+        String encodePassword = passwordEncoder.encode(password);
+        User user = userRepository.findByEmailAndPassword(email, encodePassword)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
         saveProfile(file, user.getId());
