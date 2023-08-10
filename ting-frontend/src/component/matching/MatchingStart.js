@@ -183,6 +183,17 @@ function MatchingStart() {
     });
   };
 
+   // 음성 메세지 받는 함수
+  const makeSoundMessage = (soundContent) => {
+    const message = new SpeechSynthesisUtterance()
+    message.text = `${soundContent}점`
+    message.lang = 'ko-KR';
+    message.volume = 1;
+    message.rate = 1.2;
+    message.pitch = 5;
+    window.speechSynthesis.speak(message)
+  }
+
   const onbeforeunload = (event) => {
     console.log("==================onbeforeunload====================");
     leaveSession();
@@ -248,7 +259,10 @@ function MatchingStart() {
     newSession.on("signal:score", (event) => {
       console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
-      
+
+      // 점수 선택시 양쪽 다 점수 소리 들리게
+      makeSoundMessage(data.score)
+
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
 
@@ -360,6 +374,7 @@ function MatchingStart() {
     }
   }
 
+  // 신고 후 나가기 모달창
   const report = () => {
     setShowReportModal(true);
   };
