@@ -12,6 +12,7 @@ import { setMatchingId } from "../../redux/matchingStore";
 import styles from './WaitingRoom.module.css';
 
 import NavBar from "../common/NavBar";
+
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
   const [expectTime, setExpectTime] = useState(99999); // 예상 대기시간 관리하는 state
@@ -33,12 +34,12 @@ function WaitingRoom() {
 
   const checkStreamStatus = async ()=>{
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:true})
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:true })
       const audio = stream.getAudioTracks()
       const video = stream.getVideoTracks()
       const micStatus = audio.some(track => track.readyState === 'live')
       setIsMicrophoneOn(micStatus)
-      const videoStatus = audio.some(track => track.readyState === 'live')
+      const videoStatus = video.some(track => track.readyState === 'live')
       setIsVideoOn(videoStatus)
     }
     catch (err) {
@@ -156,7 +157,7 @@ function WaitingRoom() {
 
   return (
     <div>
-
+      <NavBar/>
       <div className={styles.waitingMenu}>
         <button onClick={()=>{navigate("/shop")}}>아이템샵</button>
         <button onClick={()=>{navigate("/")}}>나가기</button>
