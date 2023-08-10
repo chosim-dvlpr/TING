@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import tokenHttp from '../../../api/tokenHttp';
 import styles from './IssueCreate.module.css'; 
 import NavBar from '../../common/NavBar';
+import Sidebar from '../common/Sidebar';
+// import NavBar from '../../common/NavBar';
 
 
 
@@ -59,14 +61,18 @@ const IssueCreate = () => {
   
     return (
       <div>
-      {/* <NavBar/> */}
+      <div className={styles.issueBoardBackGround}>
+        <NavBar/>
+      <div className={styles.issueBoardContainer}>
+        <Sidebar/>
+
       <div className={styles.formContainer}>
        
-        <h2>논쟁 글 작성하기</h2>
+        <h2>A VS B</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="title" className={styles.label}>
-              제목
+              주제
             </label>
             <input
               type="text"
@@ -79,7 +85,7 @@ const IssueCreate = () => {
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="agreeTitle" className={styles.label}>
-              찬성 투표 항목
+              A 투표 항목
             </label>
             <textarea
               id="agreeTitle"
@@ -89,7 +95,7 @@ const IssueCreate = () => {
               className={styles.textAreaField}
             />
             <label htmlFor="opposeTitle" className={styles.label}>
-              반대 투표 항목 
+              B 투표 항목 
             </label>
             <textarea
               id="opposeTitle"
@@ -115,7 +121,9 @@ const IssueCreate = () => {
           </div>
         </form>
       </div>
+      </div>
       </div> 
+      </div>
     );
   };
   

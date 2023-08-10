@@ -10,7 +10,9 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
-
+  const showbutton = (nickname) => {
+    return userdata && userdata.nickname === nickname
+  };
   // 날짜 시간 나누기
   const calculateDate = (boardTime) => {
     if (!boardTime) return "";
@@ -108,7 +110,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
               ) : (
                 // 댓글 div
                 <div className={styles.comment}>
-                <span className={styles["nickname"]}>{userdata.nickname}</span>
+                <span className={styles["nickname"]}>{comment.nickname}</span>
                   <p className={styles["comment-content"]}>{comment.content}</p>
                   <span className={styles["comment-time"]}>
                     {comment.modifiedTime === null

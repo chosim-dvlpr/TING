@@ -19,7 +19,7 @@
   display: none;
 }
 
-.chatConainer {
+.chatContainer {
   width: 360px;
   height: 600px;
   background-color: white;
@@ -37,4 +37,5 @@
   position: fixed;
   bottom: 30px;
   right: 390px;
+  z-index: 200;
 }

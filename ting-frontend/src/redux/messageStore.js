@@ -34,7 +34,7 @@ export default class MessageStore {
 
     this.currentRoomIndex = roomIndex;
 
-    if(this.isList) this.subscribeMessageBroker(this.currentRoomIndex);
+    if(!this.isList) this.subscribeMessageBroker(this.currentRoomIndex);
     else this.subscribeMessageBrokerList();
 
     this.connected = true;
@@ -52,7 +52,8 @@ export default class MessageStore {
           {},
         );
 
-        this.isList = false;
+        // this.isList = false;
+        this.isList = true;
 
         // 엔터 입력 시 메세지 전송하기
         this.sendMessage({ type: 'enter' });
@@ -71,7 +72,8 @@ export default class MessageStore {
           {},
         );
 
-        this.isList = true;
+        // this.isList = true;
+        this.isList = false;
         
         // 엔터 입력 시 메세지 전송하기
         this.sendMessage({ type: 'enter' });
@@ -168,7 +170,10 @@ export default class MessageStore {
   receiveMessage(messageReceived) {
     const message = JSON.parse(messageReceived.body);
     this.messageLogs = [...this.messageLogs, this.formatMessage(message)];
-    this.messageLogsObject = { ...this.messageLogsObject, [message.chattingId]: this.messageLogs, }
+    this.messageLogsObject = { 
+      ...this.messageLogsObject, 
+      [message.chattingId]: this.messageLogs, 
+    }
     // this.updateUnreadCount(message.chattingId);
 
     this.publish();

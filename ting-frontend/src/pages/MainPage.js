@@ -14,8 +14,34 @@ import MainButton from "../component/main/MainButton";
 
 import NavBar from "../component/common/NavBar";
 import FriendButton from "../component/common/FriendButton"
+import useMessageStore from "../component/friend/useMessageStore";
+import { useSelector } from "react-redux";
 
 function MainPage() {
+  // 채팅 기능 추가 //
+  const messageStore = useMessageStore();
+  let userdata = useSelector((state) => state.userdataReducer.userdata);
+
+  const {
+    connected,
+    currentRoomIndex,
+    roomIndices,
+    messageLogsObject,
+  } = messageStore;
+  
+  // 모든 채팅방 연결
+  const connectSocket = () => {
+    messageStore.connect();
+  }
+
+  useEffect(() => {
+    if (userdata) {
+      connectSocket();
+    }
+  }, [userdata])
+  // 여기까지 채팅 //
+
+
   useEffect(() => {
     AOS.init();
     return () => {

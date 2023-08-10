@@ -50,7 +50,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
 
   // RoomList.js
   const messageStore = useMessageStore();
-
+  
   const {
     connected,
     currentRoomIndex,
@@ -71,17 +71,23 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
     // Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
 
-  // 리스트 렌더링 되면 모든 채팅방 연결
-  const connectSocket = () => {
-    // if (connected) {
-    //   messageStore.disconnect(currentRoomIndex);
-    // }
-    messageStore.connect();
-  }
+  // // 리스트 렌더링 되면 모든 채팅방 연결
+  // const connectSocket = () => {
+  //   if (connected) {
+  //     messageStore.disconnect(currentRoomIndex);
+  //   }
+  //   messageStore.connect();
+  // }
 
   // useEffect(() => {
   //   connectSocket();
   // }, [])
+
+  // 마지막 대화 업데이트
+  useEffect(() => {
+    // console.log(messageLogs)
+    friendListAxios();
+  }, [messageLogsObject])
 
   // closeModal
   const closeModal = () => {

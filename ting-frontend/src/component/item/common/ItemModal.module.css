@@ -19,16 +19,25 @@
   border: 1px solid black;
   border-radius: 20px;
   width: 500px;
-  height: 500px;
+  height: 520px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 20px;
+}
+
+.image {
+  width: 240px;
+  height: 240px;
+  margin: 20px auto;
+  background-color: wheat;
 }
 
 .QuantityBox {
   display: flex;
   justify-content: center;
-  width: 20%;
+  justify-content: space-between;
+  width: 160px;
   padding:5px;
   margin: auto;
   background-color: rgb(242, 242, 242);
@@ -49,11 +58,28 @@
 .PlusButton{
   background-color: rgb(40, 40, 89);
   color:white;
+  margin-right: 10px;
 }
 
 .MinusButton{
   background-color: white;
+  margin-left: 10px;
 }
 
+.coinImage {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
 
+.button {
+  margin: 10px auto;
+  width: 160px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
 

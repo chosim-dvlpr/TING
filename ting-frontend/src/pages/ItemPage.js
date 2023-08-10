@@ -9,7 +9,7 @@ import NavBar from "../component/common/NavBar"
 function ItemPage(){
 
   return(
-    <div>
+    <div className={styles.background}>
     <NavBar/>
     <div className={styles.ItemContainer}>
       {/* <NavBar/> */}

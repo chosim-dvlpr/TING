@@ -18,6 +18,7 @@ function ItemModal({closeModal, clickedItem}) {
     <div>
       <div className={styles.ModalOuter} onClick={()=>{closeModal()}}></div>
       <div className={styles.ModalInner}>
+        <div className={styles.image}></div>
         <h1>{clickedItem.name}</h1>
         <h4>{clickedItem.content}</h4>
         {/* 개수 체크 버튼 */}
@@ -28,8 +29,8 @@ function ItemModal({closeModal, clickedItem}) {
         </div>
         {/* 구매하기 버튼 */}
         <div>
-          <div>구매하기</div>
-          <div>{clickedItem.price}</div>
+          <div><img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>{clickedItem.price}</div>
+          <div className={styles.button}>구매하기</div>
         </div>
       </div>
     </div>
