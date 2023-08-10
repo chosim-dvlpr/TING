@@ -143,13 +143,6 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
       {/* <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button> */}
       <div className={styles.chattingArea}>
       <table>
-        { previousMessage.map((message) => 
-          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
-            <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
-            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
-          </tr>
-        )}
-        </table>
         <table>
         {messageLogs.map((message) => (
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
@@ -157,6 +150,13 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
             <td className={styles.time}>{calculateDate(message.sendTime)}</td>
           </tr>
         ))}
+        </table>
+        { previousMessage.map((message) => 
+          <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
+            <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
+            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
+          </tr>
+        )}
         </table>
         {/* <p>{ previousMessage.content ? previousMessage.content : 0}</p> */}
       </div>
