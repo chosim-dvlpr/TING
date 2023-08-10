@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getCurrentUserdata } from "../redux/userdata";
 import NavBar from "../component/common/NavBar";
-import styles from "./LoginPage.module.css"
+import styles from "./LoginPage.module.css";
 
 import { setMyItemList } from "../redux/itemStore";
 
@@ -41,8 +41,14 @@ function LoginPage() {
         .then((response) => {
           if (response.data.code === 200) {
             console.log("성공");
-            localStorage.setItem("access-token", response.data.data["access-token"]);
-            localStorage.setItem("refresh-token", response.data.data["refresh-token"]);
+            localStorage.setItem(
+              "access-token",
+              response.data.data["access-token"]
+            );
+            localStorage.setItem(
+              "refresh-token",
+              response.data.data["refresh-token"]
+            );
 
             // 유저 데이터 redux에 저장
             tokenHttp.get("/user").then((response) => {
@@ -51,11 +57,12 @@ function LoginPage() {
             });
 
             // 유저 보유 아이템 redux에 저장
-            tokenHttp.get("/item/user").then((response)=>{
-              dispatch(setMyItemList(response.data.data))
-            })
-            .catch(err => console.log(err))
-
+            tokenHttp
+              .get("/item/user")
+              .then((response) => {
+                dispatch(setMyItemList(response.data.data));
+              })
+              .catch((err) => console.log(err));
 
             navigate("/"); // 로그인 완료되면 메인으로 이동
           } else {
@@ -72,16 +79,16 @@ function LoginPage() {
     }
   };
 
-    // 엔터키로 버튼 누를 수 있게
-    const activeEnter = (e) => {
-      if(e.key === "Enter") {
-        loginFunc();
-      }
+  // 엔터키로 버튼 누를 수 있게
+  const activeEnter = (e) => {
+    if (e.key === "Enter") {
+      loginFunc();
     }
+  };
 
   return (
     <div className={styles.outer}>
-      <NavBar/>
+      <NavBar />
       <div className={styles.container}>
         <h1 className={styles.title}>로그인</h1>
 

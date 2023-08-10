@@ -1,151 +1,151 @@
 .title {
-    font-weight: 600;
-    /* padding-right: 30px; */
-    width: 120px;
+  font-weight: 600;
+  /* padding-right: 30px; */
+  width: 120px;
 }
 
 .noData {
-    color: rgb(165, 165, 165);
+  color: rgb(165, 165, 165);
 }
 
 .innerWrapper,
 .updateWrapper {
-    width: 100%;
-    padding-left: 20px;
-    text-align: left;
-    display: flex;
+  width: 100%;
+  padding-left: 20px;
+  text-align: left;
+  display: flex;
 }
 
 .btnWrapper {
-    position: absolute;
-    right: 130px;
+  position: absolute;
+  right: 40px;
 }
 
 #moreInfo td {
-    min-width: 200px;
+  min-width: 200px;
 }
 
 #moreInfo th {
-    width: 200hpx;
+  width: 200hpx;
 }
 
 .innerWrapper tr div {
-    min-height: 30px;
+  min-height: 30px;
 }
 
 .hashtag span {
-    background-color: rgb(241, 250, 250, 0.8);
-    padding: 2px 5px;
-    margin-right: 5px;
+  background-color: rgb(241, 250, 250, 0.8);
+  padding: 2px 5px;
+  margin-right: 5px;
 }
 
 .updateWrapper {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .updateDiv {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .input {
-    border-radius: 5px;
-    border: 2px solid gray;
-    padding: 3px 10px;
-    margin-top: 3px;
+  border-radius: 5px;
+  border: 2px solid gray;
+  padding: 3px 10px;
+  margin-top: 3px;
 }
 
 #heightInput {
-    width: 100px;
+  width: 100px;
 }
 
 #introduceInput {
-    width: 80%;
+  width: 80%;
 }
 
 .dropDown {
-    position: relative;
-    /* height: auto; */
+  position: relative;
+  /* height: auto; */
 }
 
 .dropDownMenu {
-    position: relative;
-    width: 130px;
-    height: 33px;
-    padding: 3px 10px;
-    margin-top: 3px;
-    border: 2px solid gray;
-    border-radius: 5px;
-    background-color: white;
-    text-align: center;
-    cursor: pointer;
-    border-collapse: collapse;
+  position: relative;
+  width: 130px;
+  height: 33px;
+  padding: 3px 10px;
+  margin-top: 3px;
+  border: 2px solid gray;
+  border-radius: 5px;
+  background-color: white;
+  text-align: center;
+  cursor: pointer;
+  border-collapse: collapse;
 }
 
-.dropDownMenu>img {
-    position: absolute;
-    right: 0px;
-    width: 25px;
+.dropDownMenu > img {
+  position: absolute;
+  right: 0px;
+  width: 25px;
 }
 
 .dropDownMenu.multiple {
-    min-width: 220px;
-    padding-right: 15px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  min-width: 220px;
+  padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .dropDownBtn {
-    width: 130px;
-    border: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2px;
-    background-color: white;
+  width: 130px;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px;
+  background-color: white;
 }
 
 .dropDownBtn:hover {
-    background-color: #f7d1d6;
+  background-color: #f7d1d6;
 }
 
-.multiple>.dropDownBtn {
-    width: 220px;
+.multiple > .dropDownBtn {
+  width: 220px;
 }
 
 .isOpen {
-    display: inline-block;
-    position: absolute;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-bottom: 1px solid gray;
-    border-collapse: collapse;
-    z-index: 100;
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    width: 130px;
+  display: inline-block;
+  position: absolute;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  border-collapse: collapse;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 130px;
 }
 
 .isOpen.multiple {
-    width: 220px;
+  width: 220px;
 }
 
 #jobOpen.isOpen,
 #hobbyOpen.isOpen,
 #personalityOpen.isOpen {
-    top: -297px;
-    border-bottom: none;
-    border-top: 1px solid gray;
+  top: -297px;
+  border-bottom: none;
+  border-top: 1px solid gray;
 }
 
 #styleOpen.isOpen {
-    top: -193.8px;
-    border-bottom: none;
-    border-top: 1px solid gray;
+  top: -193.8px;
+  border-bottom: none;
+  border-top: 1px solid gray;
 }
 
 .isClose {
-    display: none;
+  display: none;
 }

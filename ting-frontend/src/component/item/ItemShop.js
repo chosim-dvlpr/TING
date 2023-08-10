@@ -1,131 +1,119 @@
-import styles from "./ItemShop.module.css"
-import { useState } from "react"
+import styles from "./ItemShop.module.css";
+import { useState, useEffect } from "react";
+import basicHttp from "../../api/basicHttp";
 
-import ItemModal from "./common/ItemModal"
+import ItemModal from "./common/ItemModal";
 
 function ItemShop() {
-  // 모달 상태 관련 
-  const [modalSign, setModalSign] = useState(false)
-  const [clickedItem, setClickedItem] = useState({})
+  // 모달 상태 관련
+  const [modalSign, setModalSign] = useState(false);
+  const [clickedItem, setClickedItem] = useState({});
+  const [itemList, setItemList] = useState([]);
 
-  // 임시 아이템 데이터
-  const ticketItems = [
-    { 
-      name: '부활 티켓',
-      content : '3일이 지나 죽은 물고기를 살릴 수 있습니다',
-      price : 1500
-    }, 
-    { 
-      name: '낚시 티켓',
-      content : '매칭에 필요한 티켓입니다',
-      price : 1500
-    }, 
-    { 
-      name: '닉네임 변경 티켓',
-      content : '닉네임을 변경할 수 있는 티켓입니다.',
-      price : 1500
-    }, 
-  ]
+  useEffect(() => {
+    getItemList();
+  }, []);
 
-  const items =[
-    { 
-      name: '페트병',
-      content : '어항에 3마리까지 담을 수 있습니다.',
-      price : 1500
-    }, 
-    { 
-      name: '미니 어항',
-      content : '어항에 5마리까지 담을 수 있습니다.',
-      price : 1500
-    }, 
-    { 
-      name: '수조',
-      content : '어항에 10마리까지 담을 수 있습니다.',
-      price : 1500
-    }, 
-    { 
-      name: '대형 수조',
-      content : '어항에 20마리까지 담을 수 있습니다.',
-      price : 1500
-    }, 
-    { 
-      name: '아쿠아리움',
-      content : '어항에 40마리까지 담을 수 있습니다.',
-      price : 1500
-    }, 
-  ]
+  const getItemList = () => {
+    basicHttp
+      .get("/item")
+      .then((response) => {
+        if (response.data.code == 200) {
+          let items = [];
+          response.data.data.map((item) => {
+            switch (item.name) {
+              case "매칭 티켓":
+                item.img = "/img/item/ticket_heart_one.png";
+                break;
+              case "매칭 티켓 x3":
+              case "매칭 티켓 x5":
+                item.img = "/img/item/ticket_heart_two.png";
+                break;
+              case "물고기 부활 티켓":
+                item.img = "/img/item/fish_ticket.png";
+                break;
+              case "물고기 스킨 랜덤박스":
+                item.img = "/img/item/fish_box.png";
+                break;
+              case "닉네임 변경권":
+                item.img = "/img/item/ticket_one.png";
+                break;
+              case "작은 어항":
+                item.img = "/img/item/fish_bowl.png";
+                break;
+              case "수조":
+                item.img = "/img/item/fish_tank.png";
+                break;
+              case "아쿠아리움":
+                item.img = "/img/item/aquarium.png";
+                break;
+            }
+
+            items = [...items, item];
+          });
+          setItemList(items);
+        } else {
+          console.log("아이템 불러오기 실패");
+        }
+      })
+      .catch(() => {
+        console.log("아이템 불러오기 실패");
+      });
+  };
 
   // 모달을 여는 함수
   const openModal = (item) => {
     // 모달에 띄울 정보를 보내줌
-    setClickedItem(item)
+    setClickedItem(item);
     // 모달을 열어줌
-    setModalSign(true)
-  }
+    setModalSign(true);
+  };
 
   // 모달을 닫는 함수
   const closeModal = () => {
-    setModalSign(false)
-  }
+    setModalSign(false);
+  };
 
-  return(
+  return (
     <div>
       <div className={styles.outBox}>
-
-      <div>
-          <span>티켓</span>
-        </div>
-        {/* 티켓 아이템 리스트 */}
         <div className="container">
           <div className={`row ${styles.ItemCardList}`}>
-            {
-              ticketItems.map((ticket,idx)=>(
-                <div className={`col-4 ${styles.ItemCardOuter}`} onClick={()=>{openModal(ticket)}}>
-                  <div key={idx} className={styles.ItemCard}>
-                    <div className={styles.itemCardInside}></div>
-                      <div className={styles.name}>{ticket.name}</div>
-                      <div className={styles.price}>
-                        <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>{ticket.price}</div>
-                      <div>{ticket.content}</div>
+            {itemList.map((item, idx) => (
+              <div
+                className={`col-4 ${styles.ItemCardOuter}`}
+                onClick={() => {
+                  openModal(item);
+                }}
+              >
+                <div key={idx} className={styles.ItemCard}>
+                  <div className={styles.itemCardInside}>
+                    <img src={process.env.PUBLIC_URL + item.img} />
                   </div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-
-        {/* 아이템 */}
-        <div>
-          <span>아이템</span>
-        </div>
-
-        {/* 아이템 리스트 */}
-        <div className="container">
-          <div className={`row ${styles.ItemCardList}`}>
-            {
-              items.map((item,idx)=>(
-                <div className={`col-4 ${styles.ItemCardOuter}`} onClick={()=>{openModal(item)}}>
-                  <div key={idx} className={styles.ItemCard}>
-                    <div className={styles.itemCardInside}></div>
-                    <div className={styles.name}>{item.name}</div>
-                    <div className={styles.price}>
-                    <img src={process.env.PUBLIC_URL + '/img/coin.png'} className={styles.coinImage} alt="coin"></img>{item.price}</div>
-                    <div>{item.content}</div>
+                  <div className={styles.name}>{item.name}</div>
+                  <div className={styles.price}>
+                    <img
+                      src={process.env.PUBLIC_URL + "/img/coin.png"}
+                      className={styles.coinImage}
+                      alt="coin"
+                    ></img>
+                    {item.price}
                   </div>
+                  <div>{item.description}</div>
                 </div>
-              ))
-            }
+              </div>
+            ))}
           </div>
         </div>
       </div>
-      
+
       {/* 구매 모달 */}
 
-      {
-        modalSign ? <ItemModal closeModal={closeModal} clickedItem={clickedItem}/> : null
-      }
+      {modalSign ? (
+        <ItemModal closeModal={closeModal} clickedItem={clickedItem} />
+      ) : null}
     </div>
-  )
+  );
 }
 
-export default ItemShop
+export default ItemShop;
