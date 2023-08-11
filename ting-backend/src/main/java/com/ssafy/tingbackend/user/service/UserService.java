@@ -8,6 +8,7 @@ import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.item.dto.InventoryDto;
 import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
@@ -137,6 +138,20 @@ public class UserService {
 
             userStyleRepository.saveAll(userStyles); // DB에 저장
         }
+
+        // 기본 제공 아이템 - 유리병, 매칭티켓 2개
+        Inventory skin2Inventory = Inventory.builder()
+                .user(user)
+                .itemType(ItemType.SKIN_2)
+                .quantity(1)
+                .build();
+        Inventory freeMatchingInventory = Inventory.builder()
+                .user(user)
+                .itemType(ItemType.FREE_MATCHING_TICKET)
+                .quantity(2)
+                .build();
+        inventoryRepository.save(skin2Inventory);
+        inventoryRepository.save(freeMatchingInventory);
     }
 
     public boolean checkNickname(String nickname) {
