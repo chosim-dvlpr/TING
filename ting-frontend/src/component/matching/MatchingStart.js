@@ -74,6 +74,11 @@ function MatchingStart() {
     tokenHttp.get(`/date/question/${matchingId}`).then((response) => {
       dispatch(setQuestionData(response.data.data));
     });
+    
+    // 티켓 하나 사용
+    tokenHttp.put('/item/ticket')
+    .then((response)=>{console.log(response.data.message)})
+    .catch((err)=>{console.log(err)})
 
     // openvidu 접속
     joinSession(accessToken);
@@ -220,11 +225,6 @@ function MatchingStart() {
 
     // --- 2) Init a session ---
     const newSession = OV.initSession();
-    
-    // 티켓 하나 사용
-    tokenHttp.put('/item/ticket')
-      .then((response)=>{console.log(response.data.message)})
-      .catch((err)=>{console.log(err)})
 
     // --- 3) Specify the actions when events take place in the session ---
     // On every new Stream received...
