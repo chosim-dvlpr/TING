@@ -33,7 +33,7 @@
   height: 150px;
   width: 150px;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: fill;
   box-shadow: 0px 0px 7px #bdbdbd;
 }
 
