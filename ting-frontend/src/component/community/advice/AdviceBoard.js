@@ -12,6 +12,8 @@ import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
 import NavBar from "../../common/NavBar";
 
+import {getDate} from "../../common/TimeCalculate";
+
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,25 +70,6 @@ function AdviceBoard() {
       setCurrentPage(page);
     }
   };
-
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
-  };
-
-
 
   // 글 수정
   const handleUpdate = (adviceId) => {
@@ -165,8 +148,8 @@ function AdviceBoard() {
                     <td className={styles.table_3}>{advice.hit}</td>
                     <td className={styles.table_4}>
                       {advice.modifiedTime === null
-                        ? calculateDate(advice.createdTime)
-                        : `${calculateDate(advice.modifiedTime)} (수정됨)`}
+                        ? getDate(advice.createdTime)
+                        : `${getDate(advice.modifiedTime)} (수정됨)`}
                     </td>
                 
                   </tr>

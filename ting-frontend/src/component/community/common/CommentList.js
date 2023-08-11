@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CommentLikeButton from "./CommentLikeButton"; 
 import styles from "./CommentList.module.css";
-
-
-
+import {getDate} from "../../common/TimeCalculate";
 
 function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
@@ -12,24 +10,6 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
   const showbutton = (nickname) => {
     return userdata && userdata.nickname === nickname
-  };
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if (!boardTime) return "";
-    console.log(boardTime);
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
   };
 
   // 댓글 수정
@@ -114,8 +94,8 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
                   <p className={styles["comment-content"]}>{comment.content}</p>
                   <span className={styles["comment-time"]}>
                     {comment.modifiedTime === null
-                      ? calculateDate(comment.createdTime)
-                      : `${calculateDate(comment.modifiedTime)} (수정됨)`}</span>
+                      ? getDate(comment.createdTime)
+                      : `${getDate(comment.modifiedTime)} (수정됨)`}</span>
                 <span className={styles["comment-like-button"]}>
                   <CommentLikeButton commentId={comment.commentId}
                     initialLikes={comment.likeCount}

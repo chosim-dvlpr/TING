@@ -8,6 +8,7 @@ import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
 import Sidebar from "../common/Sidebar";
 import adviceStyles from "./AdviceBoard.module.css";
+import {getDate} from "../../common/TimeCalculate";
 
 function AdviceDetail() {
   const { adviceId } = useParams();
@@ -27,25 +28,6 @@ function AdviceDetail() {
   useEffect(() => {
     console.log("==========", advice);
   }, [advice]);
-
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if (!boardTime) return "";
-    console.log(boardTime);
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
-  };
 
   const getAdviceDetail = async () => {
     try {
@@ -143,8 +125,8 @@ function AdviceDetail() {
           <div className={styles.detailTop}>
             <div className={styles.title}>{advice.title}</div>
             <div className={styles.time}>{advice.modifiedTime === null
-              ? calculateDate(advice.createdTime)
-              : `${calculateDate(advice.modifiedTime)} (수정됨)`}</div>
+              ? getDate(advice.createdTime)
+              : `${getDate(advice.modifiedTime)} (수정됨)`}</div>
             <div className={styles.hit}>{advice.hit}</div>
           </div>
           <div className={styles.content}>{advice.content}</div>
