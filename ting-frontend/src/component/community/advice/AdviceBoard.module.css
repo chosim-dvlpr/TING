@@ -1,0 +1,161 @@
+/* AdviceBoard.module.css */
+
+.adviceBoardBackground {
+  padding: 20px 0;
+  min-height: 100vh;
+}
+
+/* Container styles */
+.adviceBoardContainer {
+  margin: 0 auto;
+  background-color: white;
+  width: 80%;
+  min-width: 1200px;
+  /* height: 800px; */
+  padding: 10px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 50px;
+}
+
+.adviceTopTable {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  min-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Table styles */
+.adviceTable th:first-child, 
+.adviceTable td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.adviceTable th:last-child, 
+.adviceTable td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.adviceTable {
+  width: 70%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  margin: 4px auto 16px;
+  font-size: 14px;
+}
+
+.adviceTable th,
+.adviceTable td {
+  padding: 10px;
+  /* border: 1px solid rgb(0, 131, 159); */
+  text-align: center;
+  background-color: #fae6e8;
+  margin: 10px 0;
+  
+}
+
+.adviceTable tr {
+  height: 40px;
+}
+
+.table_1 {
+  width: 10%;
+  border-right: 1px solid white;
+}
+
+.table_2 {
+  width: 50%;
+  border-right: 1px solid white;
+}
+
+.table_3 {
+  width: 10%;
+  border-right: 1px solid white;
+}
+
+.table_4 {
+  width: 30%;
+}
+
+.adviceTable .option {
+  border-left: none;
+}
+
+.adviceTable span {
+  color: black;
+  cursor: pointer;
+}
+
+/* Button styles */
+.createButton {
+  height: 44px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 15px;
+  /* margin: 10px; */
+}
+
+.createButton:hover {
+  background-color: #d75c6b;
+}
+
+/* Link styles */
+.link {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+
+.dropdownKebab {
+  width: 20px;
+  height:20px;
+ 
+  margin-left:10px;
+  cursor: pointer;
+  
+}
+.dropdownContainer {
+  position: relative;
+  
+  float: right;
+  margin-left:10px;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdownContent span {
+  color: black;
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdownContent span:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdownContainer:hover .dropdownContent {
+  display: block;
+}
+
+

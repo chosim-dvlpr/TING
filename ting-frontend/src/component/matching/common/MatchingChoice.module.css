@@ -1,0 +1,89 @@
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.OuterContainer {
+  z-index: 11;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width:100%;
+  height:80%;
+}
+
+.Container {
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+  width:100%;
+  height:80%;
+  background-color: white;
+}
+
+.InnerBox {
+  padding:30px;
+
+} 
+
+/* 카드 뒤집는 효과 */
+.flip { 
+  width: 200px;
+  height: 273px;
+  perspective: 1100px;
+}
+
+.card {
+  width: 100%; 
+  height: 100%; 
+  position: relative;
+  transition: .4s;
+  transform-style: preserve-3d;
+}	
+
+.front, .back, .yourFront{
+  position: absolute;
+  width: 100%; 
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/cardresult.png); 
+  background-size:100%;
+}
+
+.yourFront {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/yourcardresult.png); 
+  background-size:100%;
+}
+
+/* 뒷면은 사전에 미리 뒤집기 */
+.back { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/card0.png); 
+  transform: rotateY(180deg);
+  background-size:100%; 
+}
+
+ /* 호버 시 뒤집기 */
+.flip:hover .card {
+  transform: rotateY(180deg);
+}
+
+.CardContent {
+  font-size: 40px;
+  font-family: UhBeeSe_hyun;
+}

@@ -1,0 +1,67 @@
+/* AdviceDetail.module.css */
+
+.adviceDetailContainer {
+    padding: 20px;
+    margin: 20px;
+    width: 85%;
+    margin: 0 auto;
+    box-shadow:inset 2px 2px 2px 2px rgba(200, 200, 200, 0.233),
+    5px 5px 10px 0px rgba(100, 100, 100, .1),
+    3px 3px 5px 0px rgba(100, 100, 100, .1);
+    border-radius: 15px;
+  }
+  
+  .detailTop {
+    display: flex;
+    align-items: flex-end;
+    background-color: #fae6e8;
+    border-radius: 15px;
+    height: 60px;
+    padding: 12px 40px;
+  }
+  
+  .title {
+    width: 70%;
+    font-size: 24px;
+    text-align: left;
+  }
+
+  .time {
+    width: 20%;
+  }
+
+  .hit {
+    width: 10%;
+  }
+
+  .content {
+    min-height: 200px;
+    text-align: left;
+    padding: 36px;
+  }
+
+  
+.deleteButton {
+  width: 60px;
+  height: 44px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+ 
+  border-radius: 15px;
+}
+
+.deleteButton:hover {
+  background-color: #d75c6b;
+}
+
+
+.deleteButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 90%;
+  margin-bottom: 10px;
+}

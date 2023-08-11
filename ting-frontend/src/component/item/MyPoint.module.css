@@ -1,0 +1,128 @@
+.MyPoint {
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  height: 24px;
+  width: 600px;
+  border-radius: 40px;
+  background-color: #d75c6b;
+  color: white;
+  margin: 0 auto;
+  box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+}
+
+.coinImage {
+  width: 60px;
+  height: 60px;
+  margin-right: 4px;
+}
+
+.PointText {
+  width: 300px;
+}
+
+.ChargeButton {
+  font-size: 15px;
+  display: inline-block;
+  padding: 12px 20px;
+  /* background-color: #f0f0f0; */
+  background-color: #fae6e8;
+  box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: box-shadow 0.2s; /* box-shadow 변화에 애니메이션 적용 */
+}
+
+.ChargeButton:hover {
+  /* box-shadow: inset 0 0 20px #fae6e8; */
+  box-shadow: inset 0 0 20px rgba(162, 162, 162, 0.5);
+}
+
+.moneyButton {
+  font-size: 15px;
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #fae6e8;
+  border-radius: 5px;
+  border: none;
+  margin: 10px 5px;
+}
+
+.kakaoButton {
+  border: none;
+  background-color: white;
+}
+
+.kakaoImg {
+  width: 60px;
+  height: 60px;
+}
+
+.pointList {
+  margin: 20px auto;
+  width: 600px;
+  max-height: 300px;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+}
+
+.pointList th:first-child,
+.pointList td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.pointList th:last-child,
+.pointList td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.pointList tr {
+  height: 40px;
+}
+
+.pointList td {
+  padding: 10px;
+  /* border: 1px solid rgb(0, 131, 159); */
+  text-align: center;
+  background-color: #fae6e8;
+  margin: 10px 0;
+}
+
+.pointList .category {
+  width: 30%;
+  border-right: 1px solid white;
+}
+
+.pointList .time {
+  width: 30%;
+  border-right: 1px solid white;
+}
+
+.pointList .cost {
+  width: 20%;
+  border-right: 1px solid white;
+}
+
+.pointList .point {
+  width: 20%;
+}
+
+.plus {
+  color: green;
+}
+
+.minus {
+  color: red;
+}
+
+.tdDiv {
+  height: 30px;
+}

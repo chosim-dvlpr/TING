@@ -1,0 +1,24 @@
+/* CountdownTimer.module.css */
+/*메인 비트비트 폰트*/
+@font-face{
+font-family:'bitbit';
+src:url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff'),url('//cdn.df.nexon.com/img/common/font/DNFBitBit-Regular.woff2') ;
+}
+
+
+
+.countdown {
+    font-size: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  .timer {
+    font-family: "bitbit";
+    color: #004BA1;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  

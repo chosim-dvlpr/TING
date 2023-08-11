@@ -1,0 +1,108 @@
+.ModalOuter {
+  position: fixed;
+  background-color: black;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ModalInner {
+  z-index: +1;
+  position: fixed;
+  background-color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 20px;
+  width: 500px;
+  height: 520px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+}
+
+.image {
+  width: 240px;
+  height: 240px;
+  margin: 20px auto;
+  background-color: wheat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image > img {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 20px;
+}
+
+.QuantityBox {
+  display: flex;
+  /* justify-content: center; */
+  justify-content: space-between;
+  align-items: center;
+  width: 160px;
+  padding: 5px;
+  margin: auto;
+  background-color: rgb(242, 242, 242);
+  border-radius: 10px;
+}
+
+.QuantityBox div {
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+}
+.QuantityNum {
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+}
+
+.PlusButton {
+  background-color: rgb(40, 40, 89);
+  color: white;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.MinusButton {
+  background-color: white;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.noButton {
+  /* display: none; */
+  background-color: rgb(180, 180, 180);
+  margin: 0 10px;
+}
+
+.coinImage {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+.button {
+  margin: 10px auto;
+  width: 160px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.priceDiv {
+  margin-top: 10px;
+  font-size: 18px;
+}

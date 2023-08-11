@@ -1,0 +1,52 @@
+/* 타이틀 */
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px;
+}
+
+.listContainer {
+    width: 1280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tableContainer {
+    background-color: white;
+    width: 1200px;
+    height: 600px;
+    border-radius: 15px;
+}
+
+.table {
+    height: 500px;
+    margin-left: 90px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.table th, .table td {
+    border-bottom: 1px solid #818081;
+}
+
+.tableHeader {
+    height: 45px;
+}
+
+.tableHeader > th {
+    padding: 0 30px;
+    color: #C378D9;
+    font-weight: 600;
+}
+
+.tableBody {
+    height: 45px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

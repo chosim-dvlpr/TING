@@ -1,0 +1,144 @@
+.issueBoardBackground {
+  padding: 20px 0;
+  min-height: 100vh;
+}
+
+
+.issueBoardContainer {
+  margin: 0 auto;
+  background-color: white;
+  width: 80%;
+  min-width: 1200px;
+  height: 100%;
+  padding: 10px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 50px;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  min-width: 1000px;
+  margin: 0 auto;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  margin: 4px auto 16px;
+  font-size: 14px;
+}
+
+.card {
+  
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 40px;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.link {
+  cursor: pointer;
+ 
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+
+
+.cardVotes {
+  display: flex;
+  gap: 20px;
+}
+
+.agree,
+.oppose {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownContainer {
+  position: relative;
+  float: right;
+  margin-left:10px;
+}
+
+.dropdownKebab {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.dropdownContent {
+  display:none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.dropdownContainer:hover .dropdownContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownContent span {
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdownContent span:hover {
+  background-color: #f8f8f8;
+}
+
+.createButton {
+  height: 44px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 15px;
+  /* margin: 10px; */
+}
+
+.createButton:hover {
+  background-color: #d75c6b;
+}
+
+
+.title {
+  display: flex;
+  justify-content: space between;
+  align-items: center;
+}
+
+.title div {
+  flex: 1; /* 각 아이템이 가득 차게 설정 */
+  text-align: center; /* 내부 아이템 가운데 정렬 */
+}
+
+.title .link {
+  flex: 2; /* 제목 아이템이 더 크게 설정 */
+  text-align: center; /* 가운데 정렬 */
+}

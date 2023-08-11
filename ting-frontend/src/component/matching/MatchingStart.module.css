@@ -1,0 +1,221 @@
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+video {
+  width: 100%;
+  margin:10px 0;
+  height: auto;
+  border-radius: 40px;
+  background-color: #91cad6;
+  border: 5px solid #91cad6
+}
+
+.streamcomponent div {
+  position: absolute;
+  background: #f8f8f8;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #777777;
+  font-weight: bold;
+  border-bottom-right-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+p{
+  margin: 0;
+}
+
+.container {
+  position: relative;
+  height: 88vh;
+  background-color: white;
+  margin-left: 100px;
+  /* padding-right: 130px; */
+  margin-right: 100px;
+  border-radius: 50px;
+  border: 3px solid #30668A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+  padding-top: 40px;
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  height: 75%;
+}
+
+.sessionHeader{
+  position:fixed;
+  top:20px;
+  right:20px;
+}
+
+.videoContainer {
+  margin: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardOuter{
+  filter: drop-shadow(10px 20px 5px #CCCCCC);
+  width : 200px;
+  height: 300px;
+  margin : 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left : 50%;
+  transform: translate(-50%, 0);
+}
+
+.trumpCard {
+  position: absolute;
+  width : 200px;
+  height: 300px;
+}
+
+.cardContent {
+  margin: 10px;
+  z-index: 1;
+  font-family: UhBeeSe_hyun;
+  font-size: 20px;
+}
+
+
+/* ScoreCheck module */
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ScoreCheckBox {
+  width:100%;
+  border-radius: 10px;
+}
+
+.ScoreBox {
+  width:100%;
+  padding: 20px;
+  display: flex;
+  align-content: space-around;
+}
+
+.HeartScore {
+  width:100%;
+  margin: 10px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.HeartScore img{
+  width:100%;
+  vertical-align: middle;
+}
+
+.clickedHeart {
+  scale: 1.4;
+}
+
+.HeartScore:hover{
+  cursor: pointer
+}
+
+.ScoreText {
+  font-family: UhBeeSe_hyun;
+  color: white;
+  background: none;
+  border : none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  position : absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.HeartScoreAni:hover{
+  animation-name: 흔들확대;
+  z-index: 10;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes 흔들확대 {
+  0% {
+    transform: scale(1.2);
+  }
+  30% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+
+.alertScore {
+  position: absolute;
+  top: 0;
+  width:100px;
+  height: 100px;
+  /* background-color: #30668A; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alertScore img{
+  width: 100px;
+  height: 100px;
+}
+
+.timer {
+  font-family: UhBeeSe_hyun;
+  font-size: 32px;
+}
+
+
+.MatchingChoice {
+  position: absolute;
+  top:0;
+  background-color: aqua;
+}
+
+.ScoreSumResult {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+
+.ScoreSumResult p{
+  font-size: 70px;
+  font-family: UhBeeSe_hyun;
+}
+
+.ScoreSumResult h1 {
+  margin: 0 130px;
+  font-family: UhBeeSe_hyun;
+}
+
+.ScoreCheckBox h1{
+  height: 86px;
+  margin-bottom:10px;
+  line-height: 86px;
+}

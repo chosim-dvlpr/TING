@@ -1,0 +1,98 @@
+/* module.css */
+.formContainer {
+  padding: 20px;
+    width: 85%;
+    margin: 0 auto;
+    box-shadow:inset 2px 2px 2px 2px rgba(200, 200, 200, 0.233),
+    5px 5px 10px 0px rgba(100, 100, 100, .1),
+    3px 3px 5px 0px rgba(100, 100, 100, .1);
+    border-radius: 15px;
+    /* height: 800px; */
+    /* justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); */
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+  }
+
+  .createTop {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    background-color: #fae6e8;
+    border-radius: 15px;
+    height: 60px;
+    width: 90%;
+    padding: 12px 40px;
+    font-size: 20px
+  }
+
+  .createContent {
+    margin: 20px auto;
+    background-color: #f0f0f0;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+    border-radius: 8px;
+    padding: 10px 30px;
+    width: 90%;
+    min-height: 200px;
+  }
+  
+  .label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .inputField {
+    width: 90%;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: #fae6e8;
+  }
+  
+  .textAreaField {
+    width: 100%;
+    min-height: 280px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    resize: none;
+    background-color: #f0f0f0;
+  }
+  
+  .submitButton {
+    background-color: #e58490;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 15px;
+  }
+
+  .createTable {
+    height: 400px;
+    width: 85%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    border: 1px solid #e58490;
+  }
+
+  .createTable th, .createTable td {
+    border: 1px solid #e58490;
+  }
+  
+  .table_1 {
+    width: 80px;
+    height: 60px;
+  }
+
+  .createTable th:first-child, .createTable td:first-child {
+    border-left: none;
+  }

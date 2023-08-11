@@ -1,0 +1,24 @@
+.sideBar {
+  width: 85%;
+  margin: 0 auto 24px;
+  border-bottom: 2px solid #fae6e8;
+  padding-bottom: 10px;
+  font-family: "UhBeeSe_hyun";
+  display: flex;
+}
+
+.selected {
+  background-color: #fae6e8;
+  /* background-color: rgb(234, 185, 134); */
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+
+.sideBar a {
+  color: black;
+  text-decoration: none;
+}
+
+.sideBarList {
+  margin: 0 20px;
+}

@@ -1,0 +1,61 @@
+.outBox {
+  width: 100%;
+}
+
+.ItemCardList {
+  display: flex;
+  margin: 30px;
+}
+
+.ItemCard {
+  position: relative;
+  margin: 20px;
+  padding: 8px;
+  width: 200px;
+  height: 220px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(100, 100, 100, 0.5);
+  background-color: #f7cdd4;
+}
+
+.ItemCardOuter {
+  display: flex;
+  justify-content: center;
+}
+
+.ItemCardInside {
+  width: 90%;
+  height: 160px;
+  background-color: white;
+  margin: 5px auto;
+  border-radius: 10%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ItemCardInside > img {
+  width: 75%;
+}
+
+.nameDiv {
+  /* border: 1px solid black; */
+  margin-left: 8px;
+  width: 142px;
+  height: 40px;
+  padding-top: 5px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.quantityDiv {
+  position: absolute;
+  width: 27px;
+  height: 27px;
+  padding-top: 2px;
+  right: 18px;
+  bottom: 12px;
+  background-color: #294450;
+  color: white;
+  font-weight: 700;
+}

@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'UhBeeSe_hyun';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.wrapper {
+    width: 220px;
+    padding: 30px 20px 30px 10px;
+    text-align: left;
+}
+
+.wrapper > * {
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-family: UhBeeSe_hyun;
+}
+
+.noSelected,
+.yesSelected {
+    padding: 7px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.noSelected {
+    color: gray;
+    background-color: white;
+}
+.yesSelected {
+    color: black;
+    background-color: #c5e5ea;
+    font-weight: 600;
+}

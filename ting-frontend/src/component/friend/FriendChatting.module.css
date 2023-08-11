@@ -1,0 +1,146 @@
+.profileConainer {
+  width: 360px;
+  height: 600px;
+  background-color: white;
+  position: fix;
+  bottom: 30px;
+  right: calc(width + 120px);
+  z-index: 200;
+  overflow-y: scroll;
+}
+
+.top {
+  margin: 0 auto;
+}
+
+.top img {
+  height: 60px;
+}
+
+.closeButton {
+  width: 36px;
+  height: 34px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  position: fixed;
+  right: 215px;
+  bottom: 570px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.infoArea {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px 10px;
+  border-bottom: 2px solid #e58490;
+  border-top: 2px solid #e58490;
+}
+
+.imageButton {
+  background-color: #fae6e8;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.nickname {
+  width: 180px;
+  padding: 0 10px;
+  text-align: left;
+}
+
+.kebabButton {
+  background-color: inherit;
+  border: none;
+}
+
+.kebab {
+  height: 20px;
+}
+
+.chattingArea {
+  margin: 10px;
+  padding: 0 12px 0 0;
+  height: 380px;
+  overflow-y: auto;
+  display:flex;
+  flex-direction: column-reverse;
+}
+
+.chattingArea table {
+  width: 100%;
+}
+
+.content {
+  max-width: 240px;
+  word-break: break-all;
+  text-align: left;
+  background-color: #fae6e8;
+  border: none;
+  border-radius: 10px;
+  padding: 4px 8px;
+  margin: 2px 0;
+  box-shadow: inset 2px 2px 4px #fad7db, inset -2px -2px 4px #ffffff;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.content2 {
+  max-width: 240px;
+  word-break: break-all;
+  text-align: left;
+  white-space: normal;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid #e58490;
+  border-radius: 10px;
+  padding: 4px 8px;
+  margin: 2px 0;
+  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.time {
+  font-size: 10px;
+  display: flex;
+  align-items: flex-end;
+  padding-right: 2px;
+  white-space: pre-wrap;
+}
+
+.me {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.friend {
+  display: flex;
+  flex-direction: row;
+}
+
+.submitArea input {
+  flex: 1;
+  border: none;
+  background-color: #f0f0f0;
+  box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
+  border-radius: 8px;
+  padding: 8px;
+  margin-right: 10px;
+  width: 240px;
+  font-size: 16px;
+}
+
+.sendButton {
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 15px;
+  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  height: 40px;
+}
