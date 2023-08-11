@@ -129,7 +129,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                   friend: friend,
                   })
                 }}>
-                  <div className={styles.image}>{ friend.profileImage }</div>
+                  <div className={styles.image}></div>
                   <div className={styles.middle}>
                     <div className={styles.nickname}>{ friend.nickname }</div>
                     <div className={styles.content}>{ friend.lastChattingContent }</div>
@@ -157,7 +157,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                   friend: friend,
                   })
                 }}>
-                  <div className={styles.image}>{ friend.profileImage }</div>
+                  <div className={styles.image}></div>
                   <div className={styles.middle}>
                     <div className={styles.nickname}>{ friend.nickname }</div>
                     <div className={styles.content}>{ friend.lastChattingContent }</div>
