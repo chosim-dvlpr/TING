@@ -126,8 +126,8 @@ function AdviceDetail() {
             <div className={styles.title}>{advice.title}</div>
             <div className={styles.time}>{advice.modifiedTime === null
               ? getDate(advice.createdTime)
-              : `${getDate(advice.modifiedTime)} (수정됨)`}</div>
-            <div className={styles.hit}>{advice.hit}</div>
+              : `${getDate(advice.modifiedTime)}`}</div>
+            <div className={styles.hit}>조회수:{advice.hit}</div>
           </div>
           <div className={styles.content}>{advice.content}</div>
           <CommentCreate

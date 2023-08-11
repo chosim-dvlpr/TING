@@ -75,7 +75,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
             <div className={styles["comment-details"]}>
               {editingCommentId === comment.commentId ? (
                 <div>
-                  <textarea
+                  <input
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
@@ -95,7 +95,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
                   <span className={styles["comment-time"]}>
                     {comment.modifiedTime === null
                       ? getDate(comment.createdTime)
-                      : `${getDate(comment.modifiedTime)} (수정됨)`}</span>
+                      : `${getDate(comment.modifiedTime)}`}</span>
                 <span className={styles["comment-like-button"]}>
                   <CommentLikeButton commentId={comment.commentId}
                     initialLikes={comment.likeCount}
