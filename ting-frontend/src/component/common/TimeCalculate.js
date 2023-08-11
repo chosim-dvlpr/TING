@@ -9,7 +9,6 @@ export const getDateTime = (time) => {
 
 // 현재 채팅
 export const getCurrent = (time) => {
-  console.log("~~~~~~~~~",time);
   return time.toString().substr(16,5);
 }
 
