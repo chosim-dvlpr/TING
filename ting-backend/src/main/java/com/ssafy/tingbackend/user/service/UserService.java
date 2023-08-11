@@ -4,8 +4,11 @@ import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.item.Inventory;
+import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -28,10 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,6 +52,7 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
     private final PhoneNumberAuthRepository phoneNumberRepository;
+    private final InventoryRepository inventoryRepository;
 
     private final SmsService smsService;
 
@@ -460,5 +461,32 @@ public class UserService {
         }
 
         saveProfile(file, user.getId());
+    }
+
+    public UserSkinDto getSkin(Long userId) {
+        List<Inventory> inventoryList = inventoryRepository.findByUserId(userId);
+
+        ItemType[] itemtypes = {ItemType.SKIN_10, ItemType.SKIN_5, ItemType.SKIN_3, ItemType.SKIN_2};
+
+        for (ItemType i : itemtypes) {
+            for (Inventory inventory : inventoryList) {
+                if (inventory.getItemType() == i) {
+                    return UserSkinDto.of(inventory);
+                }
+            }
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Inventory basicSkin = Inventory.builder()
+                .quantity(1)
+                .itemType(ItemType.SKIN_2)
+                .user(user)
+                .build();
+
+        inventoryRepository.save(basicSkin);
+
+        return UserSkinDto.of(basicSkin);
     }
 }

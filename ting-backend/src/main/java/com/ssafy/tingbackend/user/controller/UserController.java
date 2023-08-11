@@ -6,6 +6,7 @@ import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.user.dto.UserDto;
+import com.ssafy.tingbackend.user.dto.UserSkinDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -258,4 +259,9 @@ public class UserController {
         return new CommonResponse(200, "임시 비밀번호 전송 성공");
     }
 
+    @GetMapping("/user/skin")
+    public DataResponse<UserSkinDto> getSkin(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        return new DataResponse<>(200, "현재 유저의 어항 반환", userService.getSkin(userId));
+    }
 }
