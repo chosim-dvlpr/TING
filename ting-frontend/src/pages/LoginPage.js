@@ -1,7 +1,7 @@
 import basicHttp from "../api/basicHttp";
 import tokenHttp from "../api/tokenHttp";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -19,11 +19,8 @@ function LoginPage() {
 
   let dispatch = useDispatch();
   let navigate = useNavigate();
-  // let userEmail = useSelector((state) => { return state.userReducer.email })
-  // let userPassword = useSelector((state) => { return state.userReducer.password })
-  // let changeEmail = () => {
-  //   dispatch({ type: 200, email: email, password: password })
-  // };
+
+  const passwordRef = useRef();
 
   const loginFunc = () => {
     if (!email) {
@@ -67,10 +64,11 @@ function LoginPage() {
             navigate("/"); // 로그인 완료되면 메인으로 이동
           } else {
             // input 값 초기화
-            setEmail("");
-            setPassword("");
             alert("아이디/비밀번호가 틀립니다.");
-            navigate("/login");
+            setPassword("");
+            passwordRef.current.value = "";
+            passwordRef.current.focus();
+            // navigate("/login");
           }
         })
         .catch(() => {
@@ -100,9 +98,11 @@ function LoginPage() {
               setEmail(e.target.value);
             }}
             placeholder="이메일"
+            autoFocus
           />
           <br />
           <input
+            ref={passwordRef}
             className={styles.input}
             type="password"
             onChange={(e) => {

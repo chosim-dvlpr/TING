@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetMatchingStore } from "../redux/matchingStore";
 
-import styles from "./MatchingPage.module.css"
+import styles from "./MatchingPage.module.css";
 
 function MatchingPage() {
   let dispatch = useDispatch();
@@ -20,8 +20,8 @@ function MatchingPage() {
   return (
     <div className={styles.matchingBackground}>
       <div className={styles.matchingContainer}>
-      <Outlet></Outlet>
-    </div>
+        <Outlet></Outlet>
+      </div>
     </div>
   );
 }
