@@ -3,6 +3,8 @@ import styles from "./css/ReportDetail.module.css";
 import { useEffect, useState } from "react";
 import tokenHttp from "../../api/tokenHttp";
 
+import Button from "react-bootstrap/Button";
+
 const ReportDetail = () => {
   const [searchParams, setSeratchParams] = useSearchParams();
   const [reportedUser, setReportedUser] = useState({});
@@ -33,30 +35,56 @@ const ReportDetail = () => {
       });
   }, [searchParams]);
 
+  const changeCommentHandler = () => {};
+
   return (
     <div>
       <div className={styles.title}>ReportDetail</div>
       <div className={styles.detailContainer}>
         <div className={styles.detail}>
           <div className={styles.userInfo}>
-            <div>신고대상 유저 정보</div>
-            <div>
-              <div>{reportedUser.userId}</div>
-              <div>{reportedUser.email}</div>
-              <div>{reportedUser.name}</div>
-              <div>{reportedUser.nickname}</div>
-            </div>
+            <div className={styles.subTitle}>신고대상 유저 정보</div>
+            <table className={styles.userInfoTb}>
+              <tr>
+                <th>사용자 ID</th>
+                <td>{reportedUser.userId}</td>
+              </tr>
+              <tr>
+                <th>이메일</th>
+                <td>{reportedUser.email}</td>
+              </tr>
+              <tr>
+                <th>이름</th>
+                <td>{reportedUser.name}</td>
+              </tr>
+              <tr>
+                <th>닉네임</th>
+                <td>{reportedUser.nickname}</td>
+              </tr>
+            </table>
           </div>
           <div className={styles.reportInfo}>
-            <div>신고 정보</div>
-            <div>{report.reportId}</div>
-            <div>{report.userNickname}</div>
-            <div>{report.content}</div>
-            <div>
-              <input type="text" value={report.comment} />
+            <div className={styles.subTitle}>신고 정보</div>
+            <div className={styles.reportInfoDetail}>
+              <div>ID: {report.reportId}</div>
+              <div>신고대상 유저: {report.userNickname}</div>
+              <div>신고 내용: {report.content}</div>
             </div>
-            <div><button>신고대상 유저 경고</button></div>
-            <div><button>신고대상 유저 삭제</button></div>
+            <div className={styles.commentDiv}>
+              <label>관리자 의견</label>
+              <div>
+                <input
+                  type="text"
+                  value={report.comment}
+                  onChange={changeCommentHandler}
+                />
+                <Button variant="secondary">등록하기</Button>
+              </div>
+            </div>
+            <div className={styles.btnDiv}>
+              <Button variant="warning">신고대상 유저 경고</Button>
+              <Button variant="danger">신고대상 유저 삭제</Button>
+            </div>
           </div>
         </div>
       </div>
