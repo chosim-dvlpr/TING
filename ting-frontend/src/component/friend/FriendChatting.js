@@ -8,9 +8,9 @@ import FriendProfile from './FriendProfile';
 
 import styles from './FriendChatting.module.css';
 import { getFriendId } from '../../redux/friendStore';
-import {getDateTime} from "../common/TimeCalculate";
+import {getCurrent, getDateTime} from "../common/TimeCalculate";
 
-function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChattingObj, chattingObj }) {
+function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChattingObj, chattingObj }) {
   const location = useLocation();
   const Navigate = useNavigate();
   const dispatch = useDispatch();
@@ -98,6 +98,7 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     else {
       dispatch(getFriendId(friendId));
       setIsProfileModal(!isProfileModal);
+      onSearch2(true);
     }
   };
 
@@ -136,7 +137,7 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
         {messageLogs.map((message) => (
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
             <td className={styles.content}>{message.content}</td>
-            <td className={styles.time}>{getDateTime(message.sendTime)}</td>
+            <td className={styles.time}>{getCurrent(message.sendTime)}</td>
           </tr>
         ))}
       </table>
