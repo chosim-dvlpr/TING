@@ -37,6 +37,9 @@ const ReportDetail = () => {
 
   const changeCommentHandler = () => {};
 
+  const registerComment = () => {};
+  const deleteUser = () => {};
+
   return (
     <div>
       <div className={styles.title}>ReportDetail</div>
@@ -78,12 +81,26 @@ const ReportDetail = () => {
                   value={report.comment}
                   onChange={changeCommentHandler}
                 />
-                <Button variant="secondary">등록하기</Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    registerComment();
+                  }}
+                >
+                  등록하기
+                </Button>
               </div>
             </div>
             <div className={styles.btnDiv}>
               <Button variant="warning">신고대상 유저 경고</Button>
-              <Button variant="danger">신고대상 유저 삭제</Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  deleteUser();
+                }}
+              >
+                신고대상 유저 삭제
+              </Button>
             </div>
           </div>
         </div>
