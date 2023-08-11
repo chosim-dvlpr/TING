@@ -20,6 +20,7 @@ function MatchingStart() {
   const questionData = state.matchingReducer.questionData;
   const questionNumber = state.matchingReducer.questionNumber;
   const matchingId = state.matchingReducer.matchingId;
+  const myItemList = state.itemReducer.myItemList;
 
   // react-router
   const navigate = useNavigate();
@@ -219,6 +220,11 @@ function MatchingStart() {
 
     // --- 2) Init a session ---
     const newSession = OV.initSession();
+    
+    // 티켓 하나 사용
+    tokenHttp.put('/item/ticket')
+      .then((response)=>{console.log(response.data.message)})
+      .catch((err)=>{console.log(err)})
 
     // --- 3) Specify the actions when events take place in the session ---
     // On every new Stream received...
