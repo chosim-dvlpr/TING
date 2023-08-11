@@ -7,15 +7,15 @@ import dayjs from "dayjs";
 // const baseURL = process.env.REACT_APP_SERVER_URL;
 const baseURL = "https://i9b107.p.ssafy.io:5157";
 
-const tokenHttp = axios.create({
+const fileTokenHttp = axios.create({
   baseURL,
-  header: {
-    "Content-Type": "application/json",
+  header: { 
+    "Content-Type": "multipart/form-data",
   },
 });
 
 // 요청 인터셉터 설정 (요청 보내기 전에 수행되는 함수)
-tokenHttp.interceptors.request.use(async (req) => {
+fileTokenHttp.interceptors.request.use(async (req) => {
   const accessToken = localStorage.getItem("access-token");
   if (!accessToken) {
     console.log("token 이 존재하지 않습니다.");
@@ -32,7 +32,7 @@ tokenHttp.interceptors.request.use(async (req) => {
   }
 
   // 만료되었다면 refresh-token으로 token 재발급
-  console.log("api/tokenHttp.js : access token 만료");
+  console.log("api/fileTokenHttp.js : access token 만료");
 
   await axios
     .post(
@@ -60,4 +60,4 @@ tokenHttp.interceptors.request.use(async (req) => {
   return req;
 });
 
-export default tokenHttp;
+export default fileTokenHttp;

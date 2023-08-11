@@ -1,35 +1,86 @@
 /* 타이틀 */
 .title {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px;
 }
 
 .detailContainer {
-    width: 1280px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 1280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .detail {
-    background-color: white;
-    width: 1200px;
-    height: 600px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: white;
+  width: 1200px;
+  height: 600px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .userInfo {
-    width: 550px;
-    height: 500px;
-    background-color: antiquewhite;
+  width: 450px;
+  height: 500px;
+  margin-right: 20px;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: #fde6fb;
 }
 
 .reportInfo {
-    width: 550px;
-    height: 500px;
-    background-color: aquamarine;
+  width: 650px;
+  height: 500px;
+  padding: 30px;
+  border-radius: 15px;
+  background-color: whitesmoke;
+}
+
+.subTitle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.userInfoTb {
+  margin: 15px 0;
+  width: 370px;
+}
+
+.userInfoTb tr {
+  border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.userInfoTb td {
+  padding: 5px;
+}
+.userInfoTb th {
+  padding: 5px 5px 5px 20px;
+}
+
+.reportInfoDetail {
+  margin: 15px 0;
+}
+.reportInfoDetail > div {
+  padding: 2px 5px;
+}
+.commentDiv {
+  display: flex;
+  flex-direction: column;
+}
+.commentDiv > div {
+  display: flex;
+  align-items: center;
+}
+.commentDiv textarea {
+  width: 470px;
+  margin: 0 10px 10px 0;
+}
+
+.btnDiv {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 140px;
 }

@@ -14,6 +14,8 @@ const FriendButton = () => {
   const navigate = useNavigate();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [show, setShow] = useState(false);
+  const [profileShow, setProfileShow] = useState(false);
+  const [icon, setIcon] = useState("");
   // const [showProfile, setShowProfile] = useState(false);
   const userId = useSelector((state) => state.friendReducer.friendId);
   
@@ -25,8 +27,19 @@ const FriendButton = () => {
     // console.log(isClosed);
     if(show) {
       setShow(false);
+      setProfileShow(false);
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     }
-    else setShow(true);
+    else {
+      setShow(true);
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow: scroll;
+      width: 100%;`;
+    }
   };
 
   const closeModal = (data) => {
@@ -34,16 +47,51 @@ const FriendButton = () => {
     changeIsClosed();
   };
 
+  const openProfile = (data) => {
+    setProfileShow(data);
+  };
+
+  const getIcon = () => {
+    tokenHttp
+      .get("/user/skin")
+      .then((response) => {
+        if (response.data.code == 200) {
+          console.log(response.data.data);
+          console.log(response.data.data.itemType);
+          setIcon(getName(response.data.data.itemType));
+          console.log(icon);
+        } else {
+          console.log("아이콘 불러오기 실패");
+        }
+      }).catch(() => {
+        console.log("아이콘 불러오기 실패");
+      });
+  }
+
+  const getName = (category) => {
+    if(category=='SKIN_3') return 'bowl';
+    else if(category=='SKIN_5') return 'tank';
+    else if(category=='SKIN_10') return 'aquarium';
+    else return 'glass';
+  }
+
+  useEffect(() => {
+    getIcon();
+  }, [icon]);
+
   return (
     <div className={styles.friendContainer}>
-      <button className={styles.button} onClick={() => changeIsClosed()}></button>
+      <button className={styles.button} onClick={() => changeIsClosed()}>
+        <img src={process.env.PUBLIC_URL + `/img/friend_${icon}.png`} 
+      className={styles.coinImage} alt="icon"/>
+      </button>
       <div>
         {/* <div className={styles.profileContainer}></div> */}
         {show && <div className={styles.chatContainer}>
-          <Friend onSearch={closeModal} />
+          <Friend onSearch={closeModal} onSearch2={openProfile} />
       </div>}
       <div>
-        {userId && <div className={styles.profileContainer}>
+        {profileShow && userId && <div className={styles.profileContainer}>
           <FriendProfile userId={userId} />
         </div>}
       </div>

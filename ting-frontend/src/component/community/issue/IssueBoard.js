@@ -97,34 +97,20 @@ function IssueBoard() {
   const calculateRatio = (agreeCount, totalCount) =>
     (agreeCount / totalCount) * 100;
 
-  // Get card style based on the ratio
- // Get card style based on the ratio
-const getCardStyle = (issue) => {
-  const totalCount = calculateTotalCount(issue);
-  const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
-  const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
-
-  let cardStyle;
-
-  if (agreeRatio === 0) {
+    const getCardStyle = (issue) => {
+      const totalCount = calculateTotalCount(issue);
+      const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
+      const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
     
-    cardStyle = {
-      background: `#c5e5ea`,
-    };
-  } else if (opposeRatio === 0) {
-   
-    cardStyle = {
-      background: `#f7d1d6`,
-    };
-  } else {
+      const backgroundColor = `linear-gradient(to right, #f1b7be ${agreeRatio}%,  #8bcad5 ${agreeRatio}%)`;
     
-    cardStyle = {
-      background: `linear-gradient(to right, #f7d1d6 ${agreeRatio}%, #c5e5ea ${opposeRatio}%)`,
+      const cardStyle = {
+        background: backgroundColor,
+      };
+    
+      return cardStyle;
     };
-  }
-
-  return cardStyle;
-};
+    
 
 
   return (
@@ -146,30 +132,33 @@ const getCardStyle = (issue) => {
             ? searchResult.map((issue) => (
                 <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
                   <div className={styles.title}>
-                    <div>{issue.agreeCount}</div>
+                    <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
                     <div
                       className={styles.link}
                       onClick={(event) => handleLinkClick(issue.issueId, event)}
                     >
                       {issue.title}
                     </div>
+                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
 
-                    <div>{issue.opposeCount}</div>
+                    
                   </div>
                 </div>
               ))
             : issueList.map((issue) => (
                 <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
                   <div className={styles.title}>
-                    <div>{issue.agreeCount}</div>
+                  <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
+                 
                     <div
                       className={styles.link}
                       onClick={(event) => handleLinkClick(issue.issueId, event)}
                     >
                       {issue.title}
                     </div>
+                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
 
-                    <div>{issue.opposeCount}</div>
+                   
                   </div>
                 </div>
               ))}

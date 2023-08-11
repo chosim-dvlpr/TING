@@ -20,6 +20,7 @@ function MatchingStart() {
   const questionData = state.matchingReducer.questionData;
   const questionNumber = state.matchingReducer.questionNumber;
   const matchingId = state.matchingReducer.matchingId;
+  const myItemList = state.itemReducer.myItemList;
 
   // react-router
   const navigate = useNavigate();
@@ -73,6 +74,11 @@ function MatchingStart() {
     tokenHttp.get(`/date/question/${matchingId}`).then((response) => {
       dispatch(setQuestionData(response.data.data));
     });
+    
+    // 티켓 하나 사용
+    tokenHttp.put('/item/ticket')
+    .then((response)=>{console.log(response.data.message)})
+    .catch((err)=>{console.log(err)})
 
     // openvidu 접속
     joinSession(accessToken);
@@ -119,7 +125,7 @@ function MatchingStart() {
       if (alreadyClickedScore) return;
 
       session.signal({
-        data: JSON.stringify({ score: 5, userId: userData.userId }),
+        data: JSON.stringify({ score: 5, userId: userData.userId, questionNumber:questionNumber }),
         to: [],
         type: "score",
       });
@@ -177,7 +183,7 @@ function MatchingStart() {
 
     // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
     session.signal({
-      data: JSON.stringify({ score: score, userId: userData.userId }),
+      data: JSON.stringify({ score: score, userId: userData.userId, questionNumber:questionNumber}),
       to: [],
       type: "score",
     });
@@ -186,11 +192,11 @@ function MatchingStart() {
   // 음성 메세지 받는 함수
   const makeSoundMessage = (score) => {
     if (userData.gender === 'F') { 
-      const audio = new Audio(`/src/sound/m/${score}점_남_m4a`)
+      const audio = new Audio(`${process.env.PUBLIC_URL}/sound/m/${score}점_남.mp3`)
       audio.play()
     }
     else {
-      const audio = new Audio(`/src/sound/w/${score}점_여.m4a`)
+      const audio = new Audio(`${process.env.PUBLIC_URL}/sound/w/${score}점_여.mp3`)
       audio.play()
     }    
   }
@@ -260,9 +266,11 @@ function MatchingStart() {
     newSession.on("signal:score", (event) => {
       console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
-
+      
       // 점수 선택시 양쪽 다 점수 소리 들리게
-      if ( questionNumber > 0 && questionNumber < 12) makeSoundMessage(data.score);
+      if ( data.questionNumber > 0 && data.questionNumber < 12 ) {
+        makeSoundMessage(data.score);
+      }
 
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
