@@ -87,3 +87,33 @@
   font-size: 40px;
   font-family: UhBeeSe_hyun;
 }
+
+
+/* 버튼 토글 */
+
+
+.button {
+  border-radius: 10px;
+  padding: 5px 15px;
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+  5px 5px 10px 0px rgba(0, 0 ,0, .1),
+  3px 3px 5px 0px rgba(0, 0 ,0, .1); 
+}
+
+.button:hover {
+  background-color: #327488;
+}
+
+.clickedButton {
+  border-radius: 10px;
+  padding: 5px 15px;
+  border: none;
+  background-color: #327488;
+  color: whitesmoke;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+  5px 5px 10px 0px rgba(0, 0 ,0, .1),
+  3px 3px 5px 0px rgba(0, 0 ,0, .1); 
+}
