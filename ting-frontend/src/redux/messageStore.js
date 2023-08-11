@@ -190,6 +190,7 @@ export default class MessageStore {
       userId: message.userId, // DB 저장되어있는 유저ID로 보내기 - 보내는 사람 아이디
       content: message.content,
       sendTime: new Date(),
+      nickname: message.nickname,
       value: `${message.userId} ${message.content} (${new Date().toLocaleTimeString()})`,
       // private String id;
       // private Long chattingId;

@@ -129,19 +129,22 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                   friend: friend,
                   })
                 }}>
-                {/* profileImage 추가 필요 */}
-                {/* 프로필이미지 클릭 시 userId에 저장 */}
-                {/* <img></img> */}
-                <div className={styles.image}>프로필 : { friend.profileImage }</div>
-                <div className={styles.nickname}>닉네임 : { friend.nickname }</div>
-                <div className={styles.content}>마지막 대화 : { friend.lastChattingContent }</div>
-                <div className={styles.time}>시간 : {getTime(friend.lastChattingTime)}</div>
-                <div className={styles.unread}>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</div>
-                {/* <div>친구 아이디 번호 : { friend.userId }</div> */}
-                {/* <div>채팅방 번호 : { friend.chattingId }</div> */}
-                {/* <div>친구 상태 : { friend.state }</div> */}
+                  <div className={styles.image}>{ friend.profileImage }</div>
+                  <div className={styles.middle}>
+                    <div className={styles.nickname}>{ friend.nickname }</div>
+                    <div className={styles.content}>{ friend.lastChattingContent }</div>
+                  </div>
+                  <div>
+                    <div className={styles.time}>{getTime(friend.lastChattingTime)}</div>
+                    <div className={styles.unread}>
+                      { messageLogsObject[friend.chattingId]
+                      ? messageLogsObject[friend.chattingId].length 
+                      : 0 }</div>
+                  </div>
+                  <button>
+                    <img src="/img/kebab.png" alt="kebab" className={styles.dropdownKebab}/>
+                  </button>
                 </div>
-                <button>케밥 버튼입니당</button>
               </div>
             )
           })
