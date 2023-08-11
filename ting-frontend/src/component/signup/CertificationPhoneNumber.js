@@ -68,11 +68,8 @@ function CertificationPhonenumber(){
     <div className={styles.wrapper}>
       {/* <p>{ phonenumber }</p> */}
       <label className={styles.label} htmlFor='phonenumber'>문자로 발송된 인증번호를 입력해주세요</label>
-      <br/>
       <input className={styles.input} type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />
-      <br/>
       <input ref={authCodeInput} className={styles.input} type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 6자리"/>
-      <br/>
       <button className={styles.btn} onClick={checkPhonenumberCode}>인증확인</button>
       <button className={styles.btn} onClick={checkPhonenumber}>재전송</button>
   </div>

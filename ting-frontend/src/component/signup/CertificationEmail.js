@@ -49,10 +49,8 @@ function CertificationEmail(){
   return(
     <div className={styles.wrapper}>
         <label className={styles.label} htmlFor='email'>이메일로 전송된 인증번호를 입력해주세요</label>
-        <br/>
         {/* 이메일 수정 불가 */}
         <input className={styles.input} type="text" id="email" value={ signupReducer.email } readOnly />
-        <br/>
         <input 
           ref={authCodeInput} 
           className={styles.input} 
