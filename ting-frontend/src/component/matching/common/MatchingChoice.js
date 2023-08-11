@@ -16,6 +16,7 @@ function MatchingChoice({session, count}){
   const [finish, setFinish] = useState(false) 
   const [result,setResult] = useState(false)
   const [matchingFinish, setMatchingFinish] = useState(false)
+  const [buttonToggleSign, setButtonToggleSign] = useState([false,false])
 
   // 최종 선택 타이머 끝내는 로직
   useEffect(()=>{
@@ -29,6 +30,14 @@ function MatchingChoice({session, count}){
   // 결과 선택 로직
   useEffect(()=>{
     sendResult(result)
+    // 버튼 토글
+    if (result){
+      setButtonToggleSign([true,false])
+    }
+    else {
+      setButtonToggleSign([false,true])
+    }
+
   },[result])
 
   // 최종 결과 비동기로 친구 매칭 보내는 함수
@@ -94,8 +103,8 @@ function MatchingChoice({session, count}){
           <div>
             <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
             <h3>{ count }</h3>
-            <button onClick={()=>{setResult(true);}}>YES</button>
-            <button onClick={()=>{setResult(false)}}>NO</button>
+            <button className={buttonToggleSign[0] ? styles.clickedButton : styles.button} onClick={()=>{setResult(true);}}>YES</button>
+            <button className={buttonToggleSign[1] ? styles.clickedButton : styles.button} onClick={()=>{setResult(false);}}>NO</button>
           </div>)
           }
         </div>
