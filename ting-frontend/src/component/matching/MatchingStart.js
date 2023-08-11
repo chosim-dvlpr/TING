@@ -20,6 +20,7 @@ function MatchingStart() {
   const questionData = state.matchingReducer.questionData;
   const questionNumber = state.matchingReducer.questionNumber;
   const matchingId = state.matchingReducer.matchingId;
+  const myItemList = state.itemReducer.myItemList;
 
   // react-router
   const navigate = useNavigate();
@@ -73,6 +74,11 @@ function MatchingStart() {
     tokenHttp.get(`/date/question/${matchingId}`).then((response) => {
       dispatch(setQuestionData(response.data.data));
     });
+    
+    // 티켓 하나 사용
+    tokenHttp.put('/item/ticket')
+    .then((response)=>{console.log(response.data.message)})
+    .catch((err)=>{console.log(err)})
 
     // openvidu 접속
     joinSession(accessToken);
