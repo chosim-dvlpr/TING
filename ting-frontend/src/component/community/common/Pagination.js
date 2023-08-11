@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./Pagination.module.css";
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
-    const [currentClick, setCurrentClick] = useState(null);
+    const [currentClick, setCurrentClick] = useState(0);
     const [prevClick, setPrevClick] = useState(null);
 
     useEffect((e) => {
@@ -21,6 +21,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       },[currentClick])
 
     const getClick = (e) => {
+        console.log(e.target.id);
     setCurrentClick(e.target.id);
     }
 
