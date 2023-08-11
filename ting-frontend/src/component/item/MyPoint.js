@@ -6,6 +6,7 @@ import { setPoint } from "../../redux/itemStore";
 import { setPointPaymentId } from "../../redux/itemStore";
 import styles from "./MyPoint.module.css";
 import Pagination from "../community/common/Pagination";
+import {getDate} from "../common/TimeCalculate";
 
 function MyPoint() {
   const [chargeMenu, setChargeMenu] = useState(false);
@@ -52,23 +53,6 @@ function MyPoint() {
     }
   };
 
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
-  };
-
   const sign = (category) => {
     if (category == "포인트 충전") return "+";
     else return "-";
@@ -108,7 +92,7 @@ function MyPoint() {
               <tr key={history.pointHistoryId}>
                 <td className={styles.time}>
                   <div className={styles.tdDiv}>
-                    {calculateDate(history.changedTime)}
+                    {getDate(history.changedTime)}
                   </div>
                 </td>
                 <td class={styles.category}>{history.category}</td>

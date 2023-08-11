@@ -8,6 +8,7 @@ import FriendProfile from './FriendProfile';
 
 import styles from './FriendChatting.module.css';
 import { getFriendId } from '../../redux/friendStore';
+import {getDateTime} from "../common/TimeCalculate";
 
 function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChattingObj, chattingObj }) {
   const location = useLocation();
@@ -100,32 +101,6 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
     }
   };
 
-    // 날짜 시간 나누기
-    const calculateDate = (boardTime) => {
-      if (isSameDate(boardTime)) {
-        return boardTime.substr(11, 5);
-      } else return boardTime.substr(5, 2)+'월 '+boardTime.substr(8,2)+'일';
-    };
-  
-    const isSameDate = (boardTime) => {
-      const time = new Date(boardTime);
-      const currentTime = new Date();
-      return (
-        time.getFullYear() === currentTime.getFullYear() &&
-        time.getMonth() === currentTime.getMonth() &&
-        time.getDate() === currentTime.getDate()
-      );
-    };
-
-    const calculateTime = (time) => {
-      if(!time) return;
-      console.log(time);
-      if(time.substr(0,2)=='오후') {
-        return toString(Number(time.substr(3,2))+12)+time.substr(5,3);
-      }
-      return time.substr(3, 5); 
-    }
-
   if (!connected) {
     return (
       null
@@ -155,13 +130,13 @@ function FriendChatting({ onSearch, showFriendList, showFriendChatting, setChatt
         { previousMessage.map((message) => 
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
             <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
-            <td className={styles.time}>{calculateDate(message.sendTime)}</td>
+            <td className={styles.time}>{getDateTime(message.sendTime)}</td>
           </tr>
         )}
         {messageLogs.map((message) => (
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
             <td className={styles.content}>{message.content}</td>
-            <td className={styles.time}>{calculateTime(message.sendTime)}</td>
+            <td className={styles.time}>{getDateTime(message.sendTime)}</td>
           </tr>
         ))}
       </table>

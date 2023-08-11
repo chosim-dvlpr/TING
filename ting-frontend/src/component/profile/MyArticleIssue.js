@@ -9,6 +9,7 @@ import tokenHttp from "../../api/tokenHttp";
 
 import commonStyles from "./ProfileCommon.module.css"
 import styles from "./MyArticle.module.css";
+import {getDate} from "../common/TimeCalculate";
 
 function MyArticleIssue() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +77,7 @@ function MyArticleIssue() {
                   <td>{article.issueId}</td>
                   <td className={commonStyles.clickable} onClick={() => navigate(`/community/issue/detail/${article.issueId}`)}>{article.title}</td>
                   <td>{article.hit}</td>
-                  <td>{article.createdTime}</td>
+                  <td>{getDate(article.createdTime)}</td>
                 </tr>
               ))
               : <tr><td colSpan={4}>작성한 게시글이 없습니다.</td></tr>
