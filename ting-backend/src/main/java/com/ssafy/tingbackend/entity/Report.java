@@ -34,4 +34,8 @@ public class Report extends BaseCreatedTimeEntity {
     private Long typeId;    // 신고 타겟에 대한 PK 값 (게시글이면 게시글 PK, 댓글이면 댓글 PK, 소개팅이면 소개팅 PK)
 
     private String comment; // 관리자가 처리한 내용
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }

@@ -113,6 +113,13 @@ public class AdminService {
     }
 
     @Transactional
+    public void registerComment(Long reportId, String comment) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new CommonException(ExceptionType.REPORT_NOT_FOUND));
+        report.setComment(comment);
+    }
+
+    @Transactional
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
