@@ -55,9 +55,10 @@
 }
 
 .card span {
-  
-  height: 100%;
-  font-size: 100px;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  font-size: 140px;
   padding: 0;
   color: white;
   margin-left: 10px;
