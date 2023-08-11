@@ -16,7 +16,7 @@ function CertificationEmail(){
 
   const checkEmail = () => {
     let data = {
-      email: signupReducer.email,
+      // email: signupReducer.email,
       authCode: authCode,
     }
 

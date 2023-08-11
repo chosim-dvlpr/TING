@@ -14,6 +14,7 @@
 .input,
 .btn,
 .disabledBtn,
+.phonenumInput,
 .selectBtn {
     border-radius: 10px;
     padding: 5px 15px;
@@ -26,6 +27,12 @@
 .input {
     border: 2px solid gray;
     margin: 5px 0;
+}
+
+.phonenumInput {
+    width: 80px;
+    border: 2px solid gray;
+    margin: 5px;
 }
 
 .disabledBtn {
@@ -71,3 +78,10 @@
 .genderBtn {
     width: 180px;
 }
+
+.passwordContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
