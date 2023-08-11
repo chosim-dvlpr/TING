@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import styles from "./ItemModal.module.css";
 
@@ -6,14 +6,20 @@ import tokenHttp from "../../../api/tokenHttp";
 
 function ItemModal({ closeModal, clickedItem }) {
   const [quantity, setQuantity] = useState(1);
+  const [itemPrice, setItemPrice] = useState(clickedItem.price);
+  const priceRef = useRef();
 
   const changeQuantity = (sign) => {
     if (sign === "-") {
       if (quantity > 1) {
         setQuantity(quantity - 1);
+        setItemPrice(clickedItem.price * (quantity - 1));
+        priceRef.current.innerHTML = itemPrice;
       }
     } else {
       setQuantity(quantity + 1);
+      setItemPrice(clickedItem.price * (quantity + 1));
+      priceRef.current.innerHTML = itemPrice;
     }
   };
 
@@ -51,9 +57,45 @@ function ItemModal({ closeModal, clickedItem }) {
         <h2>{clickedItem.name}</h2>
         <h4>{clickedItem.content}</h4>
         {/* 개수 체크 버튼 */}
-        <div className={styles.QuantityBox}>
-          <div
-            className={styles.MinusButton}
+        {/* 어항 스킨의 경우 수량 증가,감소 버튼 비활성화 */}
+        {clickedItem.name === "작은 어항" ||
+        clickedItem.name === "수조" ||
+        clickedItem.name === "아쿠아리움" ? (
+          <div className={styles.QuantityBox}>
+            <div className={styles.noButton}>-</div>
+            <div className={styles.QuantityNum}>{quantity}</div>
+            <div className={styles.noButton}>+</div>
+          </div>
+        ) : (
+          <div className={styles.QuantityBox}>
+            <div
+              className={styles.MinusButton}
+              onClick={() => {
+                changeQuantity("-");
+              }}
+            >
+              -
+            </div>
+            <div className={styles.QuantityNum}>{quantity}</div>
+            <div
+              className={styles.PlusButton}
+              onClick={() => {
+                changeQuantity("+");
+              }}
+            >
+              +
+            </div>
+          </div>
+        )}
+        {/* <div className={styles.QuantityBox}> */}
+        {/* <div
+            className={
+              clickedItem.name === "작은 어항" ||
+              clickedItem.name === "수조" ||
+              clickedItem.name === "아쿠아리움"
+                ? styles.noButton
+                : styles.MinusButton
+            }
             onClick={() => {
               changeQuantity("-");
             }}
@@ -62,21 +104,27 @@ function ItemModal({ closeModal, clickedItem }) {
           </div>
           <div className={styles.QuantityNum}>{quantity}</div>
           <div
-            className={styles.PlusButton}
+            className={
+              clickedItem.name === "작은 어항" ||
+              clickedItem.name === "수조" ||
+              clickedItem.name === "아쿠아리움"
+                ? styles.noButton
+                : styles.PlusButton
+            }
             onClick={() => {
               changeQuantity("+");
             }}
           >
             +
           </div>
-        </div>
+        </div> */}
         <div className={styles.priceDiv}>
           <img
             src={process.env.PUBLIC_URL + "/img/coin.png"}
             className={styles.coinImage}
             alt="coin"
           ></img>
-          {clickedItem.price}
+          <span ref={priceRef}>{itemPrice}</span>
         </div>
         {/* 구매하기 버튼 */}
         <div>

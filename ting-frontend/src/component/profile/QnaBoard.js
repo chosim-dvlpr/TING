@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./QnaBoard.module.css";
+import {getDate} from "../common/TimeCalculate";
 
 function QnaBoard() {
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
@@ -99,9 +100,9 @@ function QnaBoard() {
                     <td>
                       <span className={commonStyles.clickable} onClick={(event) => goToQnaDetail(qna.qnaId, event)}>{qna.title}</span>
                     </td>
-                    <td>{qna.createdTime}</td>
+                    <td>{getDate(qna.createdTime)}</td>
                     <td>{qna.answer ? qna.answer : '처리 전'}</td>
-                    <td>{qna.completedTime ? qna.completedTime : '-'}</td>
+                    <td>{qna.completedTime ? getDate(qna.completedTime) : '-'}</td>
                   </tr>
                 ))
             }

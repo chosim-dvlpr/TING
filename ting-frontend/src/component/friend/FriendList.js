@@ -9,6 +9,8 @@ import Room from "./Room";
 import useMessageStore from "./useMessageStore";
 import { useSelector } from "react-redux";
 import styles from "./FriendList.module.css";
+import {getTime} from "../common/TimeCalculate";
+
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -43,24 +45,6 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
       }
     })
     .catch(() => console.log("실패"));
-  };
-
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if(!boardTime) return;
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(5, 2)+'월 '+boardTime.substr(8,2)+'일';
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
   };
 
   // 리스트 페이지에 들어가면 친구 목록을 불러옴
@@ -151,7 +135,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                 <div className={styles.image}>프로필 : { friend.profileImage }</div>
                 <div className={styles.nickname}>닉네임 : { friend.nickname }</div>
                 <div className={styles.content}>마지막 대화 : { friend.lastChattingContent }</div>
-                <div className={styles.time}>시간 : {calculateDate(friend.lastChattingTime)}</div>
+                <div className={styles.time}>시간 : {getTime(friend.lastChattingTime)}</div>
                 <div className={styles.unread}>친구 안읽은 개수 : { messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length : 0 }</div>
                 {/* <div>친구 아이디 번호 : { friend.userId }</div> */}
                 {/* <div>채팅방 번호 : { friend.chattingId }</div> */}
@@ -176,7 +160,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
                     <div className={styles.content}>{ friend.lastChattingContent }</div>
                   </div>
                   <div>
-                    <div className={styles.time}>{calculateDate(friend.lastChattingTime)}</div>
+                    <div className={styles.time}>{getTime(friend.lastChattingTime)}</div>
                     <div className={styles.unread}>
                       { messageLogsObject[friend.chattingId]
                       ? messageLogsObject[friend.chattingId].length 

@@ -109,6 +109,7 @@
   display: flex;
   align-items: flex-end;
   padding-right: 2px;
+  white-space: pre-wrap;
 }
 
 .me {
