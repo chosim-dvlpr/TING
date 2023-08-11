@@ -20,6 +20,7 @@ public class AdminQnaDto {
     private String answer;
 
     private LocalDateTime completedTime;
+    private LocalDateTime createdTime;
     private boolean isCompleted;
 
     public static AdminQnaDto of(QnA qna) {
@@ -32,6 +33,7 @@ public class AdminQnaDto {
                 .answer(qna.getAnswer())
                 .completedTime(qna.getCompletedTime())
                 .isCompleted(qna.isCompleted())
+                .createdTime(qna.getCreatedTime())
                 .build();
     }
 }
