@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './ProfileImageEdit.module.css';
 import { useSelector } from 'react-redux';
 import fileTokenHttp from '../../../api/fileTokenHttp';
+import { useNavigate } from 'react-router-dom';
 // import { Button } from "@mui/material";
 
 
-function ProfileImageEdit({ setMyImage }) {
+function ProfileImageEdit({ setMyImage, setIsModalOpen }) {
   // let signupReducer = useSelector((state) => state.signupReducer);
   const formData = new FormData();
+  let navigate = useNavigate();
 
   // 파일 업로드
   const onUploadImage = (e) => {
@@ -28,6 +30,8 @@ function ProfileImageEdit({ setMyImage }) {
       console.log(response);
       if (response.data.code === 200) {
         alert("이미지 업로드 성공");
+        setIsModalOpen(false);
+        navigate("/mypage");
       }
       else {
         console.log('파일 업로드 실패');
@@ -38,11 +42,12 @@ function ProfileImageEdit({ setMyImage }) {
 
   return (
     <div className={styles.Modal}>
-      <div>
-        <input type='file' accept='image/*' onChange={onUploadImage} ref={setMyImage}></input>
+      <div className={styles.modalbody}>
+        <div className={styles.inputmodal}>
+          <input type='file' accept='image/*' onChange={onUploadImage} ref={setMyImage}></input>
+        </div>
       </div>
     </div>
-
   )
 }
 

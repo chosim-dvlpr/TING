@@ -15,10 +15,6 @@ function ProfileHeader() {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-
-  }, [userData.profileImage])
-
   // const handleImageUpload = (image) => {
   //   setUploadedImage(image);
   //   setIsModalOpen(false);
@@ -53,11 +49,15 @@ function ProfileHeader() {
           onClick={openImageUploadModal}
         />
       </div>
-      {
-        isModalOpen && 
-        <ProfileImageEdit setMyImage={setMyImage} />
-      }
-
+      <div className={styles.Modal}>
+        {
+          isModalOpen && 
+          <ProfileImageEdit 
+            setMyImage={setMyImage} 
+            setIsModalOpen={setIsModalOpen}
+            />
+        }
+      </div>
       <div className={styles.innerWrapper}>
         {/* ... 이전 코드 */}
       </div>
