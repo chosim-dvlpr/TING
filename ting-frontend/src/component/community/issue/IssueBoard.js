@@ -132,14 +132,14 @@ function IssueBoard() {
             ? searchResult.map((issue) => (
                 <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
                   <div className={styles.title}>
-                    <span>{(issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100}</span>
+                    <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
                     <div
                       className={styles.link}
                       onClick={(event) => handleLinkClick(issue.issueId, event)}
                     >
                       {issue.title}
                     </div>
-                    <span>{(issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100}</span>
+                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
 
                     
                   </div>
@@ -148,7 +148,7 @@ function IssueBoard() {
             : issueList.map((issue) => (
                 <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
                   <div className={styles.title}>
-                   <span>{(issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100}</span>
+                  <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
                  
                     <div
                       className={styles.link}
@@ -156,7 +156,7 @@ function IssueBoard() {
                     >
                       {issue.title}
                     </div>
-                    <span>{(issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100}</span>
+                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
 
                    
                   </div>
