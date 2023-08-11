@@ -77,7 +77,7 @@ const Report = () => {
               ) : (
                 <Pagination.Item onClick={handlePage(pageResult.page - 1)}>{pageResult.page - 1}</Pagination.Item>
               )}
-              <Pagination.Item onClick={handlePage(pageResult.page)}>{pageResult.page}</Pagination.Item>
+              <Pagination.Item onClick={handlePage(pageResult.page)} active>{pageResult.page}</Pagination.Item>
               {pageResult.last ? (
                 <Pagination.Item disabled>-</Pagination.Item>
               ) : (

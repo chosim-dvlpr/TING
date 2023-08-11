@@ -17,4 +17,19 @@
     width: 1200px;
     height: 600px;
     border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userInfo {
+    width: 550px;
+    height: 500px;
+    background-color: antiquewhite;
+}
+
+.reportInfo {
+    width: 550px;
+    height: 500px;
+    background-color: aquamarine;
 }
