@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class AdminQnaDto {
     private Long qnaId;
     private Long userId;
+    private String userNickname;
 
     private String title;
     private String content;
@@ -25,6 +26,7 @@ public class AdminQnaDto {
         return AdminQnaDto.builder()
                 .qnaId(qna.getId())
                 .userId(qna.getUser().getId())
+                .userNickname(qna.getUser().getNickname())
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .answer(qna.getAnswer())

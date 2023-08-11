@@ -142,6 +142,7 @@ public class AdminService {
         );
     }
 
+    @Transactional
     public Map<String, Object> getQnaList(PageRequest pageRequest) {
         Page<QnA> qnaList = qnaRepository.findAll(pageRequest);
 
