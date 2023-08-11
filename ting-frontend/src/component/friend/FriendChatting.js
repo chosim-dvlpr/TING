@@ -136,7 +136,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
         )}
         {messageLogs.map((message) => (
           <tr key={message.id} className={message.nickname==chattingObj.nickname? styles.friend : styles.me}>
-            <td className={styles.content}>{message.content}</td>
+            <td className={message.nickname==chattingObj.nickname? styles.content2: styles.content}>{message.content}</td>
             <td className={styles.time}>{getCurrent(message.sendTime)}</td>
           </tr>
         ))}
