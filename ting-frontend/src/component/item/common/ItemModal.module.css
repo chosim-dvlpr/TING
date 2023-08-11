@@ -31,7 +31,6 @@
   height: 240px;
   margin: 20px auto;
   background-color: wheat;
-  /* border-radius: 20px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +44,9 @@
 
 .QuantityBox {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   justify-content: space-between;
+  align-items: center;
   width: 160px;
   padding: 5px;
   margin: auto;
@@ -63,6 +63,7 @@
 .QuantityNum {
   padding-left: 20px;
   padding-right: 20px;
+  text-align: center;
 }
 
 .PlusButton {
@@ -76,6 +77,12 @@
   background-color: white;
   margin-left: 10px;
   cursor: pointer;
+}
+
+.noButton {
+  /* display: none; */
+  background-color: rgb(180, 180, 180);
+  margin: 0 10px;
 }
 
 .coinImage {

@@ -33,7 +33,7 @@ function ItemShop() {
                 item.img = "/img/item/fish_ticket.png";
                 break;
               case "물고기 스킨 랜덤박스":
-                item.img = "/img/item/fish_box.png";
+                item.img = "/img/item/fish_box_2.png";
                 break;
               case "닉네임 변경권":
                 item.img = "/img/item/ticket_one.png";

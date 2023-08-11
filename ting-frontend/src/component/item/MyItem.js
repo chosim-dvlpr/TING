@@ -28,7 +28,7 @@ function MyItem() {
                 item.img = "/img/item/fish_ticket.png";
                 break;
               case "물고기 스킨 랜덤박스":
-                item.img = "/img/item/fish_box.png";
+                item.img = "/img/item/fish_box_2.png";
                 break;
               case "닉네임 변경권":
                 item.img = "/img/item/ticket_one.png";
@@ -60,17 +60,18 @@ function MyItem() {
     <div>
       <div className="container">
         <div className={`row ${styles.ItemCardList}`}>
-          {myItemList.map((item, idx) => (
-            <div className={`col-4 ${styles.ItemCardOuter}`}>
-              <div key={idx} className={styles.ItemCard}>
-                <div className={styles.ItemCardInside}>
-                  <img src={process.env.PUBLIC_URL + item.img}></img>
+          {myItemList &&
+            myItemList.map((item, idx) => (
+              <div className={`col-4 ${styles.ItemCardOuter}`}>
+                <div key={idx} className={styles.ItemCard}>
+                  <div className={styles.ItemCardInside}>
+                    <img src={process.env.PUBLIC_URL + item.img}></img>
+                  </div>
+                  <div className={styles.nameDiv}>{item.name}</div>
+                  <div className={styles.quantityDiv}>{item.quantity}</div>
                 </div>
-                <div className={styles.nameDiv}>{item.name}</div>
-                <div className={styles.quantityDiv}>{item.quantity}</div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>
