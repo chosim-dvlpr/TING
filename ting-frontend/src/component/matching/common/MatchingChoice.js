@@ -97,7 +97,7 @@ function MatchingChoice({session, count}){
             <div>
               <h3>모두 YES일 경우</h3>
               <h3>자동으로 어항에 추가됩니다.</h3>
-              <button onClick={()=>{navigate("/")}}>메인으로 돌아가기</button>
+              <button onClick={()=>{window.location.href = '/'}}>메인으로 돌아가기</button>
             </div>
           ) : (
           <div>

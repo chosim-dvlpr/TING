@@ -69,7 +69,7 @@ function MatchingStart() {
     const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
     bgmAudio.play();
 
-    audioRef.current = audio;
+    audioRef.current = bgmAudio;
     audioRef.current.addEventListener("ended", handleAudioEnded)
 
     // redux에서 오픈 비두 입장 토큰 가져오기
@@ -97,11 +97,10 @@ function MatchingStart() {
 
     // 새로고침 방지
     window.addEventListener("keydown", onKeyDown);
-
-
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
       bgmAudio.pause()
+      window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
@@ -435,7 +434,7 @@ function MatchingStart() {
     }).then((res) => {
       if (res.isConfirmed) {
         leaveSession()
-        navigate('/')
+        window.location.href = '/'
       } 
     });
   }
