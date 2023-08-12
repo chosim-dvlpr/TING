@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import basicHttp from '../../api/basicHttp';
-import { setPhonenumber } from '../../redux/signup';
+import { setPhoneNumber } from '../../redux/signup';
 
 import styles from './SignupCommon.module.css'
 
@@ -24,7 +24,7 @@ function SignUpPhoneNumber(){
     basicHttp.get(`/user/phoneauth/${inputPhonenumber}`).then((response) => {
       if (response.data.code === 200) {
         alert("인증 메세지가 전송되었습니다.");
-        dispatch(setPhonenumber(inputPhonenumber));
+        dispatch(setPhoneNumber(inputPhonenumber));
         Navigate("/signup/certPhonenum");
       }
       else if (response.data.code === 400) {

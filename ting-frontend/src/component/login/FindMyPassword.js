@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import basicHttp from "../../api/basicHttp";
 import { useState } from "react";
-
-import styles from "./FindMyPassword.module.css";
+import styles from '../signup/SignupCommon.module.css';
 
 function FindMyPassword() {
   let [name, setName] = useState("");
@@ -45,7 +44,6 @@ function FindMyPassword() {
 
   return (
     <div>
-      <h1>비밀번호 찾기</h1>
       <input
         className={styles.input}
         type="text"
@@ -55,7 +53,7 @@ function FindMyPassword() {
         placeholder="이름"
         autoFocus
       />
-      <br />
+      <br/>
       <input
         className={styles.input}
         type="text"
@@ -76,6 +74,7 @@ function FindMyPassword() {
         }}
         placeholder="이메일"
       />
+      <br/>
       <button disabled={isButtonDisabled} className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
       onClick={FindPasswordFunc}>확인</button>
       <div>
