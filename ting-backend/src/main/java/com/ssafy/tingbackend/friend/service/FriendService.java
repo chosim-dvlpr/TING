@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,15 @@ public class FriendService {
 
         List<ChattingDto> chattingDtoList = new ArrayList<>();
         for(Chatting chatting: chattingList) {
+            if(ChronoUnit.DAYS.between(chatting.getLastChattingTime(), LocalDateTime.now()) > 3) {
+                if(ChronoUnit.DAYS.between(chatting.getLastChattingTime(), LocalDateTime.now()) > 7) {
+                    chatting.setState(ChattingType.DELETED);
+                    chatting.setRemoved(true);
+                    chatting.setRemovedTime(LocalDateTime.now());
+                }
+                chatting.setState(ChattingType.DEAD);
+            }
+
             User friend = chattingUserRepository.findFriend(chatting.getId(), userId);
             Integer unread = chattingUserRepository.findUnread(chatting.getId(), userId);
             chattingDtoList.add(ChattingDto.of(chatting, friend, unread));
