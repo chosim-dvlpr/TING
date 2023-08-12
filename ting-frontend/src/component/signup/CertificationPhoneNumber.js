@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 import basicHttp from '../../api/basicHttp';
-import { setPhonenumber } from '../../redux/signup';
+import { setPhoneNumber } from '../../redux/signup';
 
 import styles from './SignupCommon.module.css'
 
@@ -65,7 +65,16 @@ function CertificationPhonenumber(){
       })
       .catch(() => console.log("실패"));
     }
+    else {
+      alert("올바른 인증 코드를 입력해주세요.");
+    }
   };
+
+  useEffect(() => {
+    if (isConfirmPhonenumCode) {
+      dispatch(setPhoneNumber(phonenumber)); // redux에 저장
+    }
+  },[isConfirmPhonenumCode])
 
   // 휴대전화 인증하기 버튼 클릭 시 실행
   const checkPhonenumber = () => {
@@ -118,19 +127,25 @@ function CertificationPhonenumber(){
         className={styles.phonenumInput} 
         type="text" 
         id="phonenumberFirst" 
-        onChange={(e) => {setPhonenumberFirst(e.target.value)}} />
+        onChange={(e) => {setPhonenumberFirst(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
       -
       <input 
         className={styles.phonenumInput} 
         type="text" 
         id="phonenumberMiddle" 
-        onChange={(e) => {setPhonenumberMiddle(e.target.value)}} />
+        onChange={(e) => {setPhonenumberMiddle(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
       -
       <input 
         className={styles.phonenumInput} 
         type="text" 
         id="phonenumberLast" 
-        onChange={(e) => {setPhonenumberLast(e.target.value)}} />
+        onChange={(e) => {setPhonenumberLast(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
       {
         !isCheckPhonenumCode &&
         <button 
@@ -148,20 +163,22 @@ function CertificationPhonenumber(){
             className={styles.input} 
             type="text" 
             onChange={(e) => {setPhonenumberAuthCode(e.target.value)}} 
-            placeholder="인증번호 4자리"/>
+            placeholder="인증번호 4자리"
+            disabled={isConfirmPhonenumCode}
+          />
           <button 
             className={styles.btn} 
             onClick={checkPhonenumberCode}>
             인증확인
           </button>
-          <button 
+          {/* <button 
             className={styles.btn} 
             onClick={checkPhonenumber}>
             재전송
-          </button>
+          </button> */}
         </>)
       }
-      <p>
+      <p className={styles.rightMsg}>
         {
           isConfirmPhonenumCode &&
           "휴대전화 인증 성공"

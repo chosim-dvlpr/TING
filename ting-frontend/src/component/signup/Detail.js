@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useCallback, useState, forwardRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import basicHttp from '../../api/basicHttp';
-import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
+import { setGender, setName, setRegion, setBirth, setNickname, completeSignupStep } from '../../redux/signup';
 import { regionList } from "../../SelectionDataList";
 
 import styles from './SignupCommon.module.css';
@@ -25,25 +25,21 @@ function Detail() {
   let signupReducer = useSelector((state) => state.signupReducer);
 
   // 항목 입력 체크
-  let [region, setRegion] = useState("");
+  // let [region, setRegion] = useState("");
 
   // 한글만 허용하는 패턴
   const koreanPattern = /^[가-힣]*$/;
-  // const stringPattern = /^[가-힣]*$/;
 
-  // 이름 작성 확인 - 영문도 포함 가능하도록 수정 필요
+  // 이름 작성 확인
   const nameIsExist = (data) => {
     let copy_checkAllContents = [...checkAllContents];
     
     // 올바른 형태일 때 true로 변경
     if (koreanPattern.test(data)) {
-      copy_checkAllContents[0] = true;
-      setCheckAllContents(copy_checkAllContents);
-      dispatch(setName(data));
+      dispatch(setName(data)); // redux 저장
     }
     else {
-      copy_checkAllContents[0] = false;
-      setCheckAllContents(copy_checkAllContents);
+      dispatch(setName(null));
     }
   }
   
@@ -60,16 +56,15 @@ function Detail() {
           // 닉네임 중복 시
           if (response.data.data === true) {
             alert("닉네임이 중복되었습니다.\n다시 작성해주세요.")
+            dispatch(setNickname(null));
+            return
           }
           else {
             alert("닉네임 사용이 가능합니다.");
             setCheckNickname(true);
             // redux 저장
-            // dispatch(setNickname(inputNickname));
-
-            // let copy_checkAllContents = [...checkAllContents];
-            // copy_checkAllContents[1] = true;
-            // setCheckAllContents(copy_checkAllContents);
+            dispatch(setNickname(inputNickname));
+            return
           }
         }
         else if (response.data.code === 400) {
@@ -80,45 +75,39 @@ function Detail() {
     }
   }
 
-  // 성별 체크 확인 업데이트
-  const genderIsExist = () => {
-    let copy_checkAllContents = [...checkAllContents];
-    copy_checkAllContents[2] = true;
-    setCheckAllContents(copy_checkAllContents);
+  // 생일 입력 시
+  const handleBirthChange = (selectedBirth) => {
+    setBirth(selectedBirth)
+    dispatch(setBirth(selectedBirth)); // Redux 상태에 저장
   }
 
-  // 생일 입력 확인
-  const birthIsExist = (input) => {
-    let copy_checkAllContents = [...checkAllContents];
-    if (input.length === 10) {
-      // redux에 저장
-      dispatch(setBirth(input))
-  
-      // 항목 확인
-      copy_checkAllContents[3] = true;
+  useEffect(() => {
+    checkAdult();
+  }, [handleBirthChange])
+
+  const checkAdult = () => {
+    const year = signupReducer.birth && signupReducer.birth.slice(0,4);
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    console.log(currentYear)
+
+    if (signupReducer.birth &&
+        currentYear - Number(year) < 19) {
+      alert("19세 이상의 성인만 회원가입 가능합니다.");
+      setBirth(null);
+      return false
     }
-    else {
-      copy_checkAllContents[3] = false;
-    }
-    setCheckAllContents(copy_checkAllContents);
+    else {return true}
   }
 
-  // 지역 선택 확인
-  const regionIsExist = (region) => {
-    // redux에 저장
-    dispatch(setRegion(region))
-  
-    // 항목 확인
-    let copy_checkAllContents = [...checkAllContents];
-    copy_checkAllContents[4] = true;
-    setCheckAllContents(copy_checkAllContents);
+  // 지역 선택 시
+  const handleRegionChange = (selectedRegion) => {
+    setCurrentRegion(selectedRegion)
   }
 
-  // 추가 정보 입력하기 클릭 시
-  const goToSelect = (moveTo) => {
-    // 가입 완료하고, 선택정보 입력 페이지로 이동
-    completeSignup(moveTo);
-  }
+  useEffect(() => {
+    dispatch(setRegion(currentRegion.regionEn)); // Redux 상태에 저장
+  }, [currentRegion])
 
   // 엔터키로 버튼 누를 수 있게
   const activeEnter = (e, check) => {
@@ -130,43 +119,38 @@ function Detail() {
       }
     }
   }
+  
+  // 모든 항목이 입력되었다면 true 반환
+  const checkAllData = () => {
+    const checkDataList = ["email", "password", "phoneNumber", "name", 
+      "nickname", "gender", "birth", "region"];
+    
+    checkDataList.map((data) => {
+      if (!signupReducer.data) {
+        return false
+      }
+    })
+    return true
+  }
 
   // 회원가입 완료 클릭 시
   const completeSignup = (moveTo) => {
-    console.log(checkAllContents)
-    console.log(signupReducer)
-    // 모두 true라면 회원가입 요청
-    if (checkAllContents.every(item => item === true)) {
-      let selectionData = {
-        profileImage: "",
-        mbtiCode: "",
-        heightCode: "",
-        drinkingCode: "",
-        smokingCode: "",
-        religionCode: "",
-        hobbyCodeList: [],
-        jobCode: "",
-        personalityCodeList: [],
-        introduction: "",
-        styleCodeList: [],
-      }
-      
-      let data = {
-        email: signupReducer.email,
-        password: signupReducer.password,
-        name: signupReducer.name,
-        nickname: signupReducer.nickname,
-        phoneNumber: signupReducer.phonenumber,
-        gender: signupReducer.gender,
-        birth: signupReducer.birth,
-        region: signupReducer.region,
-        ...selectionData
-      }
-      basicHttp.post('/user/signup', data).then((response) => {
+    // 모두 값이 있다면 회원가입 요청
+    
+    if (!checkAllData()) {
+      alert("모든 항목을 입력 또는 체크해주세요.");
+      // dispatch(completeSignupStep()); // 나중에 삭제하기
+    }
+    else if (!checkAdult()) {
+      alert("19세 이상의 성인만 회원가입 가능합니다.");
+    }
+    else {
+      basicHttp.post('/user/signup', signupReducer).then((response) => {
         console.log(response)
-        console.log(data)
+        console.log(signupReducer)
         if (response.data.code === 200) {
           alert("회원가입이 완료되었습니다.");
+          dispatch(completeSignupStep());
           Navigate(moveTo);
         }
         else if (response.data.code === 400) {
@@ -174,16 +158,7 @@ function Detail() {
         }
       })
     }
-    else {
-      alert("모든 항목을 입력 또는 체크해주세요.");
-      console.log(checkAllContents);
-      console.log(signupReducer);
     }
-  }
-
-  useEffect(() => {
-    console.log(birthDate)
-  },[birthDate])
 
   return(
     <div className={styles.wrapper}>
@@ -204,10 +179,10 @@ function Detail() {
             placeholder="닉네임"></input>
           <button 
             className={styles.btn} 
-            onClick={nicknameIsExist}>
+            onClick={() => nicknameIsExist()}>
           중복확인</button>
           <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
-          <p>
+          <p className={styles.rightMsg}>
             {
               checkNickname &&
               "닉네임 중복 확인 완료"
@@ -219,18 +194,20 @@ function Detail() {
         className={[styles.selectBtn, styles.genderBtn].join(" ")} 
         onClick={() => {
           dispatch(setGender("M"));
-          genderIsExist();
       }}>남</button>
       <button
         className={[styles.selectBtn, styles.genderBtn].join(" ")} 
         onClick={() => {
           dispatch(setGender("F"));
-          genderIsExist();
       }}>여</button>
       <br/>
 
       <label>생년월일</label>
-      <input type="date" onChange={(e) => setBirthDate(e.target.value)}></input>
+      <input 
+        type="date" 
+        onChange={(e) => {
+          handleBirthChange(e.target.value)
+        }}></input>
       <br/>
 
       <Dropdown>
@@ -239,17 +216,22 @@ function Detail() {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {
-            regionList.map((region, i) => (
-              <Dropdown.Item onClick={() => setRegion(region.regionKor)}>{region.regionKor}</Dropdown.Item>
+            regionList.map((r, i) => (
+              <Dropdown.Item onClick={() => {
+                handleRegionChange(r)
+                // setCurrentRegion(r.regionEn);
+                // dispatch(setRegion(currentRegion));
+              }
+                }>{r.regionKor}</Dropdown.Item>
               )
             )
           }
         </Dropdown.Menu>
       </Dropdown>
-      <p>{ region }</p>
+      <p>{ currentRegion.regionKor }</p>
       <br/>
-      <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
-      <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
+
+      <button className={styles.btn} onClick={() => completeSignup("/signup/complete")}>회원가입 완료</button>
     </div>
   )
 }

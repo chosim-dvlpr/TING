@@ -52,13 +52,13 @@ function Password() {
 
   useEffect(() => {
     if (isPasswordPassed) {
-      storePassword();    
+      dispatch(setPassword(inputPasswordCheck));
     }
+    else { dispatch(setPassword(null)) }
   }, [isPasswordPassed])
 
-  // 다음 버튼 클릭 시 비밀번호 store에 저장
+  // 비밀번호 store에 저장
   const storePassword = () => {
-    dispatch(setPassword(inputPasswordCheck));
   };
 
   return(

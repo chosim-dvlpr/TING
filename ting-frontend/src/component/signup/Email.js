@@ -33,14 +33,11 @@ function InputEmail(){
   
   // 이메일 중복 체크
   const checkEmail = () => {
-    storeRedux();
     basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
       if (response.data.code === 200) {
         alert("인증 메일이 전송되었습니다.");
         setShowInputCode(true);
-        authCodeInput.current.focus();
         setIsInputEmailDisabled(true);
-        storeRedux(); // redux에 저장
       }
       else {
         console.log("중복");
@@ -48,12 +45,6 @@ function InputEmail(){
         emailInput.current.value = "";
       }
     })
-    .catch(() => alert("새로운 인증메일이 전송되었습니다."))
-  }
-
-  // 이메일을 redux에 저장
-  const storeRedux = () => {
-    dispatch(setEmail(inputEmail));
   }
 
   // 엔터키로 버튼 누를 수 있게
@@ -61,6 +52,7 @@ function InputEmail(){
     if(e.key === "Enter") {
       switch (check) {
         case checkEmailCode:
+          
           checkEmailCode();
           break;
         case checkEmail:
@@ -76,14 +68,16 @@ function InputEmail(){
   // 이메일 코드 확인
   const checkEmailCode = () => {
     let data = {
-      email: signupReducer.email,
+      email: inputEmail,
       authCode: authCode,
     }
+    console.log(data)
 
     basicHttp.post('/user/emailauth', data).then((response) => {
       if (response.data.code === 200) {
         alert("인증 성공");
-        // Navigate("/signup/password");
+        dispatch(setEmail(inputEmail)); // redux에 저장
+        setIsInputEmailCodeDisabled(true);
       }
       else if (response.data.code === 400) {
         alert("인증 실패");
@@ -112,7 +106,8 @@ function InputEmail(){
         onChange={(e) => setInputEmail(e.target.value)} 
         onKeyDown={(e) => activeEnter(e, checkEmail)}
         placeholder="이메일"
-        disabled={isInputEmailDisabled} />
+        disabled={showInputCode} // code입력창 뜨면 disable되도록
+      />
       { 
         !showInputCode &&
           <button 
