@@ -98,6 +98,14 @@ public class UserService {
     public void signUp(UserDto.Signup userDto) {
         userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
+        // 이메일, 닉네임 중복체크 처리
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new CommonException(ExceptionType.DUPLICATED_EMAIL);
+        }
+        if (checkNickname(userDto.getNickname())) {
+            throw new CommonException(ExceptionType.DUPLICATED_NICKNAME);
+        }
+
         // 기본 정보 UserDto -> User 변환
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
