@@ -3,9 +3,11 @@ import { useCallback, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import basicHttp from '../../api/basicHttp';
 import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
+import { regionList } from "../../SelectionDataList";
 
 import styles from './SignupCommon.module.css';
-import { regionList } from "../../SelectionDataList";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 function Detail() {
   const Navigate = useNavigate();
@@ -17,10 +19,6 @@ function Detail() {
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
 
   let [openRegion, setOpenRegion] = useState(false);
-
-  // let regionList = ["서울", "부산", "대구", "인천", "광주", 
-  //   "대전", "울산", "경기", "강원" ,"충복", "충남", 
-  //   "세종", "전북", "전남", "경북", "경남", "제주"];
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
@@ -128,18 +126,6 @@ function Detail() {
       case "region":
         callback = setCurrentRegion; currentData = currentRegion;
         break;
-      // case "DRINKING":
-      //   callback = setCurrentDrinking; currentData = currentDrinking;
-      //   break;
-      // case "SMOKING":
-      //   callback = setCurrentSmoking; currentData = currentSmoking;
-      //   break;
-      // case "RELIGION":
-      //   callback = setCurrentReligion; currentData = currentReligion;
-      //   break;
-      // case "JOB":
-      //   callback = setCurrentRegion; currentData = currentJob;
-      //   break;
     }
   }
 
@@ -260,61 +246,21 @@ function Detail() {
       }}>여</button>
       <br/>
       {/* 생년월일 - date Picker 사용하기 */}
-      {/* <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input> */}
+      {/* <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input> */}      
 
-      <h3>지역 선택</h3>
-      
-      <div className={styles.updateDiv}>
-        <p className={styles.title}>직업</p>
-        <div className={styles.dropDown}>
-          <div className={styles.dropDownMenu} onClick={() => { setOpenRegion(!openRegion) }}>
-            {currentRegion && currentRegion.name}
-            <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-          </div>
-          <div className={openRegion ? styles.isOpen : styles.isClose}>
-            <CustomDropDown items={regionList.map((region) => region.regionKor)} type="Region" />
-          </div>
-        </div>
-      </div>
-      {/* <div className={styles.dropDown}>
-        <div className={styles.dropDownMenu} onClick={() => { setOpenRegion(!openRegion) }}>
-          {currentMbti && currentMbti.name}
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
           지역 선택
-          <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-        </div>
-        <div className={openRegion ? styles.isOpen : styles.isClose}>
-          <CustomDropDown 
-            items={
-              regionList
-              .map((region) => region.regionKor)} 
-            type="region" />
-        </div>
-      </div> */}
-      {/* <CustomDropDown 
-        items={
-          regionList
-          .filter((region) =>
-            region.regionKor)
-          } 
-        type="region" /> */}
-
-      {/* {
-        regionList.map((r,i) => {
-          if(i % 9 == 8) {
-            return (
-              <span>
-                <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
-                <br></br>
-              </span>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {
+            regionList.map((region, i) => (
+              <Dropdown.Item >{region.regionKor}</Dropdown.Item>
+              )
             )
           }
-          else {
-            return (
-              <button className={styles.selectBtn} key={i} onClick={() => regionIsExist(r.regionEn)}>{r.regionKor}</button>
-            )
-          }
-        })
-      } */}
+        </Dropdown.Menu>
+      </Dropdown>
       <br/>
       <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
       <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
