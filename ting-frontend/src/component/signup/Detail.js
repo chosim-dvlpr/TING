@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { useCallback, useState } from "react"
+import { useCallback, useState, forwardRef, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import basicHttp from '../../api/basicHttp';
 import { setGender, setName, setRegion, setBirth, setNickname } from '../../redux/signup';
@@ -17,19 +17,15 @@ function Detail() {
   let [currentRegion, setCurrentRegion] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
-
-  let [openRegion, setOpenRegion] = useState(false);
+  
+  // 생년월일
+  const [birthDate, setBirthDate] = useState("");
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
-  // let email = useSelector((state) => state.signupReducer.email);
-  // let password = useSelector((state) => state.signupReducer.password);
-  // let name = useSelector((state) => state.signupReducer.name);
-  // let nickname = useSelector((state) => state.signupReducer.nickname);
-  // let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
-  // let gender = useSelector((state) => state.signupReducer.gender);
-  // let birth = useSelector((state) => state.signupReducer.birth);
-  // let region = useSelector((state) => state.signupReducer.region);
+
+  // 항목 입력 체크
+  let [region, setRegion] = useState("");
 
   // 한글만 허용하는 패턴
   const koreanPattern = /^[가-힣]*$/;
@@ -118,17 +114,6 @@ function Detail() {
     setCheckAllContents(copy_checkAllContents);
   }
 
-  // 지역 선택 드롭다운
-  const CustomDropDown = (props) => {
-    let callback;
-    let currentData;
-    switch (props.type) {
-      case "region":
-        callback = setCurrentRegion; currentData = currentRegion;
-        break;
-    }
-  }
-
   // 추가 정보 입력하기 클릭 시
   const goToSelect = (moveTo) => {
     // 가입 완료하고, 선택정보 입력 페이지로 이동
@@ -141,12 +126,6 @@ function Detail() {
       switch (check) {
         case nicknameIsExist:
           nicknameIsExist();
-          break;
-        // case checkEmail:
-        //   checkEmail();
-        //   break;
-      
-        default:
           break;
       }
     }
@@ -202,6 +181,10 @@ function Detail() {
     }
   }
 
+  useEffect(() => {
+    console.log(birthDate)
+  },[birthDate])
+
   return(
     <div className={styles.wrapper}>
       {/* <label>이름을 입력해주세요</label> */}
@@ -245,8 +228,10 @@ function Detail() {
           genderIsExist();
       }}>여</button>
       <br/>
-      {/* 생년월일 - date Picker 사용하기 */}
-      {/* <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input> */}      
+
+      <label>생년월일</label>
+      <input type="date" onChange={(e) => setBirthDate(e.target.value)}></input>
+      <br/>
 
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -255,12 +240,13 @@ function Detail() {
         <Dropdown.Menu>
           {
             regionList.map((region, i) => (
-              <Dropdown.Item >{region.regionKor}</Dropdown.Item>
+              <Dropdown.Item onClick={() => setRegion(region.regionKor)}>{region.regionKor}</Dropdown.Item>
               )
             )
           }
         </Dropdown.Menu>
       </Dropdown>
+      <p>{ region }</p>
       <br/>
       <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
       <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
