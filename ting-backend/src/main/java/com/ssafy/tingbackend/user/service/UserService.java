@@ -221,10 +221,28 @@ public class UserService {
         insertCode(email, Long.toString(verifiedCode));
         // 이메일 발신될 데이터 적재
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email); // 수신자 바꾸기
-        simpleMailMessage.setSubject("이메일 인증 코드입니다.");
-        simpleMailMessage.setText("아래의 인증 코드를 입력해주세요. \n" +
-                verifiedCode + " \n");
+        simpleMailMessage.setTo(email); // 수신자
+        simpleMailMessage.setSubject("Ting 회원가입 이메일 인증코드 안내");
+
+        simpleMailMessage.setText("    <div style=\"width: 700px; height: 500px; margin: 50px\">\n" +
+                "      <img src=\"https://i.ibb.co/ctnXLZr/email-ting-logo-removebg-preview.png\" alt=\"ting logo\" style=\"width: 100px\" />\n" +
+                "      <h2 style=\"font-weight: 900\">Ting 서비스의 이메일 확인을 위해 인증번호를 보내드려요</h2>\n" +
+                "      <p>이메일 인증 화면에서 아래의 인증번호를 입력하고 인증을 완료해주세요.</p>\n" +
+                "      <h1>" + verifiedCode + "</h1>\n" +
+                "\n" +
+                "      <hr />\n" +
+                "      <pre>\n" +
+                "혹시 요청하지 않은 인증 메일을 받으셨나요?\n" +
+                "누군가 실수로 메일 주소를 잘못 입력했을 수 있어요. 계정이 도용된 것은 아니니 안심하세요.\n" +
+                "직접요청한 인증 메일이 아닌 경우 무시해주세요.\n" +
+                "      </pre>\n" +
+                "      <hr style=\"border: 0; height: 3px; background: #ccc\" />\n" +
+                "\n" +
+                "<pre>\n" +
+                "이 메일은 발신 전용 메일이에요.\n" +
+                "Ting에 궁금한 점이 있으시면 답장을 통해 질문해주세요. © SSAFY Ting Inc.\n" +
+                "</pre>\n" +
+                "    </div>");
 
         // 이메일 발신
         javaMailSender.send(simpleMailMessage);
