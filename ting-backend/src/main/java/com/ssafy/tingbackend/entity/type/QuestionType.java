@@ -1,5 +1,5 @@
 package com.ssafy.tingbackend.entity.type;
 
 public enum QuestionType {
-    ESSENTIAL, RANDOM
+    ESSENTIAL, LOVE, LIFE, HOBBY, FAVORITE, PREFER, VS
 }

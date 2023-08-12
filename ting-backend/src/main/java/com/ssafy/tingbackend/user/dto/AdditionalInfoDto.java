@@ -15,6 +15,8 @@ public class AdditionalInfoDto {
     private String name;
 
     public static AdditionalInfoDto of(AdditionalInfo additionalInfo) {
+        if (additionalInfo == null) return null;
+
         return AdditionalInfoDto.builder()
                 .code(additionalInfo.getCode())
                 .category(additionalInfo.getCategory())

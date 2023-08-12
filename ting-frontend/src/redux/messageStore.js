@@ -28,14 +28,14 @@ export default class MessageStore {
   }
 
   // 채팅방 연결
-  connect(roomIndex) {
+  connect(roomIndex, userId) {
     this.socket = new SockJS(`${baseUrl}/chat`);
     this.client = Stomp.over(this.socket);
 
     this.currentRoomIndex = roomIndex;
 
-    if(!this.isList) this.subscribeMessageBroker(this.currentRoomIndex);
-    else this.subscribeMessageBrokerList();
+    if(roomIndex) this.subscribeMessageBroker(this.currentRoomIndex);
+    else this.subscribeMessageBrokerList(userId);
 
     this.connected = true;
     this.publish();
@@ -62,12 +62,12 @@ export default class MessageStore {
   }
 
   // 채팅리스트 구독 연결
-  subscribeMessageBrokerList() {
+  subscribeMessageBrokerList(userId) {
     this.client.connect(
       {},
       () => {
         this.client.subscribe(
-          `/subscription/list/${this.userId}`,
+          `/subscription/list/${userId}`,
           (messageReceived) => this.receiveMessage(messageReceived),
           {},
         );
@@ -95,7 +95,7 @@ export default class MessageStore {
     this.messageLogsObject = {};
     this.publish();
 
-    this.connect();
+    // this.connect();
   }
 
   // disconnect all

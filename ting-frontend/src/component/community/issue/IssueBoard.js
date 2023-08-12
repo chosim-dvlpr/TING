@@ -68,13 +68,18 @@ function IssueBoard() {
     try {
       const response = await tokenHttp.get(`/issue/search/`, {
         params: {
-          pageNo: currentPage,
+          pageNo: 1, // 검색 시 첫 번째 페이지부터 조회
           item,
           keyword,
         },
       });
 
       const searchData = response.data;
+      setSearchResult(searchData.data.issueBoardList);
+      setTotalPages(searchData.data.totalPages); // 검색 결과에 따른 totalPages 설정
+      setCurrentPage(1); // 검색 시 첫 번째 페이지로 이동
+    
+
       console.log("===========Search Data:", searchData);
 
       console.log("============", searchData.issueBoardList);
@@ -89,29 +94,25 @@ function IssueBoard() {
     console.log("============Search Result:", searchResult);
   }, [searchResult]);
 
-  
- // 투표 비율에 따른 색상 변경
+  // 투표 비율에 따른 색상 변경
   const calculateTotalCount = (issue) => issue.agreeCount + issue.opposeCount;
 
-  
   const calculateRatio = (agreeCount, totalCount) =>
     (agreeCount / totalCount) * 100;
 
-    const getCardStyle = (issue) => {
-      const totalCount = calculateTotalCount(issue);
-      const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
-      const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
-    
-      const backgroundColor = `linear-gradient(to right, #f1b7be ${agreeRatio}%,  #8bcad5 ${agreeRatio}%)`;
-    
-      const cardStyle = {
-        background: backgroundColor,
-      };
-    
-      return cardStyle;
-    };
-    
+  const getCardStyle = (issue) => {
+    const totalCount = calculateTotalCount(issue);
+    const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
+    const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
 
+    const backgroundColor = `linear-gradient(to right, #f1b7be ${agreeRatio}%,  #8bcad5 ${agreeRatio}%)`;
+
+    const cardStyle = {
+      background: backgroundColor,
+    };
+
+    return cardStyle;
+  };
 
   return (
     <div className={styles.issueBoardBackground}>
@@ -128,40 +129,36 @@ function IssueBoard() {
         </div>
 
         <div className={styles.cardList}>
-          {searchResult.length > 0
-            ? searchResult.map((issue) => (
-                <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
-                  <div className={styles.title}>
-                    <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
-                    <div
-                      className={styles.link}
-                      onClick={(event) => handleLinkClick(issue.issueId, event)}
-                    >
-                      {issue.title}
-                    </div>
-                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
-
-                    
-                  </div>
+          {(searchResult.length > 0 ? searchResult : issueList).map((issue) => (
+            <div
+              key={issue.issueId}
+              className={styles.card}
+              style={getCardStyle(issue)}
+            >
+              <div className={styles.title}>
+                <span>
+                  {Math.round(
+                    (issue.agreeCount /
+                      (issue.agreeCount + issue.opposeCount)) *
+                      100
+                  )}
+                </span>
+                <div
+                  className={styles.link}
+                  onClick={(event) => handleLinkClick(issue.issueId, event)}
+                >
+                  {issue.title}
                 </div>
-              ))
-            : issueList.map((issue) => (
-                <div key={issue.issueId} className={styles.card}  style={getCardStyle(issue)}>
-                  <div className={styles.title}>
-                  <span>{Math.round((issue.agreeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
-                 
-                    <div
-                      className={styles.link}
-                      onClick={(event) => handleLinkClick(issue.issueId, event)}
-                    >
-                      {issue.title}
-                    </div>
-                    <span>{Math.round((issue.opposeCount)/(issue.agreeCount + issue.opposeCount)*100)}</span>
-
-                   
-                  </div>
-                </div>
-              ))}
+                <span>
+                  {Math.round(
+                    (issue.opposeCount /
+                      (issue.agreeCount + issue.opposeCount)) *
+                      100
+                  )}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
 
         <Pagination

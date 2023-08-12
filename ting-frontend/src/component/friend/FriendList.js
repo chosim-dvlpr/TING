@@ -64,6 +64,7 @@ function FriendList({ onSearch, showFriendList, showFriendChatting, setChattingO
 
   // 채팅방 입장할 때
   const handleClickEnterRoom = (roomIndex) => {
+    console.log("방=========", roomIndex);
     if (connected) {
       messageStore.disconnect(currentRoomIndex);
     }

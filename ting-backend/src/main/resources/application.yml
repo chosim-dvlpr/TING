@@ -5,7 +5,11 @@ server:
     key-store-type: PKCS12
     key-store-password: springbackendssl
 
+
 spring:
+  jackson:
+    time-zone: Asia/Seoul
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://i9b107.p.ssafy.io:3366/ting_db?serverTimezone=Asia/Seoul
@@ -44,6 +48,15 @@ spring:
       username: ting-mongo
       password: 1q2w3e4r-ting-mongo
 
+  # 채팅
+#  devtools:
+#    livereload:
+#      enabled: true
+#    restart:
+#      enabled: false
+#  freemarker:
+#    cache: false
+
 jwt:
   secretKey: JwtSecretKeyForShortDate
 
@@ -58,3 +71,25 @@ ncloud:
     secretKey: bdVJFqzAnewfwK86dsM6llnerPrTwQOmbX6ts4kn
     senderPhone: 01050659767
 
+# profile 이미지 파일경로
+file:
+  path: /app/profile
+
+# natural language api
+cloud:
+  gcp:
+    credentials:
+      location: classpath:service-account-key.json
+
+payment:
+  kakaopay:
+    admin:
+      key: 68c2aade4f26ed122b7aa651eedaf2fa
+    cid: TC0ONETIME
+    url:
+      ready: https://kapi.kakao.com/v1/payment/ready
+      approve: https://kapi.kakao.com/v1/payment/approve
+    redirectUrl:
+      approvalRedirectUrl: /payment/kakaoPaySuccess
+      cancelRedirectUrl: /payment/kakaoPayCancel
+      failRedirectUrl: /payment/kakaoPayFail

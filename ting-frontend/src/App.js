@@ -1,6 +1,8 @@
 import "./App.css";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// 로그인
 import LoginPage from "./pages/LoginPage.js";
 import SignupPage from "./pages/SignupPage.js";
 import SignupEmail from "./component/signup/Email.js";
@@ -20,7 +22,12 @@ import Hobby from "./component/signup/select/Hobby";
 import Personality from "./component/signup/select/Personality";
 import Style from "./component/signup/select/Style";
 import Introduce from "./component/signup/select/Introduce";
+import SignupComplete from "./component/signup/SignupComplete";
 import Openvidu from "./pages/openvidu/openvidu-main.js";
+
+// 로그인 이메일, 비밀번호 찾기
+import FindMyInfoPage from "./pages/FindMyInfoPage";
+
 
 // 메인페이지
 import MainPage from "./pages/MainPage";
@@ -88,6 +95,9 @@ import KakaoPayCancel from "./pages/pay-result-page/KakaoPayCancel";
 import KakaoPayFail from "./pages/pay-result-page/KakaoPayFail";
 import ProfileImage from "./component/signup/select/profileImage";
 
+// 라우트 가드 (인증)
+import Auth from "./util/Auth";
+
 function App() {
   let accessToken = localStorage.getItem("access-token");
   // accessToken이 있다면 isLogin에 true 저장
@@ -97,6 +107,8 @@ function App() {
     localStorage.removeItem("access-token"); // localStorage의 access-token 삭제
     setIsLogin(false);
   };
+
+  const AuthMatchingPage = Auth(MatchingPage);
 
   return (
     <div className="App">
@@ -130,14 +142,20 @@ function App() {
             <Route path="introduce" element={<Introduce />}></Route>
             <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
+          <Route path="signupComplete" element={<SignupComplete />}></Route>
         </Route>
 
-        {/* 매칭 */}
-        <Route path="/matching" element={<MatchingPage />}>
+        {/* 로그인 아이디, 비번 찾기 */}
+        <Route path="/login/forget" element={<FindMyInfoPage/>}></Route>
+
+        {/* 매칭 - 로그인 인증 */}
+        {/* <Route path="/matching" element={<MatchingPage  />}> */}
+        <Route path="/matching" element={<AuthMatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
           <Route path="start" element={<MatchingStart />}></Route>
           <Route path="result" element={<MatchingResult />}></Route>
         </Route>
+        {/* </Route> */}
 
         {/* 커뮤니티 페이지 */}
 

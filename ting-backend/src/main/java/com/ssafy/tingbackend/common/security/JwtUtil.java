@@ -30,7 +30,8 @@ public class JwtUtil {
     }
 
     public static String generateAccessToken(String userId) {
-        Long expirationTime = 1000L * 60 * 10;  // 10분
+//        Long expirationTime = 1000L * 60 * 10;  // 10분
+        Long expirationTime = 1000L * 60 * 60 * 24 * 50;  // 10분
         return generateToken(userId, "access-token", expirationTime);
     }
 
@@ -71,4 +72,5 @@ public class JwtUtil {
             throw new CommonException(ExceptionType.JWT_TOKEN_PARSE_ERROR);
         }
     }
+
 }

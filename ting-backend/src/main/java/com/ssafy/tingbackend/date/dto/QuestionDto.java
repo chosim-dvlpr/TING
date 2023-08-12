@@ -14,6 +14,10 @@ public class QuestionDto {
     private String questionCard;
     private QuestionType category;
 
+    public QuestionDto(String questionCard) {
+        this.questionCard = questionCard;
+    }
+
     public static QuestionDto of(Question question) {
         return QuestionDto.builder()
                 .id(question.getId())

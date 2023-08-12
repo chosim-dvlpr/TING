@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,10 +66,10 @@ public class MypageController {
      * @return 문의 목록 리스트
      */
     @GetMapping("/mypage/qna")
-    public DataResponse<List<QnADto>> listQuestion(@RequestParam("pageNo") int pageNo, Principal principal) {
+    public DataResponse<Map<String, Object>> listQuestion(@RequestParam("pageNo") int pageNo, Principal principal) {
         Long userId = Long.parseLong(principal.getName());
-        List<QnADto> qnaList = mypageService.qnaList(pageNo, userId);
-        return new DataResponse<>(200, "문의글 상세 조회 성공", qnaList);
+        Map<String, Object> result = mypageService.qnaList(pageNo, userId);
+        return new DataResponse<>(200, "문의글 목록 조회 성공", result);
     }
 
 }

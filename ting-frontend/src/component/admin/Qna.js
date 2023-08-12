@@ -41,10 +41,10 @@ const Qna = () => {
         <div className={styles.tableContainer}>
           <table className={styles.table}>
             <tr className={styles.tableHeader}>
-              <th>id</th>
+              <th style={{ width: "120px" }}>id</th>
               <th style={{ width: "150px" }}>유저</th>
               <th style={{ width: "150px" }}>제목</th>
-              <th style={{ width: "150px" }}>문의시간</th>
+              <th style={{ width: "250px" }}>문의시간</th>
               <th style={{ width: "150px" }}>처리상태</th>
               <th style={{ width: "200px" }}>문의상세</th>
             </tr>
@@ -53,10 +53,10 @@ const Qna = () => {
             {qnaList.map((qna) => (
               <tr className={styles.tableBody}>
                 <td>{qna.qnaId}</td>
-                <td>{qna.useNickname}</td>
+                <td>{qna.userNickname}</td>
                 <td>{qna.title}</td>
-                <td>{qna.createdTime}</td>
-                <td>{qna.completed}</td>
+                <td>{convertTimeFormat(qna.createdTime)}</td>
+                <td>{qna.completed ? "답변완료" : "미처리"}</td>
                 <td>
                   <Button>상세보기</Button>
                 </td>
