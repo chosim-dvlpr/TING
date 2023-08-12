@@ -25,6 +25,7 @@ public enum ExceptionType {
     DUPLICATED_EMAIL(4300, "중복된 이메일입니다."),
     EMAIL_NOT_FOUND(4301, "존재하지 않는 이메일입니다."),
     EMAIL_CODE_NOT_MATCH(4302, "이메일 인증코드가 틀렸습니다."),
+    EMAIL_SEND_FAIL(4303, "이메일 인증코드 전송에 실패하였습니다."),
 
     SMS_SEND_FAILED(4400, "인증코드 발송에 실패하였습니다."),
     PHONE_NUMBER_NOT_FOUND(4401, "존재하지 않는 전화번호입니다."),
