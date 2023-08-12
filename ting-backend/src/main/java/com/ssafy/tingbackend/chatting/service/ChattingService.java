@@ -6,6 +6,7 @@ import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.chatting.Chatting;
 import com.ssafy.tingbackend.entity.chatting.ChattingUser;
+import com.ssafy.tingbackend.entity.type.ChattingType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
 import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
@@ -46,16 +47,20 @@ public class ChattingService {
 
 //        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(roomId, userId, content, "닉네임임시");//테스트
 //        template.convertAndSend("/subscription/list/1", chattingMessageDto); // 테스트용
-        template.convertAndSend("/subscription/list/" + friendChattingUser.getUser().getId(), chattingMessageDto);
-        template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
 
-        chattingMessageRepository.save(chattingMessageDto);
-
-        friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
         Chatting chatting = chattingRepository.findById(roomId)
-                .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));
-        chatting.setLastChattingContent(content);
-        chatting.setLastChattingTime(LocalDateTime.now());
+                        .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));
+        if(chatting.getState().equals(ChattingType.ALIVE)) {
+            template.convertAndSend("/subscription/list/" + friendChattingUser.getUser().getId(), chattingMessageDto);
+            template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
+
+            chattingMessageRepository.save(chattingMessageDto);
+
+            friendChattingUser.setUnread(friendChattingUser.getUnread()+1);
+            chatting.setLastChattingContent(content);
+            chatting.setLastChattingTime(LocalDateTime.now());
+        }
+
     }
 
     @Transactional
