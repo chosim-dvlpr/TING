@@ -79,7 +79,7 @@
 }
 
  /* 호버 시 뒤집기 */
-.flip:hover .card {
+.flipped {
   transform: rotateY(180deg);
 }
 
