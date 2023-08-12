@@ -11,6 +11,7 @@ import { persistReducer } from 'redux-persist';
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import persistStore from "redux-persist/es/persistStore";
 import friendReducer from "./friendStore";
+// import thunk from "redux-thunk";
 
 const persistConfig = {
   key: 'root',
@@ -33,8 +34,8 @@ const store = configureStore({
   middleware: getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-    }
-  })
+    },
+  }),
 });
 
 // persistor를 export 합니다.
