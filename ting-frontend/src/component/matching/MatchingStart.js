@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,10 +55,20 @@ function MatchingStart() {
   // 최종 선택 모달창 관련 state
   const [showMatchingChoiceModal, setShowMatchingChoiceModal] = useState(false)
 
+  // BGM 관련 변수
+  const audioRef = useRef(null);
+
   // 초기화 useEffect hook
   useEffect(() => {
     console.log("====================useEffect (초기화) ======================");
     dispatch(resetMatchingStore())
+
+    // 음악 무한 재생
+    const audio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
+    audio.play();
+
+    audioRef.current = audio;
+    audioRef.current.addEventListener("ended", handleAudioEnded)
 
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
@@ -381,6 +391,12 @@ function MatchingStart() {
       publisher.publishAudio(isAudioOn)
       publisher.publishVideo(isVideoOn)
     }
+  }
+
+  // 음악 지속 재생
+  const handleAudioEnded = () => {
+    audioRef.current.currentTime = 0;
+    audioRef.current.play();
   }
 
   // 신고 후 나가기 모달창
