@@ -19,9 +19,12 @@ import com.ssafy.tingbackend.point.repository.PointHistoryRepository;
 import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +106,9 @@ public class ItemService {
 
         List<InventoryDto> inventoryDtoList = new ArrayList<>();
 
-        inventory.forEach(i -> inventoryDtoList.add(InventoryDto.of(i)));
+        inventory.forEach(i -> {
+            if (i.getQuantity() > 0) inventoryDtoList.add(InventoryDto.of(i));
+        });
 
         return inventoryDtoList;
     }
@@ -189,5 +194,35 @@ public class ItemService {
         }
 
         throw new CommonException(ExceptionType.ITEM_NOT_ENOUGH);
+    }
+
+    @Scheduled(cron = "0 0 7 * * *", zone = "Asia/Seoul")  // 매일 7시에 모든 사용자의 무료 티켓 2장으로 세팅
+    @Async
+    @Transactional
+    public void updateFreeTicket() {
+        List<User> allUsers = userRepository.findAllUsers();
+
+        userLoop:
+        for (User user : allUsers) {
+            List<Inventory> inventoryList = inventoryRepository.findByUserId(user.getId());
+
+            for (Inventory inventory : inventoryList) {
+                if (inventory.getItemType() == ItemType.FREE_MATCHING_TICKET) {
+                    inventory.setQuantity(2);
+                    inventoryRepository.save(inventory);
+                    continue userLoop;
+                }
+
+            }
+
+            Inventory freeTicketInventory = Inventory.builder()
+                    .user(user)
+                    .quantity(2)
+                    .itemType(ItemType.FREE_MATCHING_TICKET)
+                    .build();
+            inventoryRepository.save(freeTicketInventory);
+        }
+
+        log.info("무료 매칭 티켓 업데이트 완료 ({})", LocalDateTime.now());
     }
 }
