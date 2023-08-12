@@ -9,10 +9,11 @@ function FindMyEmail() {
   let [phoneNumber, setPhoneNumber] = useState("");
   let [isButtonDisabled, setIsButtonDisabled] = useState(true);
   let [email, setEmail] = useState("");
+  let [resultMessage, setResultMessage] = useState("");
   
   useEffect(() => {
     setIsButtonDisabled(false);
-  });
+  }, []);
 
   const FindEmailFunc = () => {
     if (!name) {
@@ -30,8 +31,10 @@ function FindMyEmail() {
           console.log("성공");
           console.log(response.data)
           setEmail(response.data.data)
+          setResultMessage(`아이디는 ${response.data.data}입니다.`);
         } else {
             console.log("실패")
+            setResultMessage("아이디를 찾을 수 없습니다.")
         }
       });
     }
@@ -56,21 +59,20 @@ function FindMyEmail() {
           type="text"
           id="phonenumber"
           onChange={(e) => {
-            if (e.target.value.length === 13) {
+            if (e.target.value.length === 11 || e.target.value.length === 13) {
               setIsButtonDisabled(false);
               setPhoneNumber(e.target.value);
             }
           }}
           placeholder="전화번호('-'제외)"
         />
-        <button className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
+        <button disabled={isButtonDisabled} className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
          onClick={FindEmailFunc}>
           확인
         </button>
-        <div>
-          
-          <span>아이디는 {email} 입니다.</span>
-        </div>
+          <div>
+            <span>{resultMessage}</span>
+          </div>
       </div>
     </div>
   );
