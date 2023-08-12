@@ -117,19 +117,19 @@ function CertificationPhonenumber(){
       <input 
         className={styles.phonenumInput} 
         type="text" 
-        id="phonenumber" 
+        id="phonenumberFirst" 
         onChange={(e) => {setPhonenumberFirst(e.target.value)}} />
       -
       <input 
         className={styles.phonenumInput} 
         type="text" 
-        id="phonenumber" 
+        id="phonenumberMiddle" 
         onChange={(e) => {setPhonenumberMiddle(e.target.value)}} />
       -
       <input 
         className={styles.phonenumInput} 
         type="text" 
-        id="phonenumber" 
+        id="phonenumberLast" 
         onChange={(e) => {setPhonenumberLast(e.target.value)}} />
       {
         !isCheckPhonenumCode &&
