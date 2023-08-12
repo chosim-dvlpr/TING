@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import basicHttp from "../../api/basicHttp";
 import { useState } from "react";
 
-import styles from "./FindMyEmail.module.css";
+import styles from '../signup/SignupCommon.module.css';
 
 function FindMyEmail() {
   let [name, setName] = useState("");
@@ -42,7 +42,6 @@ function FindMyEmail() {
 
   return (
     <div>
-      <h1>아이디(이메일)찾기</h1>
       <div className={styles.wrapper}>
         <input
           className={styles.input}
@@ -66,6 +65,7 @@ function FindMyEmail() {
           }}
           placeholder="전화번호('-'제외)"
         />
+        <br/>
         <button disabled={isButtonDisabled} className={isButtonDisabled ? styles.disabledBtn : styles.btn} 
          onClick={FindEmailFunc}>
           확인
