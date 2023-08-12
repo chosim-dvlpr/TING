@@ -9,6 +9,8 @@ import styles from "./MatchingStart.module.css";
 import Report from "./common/Report.js";
 import MatchingChoice from "./common/MatchingChoice.js";
 
+import Swal from "sweetalert2";
+
 function MatchingStart() {
   // redux 관련 state 불러오기
   const dispatch = useDispatch();
@@ -106,10 +108,12 @@ function MatchingStart() {
   const onKeyDown = (event) => {
     // 만약 눌린 키가 F5 키(키 코드: 116)라면 새로고침을 막습니다.
     if (event.keyCode === 116) {
-      alert('경고~!')
+      // 새로고침 방지 모달
+      blockF5()
       event.preventDefault();
       console.log("F5 key pressed, but default behavior prevented.");
     }
+
   }
 
   // 질문카드를 제어하는 useEffect hook
@@ -416,6 +420,25 @@ function MatchingStart() {
   const report = () => {
     setShowReportModal(true);
   };
+
+  // 경고창을 호출하는 함수
+  function blockF5(socket) {
+    Swal.fire({
+      icon: "warning",
+      title: "정말 나가시겠습니까?",
+      text: "중간에 나가시면 매칭 티켓은 복구되지 않습니다.",
+      timer: 10000,
+      timerProgressBar: true,
+      showCancelButton: true,
+      cancelButtonText: "아니오",
+      confirmButtonText: "네",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        leaveSession()
+        navigate('/')
+      } 
+    });
+  }
 
   return (
     <>
