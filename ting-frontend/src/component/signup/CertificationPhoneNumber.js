@@ -71,7 +71,7 @@ function CertificationPhonenumber(){
       <br/>
       <input className={styles.input} type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />
       <br/>
-      <input ref={authCodeInput} className={styles.input} type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 6자리"/>
+      <input ref={authCodeInput} className={styles.input} type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 4자리"/>
       <br/>
       <button className={styles.btn} onClick={checkPhonenumberCode}>인증확인</button>
       <button className={styles.btn} onClick={checkPhonenumber}>재전송</button>
