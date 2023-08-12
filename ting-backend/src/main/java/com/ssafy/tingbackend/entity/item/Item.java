@@ -1,14 +1,12 @@
 package com.ssafy.tingbackend.entity.item;
 
+import com.ssafy.tingbackend.entity.type.ItemType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,4 +19,8 @@ public class Item {
 
     private String name;
     private Long price;
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private ItemType category;
 }

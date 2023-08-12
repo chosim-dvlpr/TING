@@ -1,5 +1,5 @@
 package com.ssafy.tingbackend.entity.type;
 
 public enum ReportType {
-    BOARD, COMMENT, MATCHING
+    ISSUE_BOARD, ADVICE_BOARD, COMMENT, MATCHING
 }
