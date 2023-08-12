@@ -7,6 +7,9 @@ const FishAnimation = () => {
     <div className={styles.fishContainer}>
       <div className={styles.fish}></div>
       <div className={styles.fish2}></div>
+      <div className={styles.fish3}></div>
+      <div className={styles.fish4}></div>
+      <div className={styles.fish5}></div>
     </div>
   );
 };
