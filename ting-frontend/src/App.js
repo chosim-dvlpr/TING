@@ -145,6 +145,9 @@ function App() {
           <Route path="signupComplete" element={<SignupComplete />}></Route>
         </Route>
 
+        {/* 로그인 아이디, 비번 찾기 */}
+        <Route path="/login/forget" element={<FindMyInfoPage/>}></Route>
+
         {/* 매칭 - 로그인 인증 */}
         {/* <Route path="/matching" element={<MatchingPage  />}> */}
         <Route path="/matching" element={<AuthMatchingPage />}>
