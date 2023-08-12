@@ -3,8 +3,7 @@ package com.ssafy.tingbackend.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.tingbackend.user.dto.MessageDto;
-import com.ssafy.tingbackend.user.dto.SmsResponseDto;
-import com.ssafy.tingbackend.user.dto.SmsRequestDto;
+import com.ssafy.tingbackend.user.dto.SmsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -43,7 +42,7 @@ public class SmsService {
     @Value("${ncloud.sens.senderPhone}")
     private String senderPhone;
 
-    public SmsResponseDto sendSms(Long time, MessageDto message) throws RestClientException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException, JsonProcessingException, URISyntaxException {
+    public SmsDto.Response sendSms(Long time, MessageDto message) throws RestClientException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException, JsonProcessingException, URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("x-ncp-apigw-timestamp", time.toString());
@@ -53,7 +52,7 @@ public class SmsService {
         List<MessageDto> messages = new ArrayList<>();
         messages.add(message);
 
-        SmsRequestDto request = SmsRequestDto.builder()
+        SmsDto.Request request = SmsDto.Request.builder()
                 .type("SMS")
                 .from(this.senderPhone)
                 .content(message.getContent())
@@ -66,7 +65,7 @@ public class SmsService {
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        SmsResponseDto response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ this.serviceId +"/messages"), httpBody, SmsResponseDto.class);
+        SmsDto.Response response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ this.serviceId +"/messages"), httpBody, SmsDto.Response.class);
 
         return response;
     }

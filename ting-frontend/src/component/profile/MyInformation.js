@@ -13,7 +13,7 @@ function MyInformation() {
 
   // 지역 영어를 한글로 변환
   const matchRegion = (regionData) => {
-    const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
+    const regionName = regionList.reggionEn && regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
     console.log(regionName)
     return regionName
   };

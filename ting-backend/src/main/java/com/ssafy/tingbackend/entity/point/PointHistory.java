@@ -2,16 +2,14 @@ package com.ssafy.tingbackend.entity.point;
 
 import com.ssafy.tingbackend.entity.common.BaseCreatedTimeEntity;
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @ToString(of = {"user", "pointCategory", "changeCost", "resultPoint"})
 public class PointHistory extends BaseCreatedTimeEntity {
     @Id

@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
@@ -12,7 +12,7 @@ import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
 import NavBar from "../../common/NavBar";
 
-import {getDate} from "../../common/TimeCalculate";
+import { getDate } from "../../common/TimeCalculate";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
@@ -21,8 +21,7 @@ function AdviceBoard() {
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
 
-
-  const boardType = "advice"
+  const boardType = "advice";
 
   useEffect(() => {
     getAllAdviceData();
@@ -71,40 +70,29 @@ function AdviceBoard() {
     }
   };
 
-  // 글 수정
-  const handleUpdate = (adviceId) => {
-    navigate(`/community/advice/update/${adviceId}`);
-  };
 
-  // 글 삭제
-  const handleDelete = async (adviceId) => {
-    try {
-      await tokenHttp.delete(`advice/${adviceId}`);
-      console.log("delete성공");
-      await getAllAdviceData();
-    } catch (error) {
-      console.error("Error deleting advice:", error);
-    }
-  };
 
   // 검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
 
-  const handleSearch = async ({ keyword}) => {
+  const handleSearch = async ({ keyword }) => {
     try {
       const response = await tokenHttp.get(`/advice/search/`, {
         params: {
-          pageNo: currentPage,
+          pageNo: 1, // 검색 시 첫 번째 페이지부터 조회
           keyword,
         },
       });
 
       const searchData = response.data.data;
       setSearchResult(searchData.adviceBoardList);
+      setTotalPages(searchData.totalPages); // 검색 결과에 따른 totalPages 설정
+      setCurrentPage(1); // 검색 시 첫 번째 페이지로 이동
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
   };
+  
   useEffect(() => {
     console.log("============search Result", searchResult);
   }, [searchResult]);
@@ -115,21 +103,13 @@ function AdviceBoard() {
       <div className={styles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.adviceTopTable}>
-          <SearchBar onSearch={handleSearch} boardType={boardType}/>
+          <SearchBar onSearch={handleSearch} boardType={boardType} />
           <button className={styles.createButton} onClick={handleCreateClick}>
             글 작성하기
           </button>
         </div>
         <div>
           <table className={styles.adviceTable}>
-            {/* <thead>
-              <tr>
-                <th className={styles.table_1}>Id</th>
-                <th className={styles.table_2}>title</th>
-                <th className={styles.table_3}>hit</th>
-                <th className={styles.table_4}>createdTime</th>
-              </tr>
-            </thead> */}
             <tbody>
               {(searchResult.length > 0 ? searchResult : adviceList).map(
                 (advice, index) => (
@@ -149,9 +129,8 @@ function AdviceBoard() {
                     <td className={styles.table_4}>
                       {advice.modifiedTime === null
                         ? getDate(advice.createdTime)
-                        : `${getDate(advice.modifiedTime)} (수정됨)`}
+                        : `${getDate(advice.modifiedTime)}`}
                     </td>
-                
                   </tr>
                 )
               )}

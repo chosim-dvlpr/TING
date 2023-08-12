@@ -28,17 +28,15 @@ function SearchBar({ onSearch, boardType }) {
 
   return (
     <div className={styles.searchBarContainer}>
-      <select className={styles.searchInput} value={item} onChange={handleItemChange}>
-      {boardType === "issue" && (
-          <>
-            <option value="title">제목</option>
-            <option value="nickname">닉네임</option>
-          </>
-        )}
+     {boardType === "issue" && (
+        <select className={styles.searchInput} value={item} onChange={handleItemChange}>
+          <option value="title">제목</option>
+          <option value="nickname">닉네임</option>
+        </select>
+      )}
         {boardType === "advice" && (
-          <option value="title">Title</option>
+          <div value="title" className={styles.title}>제목</div>
         )}
-      </select>
     <input className={styles.searchInput} type="text" value={keyword} onChange={handleKeywordChange} />
     <button className={styles.searchButton} onClick={handleSearch}>Search</button>
   </div>

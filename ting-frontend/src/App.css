@@ -51,6 +51,7 @@ body {
   min-width: 1500px;
   width: 100%;
   height: auto;
+  overflow-x: hidden;
 }
 
 .App-logo {
