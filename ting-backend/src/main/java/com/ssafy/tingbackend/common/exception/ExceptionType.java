@@ -18,6 +18,7 @@ public enum ExceptionType {
     USER_NOT_FOUND(4100, "존재하지 않는 유저입니다."),
     PROFILE_FILE_NOT_FOUND(4101, "프로필 파일이 존재하지 않습니다."),
     PASSWORD_NOT_MATCH(4102, "아이디와 패스워드가 일치하지 않습니다."),
+    EMAIL_SEND_FAIL(4103, "이메일 인증코드 전송에 실패하였습니다."),
 
     ADDITOIONAL_INFO_NOT_FOUND(4200, "부가정보 코드가 존재하지 않습니다."),
 
