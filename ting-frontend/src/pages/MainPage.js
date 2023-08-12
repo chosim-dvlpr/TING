@@ -7,6 +7,7 @@ import AOS from "aos";
 import "./aos.css";
 
 import styles from "./MainPage.module.css";
+import { SectionsContainer, Section } from "react-fullpage";
 
 //component
 import CountdownTimer from "../component/main/CountdownTimer";
@@ -134,6 +135,16 @@ function MainPage() {
       outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
     };
   }, []);
+
+  let optinos = {
+    anchors: [
+      "sectionOne",
+      "sectionTwo",
+      "sectionThree",
+      "sectionFour",
+      "sectionFive",
+    ],
+  };
 
   return (
     <div ref={outerDivRef} className={styles.outer}>
