@@ -109,6 +109,13 @@ function App() {
   };
 
   const AuthMatchingPage = Auth(MatchingPage);
+  const AuthAdviceCreate = Auth(AdviceCreate);
+  const AuthAdviceUpdate = Auth(AdviceUpdate);
+  const AuthIssueCreate = Auth(IssueCreate);
+  const AuthFriend = Auth(Friend);
+  const AuthMyProfilePage = Auth(MyProfilePage);
+  const AuthItemPage = Auth(ItemPage);
+  const AuthAdminPage = Auth(AdminPage, true);
 
   return (
     <div className="App">
@@ -158,26 +165,25 @@ function App() {
         {/* </Route> */}
 
         {/* 커뮤니티 페이지 */}
-
         <Route path="/community//*" element={<CommunityPage />} />
 
         <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail />} />
         <Route path="/community/advice" element={<AdviceBoard />} />
-        <Route path="/community/advice/create" element={<AdviceCreate />} />
-        <Route path="/community/advice/update/:adviceId" element={<AdviceUpdate />} />
+        <Route path="/community/advice/create" element={<AuthAdviceCreate />} />
+        <Route path="/community/advice/update/:adviceId" element={<AuthAdviceUpdate />} />
 
         <Route path="/community/issue" element={<IssueBoard />} />
-        <Route path="/community/issue/create" element={<IssueCreate />} />
+        <Route path="/community/issue/create" element={<AuthIssueCreate />} />
         <Route path="/community/issue/detail/:issueId" element={<IssueDetail />} />
 
-        {/* 친구목록 임시 */}
-        <Route path="/friend" element={<Friend />}>
+        {/* 친구목록 */}
+        <Route path="/friend" element={<AuthFriend />}>
           <Route path="" element={<FriendList />}></Route>
           <Route path="chat" element={<FriendChatting />}></Route>
         </Route>
 
         {/* 마이페이지 */}
-        <Route path="/mypage" element={<MyProfilePage />}>
+        <Route path="/mypage" element={<AuthMyProfilePage />}>
           <Route path="" element={<MyInformation />}></Route>
           <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
@@ -189,7 +195,7 @@ function App() {
         </Route>
 
         {/* 아이템 페이지 */}
-        <Route path="/item" element={<ItemPage />}>
+        <Route path="/item" element={<AuthItemPage />}>
           {/* 아이템 상점 */}
           <Route path="shop" element={<ItemShop />}></Route>
           {/* 보유 아이템 관리 */}
@@ -204,7 +210,7 @@ function App() {
         <Route path="/payment/kakaoPayFail" element={<KakaoPayFail />} />
 
         {/* 관리자 페이지 */}
-        <Route path="/admin" element={<AdminPage />}>
+        <Route path="/admin" element={<AuthAdminPage />}>
           <Route path="" element={<Dashboard />}></Route>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="report" element={<Report />} />
