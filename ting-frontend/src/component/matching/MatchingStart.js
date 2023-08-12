@@ -66,8 +66,8 @@ function MatchingStart() {
     dispatch(resetMatchingStore())
 
     // 음악 무한 재생
-    const audio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
-    audio.play();
+    const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
+    bgmAudio.play();
 
     audioRef.current = audio;
     audioRef.current.addEventListener("ended", handleAudioEnded)
@@ -101,6 +101,7 @@ function MatchingStart() {
 
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
+      bgmAudio.pause()
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
@@ -113,7 +114,6 @@ function MatchingStart() {
       event.preventDefault();
       console.log("F5 key pressed, but default behavior prevented.");
     }
-
   }
 
   // 질문카드를 제어하는 useEffect hook
