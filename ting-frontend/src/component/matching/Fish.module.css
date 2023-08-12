@@ -1,7 +1,12 @@
+.fishContainer {
+  width: 100%;
+} 
+
+/* 물고기 */
 .fish {
   background-image: url('../../../public/img/물고기5.png');
   background-size: auto 100%;
-  z-index: 100000;
+  z-index: -1;
   width: 100px;
   height: 100px;
   top: 50%; /* 화면 중앙에 위치 */
@@ -10,11 +15,21 @@
   animation: moveSPath 10s infinite; /* S자 모양 이동 애니메이션 적용 */
   position:absolute;
 }
+.fish2 {
+  background-image: url('../../../public/img/물고기5.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 75%; /* 화면 중앙에 위치 */
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath2 10s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
 
 
-.fishContainer {
-  width: 100%;
-} 
+
 
 @keyframes moveSPath {
   0% {
@@ -28,6 +43,27 @@
   }
   75% {
     transform: translateX(1500%) translateY(-50%);
+
+  }
+  100% {
+    transform: translateX(2500%);
+  }
+
+}
+
+
+@keyframes moveSPath2 {
+  0% {
+    transform: translateX(-100%);
+  }
+  25%{
+    transform: translateX(500%) translateY(50%);
+  }
+  50% {
+    transform: translateX(1000%) translateY(100%);
+  }
+  75% {
+    transform: translateX(1500%) translateY(50%);
 
   }
   100% {
