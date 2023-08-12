@@ -21,14 +21,14 @@ import { useSelector } from "react-redux";
 function MainPage() {
   // 채팅 기능 추가 //
   const messageStore = useMessageStore();
-  let userdata = useSelector((state) => state.userdataReducer.userdata);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const { connected, currentRoomIndex, roomIndices, messageLogsObject } =
     messageStore;
 
   // 모든 채팅방 연결
   const connectSocket = () => {
-    messageStore.connect();
+    messageStore.connect(null, userdata.userId);
   };
 
   useEffect(() => {
@@ -149,7 +149,10 @@ function MainPage() {
   return (
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
-      <FriendButton />
+      {
+        userdata &&
+        <FriendButton />
+      }
 
       {/*section1 */}
       <div className={styles.wrapper}>

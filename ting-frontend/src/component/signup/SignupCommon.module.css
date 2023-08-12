@@ -1,6 +1,7 @@
 .wrapper {
     margin: 20px;
 }
+
 .wrapper * {
     font-weight: 400;
     font-size: 20px;
@@ -11,9 +12,11 @@
 .disabledBtn {
     margin: 10px;
 }
+
 .input,
 .btn,
 .disabledBtn,
+.phonenumInput,
 .selectBtn {
     border-radius: 10px;
     padding: 5px 15px;
@@ -28,6 +31,12 @@
     margin: 5px 0;
 }
 
+.phonenumInput {
+    width: 80px;
+    border: 2px solid gray;
+    margin: 5px;
+}
+
 .disabledBtn {
     border: none;
     background-color: gainsboro;
@@ -38,10 +47,11 @@
     border: none;
     background-color: #2e6070;
     color: whitesmoke;
-    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
-    5px 5px 10px 0px rgba(0, 0 ,0, .1),
-    3px 3px 5px 0px rgba(0, 0 ,0, .1);
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
 }
+
 .btn:hover {
     background-color: #327488;
 }
@@ -49,6 +59,7 @@
 .rightMsg {
     color: green;
 }
+
 .wrongMsg {
     color: red;
 }
@@ -63,6 +74,7 @@
     border: none;
     margin: 3px;
 }
+
 .selectBtn:hover,
 .selectBtn:focus {
     background-color: #98E0EF;
@@ -70,4 +82,29 @@
 
 .genderBtn {
     width: 180px;
+}
+
+.passwordContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.selectContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.completeContainer {
+    margin-top: 100px;
+}
+
+.completeParagraph {
+    margin-top: 20px;
+}
+
+.selectDataContainer {
+    display: grid;
+	grid-template-columns: repeat(2, 1fr);
 }

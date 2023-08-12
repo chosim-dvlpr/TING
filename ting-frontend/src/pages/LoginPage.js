@@ -84,6 +84,8 @@ function LoginPage() {
     }
   };
 
+
+
   return (
     <div className={styles.outer}>
       <NavBar />
@@ -120,6 +122,12 @@ function LoginPage() {
           >
             로그인
           </button>
+           <div>
+            <span onClick={()=>navigate("/login/forget")}>
+                아이디/비밀번호 찾기
+            </span>
+
+        </div>
         </div>
       </div>
     </div>

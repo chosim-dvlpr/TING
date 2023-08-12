@@ -6,14 +6,14 @@ export const signupReducer = createSlice({
     // 기본값
     email: "",
     password: "",
-    phonenumber: "",
+    phoneNumber: "",
     name: "",
     nickname: "",
     gender: "",
     birth: "",
     region: "",
     // 선택값
-    // profileImage: "",
+    profileImage: "",
     mbtiCode: "",
     heightCode: "",
     drinkingCode: "",
@@ -32,8 +32,8 @@ export const signupReducer = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload;
     },
-    setPhonenumber: (state, action) => {
-      state.phonenumber = action.payload;
+    setPhoneNumber: (state, action) => {
+      state.phoneNumber = action.payload;
     },
     setName: (state, action) => {
       state.name = action.payload;
@@ -102,15 +102,23 @@ export const signupReducer = createSlice({
     setDeleteStyleCodeList: (state, action) => {
       state.styleCodeList.slice(action.payload, 1);
     },
-    // setProfileImage: (state, action) => {
-    //   state.profileImage = action.payload;
-    // },
+    completeSignupStep: (state) => {
+      const keys = Object.keys(state); // state 객체의 모든 키(key)를 배열로 얻기
+      console.log(keys)
+      keys.map((key, i) => {
+        console.log(key)
+        // console.log(state.key)
+        // console.log(key, state.key)
+      })
+
+    }
+
   }
 })
 
 
-export const { setEmail, setPassword, setPhonenumber, setName, setNickname, setGender, setRegion, setBirth,
+export const { setEmail, setPassword, setPhoneNumber, setName, setNickname, setGender, setRegion, setBirth,
   setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setHobbyCodeList,
-  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList,
+  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList, completeSignupStep,
 } = signupReducer.actions;
 export default signupReducer;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../pages/openvidu/UserVideoComponent.js";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import tokenHttp from "../../api/tokenHttp.js";
 import styles from "./MatchingStart.module.css";
 import Report from "./common/Report.js";
 import MatchingChoice from "./common/MatchingChoice.js";
+
+import Swal from "sweetalert2";
 
 function MatchingStart() {
   // redux 관련 state 불러오기
@@ -41,7 +43,7 @@ function MatchingStart() {
 
   // 최종 점수 관련 state
   const [sumMyScore, setSumMyScore] = useState(0)
-  const [sumYourScore, setSumYourScore] = useState(0) 
+  const [sumYourScore, setSumYourScore] = useState(0)
 
   // openvidu 관련 state
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -55,10 +57,20 @@ function MatchingStart() {
   // 최종 선택 모달창 관련 state
   const [showMatchingChoiceModal, setShowMatchingChoiceModal] = useState(false)
 
+  // BGM 관련 변수
+  const audioRef = useRef(null);
+
   // 초기화 useEffect hook
   useEffect(() => {
     console.log("====================useEffect (초기화) ======================");
     dispatch(resetMatchingStore())
+
+    // 음악 무한 재생
+    const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
+    bgmAudio.play();
+
+    audioRef.current = bgmAudio;
+    audioRef.current.addEventListener("ended", handleAudioEnded)
 
     // redux에서 오픈 비두 입장 토큰 가져오기
     let accessToken = state.openviduReducer.token;
@@ -74,29 +86,43 @@ function MatchingStart() {
     tokenHttp.get(`/date/question/${matchingId}`).then((response) => {
       dispatch(setQuestionData(response.data.data));
     });
-    
+
     // 티켓 하나 사용
     tokenHttp.put('/item/ticket')
-    .then((response)=>{console.log(response.data.message)})
-    .catch((err)=>{console.log(err)})
+      .then((response) => { console.log(response.data.message) })
+      .catch((err) => { console.log(err) })
 
     // openvidu 접속
     joinSession(accessToken);
 
+    // 새로고침 방지
+    window.addEventListener("keydown", onKeyDown);
     window.addEventListener("beforeunload", onbeforeunload);
     return () => {
+      bgmAudio.pause()
+      window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, []);
+
+  const onKeyDown = (event) => {
+    // 만약 눌린 키가 F5 키(키 코드: 116)라면 새로고침을 막습니다.
+    if (event.keyCode === 116) {
+      // 새로고침 방지 모달
+      blockF5()
+      event.preventDefault();
+      console.log("F5 key pressed, but default behavior prevented.");
+    }
+  }
 
   // 질문카드를 제어하는 useEffect hook
   useEffect(() => {
     console.log("================useEffect (score 변경)=====================");
     if (questionNumber < Math.min(myScore.length, yourScore.length)) {
       // questionNumber 바로 안바뀌게 잠시 시간 텀 줌
-      setTimeout(()=>{
+      setTimeout(() => {
         dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
-      },2000)
+      }, 2000)
     }
   }, [myScore, yourScore]);
 
@@ -114,7 +140,7 @@ function MatchingStart() {
     if (count === 0) {
       clearInterval(timer);
       // setCount(30);
-      
+
       // 타임이 끝나면 5점을 자동으로 상대에게 전달
 
       // 이미 점수를 선택했다면 상대에게 점수를 전송하지 않음
@@ -125,7 +151,7 @@ function MatchingStart() {
       if (alreadyClickedScore) return;
 
       session.signal({
-        data: JSON.stringify({ score: 5, userId: userData.userId, questionNumber:questionNumber }),
+        data: JSON.stringify({ score: 5, userId: userData.userId, questionNumber: questionNumber }),
         to: [],
         type: "score",
       });
@@ -155,22 +181,22 @@ function MatchingStart() {
     if (questionNumber === 12) {
       setCount(5);
       // 결과 최종합
-      setSumMyScore(myScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
-      setSumYourScore(yourScore.slice(1,11).reduce((acc,curr)=>acc+curr, 0))
+      setSumMyScore(myScore.slice(1, 11).reduce((acc, curr) => acc + curr, 0))
+      setSumYourScore(yourScore.slice(1, 11).reduce((acc, curr) => acc + curr, 0))
       // 최종 점수 DB에 저장
       const totalScoreData = {
-        matchingId : matchingId,
-        totalScore : sumYourScore,
+        matchingId: matchingId,
+        totalScore: sumYourScore,
       }
-      tokenHttp.post('/date/score/total',totalScoreData)
-        .then((response)=>{console.log(response.data.message)})
-        .catch((err)=>{console.log(err)})
+      tokenHttp.post('/date/score/total', totalScoreData)
+        .then((response) => { console.log(response.data.message) })
+        .catch((err) => { console.log(err) })
     }
     if (questionNumber === 14) {
       // 최종 선택 모달창 on
       setShowMatchingChoiceModal(true)
       // 사용자 video audio off
-      toggleAudioAndVideo(false,false)
+      toggleAudioAndVideo(false, false)
       setCount(20)
     }
   }, [questionNumber]);
@@ -183,7 +209,7 @@ function MatchingStart() {
 
     // TODO: 상대에게 점수를 전송하는 로직 (openviduSession.signal)
     session.signal({
-      data: JSON.stringify({ score: score, userId: userData.userId, questionNumber:questionNumber}),
+      data: JSON.stringify({ score: score, userId: userData.userId, questionNumber: questionNumber }),
       to: [],
       type: "score",
     });
@@ -191,14 +217,14 @@ function MatchingStart() {
 
   // 음성 메세지 받는 함수
   const makeSoundMessage = (score) => {
-    if (userData.gender === 'F') { 
+    if (userData.gender === 'F') {
       const audio = new Audio(`${process.env.PUBLIC_URL}/sound/m/${score}점_남.mp3`)
       audio.play()
     }
     else {
       const audio = new Audio(`${process.env.PUBLIC_URL}/sound/w/${score}점_여.mp3`)
       audio.play()
-    }    
+    }
   }
 
   const onbeforeunload = (event) => {
@@ -266,9 +292,9 @@ function MatchingStart() {
     newSession.on("signal:score", (event) => {
       console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
-      
+
       // 점수 선택시 양쪽 다 점수 소리 들리게
-      if ( data.questionNumber > 0 && data.questionNumber < 12 ) {
+      if (data.questionNumber > 0 && data.questionNumber < 12) {
         makeSoundMessage(data.score);
       }
 
@@ -383,29 +409,54 @@ function MatchingStart() {
     }
   }
 
+  // 음악 지속 재생
+  const handleAudioEnded = () => {
+    audioRef.current.currentTime = 0;
+    audioRef.current.play();
+  }
+
   // 신고 후 나가기 모달창
   const report = () => {
     setShowReportModal(true);
   };
 
+  // 경고창을 호출하는 함수
+  function blockF5(socket) {
+    Swal.fire({
+      icon: "warning",
+      title: "정말 나가시겠습니까?",
+      text: "중간에 나가시면 매칭 티켓은 복구되지 않습니다.",
+      timer: 10000,
+      timerProgressBar: true,
+      showCancelButton: true,
+      cancelButtonText: "아니오",
+      confirmButtonText: "네",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        leaveSession()
+        window.location.href = '/'
+      } 
+    });
+  }
+
   return (
     <>
 
       <div className={`${styles.container}`}>
-      {/* 최종 선택 */}
-      {showMatchingChoiceModal && <MatchingChoice className={styles.MatchingChoice}session={session} count={count}/>}
-      
-      {/* 신고 모달창 */}
-      {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
+        {/* 최종 선택 */}
+        {showMatchingChoiceModal && <MatchingChoice className={styles.MatchingChoice} session={session} count={count} />}
+
+        {/* 신고 모달창 */}
+        {showReportModal && <Report setShowReportModal={setShowReportModal} session={session} />}
 
         <div>
           <h3 className={styles.timer}>{count}</h3>
         </div>
-        { questionNumber>0 && questionNumber<11 && showScoreMessage &&
-            <div className={styles.alertScore}>
-              <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`}/>
-              <span className={styles.ScoreText}>{alertScore}</span>
-            </div>
+        {questionNumber > 0 && questionNumber < 11 && showScoreMessage &&
+          <div className={styles.alertScore}>
+            <img src={"/img/heart-icon2.png"} id={`buttonImg-${alertScore}`} />
+            <span className={styles.ScoreText}>{alertScore}</span>
+          </div>
         }
 
         <div id="session-header" className={styles.sessionHeader}>
@@ -417,7 +468,7 @@ function MatchingStart() {
           {/* 질문 카드 */}
           {/* <QuestionCard /> */}
           <div className={styles.cardOuter}>
-            <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard}/>
+            <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard} />
             <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
           </div>
           {/* 질문 카드 -- end */}
@@ -432,56 +483,56 @@ function MatchingStart() {
             <div className="stream-container col-md-5 col-xs-5" onClick={() => handleMainVideoStream(subscribers[0])}>
               <UserVideoComponent streamManager={subscribers[0]} />
             </div>
-            
+
           </div>
         </div>
-        
+
         <div className="wrapper">
-        {/* 점수 체크판 -- start */}
-        {/* <ScoreCheck></ScoreCheck> */}
-        { showMatchingChoiceModal ? null : (
-          <div className={styles.ScoreCheckBox}>
-            {questionNumber === 0 ? (
-              <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
-            ) : questionNumber === 11 ? (
-              <h1>끝이 났습니다.</h1>
-            ) : questionNumber === 12 ? (
-              <div className={ styles.ScoreSumResult }>
-                <p> {sumYourScore}점 </p>
-                <h1>최종 점수</h1>
-                <p> {sumMyScore}점 </p>
-              </div>
-            ) : questionNumber === 13 ? (
-              <h1>서로 마지막 어필을 해주세요</h1>
-            ) : 0 <= questionNumber <= 10 ? (
-              <div className={styles.ScoreBox}>
-                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
-                  return (
-                    <div className={`${styles.HeartScore} ${ !disableHover[i] ? styles.HeartScoreAni : null}`}>
-                      <img 
-                        src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"} 
-                        id={`buttonImg-${score}`} 
-                        className={buttonToggleSign[i] ? styles.clickedHeart : null}
+          {/* 점수 체크판 -- start */}
+          {/* <ScoreCheck></ScoreCheck> */}
+          {showMatchingChoiceModal ? null : (
+            <div className={styles.ScoreCheckBox}>
+              {questionNumber === 0 ? (
+                <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
+              ) : questionNumber === 11 ? (
+                <h1>끝이 났습니다.</h1>
+              ) : questionNumber === 12 ? (
+                <div className={styles.ScoreSumResult}>
+                  <p> {sumYourScore}점 </p>
+                  <h1>최종 점수</h1>
+                  <p> {sumMyScore}점 </p>
+                </div>
+              ) : questionNumber === 13 ? (
+                <h1>서로 마지막 어필을 해주세요</h1>
+              ) : 0 <= questionNumber <= 10 ? (
+                <div className={styles.ScoreBox}>
+                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score, i) => {
+                    return (
+                      <div className={`${styles.HeartScore} ${!disableHover[i] ? styles.HeartScoreAni : null}`}>
+                        <img
+                          src={buttonToggleSign[i] ? "/img/heart-icon-toggle2.png" : "/img/heart-icon2.png"}
+                          id={`buttonImg-${score}`}
+                          className={buttonToggleSign[i] ? styles.clickedHeart : null}
                         />
 
-                      <button
-                        className={styles.ScoreText}
-                        disabled={disableaButton}
-                        onClick={() => {
-                          setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
-                          setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
-                          setDisableButton(true)
-                          handleScoreSelect(score);
-                        }}
-                      >
-                        {score}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : null}
-          </div> )
+                        <button
+                          className={styles.ScoreText}
+                          disabled={disableaButton}
+                          onClick={() => {
+                            setButtonToggleSign([...buttonToggleSign.slice(0, i), true, ...buttonToggleSign.slice(i + 1)]);
+                            setDisableHover([...trueList.slice(0, i), true, ...trueList.slice(i + 1)])
+                            setDisableButton(true)
+                            handleScoreSelect(score);
+                          }}
+                        >
+                          {score}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>)
           }
           {/* 점수 체크판 -- end */}
         </div>

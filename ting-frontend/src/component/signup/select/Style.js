@@ -27,7 +27,7 @@ function Style(){
         }
       <br/>
       { signupReducer.styleCodeList }
-      <button onClick={() => Navigate("/signup/select/introduction")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/introduction")}>다음</button> */}
     </div>
   )
 }
