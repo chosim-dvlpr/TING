@@ -22,6 +22,10 @@ import Style from "./component/signup/select/Style";
 import Introduce from "./component/signup/select/Introduce";
 import Openvidu from "./pages/openvidu/openvidu-main.js";
 
+// 로그인 이메일, 비밀번호 찾기
+import FindMyInfoPage from "./pages/FindMyInfoPage";
+
+
 // 메인페이지
 import MainPage from "./pages/MainPage";
 
@@ -130,6 +134,10 @@ function App() {
             <Route path="introduce" element={<Introduce />}></Route>
             <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
+        </Route>
+
+        {/* 로그인 */}
+        <Route path="/login/forget" element={<FindMyInfoPage/>}>
         </Route>
 
         {/* 매칭 */}

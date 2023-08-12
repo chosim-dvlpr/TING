@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './CountdownTimer.module.css';
 
 const CountdownTimer = () => {
-  const targetTimeMillis = 1 * 60 * 1000; // 5 minutes in milliseconds
+  const targetTimeMillis = 5 * 60 * 1000; // 5 minutes in milliseconds
   const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
