@@ -97,6 +97,7 @@ import ProfileImage from "./component/signup/select/profileImage";
 
 // 라우트 가드 (인증)
 import Auth from "./util/Auth";
+import SignUpAll from "./component/signup/SignupAll";
 
 function App() {
   let accessToken = localStorage.getItem("access-token");
@@ -123,12 +124,13 @@ function App() {
 
         {/* 회원가입 */}
         <Route path="/signup" element={<SignupPage />}>
-          <Route path="" element={<SignupEmail />}></Route>
+          <Route path="" element={<SignUpAll />}></Route>
           <Route path="certEmail" element={<CertificationEmail />}></Route>
           <Route path="password" element={<SignupPassword />}></Route>
           <Route path="phonenum" element={<SignupPhoneNumber />}></Route>
           <Route path="certPhonenum" element={<CertificationPhonenumber />}></Route>
           <Route path="detail" element={<SignupDetail />}></Route>
+          <Route path="complete" element={<SignupComplete />}></Route>
           <Route path="select" element={<SelectionData />}>
             <Route path="mbti" element={<Mbti />}></Route>
             <Route path="height" element={<Height />}></Route>
@@ -142,7 +144,6 @@ function App() {
             <Route path="introduce" element={<Introduce />}></Route>
             <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
-          <Route path="signupComplete" element={<SignupComplete />}></Route>
         </Route>
 
         {/* 로그인 아이디, 비번 찾기 */}

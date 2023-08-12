@@ -27,7 +27,7 @@ function Hobby(){
           )
         }
       <br/>
-      <button onClick={() => Navigate("/signup/select/personality")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/personality")}>다음</button> */}
     </div>
   )
 }

@@ -103,3 +103,8 @@
 .completeParagraph {
     margin-top: 20px;
 }
+
+.selectDataContainer {
+    display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}

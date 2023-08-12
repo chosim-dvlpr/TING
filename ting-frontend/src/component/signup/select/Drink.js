@@ -25,7 +25,7 @@ function Drink(){
           )
         }
       <br/>
-      <button onClick={() => Navigate("/signup/select/smoke")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/smoke")}>다음</button> */}
     </div>
   )
 }

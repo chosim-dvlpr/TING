@@ -16,15 +16,16 @@ function Height(){
   return(
     <div className="Height">
       <h3>Height</h3>
-      {
+      <input type="number"></input> 
+      {/* {
         heightList.map((height, i) => {
           return (
             <button onClick={() => changeHeight(height)} key={i}>{ height }</button>
           )
         })
-      }
+      } */}
       <br/>
-      <button onClick={() => Navigate("/signup/select/drink")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/drink")}>다음</button> */}
     </div>
   )
 }
