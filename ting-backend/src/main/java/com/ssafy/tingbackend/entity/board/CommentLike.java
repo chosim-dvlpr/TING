@@ -2,10 +2,7 @@ package com.ssafy.tingbackend.entity.board;
 
 import com.ssafy.tingbackend.entity.common.BaseCreatedTimeEntity;
 import com.ssafy.tingbackend.entity.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"user", "comment"})
+@Builder
+@AllArgsConstructor
 public class CommentLike extends BaseCreatedTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

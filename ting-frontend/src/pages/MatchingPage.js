@@ -5,6 +5,8 @@ import { resetMatchingStore } from "../redux/matchingStore";
 
 import styles from "./MatchingPage.module.css";
 
+import FishAnimation from "../component/matching/Fish.js"
+
 function MatchingPage() {
   let dispatch = useDispatch();
 
@@ -19,6 +21,7 @@ function MatchingPage() {
 
   return (
     <div className={styles.matchingBackground}>
+      <FishAnimation/>
       <div className={styles.matchingContainer}>
         <Outlet></Outlet>
       </div>

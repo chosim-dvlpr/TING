@@ -52,7 +52,7 @@ function WaitingRoom() {
 
     fetchItemList()
 
-  },[myItemList])
+  },[dispatch, totalTicket])
   
   // 마이크 비디오 상태 확인
   useEffect(()=>{
