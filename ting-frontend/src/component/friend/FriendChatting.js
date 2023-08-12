@@ -15,7 +15,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
   const Navigate = useNavigate();
   const dispatch = useDispatch();
   const messageStore = useMessageStore();
-  // let userdata = useSelector((state) => state.userdataReducer);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const [previousMessage, setPreviousMessage] = useState([]);
   const [isProfileModal, setIsProfileModal] = useState(false); // 프로필 모달 띄우기
@@ -80,6 +80,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
     if (connected) {
       messageStore.disconnect(currentRoomIndex);
     }
+    messageStore.connect(null, userdata.userId);
     console.log('채팅 연결 해제')
     messageLogs = {};
     showFriendList(true);
