@@ -9,9 +9,11 @@ import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
 import { setMatchingId } from "../../redux/matchingStore";
+import { setMyItemList } from "../../redux/itemStore";
 import styles from './WaitingRoom.module.css';
 
 import NavBar from "../common/NavBar";
+import tokenHttp from "../../api/tokenHttp";
 
 function WaitingRoom() {
   const [socket, setSocket] = useState(null); // 연결된 소켓을 관리하는 state (null 일 경우 연결이 안된 것)
@@ -29,17 +31,28 @@ function WaitingRoom() {
   
   
   // 티켓 몇개인지 지속적 확인
-  useEffect(()=>{
-    const matchingTicket = myItemList.filter(obj => obj.itemType === "MATCHING_TICKET")
-    const freeMatchingTicket = myItemList.filter(obj => obj.itemType === "FREE_MATCHING_TICKET")
-    
-    // 아이템이 없을 경우 예외 처리
-    const matchingTicketQuantity = matchingTicket.length > 0 ? matchingTicket[0].quantity : 0
-    const freeMatchingTicketQuantity = freeMatchingTicket.length ? freeMatchingTicket[0].quantity : 0
+  useEffect( ()=>{
+    async function fetchItemList (){
 
-    setTotalTicket(matchingTicketQuantity + freeMatchingTicketQuantity)
-   
-  },[])
+      try {
+        const response = await tokenHttp.get("/item/user")
+        dispatch(setMyItemList(response.data.data));
+        
+        const matchingTicket = myItemList.filter(obj => obj.itemType === "MATCHING_TICKET")
+        const freeMatchingTicket = myItemList.filter(obj => obj.itemType === "FREE_MATCHING_TICKET")
+        
+        // 아이템이 없을 경우 예외 처리
+        const matchingTicketQuantity = matchingTicket.length > 0 ? matchingTicket[0].quantity : 0
+        const freeMatchingTicketQuantity = freeMatchingTicket.length ? freeMatchingTicket[0].quantity : 0
+        
+        setTotalTicket(matchingTicketQuantity + freeMatchingTicketQuantity)
+      } 
+      catch (error) { console.log(error) };
+    }
+
+    fetchItemList()
+
+  },[myItemList])
   
   // 마이크 비디오 상태 확인
   useEffect(()=>{

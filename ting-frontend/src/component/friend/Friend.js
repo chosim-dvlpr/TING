@@ -6,7 +6,7 @@ import FriendList from "./FriendList";
 import FriendChatting from "./FriendChatting";
 import { messageStore } from "../../redux/messageStore";
 
-function Friend({ onSearch }){
+function Friend({ onSearch, onSearch2 }){
   let Navigate = useNavigate();
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [isFriendList, setIsFriendList] = useState(true);
@@ -27,6 +27,10 @@ function Friend({ onSearch }){
     // messageStore.disconnectAll();
     // Navigate((-1));
   };
+  
+  const showProfile = () => {
+    onSearch2(true);
+  }
 
   const showFriendList = (data) => {
     setIsFriendList(data)
@@ -55,7 +59,7 @@ function Friend({ onSearch }){
         }
         {
           isFriendChatting &&
-          <FriendChatting showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
+          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
         }    
       </div>
 
