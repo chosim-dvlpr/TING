@@ -25,7 +25,7 @@ function Smoke(){
           )
         }
       <br/>
-      <button onClick={() => Navigate("/signup/select/religion")}>다음</button>      
+      {/* <button onClick={() => Navigate("/signup/select/religion")}>다음</button>       */}
     </div>
   )
 }

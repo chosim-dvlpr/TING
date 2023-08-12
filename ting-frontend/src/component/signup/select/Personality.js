@@ -27,7 +27,7 @@ function Personality(){
         }
       <br/>
       { signupReducer.personalityCodeList }
-      <button onClick={() => Navigate("/signup/select/style")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/style")}>다음</button> */}
     </div>
   )
 }

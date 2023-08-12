@@ -89,7 +89,7 @@ function Detail() {
     const year = signupReducer.birth && signupReducer.birth.slice(0,4);
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    console.log(currentYear)
+    // console.log(currentYear)
 
     if (signupReducer.birth &&
         currentYear - Number(year) < 19) {
@@ -136,7 +136,6 @@ function Detail() {
   // 회원가입 완료 클릭 시
   const completeSignup = (moveTo) => {
     // 모두 값이 있다면 회원가입 요청
-    
     if (!checkAllData()) {
       alert("모든 항목을 입력 또는 체크해주세요.");
       // dispatch(completeSignupStep()); // 나중에 삭제하기
@@ -146,12 +145,11 @@ function Detail() {
     }
     else {
       basicHttp.post('/user/signup', signupReducer).then((response) => {
-        console.log(response)
-        console.log(signupReducer)
+        // console.log(response)
+        // console.log(signupReducer)
         if (response.data.code === 200) {
           alert("회원가입이 완료되었습니다.");
-          dispatch(completeSignupStep());
-          Navigate(moveTo);
+          Navigate(moveTo, { state : { name: signupReducer.name }});
         }
         else if (response.data.code === 400) {
           alert("회원 가입 실패");

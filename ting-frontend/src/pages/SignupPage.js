@@ -16,13 +16,7 @@ function SignUpPage(){
       <NavBar/>
       <div className={styles.container}>
         <p className={styles.title}>회원 가입</p>
-        {/* <Outlet></Outlet> */}
-        <InputEmail />
-        {/* <CertificationEmail /> */}
-        <Password />
-        {/* <SignUpPhoneNumber /> */}
-        <CertificationPhonenumber />
-        <Detail />
+        <Outlet></Outlet>
       </div>
     </div>
     // <div>

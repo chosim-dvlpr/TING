@@ -25,7 +25,7 @@ function Religion(){
           )
         }
       <br/>
-      <button onClick={() => Navigate("/signup/select/job")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/job")}>다음</button> */}
     </div>
   )
 }
