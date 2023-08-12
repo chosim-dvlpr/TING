@@ -1,6 +1,8 @@
 import "./App.css";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// 로그인
 import LoginPage from "./pages/LoginPage.js";
 import SignupPage from "./pages/SignupPage.js";
 import SignupEmail from "./component/signup/Email.js";
@@ -20,6 +22,7 @@ import Hobby from "./component/signup/select/Hobby";
 import Personality from "./component/signup/select/Personality";
 import Style from "./component/signup/select/Style";
 import Introduce from "./component/signup/select/Introduce";
+import SignupComplete from "./component/signup/SignupComplete";
 import Openvidu from "./pages/openvidu/openvidu-main.js";
 
 // 메인페이지
@@ -135,6 +138,7 @@ function App() {
             <Route path="introduce" element={<Introduce />}></Route>
             <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
+          <Route path="signupComplete" element={<SignupComplete />}></Route>
         </Route>
 
         {/* 매칭 - 로그인 인증 */}
