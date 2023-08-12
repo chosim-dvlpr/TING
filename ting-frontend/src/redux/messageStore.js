@@ -34,7 +34,7 @@ export default class MessageStore {
 
     this.currentRoomIndex = roomIndex;
 
-    if(!this.isList) this.subscribeMessageBroker(this.currentRoomIndex);
+    if(roomIndex) this.subscribeMessageBroker(this.currentRoomIndex);
     else this.subscribeMessageBrokerList(userId);
 
     this.connected = true;
