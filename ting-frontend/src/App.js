@@ -137,7 +137,7 @@ function App() {
           </Route>
         </Route>
 
-        {/* 매칭 */}
+        {/* 매칭 - 로그인 인증 */}
         {/* <Route path="/matching" element={<MatchingPage  />}> */}
         <Route path="/matching" element={<AuthMatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
