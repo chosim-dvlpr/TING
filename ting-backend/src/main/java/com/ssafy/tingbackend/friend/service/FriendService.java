@@ -41,9 +41,10 @@ public class FriendService {
         chattingList = chattingRepository.findAllByUser(chattingIdList);
 
         List<ChattingDto> chattingDtoList = new ArrayList<>();
-        for(Chatting chatting: chattingList) {
-            if(ChronoUnit.DAYS.between(chatting.getLastChattingTime(), LocalDateTime.now()) > 3) {
-                if(ChronoUnit.DAYS.between(chatting.getLastChattingTime(), LocalDateTime.now()) > 7) {
+        for (Chatting chatting : chattingList) {
+            LocalDateTime lastChattingTime = chatting.getLastChattingTime() == null ? chatting.getCreatedTime() : chatting.getLastChattingTime();
+            if (ChronoUnit.DAYS.between(lastChattingTime, LocalDateTime.now()) > 3) {
+                if (ChronoUnit.DAYS.between(chatting.getLastChattingTime(), LocalDateTime.now()) > 7) {
                     chatting.setState(ChattingType.DELETED);
                     chatting.setRemoved(true);
                     chatting.setRemovedTime(LocalDateTime.now());
@@ -71,7 +72,7 @@ public class FriendService {
         friend.getUserHobbys().forEach(hobby -> hobbyAdditional.add(AdditionalInfoDto.of(hobby.getAdditionalInfo())));
         friend.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
         friend.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
-        return UserDto.Info.of(friend,hobbyAdditional, styleAdditional, personalityAdditional);
+        return UserDto.Info.of(friend, hobbyAdditional, styleAdditional, personalityAdditional);
     }
 
     @Transactional
