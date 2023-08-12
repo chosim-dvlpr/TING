@@ -1,6 +1,7 @@
 package com.ssafy.tingbackend.entity.user;
 
 import com.ssafy.tingbackend.entity.common.BaseTimeEntity;
+import com.ssafy.tingbackend.entity.item.FishSkin;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -43,6 +44,10 @@ public class User extends BaseTimeEntity {
     private Long point;
     private Integer height;
     private String introduce;
+
+    @JoinColumn(name = "fish_skin_code")
+    @OneToOne(fetch = FetchType.EAGER)
+    private FishSkin fishSkin;
 
     // 직업, 음주, 흡연, 종교, MBTI, 성격, 취미, 스타일
     @OneToOne

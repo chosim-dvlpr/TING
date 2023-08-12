@@ -420,6 +420,7 @@ public class UserService {
                 password + " \n");
         javaMailSender.send(simpleMailMessage);
         user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     public static String createKey() {
