@@ -88,6 +88,9 @@ import KakaoPayCancel from "./pages/pay-result-page/KakaoPayCancel";
 import KakaoPayFail from "./pages/pay-result-page/KakaoPayFail";
 import ProfileImage from "./component/signup/select/profileImage";
 
+// 라우트 가드 (인증)
+import Auth from "./util/Auth";
+
 function App() {
   let accessToken = localStorage.getItem("access-token");
   // accessToken이 있다면 isLogin에 true 저장
@@ -97,6 +100,8 @@ function App() {
     localStorage.removeItem("access-token"); // localStorage의 access-token 삭제
     setIsLogin(false);
   };
+
+  const AuthMatchingPage = Auth(MatchingPage);
 
   return (
     <div className="App">
@@ -133,11 +138,13 @@ function App() {
         </Route>
 
         {/* 매칭 */}
-        <Route path="/matching" element={<MatchingPage />}>
+        {/* <Route path="/matching" element={<MatchingPage  />}> */}
+        <Route path="/matching" element={<AuthMatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
           <Route path="start" element={<MatchingStart />}></Route>
           <Route path="result" element={<MatchingResult />}></Route>
         </Route>
+        {/* </Route> */}
 
         {/* 커뮤니티 페이지 */}
 
