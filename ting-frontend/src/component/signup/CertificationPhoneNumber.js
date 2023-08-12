@@ -4,19 +4,43 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 
 import basicHttp from '../../api/basicHttp';
-import { setPhonenumber } from '../../redux/signup';
+import { setPhoneNumber } from '../../redux/signup';
 
 import styles from './SignupCommon.module.css'
 
 function CertificationPhonenumber(){
-  let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
+  // let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
+  
+  let [phonenumberFirst, setPhonenumberFirst] = useState("");
+  let [phonenumberMiddle, setPhonenumberMiddle] = useState("");
+  let [phonenumberLast, setPhonenumberLast] = useState("");
+  let [phonenumber, setPhonenumber] = useState("");
   let [phonenumberAuthCode, setPhonenumberAuthCode] = useState("");
+
+  let [isCheckPhonenumCode, setIsCheckPhonenumCode] = useState(false); // 휴대전화 인증버튼 클릭 시 true
+  let [isConfirmPhonenumCode, setIsConfirmPhonenumCode] = useState(false); // 휴대전화 인증 확인 시 true
   const Navigate = useNavigate()
   
   let dispatch = useDispatch();
 
   // 버튼 활성화 여부
   // let [isCertPhoneButtonDisabled, setIsCertPhoneButtonDisabled] = useState(true);
+
+  // 전화번호 형식에 맞게 저장
+  useEffect(() => {
+    const fullPhoneNumber = String(checkNumber(phonenumberFirst)) + String(checkNumber(phonenumberMiddle)) + String(checkNumber(phonenumberLast))
+    setPhonenumber(fullPhoneNumber);
+  }, [phonenumberFirst, phonenumberMiddle, phonenumberLast])
+
+  // 숫자만 입력 가능하도록
+  const checkNumber = (input) => {
+    const onlyNumbersRegex = /^[0-9]*$/;
+    if (onlyNumbersRegex.test(input)) {
+      return input
+    } else {
+      return false
+    }
+  };
 
   const checkPhonenumberCode = () => {
     let data = {
@@ -28,7 +52,8 @@ function CertificationPhonenumber(){
       basicHttp.post('/user/phoneauth', data).then((response) => {
         if (response.data.code === 200) {
           alert("인증 성공");
-          Navigate("/signup/detail");
+          setIsConfirmPhonenumCode(true);
+          return
         }
         else if (response.data.code === 400) {
           alert("인증 실패");
@@ -36,18 +61,32 @@ function CertificationPhonenumber(){
         else if (response.data.code === 401) {
           alert("문자 인증 실패");
         }
+        setIsConfirmPhonenumCode(false)
       })
       .catch(() => console.log("실패"));
     }
+    else {
+      alert("올바른 인증 코드를 입력해주세요.");
+    }
   };
 
-  // 인증번호 재전송
+  useEffect(() => {
+    if (isConfirmPhonenumCode) {
+      dispatch(setPhoneNumber(phonenumber)); // redux에 저장
+    }
+  },[isConfirmPhonenumCode])
+
+  // 휴대전화 인증하기 버튼 클릭 시 실행
   const checkPhonenumber = () => {
-    // 연락처에 '-' 제거 필요
+    // console.log(phonenumber.length)
+    if (phonenumber.length !== 11) {
+      alert("올바른 전화번호를 입력해주세요");
+      return
+    }
     basicHttp.get(`/user/phoneauth/${phonenumber}`).then((response) => {
       if (response.data.code === 200) {
         alert("인증 메세지가 전송되었습니다.");
-        dispatch(setPhonenumber(phonenumber));
+        setIsCheckPhonenumCode(true);
       }
       else if (response.data.code === 400) {
         alert("인증 실패");
@@ -59,22 +98,93 @@ function CertificationPhonenumber(){
     .catch(() => console.log("실패"));
   }
 
-  const authCodeInput = useRef();
-  useEffect(() => {
-    authCodeInput.current.focus();
-  })
+    // 엔터키로 버튼 누를 수 있게
+    const activeEnter = (e, check) => {
+      if(e.key === "Enter") {
+        switch (check) {
+          // case checkEmailCode:
+          //   checkEmailCode();
+          //   break;
+          // case checkEmail:
+          //   checkEmail();
+          //   break;
+        
+          default:
+            break;
+        }
+      }
+    }
 
   return(
     <div className={styles.wrapper}>
-      {/* <p>{ phonenumber }</p> */}
-      <label className={styles.label} htmlFor='phonenumber'>문자로 발송된 인증번호를 입력해주세요</label>
-      <br/>
-      <input className={styles.input} type="text" id="phonenumber"  value={ phonenumber } placeholder="전화번호" readOnly />
-      <br/>
-      <input ref={authCodeInput} className={styles.input} type="text" onChange={(e) => { setPhonenumberAuthCode(e.target.value) }} placeholder="인증번호 4자리"/>
-      <br/>
-      <button className={styles.btn} onClick={checkPhonenumberCode}>인증확인</button>
-      <button className={styles.btn} onClick={checkPhonenumber}>재전송</button>
+      <label 
+        className={styles.label} 
+        htmlFor='phonenumber'>
+        전화번호를 인증해주세요
+      </label>
+      {/* 휴대전화 인증 버튼 누르기 전 */}
+      <input 
+        className={styles.phonenumInput} 
+        type="text" 
+        id="phonenumberFirst" 
+        onChange={(e) => {setPhonenumberFirst(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
+      -
+      <input 
+        className={styles.phonenumInput} 
+        type="text" 
+        id="phonenumberMiddle" 
+        onChange={(e) => {setPhonenumberMiddle(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
+      -
+      <input 
+        className={styles.phonenumInput} 
+        type="text" 
+        id="phonenumberLast" 
+        onChange={(e) => {setPhonenumberLast(e.target.value)}} 
+        disabled={isCheckPhonenumCode}
+      />
+      {
+        !isCheckPhonenumCode &&
+        <button 
+          className={styles.btn} 
+          onClick={checkPhonenumber}>
+          인증하기
+        </button>
+      }
+
+      {/* 인증하기 버튼 누른 뒤 인증번호 입력 */}
+      {
+        isCheckPhonenumCode &&
+        (<>
+          <input 
+            className={styles.input} 
+            type="text" 
+            onChange={(e) => {setPhonenumberAuthCode(e.target.value)}} 
+            placeholder="인증번호 4자리"
+            disabled={isConfirmPhonenumCode}
+          />
+          <button 
+            className={styles.btn} 
+            onClick={checkPhonenumberCode}>
+            인증확인
+          </button>
+          {/* <button 
+            className={styles.btn} 
+            onClick={checkPhonenumber}>
+            재전송
+          </button> */}
+        </>)
+      }
+      <p className={styles.rightMsg}>
+        {
+          isConfirmPhonenumCode &&
+          "휴대전화 인증 성공"
+        }
+      </p>
+      
   </div>
   )
 }
