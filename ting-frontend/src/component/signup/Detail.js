@@ -7,12 +7,17 @@ import { setGender, setName, setRegion, setBirth, setNickname } from '../../redu
 import styles from './SignupCommon.module.css';
 import { regionList } from "../../SelectionDataList";
 
-function Detail(){
-  const Navigate = useNavigate()
+function Detail() {
+  const Navigate = useNavigate();
   // let [inputName, setInputName] = useState("");
   let [inputNickname, setInputNickname] = useState("");
+  let [checkNickname, setCheckNickname] = useState(false);
+  let [currentRegion, setCurrentRegion] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
+
+  let [openRegion, setOpenRegion] = useState(false);
+
   // let regionList = ["서울", "부산", "대구", "인천", "광주", 
   //   "대전", "울산", "경기", "강원" ,"충복", "충남", 
   //   "세종", "전북", "전남", "경북", "경남", "제주"];
@@ -64,12 +69,13 @@ function Detail(){
           }
           else {
             alert("닉네임 사용이 가능합니다.");
+            setCheckNickname(true);
             // redux 저장
-            dispatch(setNickname(inputNickname));
+            // dispatch(setNickname(inputNickname));
 
-            let copy_checkAllContents = [...checkAllContents];
-            copy_checkAllContents[1] = true;
-            setCheckAllContents(copy_checkAllContents);
+            // let copy_checkAllContents = [...checkAllContents];
+            // copy_checkAllContents[1] = true;
+            // setCheckAllContents(copy_checkAllContents);
           }
         }
         else if (response.data.code === 400) {
@@ -114,10 +120,50 @@ function Detail(){
     setCheckAllContents(copy_checkAllContents);
   }
 
+  // 지역 선택 드롭다운
+  const CustomDropDown = (props) => {
+    let callback;
+    let currentData;
+    switch (props.type) {
+      case "region":
+        callback = setCurrentRegion; currentData = currentRegion;
+        break;
+      // case "DRINKING":
+      //   callback = setCurrentDrinking; currentData = currentDrinking;
+      //   break;
+      // case "SMOKING":
+      //   callback = setCurrentSmoking; currentData = currentSmoking;
+      //   break;
+      // case "RELIGION":
+      //   callback = setCurrentReligion; currentData = currentReligion;
+      //   break;
+      // case "JOB":
+      //   callback = setCurrentRegion; currentData = currentJob;
+      //   break;
+    }
+  }
+
   // 추가 정보 입력하기 클릭 시
   const goToSelect = (moveTo) => {
     // 가입 완료하고, 선택정보 입력 페이지로 이동
     completeSignup(moveTo);
+  }
+
+  // 엔터키로 버튼 누를 수 있게
+  const activeEnter = (e, check) => {
+    if(e.key === "Enter") {
+      switch (check) {
+        case nicknameIsExist:
+          nicknameIsExist();
+          break;
+        // case checkEmail:
+        //   checkEmail();
+        //   break;
+      
+        default:
+          break;
+      }
+    }
   }
 
   // 회원가입 완료 클릭 시
@@ -172,13 +218,34 @@ function Detail(){
 
   return(
     <div className={styles.wrapper}>
-      <p>상세정보를 입력해주세요</p>
-      <input className={styles.input} id={styles.nameInput} type="text" onChange={(e) => { nameIsExist(e.target.value) }} placeholder="이름"></input>
-      <br></br>
-      <input className={styles.input} type="text" onChange={(e) => setInputNickname(e.target.value)} placeholder="닉네임"></input>
-      <button className={styles.btn} onClick={nicknameIsExist}>중복확인</button>
-      <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
-      
+      {/* <label>이름을 입력해주세요</label> */}
+      <div className={styles.nameContainer}>
+        <input 
+          className={styles.input} 
+          id={styles.nameInput} 
+          type="text" 
+          onChange={(e) => { nameIsExist(e.target.value) }} 
+          placeholder="이름"></input>
+        <div>
+          <input 
+            className={styles.input} 
+            type="text" 
+            onChange={(e) => setInputNickname(e.target.value)}
+            onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
+            placeholder="닉네임"></input>
+          <button 
+            className={styles.btn} 
+            onClick={nicknameIsExist}>
+          중복확인</button>
+          <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
+          <p>
+            {
+              checkNickname &&
+              "닉네임 중복 확인 완료"
+            }
+          </p>
+        </div>
+      </div>
       <button
         className={[styles.selectBtn, styles.genderBtn].join(" ")} 
         onClick={() => {
@@ -192,11 +259,46 @@ function Detail(){
           genderIsExist();
       }}>여</button>
       <br/>
-
-      <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input>
+      {/* 생년월일 - date Picker 사용하기 */}
+      {/* <input className={styles.input} id={styles.regionInput} type="text" onChange={(e) => birthIsExist(e.target.value)} placeholder="생년월일 8자리 (yyyy-mm-dd)"></input> */}
 
       <h3>지역 선택</h3>
-      {
+      
+      <div className={styles.updateDiv}>
+        <p className={styles.title}>직업</p>
+        <div className={styles.dropDown}>
+          <div className={styles.dropDownMenu} onClick={() => { setOpenRegion(!openRegion) }}>
+            {currentRegion && currentRegion.name}
+            <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
+          </div>
+          <div className={openRegion ? styles.isOpen : styles.isClose}>
+            <CustomDropDown items={regionList.map((region) => region.regionKor)} type="Region" />
+          </div>
+        </div>
+      </div>
+      {/* <div className={styles.dropDown}>
+        <div className={styles.dropDownMenu} onClick={() => { setOpenRegion(!openRegion) }}>
+          {currentMbti && currentMbti.name}
+          지역 선택
+          <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
+        </div>
+        <div className={openRegion ? styles.isOpen : styles.isClose}>
+          <CustomDropDown 
+            items={
+              regionList
+              .map((region) => region.regionKor)} 
+            type="region" />
+        </div>
+      </div> */}
+      {/* <CustomDropDown 
+        items={
+          regionList
+          .filter((region) =>
+            region.regionKor)
+          } 
+        type="region" /> */}
+
+      {/* {
         regionList.map((r,i) => {
           if(i % 9 == 8) {
             return (
@@ -212,7 +314,7 @@ function Detail(){
             )
           }
         })
-      }
+      } */}
       <br/>
       <button className={styles.btn} onClick={(e) => goToSelect("/signup/select/mbti")}>추가 정보 입력하기</button>
       <button className={styles.btn} onClick={(e) => completeSignup("/login")}>로그인 하러 가기</button>
