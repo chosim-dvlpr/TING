@@ -38,7 +38,7 @@ function SearchBar({ onSearch, boardType }) {
           <div value="title" className={styles.title}>제목</div>
         )}
     <input className={styles.searchInput} type="text" value={keyword} onChange={handleKeywordChange} />
-    <button className={styles.searchButton} onClick={handleSearch}>Search</button>
+    <button className={styles.searchButton} onClick={handleSearch}>검색</button>
   </div>
 );
 }

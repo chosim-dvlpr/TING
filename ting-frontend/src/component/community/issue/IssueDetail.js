@@ -180,12 +180,12 @@ function IssueDetail() {
               className={`${styles.voteArea} ${styles.agreeArea}`}
               style={{ flex: issue.agreeCount }}
             >
-              <p>
+            
                 {issue.agreeTitle} {issue.agreeCount}{" "}
                 <button className={styles.voteButton} onClick={handleAgree}>
                   찬성
                 </button>
-              </p>
+
             </div>
             <div
               className={`${styles.voteArea} ${styles.opposeArea}`}
