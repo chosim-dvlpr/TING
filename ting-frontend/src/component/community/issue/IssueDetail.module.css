@@ -50,11 +50,11 @@
 .voteContainer {
   
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    padding: 16px;
+    padding: 8px 16px;
 
     border-radius: 10px;
     box-shadow: 5px 5px 10px #c4c4c4, -5px -5px 10px #ffffff; 
@@ -64,24 +64,27 @@
   .voteButton {
     padding: 8px 16px;
     border: none;
-    background: #f0f0f0; /* Light background color */
+    background: #f0f0f0; 
     border-radius: 8px;
-    box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
+    box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff; 
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   }
   
   .voteButton:hover {
-    background: #e0e0e0; /* Slightly darker background color on hover */
-    box-shadow: 3px 3px 6px #c4c4c4, -3px -3px 6px #ffffff; /* Adjusted Neumorphism shadow on hover */
+    background: #e0e0e0; 
+    box-shadow: 3px 3px 6px #c4c4c4, -3px -3px 6px #ffffff; 
   }
   
   .voteArea { 
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 8px;
     border-radius: 8px;
     overflow: hidden;
     transition: flex 0.3s ease-in-out;
+    flex: 1;
   }
   
   .agreeArea {
