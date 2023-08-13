@@ -67,4 +67,10 @@ public class ItemController {
         itemService.useTicket(Long.parseLong(principal.getName()));
         return new CommonResponse(200, "티켓 사용 성공");
     }
+
+    @PutMapping("/item/fishRandomBox")
+    public DataResponse useFishSkin(Principal principal) {
+        ItemDto.FishSkinDto fishSkinDto = itemService.useFishRandomBox(Long.parseLong(principal.getName()));
+        return new DataResponse(200, "물고기 랜덤박스 사용 성공", fishSkinDto);
+    }
 }
