@@ -499,7 +499,7 @@ function MatchingStart() {
               {questionNumber === 0 ? (
                 <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
               ) : questionNumber === 11 ? (
-                <h1>끝이 났습니다.</h1>
+                <h1>질문 카드가 끝났습니다.</h1>
               ) : questionNumber === 12 ? (
                 <div className={styles.ScoreSumResult}>
                   <p> {sumYourScore}점 </p>
