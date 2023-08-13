@@ -49,7 +49,7 @@ function MainPage() {
   const wheelHandler = (e) => {
     // e.preventDefault();
     const { deltaY } = e;
-    const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
+    const { scrollTop } = outerDivRef.current && null; // 스크롤 위쪽 끝부분 위치
     const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
 
     if (deltaY > 0) {
@@ -148,16 +148,6 @@ function MainPage() {
     };
   }, []);
 
-  let options = {
-    anchors: [
-      "sectionOne",
-      "sectionTwo",
-      "sectionThree",
-      "sectionFour",
-      "sectionFive",
-    ],
-  };
-
   return (
     <MyContext.Provider value={{ wheelHandler, scrollStyle, noScrollStyle }}>
       <div ref={outerDivRef} className={styles.outer}>
@@ -166,34 +156,34 @@ function MainPage() {
 
         {/*section1 */}
         <div className={styles.wrapper}>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
-          <div class={styles.snowflake}>
+          <div className={styles.snowflake}>
             <img src="/img/heart_1.png"></img>
           </div>
           {/* <div className={styles.backgroundFish} id={styles.backgroundFish1}>
