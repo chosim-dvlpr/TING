@@ -9,12 +9,14 @@
 
 .label,
 .btn,
+.btnSecondary,
 .disabledBtn {
     margin: 10px;
 }
 
 .input,
 .btn,
+.btnSecondary,
 .disabledBtn,
 .phonenumInput,
 .selectBtn {
@@ -107,4 +109,17 @@
 .selectDataContainer {
     display: grid;
 	grid-template-columns: repeat(2, 1fr);
+}
+
+.btnSecondary {
+    border: none;
+    background-color: #c5e5ea;
+    color: #2e6070;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
+}
+
+.btnSecondary:hover {
+    background-color: #8bcad5;
 }

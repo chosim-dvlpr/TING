@@ -19,10 +19,37 @@ function CertificationPhonenumber(){
 
   let [isCheckPhonenumCode, setIsCheckPhonenumCode] = useState(false); // 휴대전화 인증버튼 클릭 시 true
   let [isConfirmPhonenumCode, setIsConfirmPhonenumCode] = useState(false); // 휴대전화 인증 확인 시 true
-  const Navigate = useNavigate()
   
+  const onlyNumbersRegex = /^[0-9]*$/;
+  const phonenumberFirstRef = useRef("");
+  const phonenumberMiddleRef = useRef("");
+  const phonenumberLastRef = useRef("");
+  
+  const Navigate = useNavigate()
   let dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!onlyNumbersRegex.test(phonenumberFirst)) {
+      alert("숫자를 입력하세요.")
+      phonenumberFirstRef.current.value = "";
+    }
+  }, [phonenumberFirst, phonenumberMiddle, phonenumberLast])
+
+  useEffect(() => {
+    if (!onlyNumbersRegex.test(phonenumberMiddle)) {
+      alert("숫자를 입력하세요.")
+      phonenumberMiddleRef.current.value = "";
+    }
+  }, [phonenumberMiddle])
+
+  useEffect(() => {
+    if (!onlyNumbersRegex.test(phonenumberLast)) {
+      alert("숫자를 입력하세요.")
+      phonenumberLastRef.current.value = "";
+    }
+  }, [phonenumberLast])
+
+  
   // 버튼 활성화 여부
   // let [isCertPhoneButtonDisabled, setIsCertPhoneButtonDisabled] = useState(true);
 
@@ -78,7 +105,6 @@ function CertificationPhonenumber(){
 
   // 휴대전화 인증하기 버튼 클릭 시 실행
   const checkPhonenumber = () => {
-    // console.log(phonenumber.length)
     if (phonenumber.length !== 11) {
       alert("올바른 전화번호를 입력해주세요");
       return
@@ -125,25 +151,31 @@ function CertificationPhonenumber(){
       {/* 휴대전화 인증 버튼 누르기 전 */}
       <input 
         className={styles.phonenumInput} 
+        ref={phonenumberFirstRef}
         type="text" 
         id="phonenumberFirst" 
         onChange={(e) => {setPhonenumberFirst(e.target.value)}} 
+        maxLength={3}
         disabled={isCheckPhonenumCode}
       />
       -
       <input 
         className={styles.phonenumInput} 
+        ref={phonenumberMiddleRef}
         type="text" 
         id="phonenumberMiddle" 
         onChange={(e) => {setPhonenumberMiddle(e.target.value)}} 
+        maxLength={4}
         disabled={isCheckPhonenumCode}
       />
       -
       <input 
         className={styles.phonenumInput} 
+        ref={phonenumberMiddleRef}
         type="text" 
         id="phonenumberLast" 
         onChange={(e) => {setPhonenumberLast(e.target.value)}} 
+        maxLength={4}
         disabled={isCheckPhonenumCode}
       />
       {
