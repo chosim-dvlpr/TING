@@ -4,11 +4,13 @@ import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.item.FishSkin;
 import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
 import com.ssafy.tingbackend.item.dto.InventoryDto;
+import com.ssafy.tingbackend.item.repository.FishSkinRepository;
 import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
@@ -56,6 +58,7 @@ public class UserService {
     private final EmailRepository emailRepository;
     private final PhoneNumberAuthRepository phoneNumberRepository;
     private final InventoryRepository inventoryRepository;
+    private final FishSkinRepository fishSkinRepository;
 
     private final SmsService smsService;
 
@@ -121,6 +124,11 @@ public class UserService {
         if (userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
         if (userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
         if (userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        // 기본 제공 물고기 스킨
+        FishSkin defaultSkin = fishSkinRepository.findById(1L)
+                .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_FOUND));
+        user.setFishSkin(defaultSkin);
 
         userRepository.save(user); // DB에 저장
 

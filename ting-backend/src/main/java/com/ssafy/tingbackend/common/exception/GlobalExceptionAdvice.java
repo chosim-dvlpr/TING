@@ -3,12 +3,15 @@ package com.ssafy.tingbackend.common.exception;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @Slf4j
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(CommonException.class)
@@ -19,6 +22,7 @@ public class GlobalExceptionAdvice {
 
         return new CommonResponse(e.getExceptionType().getCode(), e.getExceptionType().getMessage());
     }
+
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public CommonResponse httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e) {
