@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { useCallback, useState, forwardRef, useEffect } from "react"
+import { useCallback, useState, forwardRef, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import basicHttp from '../../api/basicHttp';
 import { setGender, setName, setRegion, setBirth, setNickname, completeSignupStep } from '../../redux/signup';
@@ -13,11 +13,15 @@ function Detail() {
   const Navigate = useNavigate();
   // let [inputName, setInputName] = useState("");
   let [inputNickname, setInputNickname] = useState("");
+  let inputNicknameRef = useRef();
   let [checkNickname, setCheckNickname] = useState(false);
+  const [nicknameMsg, setNicknameMsg] = useState("");
   let [currentRegion, setCurrentRegion] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
-  
+  let [count, setCount] = useState(0);
+  const [genderSelected, setGenderSelected] = useState();
+
   // 생년월일
   const [birthDate, setBirthDate] = useState("");
 
@@ -29,6 +33,8 @@ function Detail() {
 
   // 한글만 허용하는 패턴
   const koreanPattern = /^[가-힣]*$/;
+  const koreanPatternAll = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z]*[ㄱ-ㅎㅏ-ㅣ가-힣]+[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z]*$/
+
 
   // 이름 작성 확인
   const nameIsExist = (data) => {
@@ -48,7 +54,7 @@ function Detail() {
     // 닉네임 한글 확인
     // 한글이 아닌 글자가 있다면 경고메세지 출력
     if (!koreanPattern.test(inputNickname)) {
-      alert("한글만 입력해주세요.");
+      alert("한글만 입력 가능합니다.");
     }
     else {
       basicHttp.get(`/user/nickname/${inputNickname}`).then((response) => {
@@ -81,9 +87,9 @@ function Detail() {
     dispatch(setBirth(selectedBirth)); // Redux 상태에 저장
   }
 
-  useEffect(() => {
-    checkAdult();
-  }, [handleBirthChange])
+  // useEffect(() => {
+  //   checkAdult();
+  // }, [handleBirthChange])
 
   const checkAdult = () => {
     const year = signupReducer.birth && signupReducer.birth.slice(0,4);
@@ -93,7 +99,7 @@ function Detail() {
 
     if (signupReducer.birth &&
         currentYear - Number(year) < 19) {
-      alert("19세 이상의 성인만 회원가입 가능합니다.");
+      alert("성인만 회원가입 가능합니다.");
       setBirth(null);
       return false
     }
@@ -108,6 +114,13 @@ function Detail() {
   useEffect(() => {
     dispatch(setRegion(currentRegion.regionEn)); // Redux 상태에 저장
   }, [currentRegion])
+
+  useEffect(() => {
+    if (inputNickname && !koreanPatternAll.test(inputNickname)) {
+      setNicknameMsg("한글만 입력 가능합니다.")
+      // inputNicknameRef.current.value = "";
+    }
+  }, [inputNickname])
 
   // 엔터키로 버튼 누를 수 있게
   const activeEnter = (e, check) => {
@@ -124,39 +137,36 @@ function Detail() {
   const checkAllData = () => {
     const checkDataList = ["email", "password", "phoneNumber", "name", 
       "nickname", "gender", "birth", "region"];
-    
-    checkDataList.map((data) => {
-      if (!signupReducer.data) {
-        return false
+      let count = 0;
+
+    checkDataList.forEach((data) => {
+      if (!signupReducer[data]) { // 빈 값이 있다면 1 추가
+        count++;
       }
     })
-    return true
+
+    // 빈 값이 있다면
+    if (count > 0) {
+      return false
+    }
+    else {
+      return true
+    }
   }
 
   // 회원가입 완료 클릭 시
-  const completeSignup = (moveTo) => {
+  const goToSignupComplete = (moveTo) => {
     // 모두 값이 있다면 회원가입 요청
+    console.log(checkAllData())
+    // console.log(checkAdult())
     if (!checkAllData()) {
       alert("모든 항목을 입력 또는 체크해주세요.");
-      // dispatch(completeSignupStep()); // 나중에 삭제하기
     }
     else if (!checkAdult()) {
-      alert("19세 이상의 성인만 회원가입 가능합니다.");
+      alert("성인만 회원가입 가능합니다.");
     }
-    else {
-      basicHttp.post('/user/signup', signupReducer).then((response) => {
-        // console.log(response)
-        // console.log(signupReducer)
-        if (response.data.code === 200) {
-          alert("회원가입이 완료되었습니다.");
-          Navigate(moveTo, { state : { name: signupReducer.name }});
-        }
-        else if (response.data.code === 400) {
-          alert("회원 가입 실패");
-        }
-      })
-    }
-    }
+    else {Navigate(moveTo)}
+  }
 
   return(
     <div className={styles.wrapper}>
@@ -170,7 +180,8 @@ function Detail() {
           placeholder="이름"></input>
         <div>
           <input 
-            className={styles.input} 
+            className={styles.input}
+            ref={inputNicknameRef} 
             type="text" 
             onChange={(e) => setInputNickname(e.target.value)}
             onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
@@ -180,6 +191,7 @@ function Detail() {
             onClick={() => nicknameIsExist()}>
           중복확인</button>
           <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
+          <p className={styles.wrongMsg}>{ nicknameMsg }</p>
           <p className={styles.rightMsg}>
             {
               checkNickname &&
@@ -189,14 +201,16 @@ function Detail() {
         </div>
       </div>
       <button
-        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
+        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "M" && styles.genderSelected}`} 
         onClick={() => {
           dispatch(setGender("M"));
+          setGenderSelected("M");
       }}>남</button>
       <button
-        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
+        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "F" && styles.genderSelected}`} 
         onClick={() => {
           dispatch(setGender("F"));
+          setGenderSelected("F");
       }}>여</button>
       <br/>
 
@@ -205,7 +219,9 @@ function Detail() {
         type="date" 
         onChange={(e) => {
           handleBirthChange(e.target.value)
-        }}></input>
+        }}
+        max="2004-12-31"
+        ></input>
       <br/>
 
       <Dropdown>
@@ -228,8 +244,11 @@ function Detail() {
       </Dropdown>
       <p>{ currentRegion.regionKor }</p>
       <br/>
-
-      <button className={styles.btn} onClick={() => completeSignup("/signup/complete")}>회원가입 완료</button>
+      {/* <label>추가 정보를 입력하시면 매칭 정확도가 올라가요!</label> */}
+      <button className={styles.btn} onClick={() => goToSignupComplete("/signup/complete")}>다음</button>
+      {/* <br/>
+      <label>추가 정보 입력하지 않고 완료할게요!</label>
+      <button className={styles.btn} onClick={() => completeSignup("/signup/complete")}>회원가입 완료</button> */}
     </div>
   )
 }
