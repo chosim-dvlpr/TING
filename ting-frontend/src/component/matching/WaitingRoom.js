@@ -196,7 +196,7 @@ function WaitingRoom() {
           {/* 오른쪽 영상 박스 */}
           <Col className={`col-7 ${styles.leftBox}`}>
             { isVideoOn ?  (
-              <Webcam className={styles.Webcam} audio={true} video={true}/>
+              <Webcam className={styles.Webcam} video={true}/>
             ) : (
               <div className={styles.loadingSpinner}>
                 <div className={styles.spinner}></div>
