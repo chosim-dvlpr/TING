@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
@@ -70,13 +69,13 @@ function AdviceBoard() {
     }
   };
 
-
-
   // 검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
+  const [searchClicked, setSearchClicked] = useState(false);
 
   const handleSearch = async ({ keyword }) => {
     try {
+      setSearchClicked(true);
       const response = await tokenHttp.get(`/advice/search/`, {
         params: {
           pageNo: 1, // 검색 시 첫 번째 페이지부터 조회
@@ -92,10 +91,12 @@ function AdviceBoard() {
       console.error("Error fetching search results:", error);
     }
   };
-  
+
   useEffect(() => {
     console.log("============search Result", searchResult);
   }, [searchResult]);
+
+  // ... (이전 코드)
 
   return (
     <div className={styles.adviceBoardBackground}>
@@ -111,33 +112,36 @@ function AdviceBoard() {
         <div>
           <table className={styles.adviceTable}>
             <tbody>
-              {(searchResult.length > 0 ? searchResult : adviceList).map(
-                (advice, index) => (
-                  <tr key={advice.adviceId}>
-                    <td className={styles.table_1}>{advice.adviceId}</td>
-                    <td className={styles.table_2}>
-                      <span
-                        className={styles.link}
-                        onClick={(event) =>
-                          handleLinkClick(advice.adviceId, event)
-                        }
-                      >
-                        {advice.title}
-                      </span>
-                    </td>
-                    <td className={styles.table_3}>{advice.hit}</td>
-                    <td className={styles.table_4}>
-                      {advice.modifiedTime === null
-                        ? getDate(advice.createdTime)
-                        : `${getDate(advice.modifiedTime)}`}
-                    </td>
-                  </tr>
+              {searchClicked && searchResult.length === 0 ? (
+                <div>검색 결과가 없습니다.</div>
+              ) : (
+                (searchResult.length > 0 ? searchResult : adviceList).map(
+                  (advice, index) => (
+                    <tr key={advice.adviceId}>
+                      <td className={styles.table_1}>{advice.adviceId}</td>
+                      <td className={styles.table_2}>
+                        <span
+                          className={styles.link}
+                          onClick={(event) =>
+                            handleLinkClick(advice.adviceId, event)
+                          }
+                        >
+                          {advice.title}
+                        </span>
+                      </td>
+                      <td className={styles.table_3}>{advice.hit}</td>
+                      <td className={styles.table_4}>
+                        {advice.modifiedTime === null
+                          ? getDate(advice.createdTime)
+                          : `${getDate(advice.modifiedTime)}`}
+                      </td>
+                    </tr>
+                  )
                 )
               )}
             </tbody>
           </table>
         </div>
-
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

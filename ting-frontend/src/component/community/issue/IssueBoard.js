@@ -63,9 +63,11 @@ function IssueBoard() {
 
   //검색 기능 추가
   const [searchResult, setSearchResult] = useState([]);
+  const [searchClicked, setSearchClicked] = useState(false);
 
   const handleSearch = async ({ keyword, item }) => {
     try {
+      setSearchClicked(true);
       const response = await tokenHttp.get(`/issue/search/`, {
         params: {
           pageNo: 1, // 검색 시 첫 번째 페이지부터 조회
@@ -78,7 +80,6 @@ function IssueBoard() {
       setSearchResult(searchData.data.issueBoardList);
       setTotalPages(searchData.data.totalPages); // 검색 결과에 따른 totalPages 설정
       setCurrentPage(1); // 검색 시 첫 번째 페이지로 이동
-    
 
       console.log("===========Search Data:", searchData);
 
@@ -129,36 +130,42 @@ function IssueBoard() {
         </div>
 
         <div className={styles.cardList}>
-          {(searchResult.length > 0 ? searchResult : issueList).map((issue) => (
-            <div
-              key={issue.issueId}
-              className={styles.card}
-              style={getCardStyle(issue)}
-            >
-              <div className={styles.title}>
-                <span>
-                  {Math.round(
-                    (issue.agreeCount /
-                      (issue.agreeCount + issue.opposeCount)) *
-                      100
-                  )}
-                </span>
+          {searchClicked && searchResult.length === 0 ? (
+            <div className={styles.noResults}>검색 결과가 없습니다.</div>
+          ) : (
+            (searchResult.length > 0 ? searchResult : issueList).map(
+              (issue) => (
                 <div
-                  className={styles.link}
-                  onClick={(event) => handleLinkClick(issue.issueId, event)}
+                  key={issue.issueId}
+                  className={styles.card}
+                  style={getCardStyle(issue)}
                 >
-                  {issue.title}
+                  <div className={styles.title}>
+                    <span>
+                      {Math.round(
+                        (issue.agreeCount /
+                          (issue.agreeCount + issue.opposeCount)) *
+                          100
+                      )}
+                    </span>
+                    <div
+                      className={styles.link}
+                      onClick={(event) => handleLinkClick(issue.issueId, event)}
+                    >
+                      {issue.title}
+                    </div>
+                    <span>
+                      {Math.round(
+                        (issue.opposeCount /
+                          (issue.agreeCount + issue.opposeCount)) *
+                          100
+                      )}
+                    </span>
+                  </div>
                 </div>
-                <span>
-                  {Math.round(
-                    (issue.opposeCount /
-                      (issue.agreeCount + issue.opposeCount)) *
-                      100
-                  )}
-                </span>
-              </div>
-            </div>
-          ))}
+              )
+            )
+          )}
         </div>
 
         <Pagination
