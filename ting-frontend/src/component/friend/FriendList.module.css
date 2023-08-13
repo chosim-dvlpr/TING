@@ -75,15 +75,19 @@
   background-color: #fae6e8;
 }
 
-
 .dead {
   background-color: grey;
 }
 
-.image {
+/* .image {
   background-color: white;
   border-radius: 50%;
   width: 48px;
+} */
+.image img {
+  width: 69px;
+  height: auto;
+  margin-top: -10px;
 }
 
 .middle {
@@ -95,7 +99,6 @@
 }
 
 .nickname {
-
 }
 
 .content {
@@ -126,7 +129,11 @@
   background-color: inherit;
   border: none;
 }
-.friendItem img {
+/* .friendItem img {
+  height: 20px;
+} */
+
+.kebab {
   height: 20px;
 }
 
@@ -150,7 +157,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-
 /* 드롭다운 컨테이너의 스타일 추가 */
 .dropdown {
   position: relative;
@@ -169,7 +175,7 @@
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   right: 0;
 }
@@ -194,4 +200,3 @@
 .dropdownContent button:hover {
   background-color: #f1f1f1;
 }
-

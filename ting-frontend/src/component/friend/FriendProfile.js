@@ -7,8 +7,10 @@ import styles from './FriendProfile.module.css';
 function FriendProfile(props){
   let dispatch = useDispatch();
 
-  let [friendProfile, setFriendProfile] = useState([]);
+  const [friendProfile, setFriendProfile] = useState([]);
   
+  const [friendImg, setFriendImg] = useState("");
+
   const friendProfileAxios = () => {
     basicHttp.get(`/friend/profile/${props.userId}`).then((response) => {
       // 불러오기 성공 시 friendList에 친구목록 저장
@@ -16,6 +18,7 @@ function FriendProfile(props){
         console.log('프로필 불러오기 성공');
         console.log(response.data.data);
         setFriendProfile(response.data.data);
+        setFriendImg(response.data.data.fishSkin)
       }
       else if (response.data.code === 400) {
         console.log('프로필 불러오기 실패');
@@ -34,11 +37,15 @@ function FriendProfile(props){
   };
 
 
+
+
   return (
     <div>
       <button className={styles.closeButton} onClick={() => closeProfileModal()}>X</button>
       {/* 프로필 이미지 추가 필요 */}
-      <div className={styles.image}></div>
+      <div className={styles.image}>
+      <img  src={`https://i9b107.p.ssafy.io:5157/${friendImg}`} alt="물고기 스킨" className={styles.friendImg}></img>
+      </div>
       <div className={styles.nickname}>{ friendProfile.nickname }</div>
       <div className={styles.temp}>{friendProfile.temperature}℃</div>
       <div className={styles.introduce}>자기소개{ friendProfile.introduce }</div>

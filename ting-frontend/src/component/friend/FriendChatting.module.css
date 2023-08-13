@@ -41,11 +41,18 @@
 }
 
 .imageButton {
-  background-color: #fae6e8;
   border: none;
   border-radius: 50%;
   width: 48px;
   height: 48px;
+  background-color: white;
+}
+
+.fishSkinImage {
+  width: 53px;
+  height: 53px;
+  margin-left: -6px;
+  margin-top: -4px;
 }
 
 .nickname {
