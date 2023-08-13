@@ -390,4 +390,24 @@ public class BoardService {
         }
         return commentDtoList;
     }
+
+    public List<Long> myLikeList(BoardType boardType, Long boardId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        List<Comment> commentList = new ArrayList<>();
+        if(boardType.equals(BoardType.ADVICE)) {
+            commentList = commentRepository.findAllAdvice(boardId);
+        } else if(boardType.equals(BoardType.ISSUE)) {
+            commentList = commentRepository.findAllIssue(boardId);
+        }
+
+        List<Long> myLikeList = new ArrayList<>();
+        for(Comment comment: commentList) {
+            Long commentId = commentLikeRepository.findByCommentAndUser(comment.getId(), user.getId());
+            if(commentId != null) myLikeList.add(commentId);
+        }
+
+        return myLikeList;
+    }
 }

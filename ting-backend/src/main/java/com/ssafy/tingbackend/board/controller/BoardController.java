@@ -251,6 +251,19 @@ public class BoardController {
     }
 
     /**
+     * 내 댓글 좋아요 목록 조회 API
+     * @param principal 로그인한 유저의 id (자동주입)
+     * @param boardType, boardId
+     * @return 댓글 목록 리스트
+     */
+    @GetMapping("/comment/like/{boardType}/{boardId}")
+    public DataResponse<List<Long>> listComment(@PathVariable BoardType boardType, @PathVariable Long boardId, Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        List<Long> myLikeList = boardService.myLikeList(boardType, boardId, userId);
+        return new DataResponse<>(200, "내 댓글 좋아요 목록 조회 성공", myLikeList);
+    }
+
+    /**
      * 댓글 좋아요 등록 API
      * @param principal 로그인한 유저의 id (자동주입)
      * @param commentId
