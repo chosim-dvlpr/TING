@@ -1,5 +1,9 @@
+.signupAll {
+    text-align: left;
+}
+
 .wrapper {
-    margin: 20px;
+    margin: 50px;
 }
 
 .wrapper * {
@@ -11,7 +15,7 @@
 .btn,
 .btnSecondary,
 .disabledBtn {
-    margin: 10px;
+    /* margin: 10px; */
 }
 
 .input,
@@ -26,11 +30,17 @@
 
 .label {
     color: rgb(145, 145, 145);
+    font-size: 1rem;
 }
 
 .input {
     border: 2px solid gray;
     margin: 5px 0;
+}
+
+.code {
+    margin-left: 20px;
+    width: 150px;
 }
 
 .phonenumInput {
@@ -126,4 +136,9 @@
 
 .btnSecondary:hover {
     background-color: #8bcad5;
+}
+
+
+.checkEmail {
+    margin-left: 15px;
 }

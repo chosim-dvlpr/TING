@@ -123,6 +123,14 @@ function LoginPage() {
         >
           로그인
         </button>
+        <button
+          className={styles.btnSecondary}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          메인으로 돌아가기
+        </button>
       </div>
     </div>
   );
