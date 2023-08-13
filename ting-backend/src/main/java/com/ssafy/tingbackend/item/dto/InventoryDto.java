@@ -20,6 +20,7 @@ public class InventoryDto {
     private int quantity;
 
     private String name;
+    private String description;
 
     public static InventoryDto of(Inventory inventory) {
         return InventoryDto.builder()
@@ -28,6 +29,7 @@ public class InventoryDto {
                 .itemType(inventory.getItemType())
                 .quantity(inventory.getQuantity())
                 .name(inventory.getItemType().getName())
+                .description(inventory.getItemType().getDescription())
                 .build();
     }
 }
