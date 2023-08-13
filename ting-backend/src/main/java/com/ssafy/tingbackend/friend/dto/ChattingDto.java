@@ -24,6 +24,8 @@ public class ChattingDto {
     private Long userId;
     private Integer unread;
 
+    private String fishSkin;
+
     public static ChattingDto of(Chatting chatting, User friend, Integer unread) {
         return ChattingDto.builder()
                 .chattingId(chatting.getId())
@@ -35,6 +37,7 @@ public class ChattingDto {
                 .nickname(friend.getNickname())
                 .userId(friend.getId())
                 .unread(unread)
+                .fishSkin(friend.getFishSkin().getImagePath())
                 .build();
     }
 }
