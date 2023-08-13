@@ -301,7 +301,7 @@ function MatchingStart() {
       if (data.userId === userData.userId) return;
       
       // 점수 선택시 양쪽 다 점수 소리 들리게
-      if (data.questionNumber > 0 && data.questionNumber < 12) {
+      if (data.questionNumber > 0 && data.questionNumber < 11) {
         makeSoundMessage(data.score);
       }
 
