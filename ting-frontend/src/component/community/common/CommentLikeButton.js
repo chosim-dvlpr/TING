@@ -6,6 +6,8 @@ function CommentLikeButton({ commentId, initialLikes, onUpdateLikes }) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(false);
 
+  
+
   const handleLikeClick = async () => {
     try {
       const newLikes = liked ? likes - 1 : likes + 1;
@@ -33,7 +35,19 @@ function CommentLikeButton({ commentId, initialLikes, onUpdateLikes }) {
 
   return (
     <div className={styles.buttonContainer} onClick={handleLikeClick}>
-      {liked ? <img className={styles.heartIcon} src="/img/filled-heart.png" alt="Filled Heart" /> : <img className={styles.heartIcon} src="/img/empty-heart.png" alt="Empty Heart" />}
+      {liked ? (
+        <img
+          className={styles.heartIcon}
+          src="/img/filled-heart.png"
+          alt="Filled Heart"
+        />
+      ) : (
+        <img
+          className={styles.heartIcon}
+          src="/img/empty-heart.png"
+          alt="Empty Heart"
+        />
+      )}
       좋아요 {likes}
     </div>
   );

@@ -153,11 +153,8 @@ function FriendList({
 
   // 친구 살리기
 
-
-
-
   const reviveFriend = (chattingId) => {
-    tokenHttp.put(`/friend/${chattingId}`)
+    tokenHttp.put(`/item/reviveFish/${chattingId}`)
       .then((response) => {
         if (response.data.code === 200){
           console.log("친구 부활 성공");
