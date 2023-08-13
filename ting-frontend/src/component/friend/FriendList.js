@@ -168,6 +168,7 @@ function FriendList({
   }
   
 
+
   return (
     <div>
       <div className={styles.top}>
@@ -209,7 +210,9 @@ function FriendList({
                   }
                 }}
               >
-                <div className={styles.image}></div>
+                <div className={styles.image}>
+              <img  src={`https://i9b107.p.ssafy.io:5157/${friend.fishSkin}`} alt="물고기 스킨"></img>
+            </div>
                 <div className={styles.middle}>
                   <div className={styles.nickname}>{friend.nickname}</div>
                   <div className={styles.content}>
@@ -229,7 +232,7 @@ function FriendList({
                 <div className={styles.dropdown}>
                   <button onClick={(e) => e.stopPropagation()}>
                     {/* 부모 클릭 방지 */}
-                    <img src="/img/kebab.png" alt="kebab" />
+                    <img className={styles.kebab} src="/img/kebab.png" alt="kebab" />
                   </button>
                   <div className={styles.dropdownContent}>
                     <button onClick={() => handleDelete(friend.chattingId)}>
