@@ -190,7 +190,7 @@ function WaitingRoom() {
 
 
   return (
-    <div>
+    <div className={styles.outer}>
       <NavBar/>
       <div className={styles.waitingMenu}>
         <button className={styles.button} onClick={()=>{navigate("/item/shop")}}>아이템샵</button>

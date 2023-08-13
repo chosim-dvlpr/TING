@@ -444,7 +444,7 @@ function MatchingStart() {
   }
 
   return (
-    <>
+    <div className={styles.outer}>
 
       <div className={`${styles.container}`}>
         {/* 최종 선택 */}
@@ -541,7 +541,7 @@ function MatchingStart() {
           {/* 점수 체크판 -- end */}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

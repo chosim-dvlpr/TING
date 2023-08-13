@@ -5,6 +5,10 @@
   font-style: normal;
 }
 
+.outer{
+  overflow: hidden;
+}
+
 video {
   width: 100%;
   margin:10px 0;
