@@ -19,16 +19,16 @@ function FriendList({
   showFriendChatting,
   setChattingObj,
 }) {
-  let [friendList, setFriendList] = useState([]);
+  const [friendList, setFriendList] = useState([]);
   // let [isModal, setIsModal] = useState(true);
   // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
-  let userdata = useSelector((state) => state.userdataReducer);
-  let [searchFriendNickname, setSearchFriendNickname] = useState("");
+  const userdata = useSelector((state) => state.userdataReducer);
+  const [searchFriendNickname, setSearchFriendNickname] = useState("");
 
-  let Navigate = useNavigate();
+  const Navigate = useNavigate();
 
   // 친구 찾기 버튼 클릭 시 true
-  let [isSearchFriend, setIsSearchFriend] = useState(false);
+  const [isSearchFriend, setIsSearchFriend] = useState(false);
 
   // 친구 찾기
   const searchFriend = (searchFriendNickname) => {};
@@ -43,13 +43,6 @@ function FriendList({
           console.log("친구 목록 불러오기 성공");
           setFriendList(response.data.data); // 친구 리스트 state에 저장
           console.log(response.data.data);
-
-          // 각 친구 정보에서 chattingId 추출
-          const friendChattingIds = response.data.data.map(
-            (friend) => friend.chattingId
-          );
-          console.log(friendChattingIds); // 배열에 있는 친구들의 chattingId 목록
-
         } else if (response.data.code === 400) {
           console.log("실패");
         }
@@ -114,12 +107,69 @@ function FriendList({
       const confirmDelete = window.confirm("친구를 삭제하시겠습니까?");
       if (confirmDelete) {
         await tokenHttp.delete(`/friend/${chattingId}`);
-        Navigate("/")
+        Navigate("/");
       }
     } catch (error) {
       console.error("친구 삭제 에러:".error);
     }
   };
+
+  // 친구 살리기 기능
+  const [showReviveConfirmation, setShowReviveConfirmation] = useState(false);
+
+  const handleReviveConfirmation = () => {
+    setShowReviveConfirmation(true);
+  };
+
+  const handleCloseReviveConfirmation = () => {
+    setShowReviveConfirmation(false);
+  };
+
+  // 유저의 보유 아이템 조회
+  const [userItemQuantity, setUserItemQuantity] = useState("");
+
+  const userItemAxios = () => {
+    tokenHttp.get("/item/user").then((response) => {
+      if (response.data.code === 200) {
+        console.log("유저 아이템 불러오기 성공");
+        const items = response.data.data; // 배열 내의 객체들
+        const targetItem = items.find(
+          (item) => item.name === "물고기 부활 티켓"
+        );
+        if (targetItem) {
+          setUserItemQuantity(targetItem.quantity);
+        } else {
+          setUserItemQuantity(0); // 해당 아이템을 찾지 못한 경우
+        }
+      } else if (response.data.code === 400) {
+        console.log("실패");
+      }
+    });
+  };
+
+  useEffect(() => {
+    userItemAxios();
+  }, []);
+
+  // 친구 살리기
+
+
+
+
+  const reviveFriend = (chattingId) => {
+    tokenHttp.put(`/friend/${chattingId}`)
+      .then((response) => {
+        if (response.data.code === 200){
+          console.log("친구 부활 성공");
+          console.log(response.data.code)
+          alert("친구 부활에 성공했습니다.");
+          friendListAxios(); // 최신 친구 목록 가져오기
+        } else {
+          console.log("친구 부활 실패");
+        }
+      });
+  }
+  
 
   return (
     <div>
@@ -135,7 +185,6 @@ function FriendList({
         <input
           type="text"
           onChange={(e) => setSearchFriendNickname(e.target.value)}
-          onSubmit={() => searchFriend(searchFriendNickname)}
         ></input>
         <button
           className={styles.searchButton}
@@ -144,103 +193,78 @@ function FriendList({
           검색
         </button>
       </div>
-      {/* 친구 리스트 임시 버튼 */}
-      {/* <button onClick={() => Navigate("/friend/chat")}>여기를 누르면 채팅창으로 이동</button> */}
       <div className={styles.list}>
-        {/* 찾으려는 닉네임이 공백이 아닐 때 - filter */}
-        {/* 입력한 값이 닉네임에 포함되어 있다면 필터링됨 */}
-        {searchFriendNickname
-          ? friendList
-              .filter((friend) =>
-                friend.nickname.includes(searchFriendNickname)
-              )
-              .map((friend, i) => {
-                return (
-                  <div key={i}>
-                    <div
-                      className={styles.friendItem}
-                      onClick={() => {
-                        handleClickEnterRoom({
-                          roomIndex: friend.chattingId,
-                          friend: friend,
-                        });
-                      }}
-                    >
-                      <div className={styles.image}></div>
-                      <div className={styles.middle}>
-                        <div className={styles.nickname}>{friend.nickname}</div>
-                        <div className={styles.content}>
-                          {friend.lastChattingContent}
-                        </div>
-                      </div>
-                      <div>
-                        <div className={styles.time}>
-                          {getTime(friend.lastChattingTime)}
-                        </div>
-                        <div className={styles.unread}>
-                          {messageLogsObject[friend.chattingId]
-                            ? messageLogsObject[friend.chattingId].length
-                            : 0}
-                        </div>
-                      </div>
-                      <button onClick={() => handleDelete(friend.chattingId)}>
-
-                        <img
-                          src="/img/kebab.png"
-                          alt="kebab"
-                          className={styles.dropdownKebab}
-                        />
-                      </button>
-                    </div>
+        {friendList
+          .filter((friend) => friend.nickname.includes(searchFriendNickname))
+          .map((friend, i) => (
+            <div key={i}>
+              <div
+                className={`${styles.friendItem} 
+                ${friend.state === "ALIVE" ? styles.alive : styles.dead}`}
+                onClick={() => {
+                  if (friend.state === "DEAD") {
+                    handleReviveConfirmation();
+                  } else {
+                    handleClickEnterRoom({
+                      roomIndex: friend.chattingId,
+                      friend: friend,
+                    });
+                  }
+                }}
+              >
+                <div className={styles.image}></div>
+                <div className={styles.middle}>
+                  <div className={styles.nickname}>{friend.nickname}</div>
+                  <div className={styles.content}>
+                    {friend.lastChattingContent}
                   </div>
-                );
-              })
-          : friendList.map((friend, i) => {
-              return (
-                <div key={i}>
-                  <div
-                    className={styles.friendItem}
-                    onClick={() => {
-                      handleClickEnterRoom({
-                        roomIndex: friend.chattingId,
-                        friend: friend,
-                      });
-                    }}
-                  >
-                    <div className={styles.image}></div>
-                    <div className={styles.middle}>
-                      <div className={styles.nickname}>{friend.nickname}</div>
-                      <div className={styles.content}>
-                        {friend.lastChattingContent}
-                      </div>
-                    </div>
-                    <div>
-                      <div className={styles.time}>
-                        {getTime(friend.lastChattingTime)}
-                      </div>
-                      <div className={styles.unread}>
-                        {messageLogsObject[friend.chattingId]
-                          ? messageLogsObject[friend.chattingId].length
-                          : 0}
-                      </div>
-                    </div>
+                </div>
+                <div>
+                  <div className={styles.time}>
+                    {getTime(friend.lastChattingTime)}
+                  </div>
+                  <div className={styles.unread}>
+                    {messageLogsObject[friend.chattingId]
+                      ? messageLogsObject[friend.chattingId].length
+                      : 0}
+                  </div>
+                </div>
+                <div className={styles.dropdown}>
+                  <button onClick={(e) => e.stopPropagation()}>
+                    {/* 부모 클릭 방지 */}
+                    <img src="/img/kebab.png" alt="kebab" />
+                  </button>
+                  <div className={styles.dropdownContent}>
                     <button onClick={() => handleDelete(friend.chattingId)}>
-                      <img
-                        src="/img/kebab.png"
-                        alt="kebab"
-                        className={styles.dropdownKebab}
-                
-                      />
+                      친구 삭제
                     </button>
                   </div>
                 </div>
-              );
-            })}
-      </div>
-      <div>
-        {/* {isModal === true ? <ChatRoom userId={userId} /> : null} */}
-        {/* <RoomList /> */}
-        {/* <Room /> */}
+              </div>
+              {friend.state === "DEAD" && showReviveConfirmation && (
+                <div className={styles.modalOverlay}>
+                  <div className={styles.modalContent}>
+                    <p>친구를 살리시겠습니까?</p>
+                    <p> 내 물고기 부활 티켓:{userItemQuantity}</p>
+                    {/* 살리는 api보내는 걸로 바꾸기 */}
+                    <button
+                      className={styles.modalButton}
+                      onClick={()=> reviveFriend(friend.chattingId)}
+                    >
+                      살리기
+                    </button>
+                    <button
+                      className={styles.modalButton}
+                      onClick={handleCloseReviveConfirmation}
+                    >
+                      취소
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            // </div>
+          ))}
       </div>
     </div>
   );
