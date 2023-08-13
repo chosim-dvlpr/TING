@@ -214,10 +214,10 @@ function Detail() {
         <Dropdown.Menu>
           {
             regionList.map((r, i) => (
-              <Dropdown.Item onClick={() => {
+              <Dropdown.Item 
+              key={i}   
+              onClick={() => {
                 handleRegionChange(r)
-                // setCurrentRegion(r.regionEn);
-                // dispatch(setRegion(currentRegion));
               }
                 }>{r.regionKor}</Dropdown.Item>
               )
