@@ -17,3 +17,7 @@
   .pagination button:hover {
     background-color: #d75c6b;
   }
+
+  .activePage {
+    background-color: #d75c6b;
+  }
