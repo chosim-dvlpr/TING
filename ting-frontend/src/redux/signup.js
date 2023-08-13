@@ -104,11 +104,14 @@ export const signupReducer = createSlice({
     },
     completeSignupStep: (state) => {
       const keys = Object.keys(state); // state 객체의 모든 키(key)를 배열로 얻기
-      console.log(keys)
-      keys.map((key, i) => {
-        console.log(key)
-        // console.log(state.key)
-        // console.log(key, state.key)
+      // console.log(keys)
+      keys.forEach((key, i) => {
+        if (key.includes("List")) {
+          state[key] = [];
+        }
+        else {
+          state[key] = "";  
+        }
       })
 
     }
