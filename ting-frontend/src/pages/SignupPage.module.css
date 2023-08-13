@@ -12,7 +12,7 @@
 .container {
     position: relative;
     min-height: 95vh;
-    top: 5vh;
+    margin-top: 5vh;
     background-color: white;
     margin-left: 130px;
     margin-right: 130px;
