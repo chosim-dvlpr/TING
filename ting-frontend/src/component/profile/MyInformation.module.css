@@ -50,7 +50,7 @@
 
 .input {
   border-radius: 5px;
-  border: 2px solid gray;
+  border: 2px solid #808080;
   padding: 3px 10px;
   margin-top: 3px;
 }
@@ -77,20 +77,42 @@
   border: 2px solid gray;
   border-radius: 5px;
   background-color: white;
-  text-align: center;
+  /* text-align: center; */
   cursor: pointer;
   border-collapse: collapse;
 }
 
-.dropDownMenu > img {
+.dropDownMenu > span {
+  display: inline-block;
+  width: 100px;
+  height: 100%;
+}
+
+.xImg {
   position: absolute;
-  right: 0px;
-  width: 25px;
+  right: 7px;
+  top: 0;
+  width: 15px;
+  height: 100%;
+  padding-left: 5px;
+}
+.xImg > img {
+  position: relative;
+  width: 10px;
 }
 
 .dropDownMenu.multiple {
   min-width: 220px;
   padding-right: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dropDownMenu.multiple > span {
+  display: inline-block;
+  min-width: 180px;
+  height: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

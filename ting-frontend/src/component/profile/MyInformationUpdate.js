@@ -5,9 +5,7 @@ import { useEffect, useState } from "react";
 import tokenHttp from "../../api/tokenHttp";
 import { getCurrentUserdata } from "../../redux/userdata";
 import { dataCode, regionList } from "../../SelectionDataList";
-
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import InformationModal from "./common/InformationModal";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./MyInformation.module.css";
@@ -23,13 +21,17 @@ function MyInformationUpdate() {
   let [currentSmoking, setCurrentSmoking] = useState(userdata.smokingCode);
   let [currentReligion, setCurrentReligion] = useState(userdata.religionCode);
   let [currentHobbyList, setCurrentHobbyList] = useState(userdata.userHobbys);
-  let [currentPersonalityList, setCurrentPersonalityList] = useState(userdata.userPersonalities);
+  let [currentPersonalityList, setCurrentPersonalityList] = useState(
+    userdata.userPersonalities
+  );
   let [currentJob, setCurrentJob] = useState(userdata.jobCode);
   let [currentStyleList, setCurrentStyleList] = useState(userdata.userStyles);
   let [currentIntroduce, setCurrentIntroduce] = useState(userdata.introduce);
 
   let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
-  let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState([]);
+  let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
+    []
+  );
   let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
 
   let [openMbti, setOpenMbti] = useState(false);
@@ -41,99 +43,36 @@ function MyInformationUpdate() {
   let [openPersonality, setOpenPersonality] = useState(false);
   let [openStyle, setOpenStyle] = useState(false);
 
+  // 모달 상태 관련
+  const [modalSign, setModalSign] = useState(false);
+  const [clickedType, setClickedType] = useState();
+  const [clickedItems, setClickedItems] = useState();
+  const [clickedCurrentData, setClickedCurrentData] = useState();
+
   // list를 코드로 변환
   useEffect(() => {
-    let hobbyListCode = currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
-    let personalityListCode = currentPersonalityList && currentPersonalityList.map((style, i) => style.code);
-    let styleListCode = currentStyleList && currentStyleList.map((style, i) => style.code);
+    let hobbyListCode =
+      currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
+    let personalityListCode =
+      currentPersonalityList &&
+      currentPersonalityList.map((style, i) => style.code);
+    let styleListCode =
+      currentStyleList && currentStyleList.map((style, i) => style.code);
     setCurrentHobbyListCode(hobbyListCode);
     setCurrentPersonalityListCode(personalityListCode);
     setCurrentStyleListCode(styleListCode);
   }, [currentHobbyList, currentPersonalityList, currentStyleList]);
-
-  const CustomDropDown = (props) => {
-    let callback;
-    let currentData;
-    switch (props.type) {
-      case "MBTI":
-        callback = setCurrentMbti; currentData = currentMbti;
-        break;
-      case "DRINKING":
-        callback = setCurrentDrinking; currentData = currentDrinking;
-        break;
-      case "SMOKING":
-        callback = setCurrentSmoking; currentData = currentSmoking;
-        break;
-      case "RELIGION":
-        callback = setCurrentReligion; currentData = currentReligion;
-        break;
-      case "JOB":
-        callback = setCurrentJob; currentData = currentJob;
-        break;
-    }
-
-    if (props.type === "HOBBY") {
-      return (
-        <>
-          {props.items.map((obj, i) =>
-            <button className={styles.dropDownBtn} key={i} as="button"
-              onClick={() => { deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj); }}>{obj.name}</button>)
-          }
-        </>
-      );
-    } else if (props.type === "PERSONALITY") {
-      return (
-        <>
-          {props.items.map((obj, i) =>
-            <button className={styles.dropDownBtn} key={i} as="button"
-              onClick={() => { deleteDuplicate(currentPersonalityList, setCurrentPersonalityList, obj); }}>{obj.name}</button>)
-          }
-        </>
-      );
-    } else if (props.type === "STYLE") {
-      return (
-        <>
-          {props.items.map((obj, i) =>
-            <button className={styles.dropDownBtn} key={i} as="button"
-              onClick={() => { deleteDuplicate(currentStyleList, setCurrentStyleList, obj); }}>{obj.name}</button>)
-          }
-        </>
-      );
-    } else {
-      return (
-        <>
-          {props.items.map((data, i) =>
-            <button className={styles.dropDownBtn} key={i} as="button" onClick={() => {
-              data === currentData ?
-                callback("")
-                : callback(data)
-            }}>
-              {data.name}
-            </button>)
-          }
-        </>
-      );
-    }
-  }
 
   // 지역을 한글로 변환
   const regionToKor = (regionData) => {
     // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
     // console.log(regionName)
     // return regionName
-    const matchingRegion = regionList.find((region) => region.regionEn === regionData);
+    const matchingRegion = regionList.find(
+      (region) => region.regionEn === regionData
+    );
     if (matchingRegion) {
       return matchingRegion.regionKor;
-    } else {
-      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
-    }
-  };
-
-  // 지역을 영어로 변환
-  const regionToEn = (regionData) => {
-    const matchingRegion = regionList.find((region) => region.regionKor === regionData);
-    if (matchingRegion) {
-      return matchingRegion.regionEn;
     } else {
       return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
     }
@@ -156,29 +95,24 @@ function MyInformationUpdate() {
     personalityCodeList: currentPersonalityListCode,
   };
 
-  // console.log(newProfileData);
-  // console.log(JSON.stringify(newProfileData))
-  // console.log(typeof Number(height))
-
   // 변경된 프로필 정보를 DB에 저장
   const storeNewProfile = () => {
-    tokenHttp.put('/user', newProfileData).then((response) => {
-      console.log(response)
-      if (response.data.code === 200) {
-        console.log('저장 완료');
-        storeNewProfileToRedux();
-        Navigate("/mypage");
-      }
-      else if (response.data.code === 400) {
-        console.log('확인 실패');
-      }
-      else if (response.data.code === 401) {
-        console.log('로그인이 필요합니다');
-      }
-      else if (response.data.code === 403) {
-        console.log('권한이 없습니다');
-      }
-    })
+    tokenHttp
+      .put("/user", newProfileData)
+      .then((response) => {
+        console.log(response);
+        if (response.data.code === 200) {
+          console.log("저장 완료");
+          storeNewProfileToRedux();
+          Navigate("/mypage");
+        } else if (response.data.code === 400) {
+          console.log("확인 실패");
+        } else if (response.data.code === 401) {
+          console.log("로그인이 필요합니다");
+        } else if (response.data.code === 403) {
+          console.log("권한이 없습니다");
+        }
+      })
       .catch(() => console.log("실패"));
   };
 
@@ -197,44 +131,101 @@ function MyInformationUpdate() {
       userHobbys: currentHobbyList,
       userStyles: currentStyleList,
       userPersonalities: currentPersonalityList,
-    }
+    };
     dispatch(getCurrentUserdata(newProfileData));
-    console.log("Updated profile data:", newProfileData)
+    console.log("Updated profile data:", newProfileData);
   };
 
-  // 중복 제거
-  const deleteDuplicate = (List, ListFunc, checkData) => {
-    if (List.some(item => item.code === checkData.code)) {
-      ListFunc(List.filter(item => item.code !== checkData.code))
-    } else {
-      ListFunc([...List, checkData])
-    }
-  }
+  // 모달을 여는 함수
+  const openModal = () => {
+    setModalSign(true);
+  };
+
+  // 모달을 닫는 함수
+  const closeModal = () => {
+    setModalSign(false);
+  };
 
   return (
     <div className={commonStyles.wrapper}>
-
       <div className={styles.btnWrapper}>
         <button
           className={commonStyles.btn}
           onClick={() => {
             storeNewProfile();
-          }}>
+          }}
+        >
           저장
         </button>
       </div>
 
       <div className={styles.innerWrapper}>
         <table>
-          <tr><th className={styles.title}>이름</th> <td><div>{userdata.name}</div></td></tr>
-          <tr><th className={styles.title}>성별</th> <td><div>{userdata.gender === "F" ? "여성" : "남성"}</div></td></tr>
-          <tr><th className={styles.title}>이메일</th> <td><div>{userdata.email}</div></td></tr>
-          <tr><th className={styles.title}>전화번호</th> <td><div>{userdata.phoneNumber}</div></td></tr>
-          <tr><th className={styles.title}>생년월일</th> <td><div>{userdata.birth}</div></td></tr>
-          <tr><th className={styles.title}>지역</th> <td><div>{regionToKor(userdata.region)}</div></td></tr>
+          <tr>
+            <th className={styles.title}>이름</th>{" "}
+            <td>
+              <div>{userdata.name}</div>
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>성별</th>{" "}
+            <td>
+              <div>{userdata.gender === "F" ? "여성" : "남성"}</div>
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>이메일</th>{" "}
+            <td>
+              <div>{userdata.email}</div>
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>전화번호</th>{" "}
+            <td>
+              <div>{userdata.phoneNumber}</div>
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>생년월일</th>{" "}
+            <td>
+              <div>{userdata.birth}</div>
+            </td>
+          </tr>
+          <tr>
+            <th className={styles.title}>지역</th>{" "}
+            <td>
+              <div>{regionToKor(userdata.region)}</div>
+            </td>
+          </tr>
         </table>
       </div>
       <hr />
+
+      {modalSign ? (
+        <InformationModal
+          type={clickedType}
+          items={clickedItems}
+          currentData={clickedCurrentData}
+          setter={
+            clickedType === "MBTI"
+              ? setCurrentMbti
+              : clickedType === "음주"
+              ? setCurrentDrinking
+              : clickedType === "흡연"
+              ? setCurrentSmoking
+              : clickedType === "종교"
+              ? setCurrentReligion
+              : clickedType === "직업"
+              ? setCurrentJob
+              : clickedType === "취미"
+              ? setCurrentHobbyList
+              : clickedType === "성격"
+              ? setCurrentPersonalityList
+              : setCurrentStyleList
+          }
+          closeFunc={closeModal}
+        />
+      ) : null}
 
       <div className={styles.updateWrapper}>
         <div className={styles.updateDiv}>
@@ -251,34 +242,67 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>MBTI</p>
           <div className={styles.dropDown}>
-            <div className={styles.dropDownMenu} onClick={() => { setOpenMbti(!openMbti) }}>
-              {currentMbti && currentMbti.name}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div className={openMbti ? styles.isOpen : styles.isClose}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("MBTI"))} type="MBTI" />
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentMbti);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("MBTI"))
+                  );
+                  setClickedType("MBTI");
+                  openModal();
+                }}
+              >
+                {currentMbti && currentMbti.name}
+              </span>
+              {currentMbti ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentMbti("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
-          {/* <DropdownButton id="dropdown-item-button" title="MBTI">
-            {dataCode
-              .filter((data) => data.category.includes("MBTI"))
-              .map((data, i) =>
-                <Dropdown.Item key={i} as="button" onClick={() => setCurrentMbti(data)}>{data.name}</Dropdown.Item>
-              )
-            }
-          </DropdownButton> */}
-          {/* <p>{currentMbti && currentMbti.name}</p> */}
         </div>
 
         <div className={styles.updateDiv}>
           <p className={styles.title}>음주</p>
           <div className={styles.dropDown}>
-            <div className={styles.dropDownMenu} onClick={() => { setOpenDrinking(!openDrinking) }}>
-              {currentDrinking && currentDrinking.name}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div className={openDrinking ? styles.isOpen : styles.isClose}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("DRINKING"))} type="DRINKING" />
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentDrinking);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("DRINKING")
+                    )
+                  );
+                  setClickedType("음주");
+                  openModal();
+                }}
+              >
+                {currentDrinking && currentDrinking.name}
+              </span>
+              {currentDrinking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentDrinking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -286,12 +310,32 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>흡연</p>
           <div className={styles.dropDown}>
-            <div className={styles.dropDownMenu} onClick={() => { setOpenSmoking(!openSmoking) }}>
-              {currentSmoking && currentSmoking.name}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div className={openSmoking ? styles.isOpen : styles.isClose}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("SMOKING"))} type="SMOKING" />
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentSmoking);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("SMOKING"))
+                  );
+                  setClickedType("흡연");
+                  openModal();
+                }}
+              >
+                {currentSmoking && currentSmoking.name}
+              </span>
+              {currentSmoking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentSmoking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -299,12 +343,34 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>종교</p>
           <div className={styles.dropDown}>
-            <div className={styles.dropDownMenu} onClick={() => { setOpenReligion(!openReligion) }}>
-              {currentReligion && currentReligion.name}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div className={openReligion ? styles.isOpen : styles.isClose}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("RELIGION"))} type="RELIGION" />
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentReligion);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("RELIGION")
+                    )
+                  );
+                  setClickedType("종교");
+                  openModal();
+                }}
+              >
+                {currentReligion && currentReligion.name}
+              </span>
+              {currentReligion ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentReligion("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -312,12 +378,32 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>직업</p>
           <div className={styles.dropDown}>
-            <div className={styles.dropDownMenu} onClick={() => { setOpenJob(!openJob) }}>
-              {currentJob && currentJob.name}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div id={styles.jobOpen} className={openJob ? styles.isOpen : styles.isClose}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("JOB"))} type="JOB" />
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentJob);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("JOB"))
+                  );
+                  setClickedType("직업");
+                  openModal();
+                }}
+              >
+                {currentJob && currentJob.name}
+              </span>
+              {currentJob ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentJob("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -325,40 +411,71 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>취미</p>
           <div className={styles.dropDown}>
-            <div className={[styles.dropDownMenu, styles.multiple].join(" ")} onClick={() => { setOpenHobby(!openHobby) }}>
-              {currentHobbyList && currentHobbyList.map((hobby, i) => (
-                i == currentHobbyList.length - 1 ? hobby.name : hobby.name + ', '
-              ))}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div id={styles.hobbyOpen} className={[openHobby ? styles.isOpen : styles.isClose, styles.multiple].join(" ")}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("HOBBY"))} type="HOBBY" />
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentHobbyList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("HOBBY"))
+                  );
+                  setClickedType("취미");
+                  openModal();
+                }}
+              >
+                {currentHobbyList &&
+                  currentHobbyList.map((hobby, i) => "#" + hobby.name + " ")}
+              </span>
+              {currentHobbyList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentHobbyList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
-          {/* <DropdownButton id="dropdown-item-button" title="취미">
-            {dataCode
-              .filter((data) => data.category.includes("HOBBY"))
-              .map((obj, i) => (
-                <Dropdown.Item key={i} as="button" onClick={() => {
-                  deleteDuplicate(currentHobbyList, setCurrentHobbyList, obj);
-                }
-                }>{obj.name}</Dropdown.Item>
-              ))
-            }
-          </DropdownButton> */}
         </div>
 
         <div className={styles.updateDiv}>
           <p className={styles.title}>성격</p>
           <div className={styles.dropDown}>
-            <div className={[styles.dropDownMenu, styles.multiple].join(" ")} onClick={() => { setOpenPersonality(!openPersonality) }}>
-              {currentPersonalityList && currentPersonalityList.map((personality, i) => (
-                i == currentPersonalityList.length - 1 ? personality.name : personality.name + ', '
-              ))}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div id={styles.personalityOpen} className={[openPersonality ? styles.isOpen : styles.isClose, styles.multiple].join(" ")}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("PERSONALITY"))} type="PERSONALITY" />
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentPersonalityList);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("PERSONALITY")
+                    )
+                  );
+                  setClickedType("성격");
+                  openModal();
+                }}
+              >
+                {currentPersonalityList &&
+                  currentPersonalityList.map(
+                    (personality, i) => "#" + personality.name + " "
+                  )}
+              </span>
+              {currentPersonalityList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentPersonalityList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -366,25 +483,49 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>스타일</p>
           <div className={styles.dropDown}>
-            <div className={[styles.dropDownMenu, styles.multiple].join(" ")} onClick={() => { setOpenStyle(!openStyle) }}>
-              {currentStyleList && currentStyleList.map((style, i) => (
-                i == currentStyleList.length - 1 ? style.name : style.name + ', '
-              ))}
-              <img src={process.env.PUBLIC_URL + "/img/down_pink.png"}></img>
-            </div>
-            <div id={styles.styleOpen} className={[openStyle ? styles.isOpen : styles.isClose, styles.multiple].join(" ")}>
-              <CustomDropDown items={dataCode.filter((data) => data.category.includes("STYLE"))} type="STYLE" />
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentStyleList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("STYLE"))
+                  );
+                  setClickedType("스타일");
+                  openModal();
+                }}
+              >
+                {currentStyleList &&
+                  currentStyleList.map((style, i) => "#" + style.name + " ")}
+              </span>
+              {currentStyleList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentStyleList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
 
         <div className={styles.updateDiv}>
           <p className={styles.title}>자기소개</p>
-          <input id={styles.introduceInput} className={styles.input} value={currentIntroduce} onChange={(e) => setCurrentIntroduce(e.target.value)}></input>
+          <input
+            id={styles.introduceInput}
+            className={styles.input}
+            value={currentIntroduce}
+            onChange={(e) => setCurrentIntroduce(e.target.value)}
+          ></input>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default MyInformationUpdate
+export default MyInformationUpdate;

@@ -19,6 +19,8 @@ function Detail() {
   let [currentRegion, setCurrentRegion] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
+  let [count, setCount] = useState(0);
+  const [genderSelected, setGenderSelected] = useState();
 
   // 생년월일
   const [birthDate, setBirthDate] = useState("");
@@ -199,14 +201,16 @@ function Detail() {
         </div>
       </div>
       <button
-        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
-        onClick={(e) => {
+        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "M" && styles.genderSelected}`} 
+        onClick={() => {
           dispatch(setGender("M"));
+          setGenderSelected("M");
       }}>남</button>
       <button
-        className={[styles.selectBtn, styles.genderBtn].join(" ")} 
+        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "F" && styles.genderSelected}`} 
         onClick={() => {
           dispatch(setGender("F"));
+          setGenderSelected("F");
       }}>여</button>
       <br/>
 
