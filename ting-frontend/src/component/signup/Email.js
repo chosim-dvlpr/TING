@@ -22,29 +22,37 @@ function InputEmail(){
 
 
   
-  // 이메일이 형식에 맞는지 확인
-  const checkData = () => {
-    const check = "@";
-    if (inputEmail.includes(check)) {
-      return true;
-    }
-    else { return false }; 
-  }
+  // // 이메일이 형식에 맞는지 확인
+  // const checkData = () => {
+  //   let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  //   console.log(check.test(inputEmail))
+  //   if (check.test(inputEmail)) {
+  //     return true;
+  //   }
+  //   else { return false }; 
+  // }
   
   // 이메일 중복 체크
   const checkEmail = () => {
-    basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
-      if (response.data.code === 200) {
-        alert("인증 메일이 전송되었습니다.");
-        setShowInputCode(true);
-        setIsInputEmailDisabled(true);
-      }
-      else {
-        console.log("중복");
-        setMsg("중복된 이메일입니다. 다른 이메일을 입력해주세요.");
-        emailInput.current.value = "";
-      }
-    })
+    let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    console.log(check.test(inputEmail))
+    if (check.test(inputEmail)) {
+      basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
+        if (response.data.code === 200) {
+          alert("인증 메일이 전송되었습니다.");
+          setShowInputCode(true);
+          setIsInputEmailDisabled(true);
+        }
+        else {
+          console.log("중복");
+          setMsg("중복된 이메일입니다. 다른 이메일을 입력해주세요.");
+          emailInput.current.value = "";
+        }
+      })
+    }
+    
+    else { alert("올바른 이메일을 입력해주세요.") }; 
+    
   }
 
   // 엔터키로 버튼 누를 수 있게
@@ -99,7 +107,7 @@ function InputEmail(){
 
       {/* 중복확인 전 */}
       <input 
-        // ref={emailInput} 
+        ref={emailInput} 
         className={styles.input} 
         type="email" 
         id="email" 
@@ -113,9 +121,7 @@ function InputEmail(){
           <button 
             className={styles.btn} 
             onClick={() => {
-              if (checkData()) { // 이메일 형식 검사
-                checkEmail();    // 중복 확인 실행
-              } else { alert('이메일이 형식에 맞지 않음') };
+              checkEmail();    // 중복 확인 실행
             }}
           >인증하기</button>
       }
