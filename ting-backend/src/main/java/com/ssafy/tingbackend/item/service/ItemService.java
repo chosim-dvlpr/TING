@@ -2,13 +2,20 @@ package com.ssafy.tingbackend.item.service;
 
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
+import com.ssafy.tingbackend.entity.chatting.Chatting;
+import com.ssafy.tingbackend.entity.chatting.ChattingUser;
 import com.ssafy.tingbackend.entity.item.FishSkin;
 import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.item.Item;
 import com.ssafy.tingbackend.entity.item.UserItem;
 import com.ssafy.tingbackend.entity.point.PointHistory;
+import com.ssafy.tingbackend.entity.type.ChattingType;
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.user.User;
+import com.ssafy.tingbackend.friend.dto.ChattingMessageDto;
+import com.ssafy.tingbackend.friend.repository.ChattingMessageRepository;
+import com.ssafy.tingbackend.friend.repository.ChattingRepository;
+import com.ssafy.tingbackend.friend.repository.ChattingUserRepository;
 import com.ssafy.tingbackend.item.dto.InventoryDto;
 import com.ssafy.tingbackend.item.dto.ItemDto;
 import com.ssafy.tingbackend.item.repository.FishSkinRepository;
@@ -42,6 +49,9 @@ public class ItemService {
     private final PointHistoryRepository pointHistoryRepository;
     private final PointCategoryRepository pointCategoryRepository;
     private final FishSkinRepository fishSkinRepository;
+    private final ChattingUserRepository chattingUserRepository;
+    private final ChattingRepository chattingRepository;
+    private final ChattingMessageRepository chattingMessageRepository;
 
     @Transactional
     public void buyItem(Long userId, Long itemCode, Integer count) {
@@ -259,6 +269,7 @@ public class ItemService {
         return ItemDto.FishSkinDto.of(fishSkin);
     }
 
+    @Transactional
     public void changeNickname(Long userId, String nickname) {
         User user = userRepository.findByIdNotRemoved(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
@@ -273,5 +284,48 @@ public class ItemService {
 
         user.setNickname(nickname);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void reviveFish(Long userId, Long chattingId) {
+        // 필요정보 조회 및 아이템 사용
+        User user = userRepository.findByIdNotRemoved(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Inventory inventory = inventoryRepository.findByItemTypeAndUserId(ItemType.REVIVE_TICKET, userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_ENOUGH));
+
+        if (inventory.getQuantity() == 0) throw new CommonException(ExceptionType.ITEM_NOT_ENOUGH);
+
+        inventory.setQuantity(inventory.getQuantity() - 1);
+        inventoryRepository.save(inventory);
+
+        // 어항에서 친구목록을 살리는 로직
+        // 1. chatting 테이블의 state를 ALIVE로 변경, lastChattingTime을 현재 시간으로 변경 (DELETE 면 살릴 수 없음)
+        // 2. mongodb의 채팅을 하나 추가 (살리는 사람의 id로 메시지 전송)
+        // [ㅇㅇ(닉네임) 님이 좀 더 대화를 나누어보고 싶어하여 부활티켓을 사용하였습니다.]
+
+        String nickname = user.getNickname();
+        String reviveMessage = "[" + nickname + "님이 좀 더 대화를 나누어보고 싶어 부활티켓을 사용하였습니다.]";
+        ChattingMessageDto chattingMessageDto = new ChattingMessageDto(chattingId, userId, reviveMessage, nickname);
+
+        ChattingUser friendChattingUser = chattingUserRepository.findFriendChattingUser(chattingId, userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_USER_NOT_FOUND));
+
+        Chatting chatting = chattingRepository.findById(chattingId)
+                .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));
+
+        if (chatting.getState() == ChattingType.DELETED) {
+            throw new CommonException(ExceptionType.DELETED_FRIEND_NOT_REVIVE);
+        } else if (chatting.getState() == ChattingType.ALIVE) {
+            throw new CommonException(ExceptionType.ALIVE_FRIEND_NOT_REVIVE);
+        }
+
+        chatting.setState(ChattingType.ALIVE);
+        chattingMessageRepository.save(chattingMessageDto);
+
+        friendChattingUser.setUnread(friendChattingUser.getUnread() + 1);
+        chatting.setLastChattingContent(reviveMessage);
+        chatting.setLastChattingTime(LocalDateTime.now());
     }
 }

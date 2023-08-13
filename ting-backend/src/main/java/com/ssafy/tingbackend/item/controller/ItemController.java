@@ -73,8 +73,14 @@ public class ItemController {
     }
 
     @PutMapping("/item/changeNickname")
-    public DataResponse<String> changeNickname(Principal principal, @RequestBody Map<String,String> json) {
+    public DataResponse<String> changeNickname(Principal principal, @RequestBody Map<String, String> json) {
         itemService.changeNickname(Long.parseLong(principal.getName()), json.get("nickname"));
         return new DataResponse(200, "닉네임 변경 성공", json.get("nickname"));
+    }
+
+    @PutMapping("/item/reviveFish/{chattingId}")
+    public CommonResponse reviveFish(Principal principal, @PathVariable Long chattingId) {
+        itemService.reviveFish(Long.parseLong(principal.getName()), chattingId);
+        return new CommonResponse(200, "물고기 부활 성공");
     }
 }

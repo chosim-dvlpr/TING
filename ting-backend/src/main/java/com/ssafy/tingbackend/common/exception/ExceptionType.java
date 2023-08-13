@@ -64,6 +64,8 @@ public enum ExceptionType {
     ITEM_NOT_ENOUGH(4972, "아이템이 존재하지 않습니다."),
     USER_INVENTORY_MISMATCH(4973, "사용자와 인벤토리가 일치하지 않습니다"),
     SKIN_NOT_FOUND(4974, "몰고기 스킨이 존재하지 않습니다."),
+    DELETED_FRIEND_NOT_REVIVE(4975, "삭제된 친구는 티켓을 사용해도 부활시킬 수 없습니다."),
+    ALIVE_FRIEND_NOT_REVIVE(4976, "죽은 친구에게만 티켓을 사용할 수 있습니다."),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하습니다.");
 
