@@ -242,19 +242,32 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>MBTI</p>
           <div className={styles.dropDown}>
-            <div
-              className={styles.dropDownMenu}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentMbti);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("MBTI"))
-                );
-                setClickedType("MBTI");
-                openModal();
-              }}
-            >
-              {currentMbti && currentMbti.name}
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentMbti);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("MBTI"))
+                  );
+                  setClickedType("MBTI");
+                  openModal();
+                }}
+              >
+                {currentMbti && currentMbti.name}
+              </span>
+              {currentMbti ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentMbti("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -262,19 +275,34 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>음주</p>
           <div className={styles.dropDown}>
-            <div
-              className={styles.dropDownMenu}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentDrinking);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("DRINKING"))
-                );
-                setClickedType("음주");
-                openModal();
-              }}
-            >
-              {currentDrinking && currentDrinking.name}
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentDrinking);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("DRINKING")
+                    )
+                  );
+                  setClickedType("음주");
+                  openModal();
+                }}
+              >
+                {currentDrinking && currentDrinking.name}
+              </span>
+              {currentDrinking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentDrinking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -282,19 +310,32 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>흡연</p>
           <div className={styles.dropDown}>
-            <div
-              className={styles.dropDownMenu}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentSmoking);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("SMOKING"))
-                );
-                setClickedType("흡연");
-                openModal();
-              }}
-            >
-              {currentSmoking && currentSmoking.name}
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentSmoking);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("SMOKING"))
+                  );
+                  setClickedType("흡연");
+                  openModal();
+                }}
+              >
+                {currentSmoking && currentSmoking.name}
+              </span>
+              {currentSmoking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentSmoking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -302,19 +343,34 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>종교</p>
           <div className={styles.dropDown}>
-            <div
-              className={styles.dropDownMenu}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentReligion);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("RELIGION"))
-                );
-                setClickedType("종교");
-                openModal();
-              }}
-            >
-              {currentReligion && currentReligion.name}
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentReligion);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("RELIGION")
+                    )
+                  );
+                  setClickedType("종교");
+                  openModal();
+                }}
+              >
+                {currentReligion && currentReligion.name}
+              </span>
+              {currentReligion ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentReligion("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -322,19 +378,32 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>직업</p>
           <div className={styles.dropDown}>
-            <div
-              className={styles.dropDownMenu}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentJob);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("JOB"))
-                );
-                setClickedType("직업");
-                openModal();
-              }}
-            >
-              {currentJob && currentJob.name}
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentJob);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("JOB"))
+                  );
+                  setClickedType("직업");
+                  openModal();
+                }}
+              >
+                {currentJob && currentJob.name}
+              </span>
+              {currentJob ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentJob("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -342,20 +411,33 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>취미</p>
           <div className={styles.dropDown}>
-            <div
-              className={[styles.dropDownMenu, styles.multiple].join(" ")}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentHobbyList);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("HOBBY"))
-                );
-                setClickedType("취미");
-                openModal();
-              }}
-            >
-              {currentHobbyList &&
-                currentHobbyList.map((hobby, i) => "#" + hobby.name + " ")}
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentHobbyList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("HOBBY"))
+                  );
+                  setClickedType("취미");
+                  openModal();
+                }}
+              >
+                {currentHobbyList &&
+                  currentHobbyList.map((hobby, i) => "#" + hobby.name + " ")}
+              </span>
+              {currentHobbyList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentHobbyList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -363,24 +445,37 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>성격</p>
           <div className={styles.dropDown}>
-            <div
-              className={[styles.dropDownMenu, styles.multiple].join(" ")}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentPersonalityList);
-                setClickedItems(
-                  dataCode.filter((data) =>
-                    data.category.includes("PERSONALITY")
-                  )
-                );
-                setClickedType("성격");
-                openModal();
-              }}
-            >
-              {currentPersonalityList &&
-                currentPersonalityList.map(
-                  (personality, i) => "#" + personality.name + " "
-                )}
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentPersonalityList);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("PERSONALITY")
+                    )
+                  );
+                  setClickedType("성격");
+                  openModal();
+                }}
+              >
+                {currentPersonalityList &&
+                  currentPersonalityList.map(
+                    (personality, i) => "#" + personality.name + " "
+                  )}
+              </span>
+              {currentPersonalityList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentPersonalityList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -388,20 +483,33 @@ function MyInformationUpdate() {
         <div className={styles.updateDiv}>
           <p className={styles.title}>스타일</p>
           <div className={styles.dropDown}>
-            <div
-              className={[styles.dropDownMenu, styles.multiple].join(" ")}
-              onClick={() => {
-                if (modalSign) closeModal();
-                setClickedCurrentData(currentStyleList);
-                setClickedItems(
-                  dataCode.filter((data) => data.category.includes("STYLE"))
-                );
-                setClickedType("스타일");
-                openModal();
-              }}
-            >
-              {currentStyleList &&
-                currentStyleList.map((style, i) => "#" + style.name + " ")}
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentStyleList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("STYLE"))
+                  );
+                  setClickedType("스타일");
+                  openModal();
+                }}
+              >
+                {currentStyleList &&
+                  currentStyleList.map((style, i) => "#" + style.name + " ")}
+              </span>
+              {currentStyleList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentStyleList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
