@@ -1,19 +1,15 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setMbtiCode } from "../../../redux/signup";
 import { useNavigate } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { dataCode } from "../../../SelectionDataList";
 
 function Mbti(){
-  let mbtiList = ["ISTJ", "ISFJ", "INFJ", "INTJ", 
-    "ISTP", "ISFP", "INFP", "INTP", 
-    "ESTP", "ESFP", "ENFP", "ENTP", 
-    "ESTJ", "ESFJ", "ENFJ", "ENTJ"];
-  
   let dispatch = useDispatch();
-  let Navigate = useNavigate();
+  let signupReducer = useSelector((state) => state.signupReducer);
 
-  const changeMbti = (mbti) => {
-    dispatch(setMbtiCode(mbti));
+  const handleDropdownItemClick = (data) => {
+    dispatch(setMbtiCode(data));
   };
   
   return(
@@ -21,20 +17,21 @@ function Mbti(){
       <h3>MBTI</h3>
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-basic">
-          지역 선택
+        { signupReducer.mbtiCode ? signupReducer.mbtiCode.name : "MBTI" }
         </Dropdown.Toggle>
         <Dropdown.Menu>
+          {
+            dataCode
+            .filter((data, i) => data.category.includes("MBTI"))
+            .map((data) => (
+              <Dropdown.Item onClick={() => {
+                handleDropdownItemClick(data)
+              }
+                }>{ data.name }</Dropdown.Item>
+            ))
+          }
         </Dropdown.Menu>
       </Dropdown>
-        {/* {
-          mbtiList.map((mbti, i) => {
-            return (
-              <button onClick={() => changeMbti(mbti)} key={i}>{ mbti }</button>
-              )
-            }
-          )
-        } */}
-      {/* <button onClick={() => Navigate("/signup/select/height")}>다음</button> */}
     </div>
   )
 }
