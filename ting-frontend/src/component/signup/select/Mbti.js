@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setMbtiCode } from "../../../redux/signup";
-import { useNavigate } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { dataCode } from "../../../SelectionDataList";
 
@@ -22,12 +21,13 @@ function Mbti(){
         <Dropdown.Menu>
           {
             dataCode
-            .filter((data, i) => data.category.includes("MBTI"))
-            .map((data) => (
+            .filter((data) => data.category.includes("MBTI"))
+            .map((data, i) => (
               <Dropdown.Item onClick={() => {
                 handleDropdownItemClick(data)
-              }
-                }>{ data.name }</Dropdown.Item>
+                }}
+                key={i}
+              >{ data.name }</Dropdown.Item>
             ))
           }
         </Dropdown.Menu>
