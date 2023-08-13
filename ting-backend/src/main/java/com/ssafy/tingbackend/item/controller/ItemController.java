@@ -66,18 +66,27 @@ public class ItemController {
         return new CommonResponse(200, "티켓 사용 성공");
     }
 
+    /**
+     * 물고기 스킨 랜덤박스 사용
+     */
     @PutMapping("/item/fishRandomBox")
     public DataResponse<ItemDto.FishSkinDto> useFishSkin(Principal principal) {
         ItemDto.FishSkinDto fishSkinDto = itemService.useFishRandomBox(Long.parseLong(principal.getName()));
         return new DataResponse(200, "물고기 랜덤박스 사용 성공", fishSkinDto);
     }
 
+    /**
+     * 닉네임 변경권 사용
+     */
     @PutMapping("/item/changeNickname")
     public DataResponse<String> changeNickname(Principal principal, @RequestBody Map<String, String> json) {
         itemService.changeNickname(Long.parseLong(principal.getName()), json.get("nickname"));
         return new DataResponse(200, "닉네임 변경 성공", json.get("nickname"));
     }
 
+    /**
+     * 물고기 부활 티켓 사용
+     */
     @PutMapping("/item/reviveFish/{chattingId}")
     public CommonResponse reviveFish(Principal principal, @PathVariable Long chattingId) {
         itemService.reviveFish(Long.parseLong(principal.getName()), chattingId);
