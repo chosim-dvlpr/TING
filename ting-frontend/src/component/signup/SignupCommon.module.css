@@ -3,7 +3,7 @@
 }
 
 .wrapper {
-    margin: 50px;
+    margin: 0 0 10px;
 }
 
 .wrapper * {
@@ -39,14 +39,14 @@
 }
 
 .code {
-    margin-left: 20px;
+    margin-left: 5px;
     width: 150px;
 }
 
 .phonenumInput {
     width: 80px;
     border: 2px solid gray;
-    margin: 5px;
+    margin: 5px 0;
 }
 
 .disabledBtn {
@@ -62,6 +62,7 @@
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
         5px 5px 10px 0px rgba(0, 0, 0, .1),
         3px 3px 5px 0px rgba(0, 0, 0, .1);
+    margin: 0 5px;
 }
 
 .btn:hover {
@@ -70,11 +71,18 @@
 
 .rightMsg {
     color: green;
+    font-size: 1rem;
 }
 
 .wrongMsg {
     color: red;
+    font-size: 1rem;
 }
+
+.msgHide {
+    visibility: hidden;
+}
+
 
 #nameInput,
 #regionInput {
@@ -138,7 +146,18 @@
     background-color: #8bcad5;
 }
 
-
 .checkEmail {
-    margin-left: 15px;
+    margin-left: 5px;
+}
+
+.pwdInput {
+    margin-right: 5px;
+}
+
+.wrapper > span {
+    margin: 0 2.5px;
+}
+
+.phonnumContainer {
+    
 }

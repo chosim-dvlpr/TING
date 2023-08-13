@@ -11,11 +11,11 @@ function InputEmail() {
   const emailInput = useRef();
   const authCodeInput = useRef();
   let [showInputCode, setShowInputCode] = useState(false);
-  let [msg, setMsg] = useState("");
+  let [msg, setMsg] = useState("이메일 인증");
   let [authCode, setAuthCode] = useState("");
   let [isInputEmailDisabled, setIsInputEmailDisabled] = useState(false);
   let [isInputEmailCodeDisabled, setIsInputEmailCodeDisabled] = useState(false);
-
+  const [isEmailMsgVisible, setIsEmailMsgVisible] = useState(false);
   let signupReducer = useSelector((state) => state.signupReducer);
   const Navigate = useNavigate();
   let dispatch = useDispatch();
@@ -23,7 +23,8 @@ function InputEmail() {
   // 이메일 중복 체크
   const checkEmail = () => {
     let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    console.log(check.test(inputEmail));
+    // console.log(check.test(inputEmail))
+    // setMsg("");
     if (check.test(inputEmail)) {
       basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
         if (response.data.code === 200) {
@@ -64,13 +65,13 @@ function InputEmail() {
       email: inputEmail,
       authCode: authCode,
     };
-    console.log(data);
 
     basicHttp
       .post("/user/emailauth", data)
       .then((response) => {
         if (response.data.code === 200) {
-          alert("인증 성공");
+          setMsg("이메일 인증 성공");
+          setIsEmailMsgVisible(true);
           dispatch(setEmail(inputEmail)); // redux에 저장
           setIsInputEmailCodeDisabled(true);
         } else if (response.data.code === 400) {
@@ -104,36 +105,39 @@ function InputEmail() {
         placeholder="이메일"
         disabled={showInputCode} // code입력창 뜨면 disable되도록
       />
+      <input
+        className={`${styles.input} ${styles.code}`}
+        type="text"
+        onChange={(e) => setAuthCode(e.target.value)}
+        onKeyDown={(e) => activeEnter(e, checkEmailCode)}
+        placeholder="인증번호 6자리"
+        disabled={isInputEmailCodeDisabled}
+      />
       {!showInputCode && (
         <button
           className={`${styles.btn} ${styles.checkEmail}`}
           onClick={() => {
             checkEmail(); // 중복 확인 실행
-          }}
-        >
-          인증코드전송
+          }}>인증 코드 전송
         </button>
       )}
-
       {/* 중복확인 & 인증메일 발송 뒤 */}
       {showInputCode && (
         <>
-          <input
-            className={`${styles.input} ${styles.code}`}
-            type="text"
-            onChange={(e) => setAuthCode(e.target.value)}
-            onKeyDown={(e) => activeEnter(e, checkEmailCode)}
-            placeholder="인증번호 6자리"
-            disabled={isInputEmailCodeDisabled}
-          />
           <button className={`${styles.btn} ${styles.checkEmail}`} onClick={checkEmailCode} onKeyDown={(e) => activeEnter(e, checkEmailCode)}>
-            인증번호입력
+            인증 코드 확인
           </button>
         </>
       )}
 
       <br />
-      <span className={styles.wrongMsg}>{msg}</span>
+      <span className={`
+      ${isInputEmailCodeDisabled 
+        ? styles.rightMsg 
+        : styles.wrongMsg}
+      ${!isEmailMsgVisible && styles.msgHide} 
+      ${styles.msg}`}>{msg}</span>
+
     </div>
   );
 }

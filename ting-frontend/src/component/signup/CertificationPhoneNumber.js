@@ -144,53 +144,55 @@ function CertificationPhonenumber() {
         전화번호를 인증해주세요
       </label>
       <br></br>
-      {/* 휴대전화 인증 버튼 누르기 전 */}
-      <input
-        className={styles.phonenumInput}
-        ref={phonenumberFirstRef}
-        type="text"
-        id="phonenumberFirst"
-        onChange={(e) => {
-          if (e.target.value.length == 3) {
-            phonenumberMiddleRef.current.focus();
-          }
-          setPhonenumberFirst(e.target.value);
-        }}
-        maxLength={3}
-        disabled={isCheckPhonenumCode}
-      />
-      -
-      <input
-        className={styles.phonenumInput}
-        ref={phonenumberMiddleRef}
-        type="text"
-        id="phonenumberMiddle"
-        onChange={(e) => {
-          if (e.target.value.length == 4) {
-            phonenumberLastRef.current.focus();
-          }
-          setPhonenumberMiddle(e.target.value);
-        }}
-        maxLength={4}
-        disabled={isCheckPhonenumCode}
-      />
-      -
-      <input
-        className={styles.phonenumInput}
-        ref={phonenumberLastRef}
-        type="text"
-        id="phonenumberLast"
-        onChange={(e) => {
-          setPhonenumberLast(e.target.value);
-        }}
-        maxLength={4}
-        disabled={isCheckPhonenumCode}
-      />
+      <div>
+        {/* 휴대전화 인증 버튼 누르기 전 */}
+        <input
+          className={styles.phonenumInput}
+          ref={phonenumberFirstRef}
+          type="text"
+          id="phonenumberFirst"
+          onChange={(e) => {
+            if (e.target.value.length == 3) {
+              phonenumberMiddleRef.current.focus();
+            }
+            setPhonenumberFirst(e.target.value);
+          }}
+          maxLength={3}
+          disabled={isCheckPhonenumCode}
+        />
+        <span>-</span>
+        <input
+          className={styles.phonenumInput}
+          ref={phonenumberMiddleRef}
+          type="text"
+          id="phonenumberMiddle"
+          onChange={(e) => {
+            if (e.target.value.length == 4) {
+              phonenumberLastRef.current.focus();
+            }
+            setPhonenumberMiddle(e.target.value);
+          }}
+          maxLength={4}
+          disabled={isCheckPhonenumCode}
+        />
+        <span>-</span>
+        <input
+          className={styles.phonenumInput}
+          ref={phonenumberLastRef}
+          type="text"
+          id="phonenumberLast"
+          onChange={(e) => {
+            setPhonenumberLast(e.target.value);
+          }}
+          maxLength={4}
+          disabled={isCheckPhonenumCode}
+        />
       {!isCheckPhonenumCode && (
         <button className={styles.btn} onClick={checkPhonenumber}>
           인증하기
         </button>
       )}
+      </div>
       <br></br>
       {/* 인증하기 버튼 누른 뒤 인증번호 입력 */}
       {isCheckPhonenumCode && (

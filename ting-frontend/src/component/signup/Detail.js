@@ -17,19 +17,10 @@ function Detail() {
   let [checkNickname, setCheckNickname] = useState(false);
   const [nicknameMsg, setNicknameMsg] = useState("");
   let [currentRegion, setCurrentRegion] = useState("");
-  let allContentsNum = 5;
-  let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
-  let [count, setCount] = useState(0);
   const [genderSelected, setGenderSelected] = useState();
-
-  // 생년월일
-  const [birthDate, setBirthDate] = useState("");
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
-
-  // 항목 입력 체크
-  // let [region, setRegion] = useState("");
 
   // 한글만 허용하는 패턴
   const koreanPattern = /^[가-힣]*$/;
@@ -38,8 +29,6 @@ function Detail() {
 
   // 이름 작성 확인
   const nameIsExist = (data) => {
-    let copy_checkAllContents = [...checkAllContents];
-    
     // 올바른 형태일 때 true로 변경
     if (koreanPattern.test(data)) {
       dispatch(setName(data)); // redux 저장
@@ -83,24 +72,18 @@ function Detail() {
 
   // 생일 입력 시
   const handleBirthChange = (selectedBirth) => {
-    setBirth(selectedBirth)
     dispatch(setBirth(selectedBirth)); // Redux 상태에 저장
   }
-
-  // useEffect(() => {
-  //   checkAdult();
-  // }, [handleBirthChange])
 
   const checkAdult = () => {
     const year = signupReducer.birth && signupReducer.birth.slice(0,4);
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    // console.log(currentYear)
 
     if (signupReducer.birth &&
         currentYear - Number(year) < 19) {
       alert("성인만 회원가입 가능합니다.");
-      setBirth(null);
+      dispatch(setBirth(null));
       return false
     }
     else {return true}
@@ -157,7 +140,7 @@ function Detail() {
   // 회원가입 완료 클릭 시
   const goToSignupComplete = (moveTo) => {
     // 모두 값이 있다면 회원가입 요청
-    console.log(checkAllData())
+    // console.log(checkAllData())
     // console.log(checkAdult())
     if (!checkAllData()) {
       alert("모든 항목을 입력 또는 체크해주세요.");
@@ -231,10 +214,10 @@ function Detail() {
         <Dropdown.Menu>
           {
             regionList.map((r, i) => (
-              <Dropdown.Item onClick={() => {
+              <Dropdown.Item 
+              key={i}   
+              onClick={() => {
                 handleRegionChange(r)
-                // setCurrentRegion(r.regionEn);
-                // dispatch(setRegion(currentRegion));
               }
                 }>{r.regionKor}</Dropdown.Item>
               )

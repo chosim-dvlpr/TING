@@ -67,10 +67,12 @@ function Password() {
         className={styles.label} 
         htmlFor='password'
       >사용할 비밀번호를 입력해주세요</label>
-      <p>영문/숫자/특수문자 모두 포함, 8자 이상</p>
+      <p
+        className={styles.label} 
+      >영문/숫자/특수문자 모두 포함, 8자 이상</p>
       <div className={styles.passwordContainer}>
         <input 
-          className={styles.input} 
+          className={`${styles.input} ${styles.pwdInput}`} 
           type="password" 
           id="password" 
           onChange={(e) => setInputPassword(e.target.value)} 
@@ -84,7 +86,7 @@ function Password() {
       </div>
       <div className={styles.passwordContainer}>
         <input 
-          className={styles.input} 
+          className={`${styles.input} ${styles.pwdInput}`} 
           type="password" 
           id="passwordCheck" 
           onChange={(e) => setInputPasswordCheck(e.target.value)} 
