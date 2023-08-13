@@ -511,18 +511,9 @@ public class UserService {
             contentType = "image/gif";
         }
 
-//        String contentType;
-//        try {
-//            contentType = Files.probeContentType(filePath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-//        }
-
         // 다운로드할 이미지 파일의 HTTP 헤더 설정
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 
@@ -562,5 +553,34 @@ public class UserService {
         inventoryRepository.save(basicSkin);
 
         return UserSkinDto.of(basicSkin);
+    }
+
+    public ResponseEntity<Resource> getFishSkin(String fileName) {
+        // 다운로드할 이미지 파일의 경로 생성
+        Path filePath = Paths.get(uploadPath, "skin/fish", fileName);
+
+        Resource resource;
+        try {
+            resource = new UrlResource(filePath.toUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        // 이미지 파일의 MIME 타입 지정
+        // 이미지의 Content-Type을 확인하여 적절한 MIME 타입을 지정합니다.
+        String contentType = "image/jpeg"; // 예시로 jpeg 이미지를 사용합니다.
+        if (fileName.endsWith(".png")) {
+            contentType = "image/png";
+        } else if (fileName.endsWith(".gif")) {
+            contentType = "image/gif";
+        } else if (fileName.endsWith(".jpg")) {
+            contentType = "image/jpg";
+        }
+
+        // 다운로드할 이미지 파일의 HTTP 헤더 설정
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 }

@@ -74,6 +74,7 @@ ncloud:
 # profile 이미지 파일경로
 file:
   path: /app/profile
+  fishSkinPath: /skin/fish
 
 # natural language api
 cloud:
