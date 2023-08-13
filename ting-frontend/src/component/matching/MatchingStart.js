@@ -135,11 +135,11 @@ function MatchingStart() {
           case 'LOVE':
             return '연애관';
           case 'VS':
-            return '선택';
+            return 'VS';
           case 'ESSENTIAL':
             return '필수';
           default:
-            return null;
+            return '기본';
         }
       })()
     )
