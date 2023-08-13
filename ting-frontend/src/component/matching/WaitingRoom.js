@@ -71,19 +71,12 @@ function WaitingRoom() {
       const video = stream.getVideoTracks()
       const micStatus = audio.some(track => track.readyState === 'live')
       setIsMicrophoneOn(micStatus)
-      // console.log('마이크상태',micStatus)
       const videoStatus = video.some(track => track.readyState === 'live')
       setIsVideoOn(videoStatus)
-      // console.log('비디오상태',videoStatus)
-      // console.log('소켓', socket)
     }
     catch (err) {
       setIsMicrophoneOn(false)
       setIsVideoOn(false)
-      if (socket){
-        socket.onclose()
-        // console.log('소켓 닫음')
-      }
       console.log(err)
     }
   }
