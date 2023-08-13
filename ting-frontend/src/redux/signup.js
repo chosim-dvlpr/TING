@@ -125,6 +125,6 @@ export const signupReducer = createSlice({
 
 export const { setEmail, setPassword, setPhoneNumber, setName, setNickname, setGender, setRegion, setBirth,
   setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setHobbyCodeList,
-  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList, completeSignupStep,
+  setJobCode, setPersonalityCodeList, setIntroduce, setStyleCodeList, completeSignupStep,
 } = signupReducer.actions;
 export default signupReducer;

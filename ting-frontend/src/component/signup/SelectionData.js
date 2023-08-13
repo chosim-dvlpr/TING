@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import Mbti from "./select/Mbti"
 import Height from "./select/Height"
 import Drink from "./select/Drink"
@@ -14,12 +14,14 @@ import styles from './SignupCommon.module.css'
 
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { setDrinkingCode, setHeightCode, setHobbyCodeList, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
+import { setDrinkingCode, setHeightCode, setHobbyCodeList, setIntroduce, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
 import { dataCode } from "../../SelectionDataList"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import fileHttp from "../../api/fileHttp"
+import basicHttp from "../../api/basicHttp"
 
 function SelectionData(){
-  
+  let navigate = useNavigate();
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
   const signupReducerKeys = Object.keys(signupReducer);
@@ -28,6 +30,13 @@ function SelectionData(){
   const dataCodeCategorySet = new Set();
   const [dataCodeCategoryList, setDataCodeCategoryList] = useState([]);
   
+  
+  const email = signupReducer.email;
+  const password = signupReducer.password;
+  const formData = new FormData();
+
+  const userHeight = useRef();
+
   const getDataCodeCategory = () => {
     dataCodeCategory.forEach((data) => 
     dataCodeCategorySet.add(data.category));
@@ -79,21 +88,6 @@ function SelectionData(){
       )))
   };
 
-  // 드롭다운 리스트
-  const contentsList = (category) => {
-    return (dataCode
-      .filter((data) => data.category.includes(category))
-      .map((data, i) => (
-        <Dropdown.Item onClick={() => {
-          console.log(data)
-          // handleDropdownItemClick(data)
-          }}
-          key={i}
-        >{ data.name }</Dropdown.Item>
-      )))
-  };
-
-
   // 키 저장
   const changeHeight = (height) => {
     if (height > 100 & height < 250) {
@@ -102,9 +96,65 @@ function SelectionData(){
   };
 
 
+  // 파일 업로드
+  // 업로드된 이미지 보낼 때 이메일, 비밀번호 함께 보내기 (유저 확인)
+  const onUploadImage = (e) => {
+    e.preventDefault();
+
+    if (!e.target.files) {
+      return;
+    }
+
+    formData.append('file', e.target.files[0]);
+    formData.append("email", email);
+    formData.append("password", password);
+  }
+
+  // 파일 api 보내기
+  const sendProfileImage = () => {
+    fileHttp.post("/user/profile/noToken", formData).then((response) => {
+      console.log(response);
+      if (response.data.code === 200) {
+        return true
+      }
+      else {
+        console.log('파일 업로드 실패')
+        return false
+      }
+    });
+  }
+
+  // 로그인 버튼 클릭 시 데이터 보내기
+  const goToLogin = (MoveTo) => {
+    if (signupReducer.heightCode && 
+        signupReducer.heightCode < 120 | signupReducer.heightCode > 250) {
+          alert("올바른 키를 입력해주세요.\n100에서 250 사이의 키만 입력 가능합니다.");
+          userHeight.current.value = "";
+          return
+        }
+    else {
+      basicHttp.post('/user/signup', signupReducer).then((response) => {
+        if (response.data.code === 200) {
+          if (sendProfileImage()) {
+            alert("회원가입이 완료되었습니다.");
+            navigate(MoveTo);
+          }
+          else {
+            alert("프로필 사진 업로드에 실패했습니다.")
+          }
+        }
+        else if (response.data.code === 400) {
+          alert("회원 가입 실패\n정확한 정보를 입력해주세요.");
+        }
+      })
+      .catch(() => alert("회원가입 실패"))
+    }
+  };
+
+
   return(
     <div>
-      <h3>추가 정보 입력</h3>
+      <h3>추가 정보를 입력해주세요!</h3>
       {/* <Outlet></Outlet> */}
       <div className={styles.selectDataContainer}>
         <div>
@@ -158,7 +208,8 @@ function SelectionData(){
 
           <h3>Height</h3>
           <input 
-            onChange={(e) => changeHeight(e.target.value)}
+            ref={userHeight}
+            onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
             type="number" min="100" max="250"></input> 
         </div>
 
@@ -219,6 +270,13 @@ function SelectionData(){
           ))
         }
         </span>
+        <h4>자신을 간단하게 소개해주세요</h4>
+        <input type="text" onChange={(e) => dispatch(setIntroduce(e.target.value))}></input>
+        
+        <div>
+          <h4>프로필 사진을 업로드해주세요</h4>
+          <input type="file" accept='image/*' onChange={onUploadImage}></input>
+        </div>
 
           {/* <Hobby />
           <Personality />
@@ -226,6 +284,13 @@ function SelectionData(){
           <Introduce />
           <ProfileImage /> */}
         </div>
+      </div>
+      
+      <div>
+          <button 
+            onClick={() => goToLogin("/login")}
+            className={styles.btn}  
+          >로그인 하러 가기</button>
       </div>
     </div>
   )
