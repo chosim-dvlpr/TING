@@ -14,6 +14,7 @@ function AdviceDetail() {
   const { adviceId } = useParams();
   const [advice, setAdvice] = useState({});
   const [comments, setComments] = useState([]);
+  const [myLike, setMyLike] = useState([]);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata);
   const showbutton = (nickname) => {
@@ -23,6 +24,7 @@ function AdviceDetail() {
   useEffect(() => {
     getAdviceDetail();
     getCommentList();
+    getLikeList();
   }, []);
 
   useEffect(() => {
@@ -48,6 +50,16 @@ function AdviceDetail() {
       setComments(commentData); // 댓글 목록 데이터 설정
     } catch (error) {
       console.error("Error fetching comment list:", error);
+    }
+  };
+
+  const getLikeList = async () => {
+    try {
+      const response = await tokenHttp.get(`/comment/like/ADVICE/${adviceId}`);
+      const likeData = response.data.data;
+      setMyLike(likeData);
+    } catch (error) {
+      console.error("Error fetching comment like list:", error);
     }
   };
 
@@ -137,6 +149,7 @@ function AdviceDetail() {
           />
           <CommentList
             comments={comments}
+            myLike={myLike}
             onUpdateComment={handleUpdateComment}
             onDeleteComment={handleDeleteComment}
             boardType="ADVICE"
