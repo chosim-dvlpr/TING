@@ -87,6 +87,7 @@ public class FriendService {
         friend.getUserHobbys().forEach(hobby -> hobbyAdditional.add(AdditionalInfoDto.of(hobby.getAdditionalInfo())));
         friend.getUserStyles().forEach(style -> styleAdditional.add(AdditionalInfoDto.of(style.getAdditionalInfo())));
         friend.getUserPersonalities().forEach(personality -> personalityAdditional.add(AdditionalInfoDto.of(personality.getAdditionalInfo())));
+
         return UserDto.Info.of(friend, hobbyAdditional, styleAdditional, personalityAdditional);
     }
 
