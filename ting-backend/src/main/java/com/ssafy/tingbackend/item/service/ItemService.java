@@ -258,4 +258,20 @@ public class ItemService {
 
         return ItemDto.FishSkinDto.of(fishSkin);
     }
+
+    public void changeNickname(Long userId, String nickname) {
+        User user = userRepository.findByIdNotRemoved(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Inventory inventory = inventoryRepository.findByItemTypeAndUserId(ItemType.CHANGE_NICKNAME, userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_ENOUGH));
+
+        if (inventory.getQuantity() == 0) throw new CommonException(ExceptionType.ITEM_NOT_ENOUGH);
+
+        inventory.setQuantity(inventory.getQuantity() - 1);
+        inventoryRepository.save(inventory);
+
+        user.setNickname(nickname);
+        userRepository.save(user);
+    }
 }
