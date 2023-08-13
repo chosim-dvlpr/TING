@@ -63,6 +63,7 @@ public enum ExceptionType {
     INVENTORY_NOT_FOUND(4971, "인벤토리가 존재하지 않습니다."),
     ITEM_NOT_ENOUGH(4972, "아이템이 존재하지 않습니다."),
     USER_INVENTORY_MISMATCH(4973, "사용자와 인벤토리가 일치하지 않습니다"),
+    SKIN_NOT_FOUND(4974, "몰고기 스킨이 존재하지 않습니다."),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하습니다.");
 

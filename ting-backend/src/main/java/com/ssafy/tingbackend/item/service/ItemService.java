@@ -2,15 +2,16 @@ package com.ssafy.tingbackend.item.service;
 
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
+import com.ssafy.tingbackend.entity.item.FishSkin;
 import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.item.Item;
 import com.ssafy.tingbackend.entity.item.UserItem;
-import com.ssafy.tingbackend.entity.point.PointCategory;
 import com.ssafy.tingbackend.entity.point.PointHistory;
 import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.user.User;
 import com.ssafy.tingbackend.item.dto.InventoryDto;
 import com.ssafy.tingbackend.item.dto.ItemDto;
+import com.ssafy.tingbackend.item.repository.FishSkinRepository;
 import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.item.repository.ItemRepository;
 import com.ssafy.tingbackend.item.repository.UserItemRepository;
@@ -24,12 +25,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -42,6 +41,7 @@ public class ItemService {
     private final InventoryRepository inventoryRepository;
     private final PointHistoryRepository pointHistoryRepository;
     private final PointCategoryRepository pointCategoryRepository;
+    private final FishSkinRepository fishSkinRepository;
 
     @Transactional
     public void buyItem(Long userId, Long itemCode, Integer count) {
@@ -224,5 +224,38 @@ public class ItemService {
         }
 
         log.info("무료 매칭 티켓 업데이트 완료 ({})", LocalDateTime.now());
+    }
+
+    @Transactional
+    public ItemDto.FishSkinDto useFishRandomBox(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Inventory inventory = inventoryRepository.findByUserIdAndItemType(userId, ItemType.RANDOM_SKIN_BOX)
+                .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_ENOUGH));
+
+        // 아이템이 없을 경우 예외처리
+        if (inventory.getQuantity() == 0) throw new CommonException(ExceptionType.ITEM_NOT_ENOUGH);
+
+        // 아이템 사용
+        inventory.setQuantity(inventory.getQuantity() - 1);
+
+        // 스킨 랜덤뽑기 -> 뽑은 스킨이 유저의 스킨과 같을 경우 다시 뽑기
+        FishSkin fishSkin = null;
+        while (true) {
+            // 랜덤뽑기 진행
+            fishSkin = fishSkinRepository.findByRandomFishSkin()
+                    .orElseThrow(() -> new CommonException(ExceptionType.SKIN_NOT_FOUND));
+
+            if (fishSkin.getCode() != user.getFishSkin().getCode()) break;
+        }
+
+        // 뽑은 스킨을 유저에게 적용
+        user.setFishSkin(fishSkin);
+
+        inventoryRepository.save(inventory);
+        userRepository.save(user);
+
+        return ItemDto.FishSkinDto.of(fishSkin);
     }
 }
