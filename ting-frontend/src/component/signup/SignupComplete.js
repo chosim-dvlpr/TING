@@ -9,9 +9,9 @@ function SignupComplete() {
   let location = useLocation();
   let navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(completeSignupStep());
-  }, [])
+  // useEffect(() => {
+  //   dispatch(completeSignupStep());
+  // }, [])
 
   return (
     <div>
@@ -21,8 +21,13 @@ function SignupComplete() {
           { location.state && location.state.name }님에 대해 더 알려주시면 <br /> 저희가 최선의 소개팅 상대를 찾아드려요.
         </p>
         <div className={styles.selectContainer}>
-          <button className={styles.input} onClick={() => navigate("/signup/select")}>선택정보입력하기</button>
-          <button className={styles.input} onClick={() => navigate("/login")}>로그인 하러가기</button>
+          <button className={styles.input} onClick={() => navigate("/signup/select")}>선택정보 입력하기</button>
+          <button 
+            className={styles.input} 
+            onClick={() => {
+              dispatch(completeSignupStep()); // signupReducer내용 초기화
+              navigate("/login")
+            }}>로그인 하러가기</button>
         </div>
       </div>
     </div>
