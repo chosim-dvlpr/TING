@@ -9,9 +9,7 @@ import Friend from "../friend/Friend";
 import { Link, useNavigate } from "react-router-dom";
 import FriendProfile from "../friend/FriendProfile";
 
-import MyContext from "../../MyContext";
-
-const FriendButton = () => {
+const FriendButton = ({ toggleWheelHandler }) => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
   const navigate = useNavigate();
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -22,10 +20,6 @@ const FriendButton = () => {
   const userId = useSelector((state) => state.friendReducer.friendId);
 
   // let isClosed = true;
-
-  const mainPageHandler = useContext(MyContext).wheelHandler; // useContext 훅 사용
-  const scrollStyle = useContext(MyContext).scrollStyle;
-  const noScrollStyle = useContext(MyContext).noScrollStyle;
 
   const changeIsClosed = () => {
     // alert(isClosed);
@@ -42,10 +36,7 @@ const FriendButton = () => {
         behavior: "instant",
       });
 
-      window.addEventListener("wheel", mainPageHandler);
-      window.addEventListener("DOMMouseScroll", mainPageHandler);
-      window.addEventListener("mousewheel", mainPageHandler);
-      scrollStyle();
+      toggleWheelHandler();
     } else {
       setShow(true);
       document.body.style.cssText = `
@@ -54,10 +45,7 @@ const FriendButton = () => {
       overflow: scroll;
       width: 100%;`;
 
-      window.removeEventListener("wheel", mainPageHandler);
-      window.removeEventListener("DOMMouseScroll", mainPageHandler);
-      window.removeEventListener("mousewheel", mainPageHandler);
-      noScrollStyle();
+      toggleWheelHandler();
     }
   };
 
