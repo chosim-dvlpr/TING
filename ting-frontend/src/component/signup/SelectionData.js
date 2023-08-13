@@ -14,7 +14,7 @@ import styles from './SignupCommon.module.css'
 
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { setDrinkingCode, setHeightCode, setHobbyCodeList, setIntroduce, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
+import { completeSignupStep, setDrinkingCode, setHeightCode, setHobbyCodeList, setIntroduce, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
 import { dataCode } from "../../SelectionDataList"
 import { useEffect, useRef, useState } from "react"
 import fileHttp from "../../api/fileHttp"
@@ -137,6 +137,7 @@ function SelectionData(){
         if (response.data.code === 200) {
           if (sendProfileImage()) {
             alert("회원가입이 완료되었습니다.");
+            dispatch(completeSignupStep());
             navigate(MoveTo);
           }
           else {
