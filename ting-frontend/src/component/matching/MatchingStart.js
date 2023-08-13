@@ -67,6 +67,7 @@ function MatchingStart() {
 
     // 음악 무한 재생
     const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
+    bgmAudio.volume = 0.1
     bgmAudio.play();
 
     audioRef.current = bgmAudio;
@@ -219,10 +220,12 @@ function MatchingStart() {
   const makeSoundMessage = (score) => {
     if (userData.gender === 'F') {
       const audio = new Audio(`${process.env.PUBLIC_URL}/sound/m/${score}점_남.mp3`)
+      audio.volume = 1
       audio.play()
     }
     else {
       const audio = new Audio(`${process.env.PUBLIC_URL}/sound/w/${score}점_여.mp3`)
+      audio.volume = 1
       audio.play()
     }
   }
@@ -293,13 +296,14 @@ function MatchingStart() {
       console.log("======================signal:score=====================");
       let data = JSON.parse(event.data);
 
+      console.log(data)
+      // 내가 던진 점수 시그널은 무시
+      if (data.userId === userData.userId) return;
+      
       // 점수 선택시 양쪽 다 점수 소리 들리게
       if (data.questionNumber > 0 && data.questionNumber < 12) {
         makeSoundMessage(data.score);
       }
-
-      // 내가 던진 점수 시그널은 무시
-      if (data.userId === userData.userId) return;
 
       // 점수를 yourScore에 저장
       dispatch(setYourScore(data.score));
