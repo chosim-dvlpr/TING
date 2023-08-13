@@ -12,6 +12,7 @@ function IssueDetail() {
   const { issueId } = useParams();
   const [issue, setIssue] = useState();
   const [comments, setComments] = useState([]);
+  const [myLike, setMyLike] = useState([]);
   const userdata = useSelector((state) => state.userdataReducer.userdata);
   const showbutton = (nickname) => {
     return userdata && userdata.nickname === nickname;
@@ -29,6 +30,7 @@ function IssueDetail() {
   useEffect(() => {
     getIssueDetail();
     getCommentList();
+    getLikeList();
   }, []);
 
   useEffect(() => {
@@ -54,6 +56,16 @@ function IssueDetail() {
       setComments(commentData); // 댓글 목록 데이터 설정
     } catch (error) {
       console.error("Error fetching comment list:", error);
+    }
+  };
+
+  const getLikeList = async () => {
+    try {
+      const response = await tokenHttp.get(`/comment/like/ISSUE/${issueId}`);
+      const likeData = response.data.data;
+      setMyLike(likeData);
+    } catch (error) {
+      console.error("Error fetching comment like list:", error);
     }
   };
 
@@ -209,6 +221,7 @@ function IssueDetail() {
 
           <CommentList
             comments={comments}
+            myLike={myLike}
             onUpdateComment={handleUpdateComment}
             onDeleteComment={handleDeleteComment}
           />
