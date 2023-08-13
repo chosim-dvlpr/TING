@@ -67,11 +67,12 @@ export const signupReducer = createSlice({
       state.religionCode = action.payload;
     },
     setHobbyCodeList: (state, action) => {
-      let hobbyIndex = state.hobbyCodeList.indexOf(action.payload);
+      const hobbyIndex = state.hobbyCodeList.findIndex(data => data.code === action.payload.code);
       if (hobbyIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.hobbyCodeList.splice(hobbyIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.hobbyCodeList.push(action.payload);
       }
     },
@@ -79,25 +80,27 @@ export const signupReducer = createSlice({
       state.jobCode = action.payload;
     },
     setPersonalityCodeList: (state, action) => {
-      let personalityIndex = state.personalityCodeList.indexOf(action.payload);
+      const personalityIndex = state.personalityCodeList.findIndex(data => data.code === action.payload.code);
       if (personalityIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.personalityCodeList.splice(personalityIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.personalityCodeList.push(action.payload);
-      }    
+      } 
     },
     setIntroduce: (state, action) => {
       state.introduce = action.payload;
     },
     setStyleCodeList: (state, action) => {
-      let styleIndex = state.styleCodeList.indexOf(action.payload);
+      const styleIndex = state.styleCodeList.findIndex(data => data.code === action.payload.code);
       if (styleIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.styleCodeList.splice(styleIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.styleCodeList.push(action.payload);
-      }       
+      }   
     },
     setDeleteStyleCodeList: (state, action) => {
       state.styleCodeList.slice(action.payload, 1);
