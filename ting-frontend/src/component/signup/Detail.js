@@ -15,10 +15,10 @@ function Detail() {
   let [inputNickname, setInputNickname] = useState("");
   let inputNicknameRef = useRef();
   let [checkNickname, setCheckNickname] = useState(false);
+  const [nicknameMsg, setNicknameMsg] = useState("");
   let [currentRegion, setCurrentRegion] = useState("");
   let allContentsNum = 5;
   let [checkAllContents, setCheckAllContents] = useState([false, false, false, false, false]); // 리스트 하드코딩 수정하기
-  let [count, setCount] = useState(0);
 
   // 생년월일
   const [birthDate, setBirthDate] = useState("");
@@ -52,7 +52,7 @@ function Detail() {
     // 닉네임 한글 확인
     // 한글이 아닌 글자가 있다면 경고메세지 출력
     if (!koreanPattern.test(inputNickname)) {
-      alert("한글만 입력해주세요.");
+      alert("한글만 입력 가능합니다.");
     }
     else {
       basicHttp.get(`/user/nickname/${inputNickname}`).then((response) => {
@@ -85,9 +85,9 @@ function Detail() {
     dispatch(setBirth(selectedBirth)); // Redux 상태에 저장
   }
 
-  useEffect(() => {
-    checkAdult();
-  }, [handleBirthChange])
+  // useEffect(() => {
+  //   checkAdult();
+  // }, [handleBirthChange])
 
   const checkAdult = () => {
     const year = signupReducer.birth && signupReducer.birth.slice(0,4);
@@ -97,7 +97,7 @@ function Detail() {
 
     if (signupReducer.birth &&
         currentYear - Number(year) < 19) {
-      alert("19세 이상의 성인만 회원가입 가능합니다.");
+      alert("성인만 회원가입 가능합니다.");
       setBirth(null);
       return false
     }
@@ -115,8 +115,8 @@ function Detail() {
 
   useEffect(() => {
     if (inputNickname && !koreanPatternAll.test(inputNickname)) {
-      alert("한글만 입력해주세요.")
-      inputNicknameRef.current.value = "";
+      setNicknameMsg("한글만 입력 가능합니다.")
+      // inputNicknameRef.current.value = "";
     }
   }, [inputNickname])
 
@@ -135,15 +135,16 @@ function Detail() {
   const checkAllData = () => {
     const checkDataList = ["email", "password", "phoneNumber", "name", 
       "nickname", "gender", "birth", "region"];
+      let count = 0;
 
     checkDataList.forEach((data) => {
-      if (!signupReducer.data) { // 빈 값이 있다면 1 추가
-        setCount(count+1);
+      if (!signupReducer[data]) { // 빈 값이 있다면 1 추가
+        count++;
       }
     })
 
     // 빈 값이 있다면
-    if (!count) {
+    if (count > 0) {
       return false
     }
     else {
@@ -160,7 +161,7 @@ function Detail() {
       alert("모든 항목을 입력 또는 체크해주세요.");
     }
     else if (!checkAdult()) {
-      alert("19세 이상의 성인만 회원가입 가능합니다.");
+      alert("성인만 회원가입 가능합니다.");
     }
     else {Navigate(moveTo)}
   }
@@ -188,6 +189,7 @@ function Detail() {
             onClick={() => nicknameIsExist()}>
           중복확인</button>
           <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
+          <p className={styles.wrongMsg}>{ nicknameMsg }</p>
           <p className={styles.rightMsg}>
             {
               checkNickname &&
@@ -198,7 +200,7 @@ function Detail() {
       </div>
       <button
         className={[styles.selectBtn, styles.genderBtn].join(" ")} 
-        onClick={() => {
+        onClick={(e) => {
           dispatch(setGender("M"));
       }}>남</button>
       <button
@@ -213,7 +215,9 @@ function Detail() {
         type="date" 
         onChange={(e) => {
           handleBirthChange(e.target.value)
-        }}></input>
+        }}
+        max="2004-12-31"
+        ></input>
       <br/>
 
       <Dropdown>
