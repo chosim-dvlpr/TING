@@ -99,7 +99,7 @@ function InputEmail(){
 
       {/* 중복확인 전 */}
       <input 
-        // ref={emailInput} 
+        ref={emailInput} 
         className={styles.input} 
         type="email" 
         id="email" 
