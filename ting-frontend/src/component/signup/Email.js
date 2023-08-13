@@ -35,7 +35,8 @@ function InputEmail(){
   // 이메일 중복 체크
   const checkEmail = () => {
     let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    console.log(check.test(inputEmail))
+    // console.log(check.test(inputEmail))
+    setMsg("");
     if (check.test(inputEmail)) {
       basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
         if (response.data.code === 200) {
@@ -79,11 +80,10 @@ function InputEmail(){
       email: inputEmail,
       authCode: authCode,
     }
-    console.log(data)
 
     basicHttp.post('/user/emailauth', data).then((response) => {
       if (response.data.code === 200) {
-        alert("인증 성공");
+        setMsg("이메일 인증 성공");
         dispatch(setEmail(inputEmail)); // redux에 저장
         setIsInputEmailCodeDisabled(true);
       }
@@ -149,7 +149,9 @@ function InputEmail(){
       
 
       <br />
-      <span className={styles.wrongMsg}>{msg}</span>
+      <span className={isInputEmailCodeDisabled 
+        ? styles.rightMsg 
+        : styles.wrongMsg}>{msg}</span>
 
     </div>
   )
