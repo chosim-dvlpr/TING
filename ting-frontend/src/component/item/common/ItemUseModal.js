@@ -37,6 +37,7 @@ function ItemModal({ closeModal, clickedItem }) {
         }}
       ></div>
       <div className={styles.ModalInner}>
+      <img src={`${process.env.PUBLIC_URL}/img/closeIcon.png`} className={styles.closeButton} onClick={() => { closeModal() }} />
         <div className={styles.image}>
           <img src={clickedItem.img} />
         </div>

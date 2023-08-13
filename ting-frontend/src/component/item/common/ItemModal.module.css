@@ -106,3 +106,11 @@
   margin-top: 10px;
   font-size: 18px;
 }
+
+.closeButton {
+  position: absolute;
+  top:20px;
+  right:20px;
+  width: 15px;
+  height: 15px;
+}
