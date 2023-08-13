@@ -28,7 +28,6 @@ import Openvidu from "./pages/openvidu/openvidu-main.js";
 // 로그인 이메일, 비밀번호 찾기
 import FindMyInfoPage from "./pages/FindMyInfoPage";
 
-
 // 메인페이지
 import MainPage from "./pages/MainPage";
 
@@ -135,7 +134,10 @@ function App() {
           <Route path="certEmail" element={<CertificationEmail />}></Route>
           <Route path="password" element={<SignupPassword />}></Route>
           <Route path="phonenum" element={<SignupPhoneNumber />}></Route>
-          <Route path="certPhonenum" element={<CertificationPhonenumber />}></Route>
+          <Route
+            path="certPhonenum"
+            element={<CertificationPhonenumber />}
+          ></Route>
           <Route path="detail" element={<SignupDetail />}></Route>
           <Route path="complete" element={<SignupComplete />}></Route>
           <Route path="select" element={<SelectionData />}>
@@ -154,7 +156,7 @@ function App() {
         </Route>
 
         {/* 로그인 아이디, 비번 찾기 */}
-        <Route path="/login/forget" element={<FindMyInfoPage/>}></Route>
+        <Route path="/login/forget" element={<FindMyInfoPage />}></Route>
 
         {/* 매칭 - 로그인 인증 */}
         {/* <Route path="/matching" element={<MatchingPage  />}> */}
@@ -168,14 +170,23 @@ function App() {
         {/* 커뮤니티 페이지 */}
         <Route path="/community//*" element={<CommunityPage />} />
 
-        <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail />} />
+        <Route
+          path="/community/advice/detail/:adviceId"
+          element={<AdviceDetail />}
+        />
         <Route path="/community/advice" element={<AdviceBoard />} />
         <Route path="/community/advice/create" element={<AuthAdviceCreate />} />
-        <Route path="/community/advice/update/:adviceId" element={<AuthAdviceUpdate />} />
+        <Route
+          path="/community/advice/update/:adviceId"
+          element={<AuthAdviceUpdate />}
+        />
 
         <Route path="/community/issue" element={<IssueBoard />} />
         <Route path="/community/issue/create" element={<AuthIssueCreate />} />
-        <Route path="/community/issue/detail/:issueId" element={<IssueDetail />} />
+        <Route
+          path="/community/issue/detail/:issueId"
+          element={<IssueDetail />}
+        />
 
         {/* 친구목록 */}
         <Route path="/friend" element={<AuthFriend />}>
