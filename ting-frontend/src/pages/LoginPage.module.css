@@ -107,3 +107,12 @@
 .genderBtn {
     width: 180px;
 }
+
+.findIdAndPassword {
+    cursor: pointer;
+}
+
+.signupBtn {
+    cursor: pointer;
+    margin-left: 30px;
+}

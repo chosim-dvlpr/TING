@@ -111,10 +111,6 @@ const NavBar = () => {
               <img src={process.env.PUBLIC_URL + '/img/조개2.png'} onMouseOver={openClam} onMouseLeave={closeClam} className={styles.menuItem}></img>
               <div className={styles.menuName}>로그인</div>
             </span>
-            <span className={styles.navMenu} onClick={() => navigate("/signup")}>
-              <img src={process.env.PUBLIC_URL + '/img/조개2.png'} onMouseOver={openClam} onMouseLeave={closeClam} className={styles.menuItem}></img>
-              <div className={styles.menuName}>회원가입</div>
-            </span>
           </>
         )}
       </div>

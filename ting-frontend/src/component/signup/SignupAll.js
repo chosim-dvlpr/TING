@@ -12,11 +12,6 @@ function SignUpAll(){
         <CertificationPhonenumber />
         <Detail />
     </div>
-    // <div>
-    //   <NavBar/>
-    //   <h1>회원 가입</h1>
-    //   <Outlet></Outlet>
-    // </div>
   )
   
 }

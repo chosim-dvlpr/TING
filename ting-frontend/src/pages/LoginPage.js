@@ -38,14 +38,8 @@ function LoginPage() {
         .then((response) => {
           if (response.data.code === 200) {
             console.log("성공");
-            localStorage.setItem(
-              "access-token",
-              response.data.data["access-token"]
-            );
-            localStorage.setItem(
-              "refresh-token",
-              response.data.data["refresh-token"]
-            );
+            localStorage.setItem("access-token", response.data.data["access-token"]);
+            localStorage.setItem("refresh-token", response.data.data["refresh-token"]);
 
             // 유저 데이터 redux에 저장
             tokenHttp.get("/user").then((response) => {
@@ -84,8 +78,6 @@ function LoginPage() {
     }
   };
 
-
-
   return (
     <div className={styles.outer}>
       <NavBar />
@@ -114,21 +106,23 @@ function LoginPage() {
             onKeyDown={(e) => activeEnter(e)}
           />
           <br />
-          <button
-            className={styles.btn}
-            onClick={() => {
-              loginFunc();
-            }}
-          >
-            로그인
-          </button>
-           <div>
-            <span onClick={()=>navigate("/login/forget")}>
-                아이디/비밀번호 찾기
+          <div>
+            <span className={styles.findIdAndPassword} onClick={() => navigate("/login/forget")}>
+              아이디/비밀번호찾기
             </span>
-
+            <span className={styles.signupBtn} onClick={() => navigate("/signup")}>
+              회원가입
+            </span>
+          </div>
         </div>
-        </div>
+        <button
+          className={styles.btn}
+          onClick={() => {
+            loginFunc();
+          }}
+        >
+          로그인
+        </button>
       </div>
     </div>
   );
