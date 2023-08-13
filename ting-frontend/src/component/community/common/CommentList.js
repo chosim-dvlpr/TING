@@ -4,7 +4,7 @@ import CommentLikeButton from "./CommentLikeButton";
 import styles from "./CommentList.module.css";
 import {getDate} from "../../common/TimeCalculate";
 
-function CommentList({ comments, onUpdateComment, onDeleteComment }) {
+function CommentList({ comments, myLike, onUpdateComment, onDeleteComment }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
@@ -97,12 +97,11 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
                       ? getDate(comment.createdTime)
                       : `${getDate(comment.modifiedTime)}`}</span>
                 <span className={styles["comment-like-button"]}>
-                  <CommentLikeButton commentId={comment.commentId}
+                  <CommentLikeButton 
+                    commentId={comment.commentId}
+                    initialLiked={myLike.indexOf(comment.commentId)==-1? false: true}
                     initialLikes={comment.likeCount}
                     onUpdateLikes={handleUpdateLikes}/></span>
-
-                        
-
                 <div>
                 {showbutton(comment.nickname) && (<button onClick={() => handleUpdate(comment.commentId, comment.content)} className={styles["edit-button"]}>
                   수정
