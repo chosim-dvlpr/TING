@@ -75,6 +75,7 @@ p{
   height: 300px;
   margin : 20px auto;
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -93,7 +94,29 @@ p{
   z-index: 1;
   word-break: keep-all;
   font-family: UhBeeSe_hyun;
-  font-size: 20px;
+  font-size: 30px;
+}
+
+.cardCategory {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
+}
+
+.cardCategoryBottom {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
 }
 
 
