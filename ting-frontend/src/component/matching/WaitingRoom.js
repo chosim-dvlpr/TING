@@ -56,8 +56,13 @@ function WaitingRoom() {
   
   // 마이크 비디오 상태 확인
   useEffect(()=>{
-    checkStreamStatus()
-  },[isMicrophoneOn,isVideoOn])
+    const intervalCheckStream = setInterval(() => {
+      checkStreamStatus()
+    }, 2000);
+    return () => {
+      clearInterval(intervalCheckStream);
+    }
+  },[])
 
   const checkStreamStatus = async ()=>{
     try {
@@ -70,10 +75,12 @@ function WaitingRoom() {
       setIsVideoOn(videoStatus)
     }
     catch (err) {
+      setIsMicrophoneOn(false)
+      setIsVideoOn(false)
       console.log(err)
     }
   }
-
+    
   // 웹소켓 연결
   const handleConnectClick = () => {
     const serverUrl = "wss://i9b107.p.ssafy.io:5157/matching";
@@ -84,7 +91,7 @@ function WaitingRoom() {
     // 최초 연결시 jwt 토큰 전달 (access-token, refresh-token 관리 필요 -> 어디에서 가져오는 로직?)
     ws.onopen = () => {
       console.log("소켓 연결 성공");
-      setSocket(ws);
+      setSocket(ws);     
       const token = localStorage.getItem("access-token");
       // 토큰 redux에 저장
       dispatch(setOpenviduToken(token));
@@ -183,7 +190,7 @@ function WaitingRoom() {
 
 
   return (
-    <div>
+    <div className={styles.outer}>
       <NavBar/>
       <div className={styles.waitingMenu}>
         <button className={styles.button} onClick={()=>{navigate("/item/shop")}}>아이템샵</button>
@@ -196,7 +203,7 @@ function WaitingRoom() {
           {/* 오른쪽 영상 박스 */}
           <Col className={`col-7 ${styles.leftBox}`}>
             { isVideoOn ?  (
-              <Webcam className={styles.Webcam} audio={true} video={true}/>
+              <Webcam className={styles.Webcam} video={true}/>
             ) : (
               <div className={styles.loadingSpinner}>
                 <div className={styles.spinner}></div>

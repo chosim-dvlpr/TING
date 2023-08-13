@@ -5,6 +5,10 @@
   font-style: normal;
 }
 
+.outer{
+  overflow: hidden;
+}
+
 video {
   width: 100%;
   margin:10px 0;
@@ -71,6 +75,7 @@ p{
   height: 300px;
   margin : 20px auto;
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -87,8 +92,31 @@ p{
 .cardContent {
   margin: 10px;
   z-index: 1;
+  word-break: keep-all;
   font-family: UhBeeSe_hyun;
-  font-size: 20px;
+  font-size: 30px;
+}
+
+.cardCategory {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
+}
+
+.cardCategoryBottom {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
 }
 
 

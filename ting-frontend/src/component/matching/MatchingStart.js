@@ -27,6 +27,9 @@ function MatchingStart() {
   // react-router
   const navigate = useNavigate();
 
+  // 질문 카드 관련 state
+  const [cardCategory, setCardCategory] = useState('')
+
   //  점수 알림창 관련 state
   const [showScoreMessage, setShowScoreMessage] = useState(false);
   const [alertScore, setAlertScore] = useState("");
@@ -116,6 +119,32 @@ function MatchingStart() {
     }
   }
 
+  // 질문 카드 바뀔 때 제어 되는 함수
+  useEffect(() => {
+    setCardCategory(
+      (() => {
+        switch (questionData[questionNumber]?.category) {
+          case 'PREFER':
+            return '호불호';
+          case 'HOBBY':
+            return '취미';
+          case 'LIFE':
+            return '생활';
+          case 'FAVORITE':
+            return '최애';
+          case 'LOVE':
+            return '연애관';
+          case 'VS':
+            return 'VS';
+          case 'ESSENTIAL':
+            return '필수';
+          default:
+            return '기본';
+        }
+      })()
+    )
+  }, [questionNumber])
+
   // 질문카드를 제어하는 useEffect hook
   useEffect(() => {
     console.log("================useEffect (score 변경)=====================");
@@ -123,6 +152,7 @@ function MatchingStart() {
       // questionNumber 바로 안바뀌게 잠시 시간 텀 줌
       setTimeout(() => {
         dispatch(setQuestionNumber(Math.min(myScore.length, yourScore.length)));
+        setCardCategory()
       }, 2000)
     }
   }, [myScore, yourScore]);
@@ -299,9 +329,9 @@ function MatchingStart() {
       console.log(data)
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
-      
+
       // 점수 선택시 양쪽 다 점수 소리 들리게
-      if (data.questionNumber > 0 && data.questionNumber < 12) {
+      if (data.questionNumber > 0 && data.questionNumber < 11) {
         makeSoundMessage(data.score);
       }
 
@@ -439,12 +469,12 @@ function MatchingStart() {
       if (res.isConfirmed) {
         leaveSession()
         window.location.href = '/'
-      } 
+      }
     });
   }
 
   return (
-    <>
+    <div className={styles.outer}>
 
       <div className={`${styles.container}`}>
         {/* 최종 선택 */}
@@ -472,8 +502,12 @@ function MatchingStart() {
           {/* 질문 카드 */}
           {/* <QuestionCard /> */}
           <div className={styles.cardOuter}>
-            <img src={`/img/card/card${questionNumber}.png`} alt="card" className={styles.trumpCard} />
+            <img src={`/img/card/card.png`} alt="card" className={styles.trumpCard} />
             <span className={styles.cardContent}>{questionData[questionNumber]?.questionCard}</span>
+
+            <span className={styles.cardCategory}>{cardCategory}</span>
+            <span className={styles.cardCategoryBottom}>{cardCategory}</span>
+
           </div>
           {/* 질문 카드 -- end */}
 
@@ -497,9 +531,12 @@ function MatchingStart() {
           {showMatchingChoiceModal ? null : (
             <div className={styles.ScoreCheckBox}>
               {questionNumber === 0 ? (
-                <h1>서로 간단히 인사를 나누세요 :) 바로 시작합니다.</h1>
+                <div>
+                  <h1>서로 간단히 인사를 나누세요 :)</h1>
+                  <h2>뒤에 나올 카드에 대한 질문에 대해 이야기를 나누어 보세요</h2>
+                </div>
               ) : questionNumber === 11 ? (
-                <h1>끝이 났습니다.</h1>
+                <h1>질문 카드가 끝났습니다.</h1>
               ) : questionNumber === 12 ? (
                 <div className={styles.ScoreSumResult}>
                   <p> {sumYourScore}점 </p>
@@ -541,7 +578,7 @@ function MatchingStart() {
           {/* 점수 체크판 -- end */}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

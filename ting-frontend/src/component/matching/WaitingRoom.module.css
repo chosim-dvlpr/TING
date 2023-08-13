@@ -5,6 +5,9 @@
     font-style: normal;
 }
 
+.outer{
+    overflow: hidden;
+}
 
 /* 메뉴바 */
 .waitingMenu {
