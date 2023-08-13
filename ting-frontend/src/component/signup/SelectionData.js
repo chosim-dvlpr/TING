@@ -14,7 +14,7 @@ import styles from './SignupCommon.module.css'
 
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { setDrinkingCode, setHeightCode, setMbtiCode, setReligionCode, setSmokingCode } from "../../redux/signup"
+import { setDrinkingCode, setHeightCode, setHobbyCodeList, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
 import { dataCode } from "../../SelectionDataList"
 import { useEffect, useState } from "react"
 
@@ -54,15 +54,39 @@ function SelectionData(){
       case "RELIGION":
         dispatch(setReligionCode(data));
         break;
+      case "HOBBY":
+        dispatch(setHobbyCodeList(data));
+        break;
+      case "PERSONALITY":
+        dispatch(setPersonalityCodeList(data));
+        break;
+      case "STYLE":
+        dispatch(setStyleCodeList(data));
+        break;
     }
   };
 
+  // 드롭다운
   const contents = (category) => {
     return (dataCode
       .filter((data) => data.category.includes(category))
       .map((data, i) => (
         <Dropdown.Item onClick={() => {
           handleDropdownItemClick(data)
+          }}
+          key={i}
+        >{ data.name }</Dropdown.Item>
+      )))
+  };
+
+  // 드롭다운 리스트
+  const contentsList = (category) => {
+    return (dataCode
+      .filter((data) => data.category.includes(category))
+      .map((data, i) => (
+        <Dropdown.Item onClick={() => {
+          console.log(data)
+          // handleDropdownItemClick(data)
           }}
           key={i}
         >{ data.name }</Dropdown.Item>
@@ -137,12 +161,70 @@ function SelectionData(){
             onChange={(e) => changeHeight(e.target.value)}
             type="number" min="100" max="250"></input> 
         </div>
+
         <div>
-          <Hobby />
+        <h3>Hobby</h3>
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          { "취미" }
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {
+              contents("HOBBY")
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+        <span>
+        {
+          signupReducer.hobbyCodeList.map((hobby, i) => (
+            <p>{ hobby.name }</p>
+          ))
+        }
+        </span>
+
+        <h3>Personality</h3>
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          { "성격" }
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {
+              contents("PERSONALITY")
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+        <span>
+        {
+          signupReducer.personalityCodeList.map((personality, i) => (
+            <p>{ personality.name }</p>
+          ))
+        }
+        </span>
+
+        <h3>Style</h3>
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          { "선호 스타일" }
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {
+              contents("STYLE")
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+        <span>
+        {
+          signupReducer.styleCodeList.map((style, i) => (
+            <p>{ style.name }</p>
+          ))
+        }
+        </span>
+
+          {/* <Hobby />
           <Personality />
           <Style />
           <Introduce />
-          <ProfileImage />
+          <ProfileImage /> */}
         </div>
       </div>
     </div>
