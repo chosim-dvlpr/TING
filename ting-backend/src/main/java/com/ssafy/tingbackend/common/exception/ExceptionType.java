@@ -66,6 +66,7 @@ public enum ExceptionType {
     SKIN_NOT_FOUND(4974, "몰고기 스킨이 존재하지 않습니다."),
     DELETED_FRIEND_NOT_REVIVE(4975, "삭제된 친구는 티켓을 사용해도 부활시킬 수 없습니다."),
     ALIVE_FRIEND_NOT_REVIVE(4976, "죽은 친구에게만 티켓을 사용할 수 있습니다."),
+    ITEM_ALREADY_HAVE(4977, "더 큰 어항크기 아이템을 이미 가지고 있습니다."),
 
     GLOBAL_EXCEPTION(5000, "알 수 없는 예외가 발생하습니다.");
 

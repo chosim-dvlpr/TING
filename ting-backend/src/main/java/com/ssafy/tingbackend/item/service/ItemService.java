@@ -33,9 +33,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -76,6 +74,15 @@ public class ItemService {
         pointHistory.setPointCategory(pointCategoryRepository.findById(2L).orElseThrow());
         pointHistoryRepository.save(pointHistory);
 
+
+        // 아이템이 SKIN 일 때 이미 더 큰 크기의 SKIN 을 가지고 있다면 에러 던져주기
+        Set<ItemType> typeSet = new HashSet<>(Set.of(ItemType.SKIN_2, ItemType.SKIN_3, ItemType.SKIN_5, ItemType.SKIN_10));
+
+        ItemType maxSkinSize = findMaxSkinSize(userId);
+        if (typeSet.contains(item.getCategory()) && item.getCategory().ordinal() <= maxSkinSize.ordinal()) {
+            throw new CommonException(ExceptionType.ITEM_ALREADY_HAVE);
+        }
+
         // 아이템 구매 내역 저장
         for (int i = 0; i < count; i++) {
             UserItem userItem = UserItem.builder()
@@ -104,6 +111,21 @@ public class ItemService {
 
             inventoryRepository.save(inventory);
         }
+    }
+
+    private ItemType findMaxSkinSize(Long userId) {
+        List<Inventory> inventoryList = inventoryRepository.findByUserId(userId);
+
+        ItemType[] itemType = {ItemType.SKIN_10, ItemType.SKIN_5, ItemType.SKIN_3, ItemType.SKIN_2};
+
+        for (ItemType type : itemType) {
+            for (Inventory inventory : inventoryList) {
+                if (inventory.getItemType() == type) {
+                    return type;
+                }
+            }
+        }
+        return ItemType.SKIN_2;
     }
 
     @Transactional
