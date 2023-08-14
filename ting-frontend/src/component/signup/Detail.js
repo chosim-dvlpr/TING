@@ -97,7 +97,7 @@ function Detail() {
   }
 
   useEffect(() => {
-    dispatch(setRegion(currentRegion.regionEn)); // Redux 상태에 저장
+    dispatch(setRegion(currentRegion.regionKor)); // Redux 상태에 저장
   }, [currentRegion])
 
   useEffect(() => {
