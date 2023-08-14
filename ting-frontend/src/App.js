@@ -38,7 +38,6 @@ import NavBar from "./component/common/NavBar";
 import MatchingPage from "./pages/MatchingPage.js";
 import WaitingRoom from "./component/matching/WaitingRoom.js";
 import MatchingStart from "./component/matching/MatchingStart.js";
-import MatchingResult from "./component/matching/MatchingResult";
 
 // 커뮤니티
 
@@ -163,7 +162,6 @@ function App() {
         <Route path="/matching" element={<AuthMatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
           <Route path="start" element={<MatchingStart />}></Route>
-          <Route path="result" element={<MatchingResult />}></Route>
         </Route>
         {/* </Route> */}
 
