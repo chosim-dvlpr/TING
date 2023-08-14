@@ -32,6 +32,7 @@ function MatchingChoice({ session, count }) {
 
   // 결과 선택 로직
   useEffect(() => {
+    // 결과 선택 저장
     sendResult(result)
     // 버튼 토글
     if (result) {
@@ -49,17 +50,19 @@ function MatchingChoice({ session, count }) {
     if (result) {
       resultData = {
         matchingId: matchingId,
-        choice: 'yes'
+        choice: "yes"
       };
     } else {
       resultData = {
         matchingId: matchingId,
-        choice: 'no'
+        choice: "no"
       };
     }
     try {
+      console.log('여기가 문제네?')
       const response = await tokenHttp.post('/date/result', resultData)
-      console.log(response.data);
+      console.log('친구 추가 되었는지에 대한 데이터',response.data);
+      
     } catch (err) {
       console.log(err)
     }
