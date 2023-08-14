@@ -95,16 +95,17 @@ function IssueBoard() {
     console.log("============Search Result:", searchResult);
   }, [searchResult]);
 
-  // 투표 비율에 따른 색상 변경
+  // 투표율에 따른 배경 색 설정
   const calculateTotalCount = (issue) => issue.agreeCount + issue.opposeCount;
 
   const calculateRatio = (agreeCount, totalCount) =>
-    (agreeCount / totalCount) * 100;
+    totalCount === 0 ? 50 : (agreeCount / totalCount) * 100;
 
   const getCardStyle = (issue) => {
     const totalCount = calculateTotalCount(issue);
+
     const agreeRatio = calculateRatio(issue.agreeCount, totalCount);
-    const opposeRatio = 100 - agreeRatio; // Calculate oppose ratio
+    const opposeRatio = totalCount === 0 ? 50 : 100 - agreeRatio;
 
     const backgroundColor = `linear-gradient(to right, #f1b7be ${agreeRatio}%,  #8bcad5 ${agreeRatio}%)`;
 
@@ -142,11 +143,13 @@ function IssueBoard() {
                 >
                   <div className={styles.title}>
                     <span>
-                      {Math.round(
-                        (issue.agreeCount /
-                          (issue.agreeCount + issue.opposeCount)) *
-                          100
-                      )}
+                      {issue.agreeCount + issue.opposeCount === 0
+                        ? 0
+                        : Math.round(
+                            (issue.agreeCount /
+                              (issue.agreeCount + issue.opposeCount)) *
+                              100
+                          )}
                     </span>
                     <div
                       className={styles.link}
@@ -155,11 +158,13 @@ function IssueBoard() {
                       {issue.title}
                     </div>
                     <span>
-                      {Math.round(
-                        (issue.opposeCount /
-                          (issue.agreeCount + issue.opposeCount)) *
-                          100
-                      )}
+                      {issue.agreeCount + issue.opposeCount === 0
+                        ? 0
+                        : Math.round(
+                            (issue.opposeCount /
+                              (issue.agreeCount + issue.opposeCount)) *
+                              100
+                          )}
                     </span>
                   </div>
                 </div>
