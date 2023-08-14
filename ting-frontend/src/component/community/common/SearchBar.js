@@ -23,6 +23,7 @@ function SearchBar({ onSearch, boardType }) {
   const handleSearch = () => {
     console.log("Search button clicked");
     onSearch({ keyword, item });
+
   };
   
 

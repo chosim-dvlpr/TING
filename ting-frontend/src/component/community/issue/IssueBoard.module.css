@@ -34,11 +34,11 @@
   font-size: 16px;
 }
 
+
 .card {
   display: flex;
   width: 100%;
-  height: 100%;
-  /* border: 2px solid transparent; */
+  height: auto;
   font-size: 24px;
   font-weight: 600;
   margin-top: 30px;
@@ -51,25 +51,37 @@
   justify-content: space-between;
   line-height: 1.5;
   overflow: hidden;
+  position: relative; /* 추가 */
 }
 
-.card span {
+.cardNumContainer {
   display: flex;
-  align-items: center;
+  justify-content: space-between; /* 가운데 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
   height: 100px;
   font-size: 144px;
   padding: 0;
   color: white;
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
 .link {
+  display: block;
   cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1;
+  padding: 0;
+  width: 100%;
+  position: absolute; /* 추가 */
+  top: 50%; /* 추가 */
+  transform: translateY(-50%); /* 추가 */
 }
 
-.link:hover {
-  text-decoration: underline;
+.title {
+  display: flex;
+  margin: 0 0;
+  justify-content: center;
+  align-items: center;
 }
 
 .cardVotes {
@@ -143,18 +155,3 @@
   background-color: #d75c6b;
 }
 
-.title {
-  display: flex;
-  justify-content: space between;
-  align-items: center;
-}
-
-.title div {
-  flex: 1; /* 각 아이템이 가득 차게 설정 */
-  text-align: center; /* 내부 아이템 가운데 정렬 */
-}
-
-.title .link {
-  flex: 2; /* 제목 아이템이 더 크게 설정 */
-  text-align: center; /* 가운데 정렬 */
-}
