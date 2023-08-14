@@ -21,6 +21,7 @@
 .ItemCardOuter {
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .ItemCardInside {

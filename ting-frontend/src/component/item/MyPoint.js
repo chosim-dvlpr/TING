@@ -6,7 +6,7 @@ import { setPoint } from "../../redux/itemStore";
 import { setPointPaymentId } from "../../redux/itemStore";
 import styles from "./MyPoint.module.css";
 import Pagination from "../community/common/Pagination";
-import {getDate} from "../common/TimeCalculate";
+import { getDate } from "../common/TimeCalculate";
 
 function MyPoint() {
   const [chargeMenu, setChargeMenu] = useState(false);
@@ -63,6 +63,11 @@ function MyPoint() {
     else return false;
   };
 
+  const addComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
+  };
+
   return (
     <div>
       <div className={styles.MyPoint}>
@@ -72,7 +77,7 @@ function MyPoint() {
             className={styles.coinImage}
             alt="coin"
           ></img>
-          {myPoint} Point
+          {addComma(myPoint)} Point
         </span>
         <div
           className={styles.ChargeButton}
@@ -102,9 +107,11 @@ function MyPoint() {
                   }`}
                 >
                   {sign(history.category)}
-                  {history.changeCost}
+                  {addComma(history.changeCost)}
                 </td>
-                <td className={styles.point}>{history.resultPoint}</td>
+                <td className={styles.point}>
+                  {addComma(history.resultPoint)}
+                </td>
               </tr>
             ))}
           </tbody>

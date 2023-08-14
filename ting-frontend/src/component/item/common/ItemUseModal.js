@@ -73,11 +73,14 @@ function ItemModal({ closeModal, clickedItem }) {
         <div className={styles.description}>{clickedItem.description}</div>
 
         {/* 사용하기 버튼 */}
-        <div>
-          <div className={styles.button} onClick={useClickedItem}>
-            사용하기
+        {clickedItem.name === "닉네임 변경권" ||
+        clickedItem.name === "물고기 스킨 랜덤박스" ? (
+          <div>
+            <div className={styles.button} onClick={useClickedItem}>
+              사용하기
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
       {randomFishModalSign ? (
@@ -108,16 +111,20 @@ function ItemModal({ closeModal, clickedItem }) {
     const navigate = useNavigate();
 
     const changeNickname = () => {
-      let data = {
-        nickname: newNickname,
-      };
-      tokenHttp
-        .put("/item/changeNickname", data)
-        .then((response) => {
-          console.log(response);
-          changeSuccessAlert();
-        })
-        .catch((err) => console.log(err));
+      nicknameIsExist();
+
+      if (newNickname && checkNickname) {
+        let data = {
+          nickname: newNickname,
+        };
+        tokenHttp
+          .put("/item/changeNickname", data)
+          .then((response) => {
+            console.log(response);
+            changeSuccessAlert();
+          })
+          .catch((err) => console.log(err));
+      }
     };
 
     const changeSuccessAlert = () => {
@@ -150,7 +157,9 @@ function ItemModal({ closeModal, clickedItem }) {
       // 닉네임 한글 확인
       // 한글이 아닌 글자가 있다면 경고메세지 출력
       if (!koreanPattern.test(inputNickname)) {
-        alert("한글만 입력 가능합니다.");
+        Swal.fire("한글만 입력 가능합니다.");
+      } else if (!inputNickname) {
+        Swal.fire("닉네임을 입력해주세요.");
       } else {
         basicHttp
           .get(`/user/nickname/${inputNickname}`)
@@ -158,11 +167,11 @@ function ItemModal({ closeModal, clickedItem }) {
             if (response.data.code === 200) {
               // 닉네임 중복 시
               if (response.data.data === true) {
-                alert("닉네임이 중복되었습니다.\n다시 작성해주세요.");
+                Swal.fire("닉네임이 중복되었습니다.\n다시 작성해주세요.");
                 dispatch(setNickname(null));
                 return;
               } else {
-                alert("닉네임 사용이 가능합니다.");
+                // Swal.fire("닉네임 사용이 가능합니다.");
                 setCheckNickname(true);
                 setNewNickname(inputNickname);
                 return;
@@ -197,11 +206,14 @@ function ItemModal({ closeModal, clickedItem }) {
               ref={inputNicknameRef}
               type="text"
               onChange={(e) => setInputNickname(e.target.value)}
-              onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
+              // onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
               placeholder="새 닉네임"
             ></input>
             <br />
-            {checkNickname ? (
+            <button className={styles.btn} onClick={() => changeNickname()}>
+              변경하기
+            </button>
+            {/* {checkNickname ? (
               <p className={styles.comment}>닉네임 중복 확인 완료</p>
             ) : (
               <p className={styles.comment}>
@@ -209,14 +221,11 @@ function ItemModal({ closeModal, clickedItem }) {
               </p>
             )}
             {checkNickname ? (
-              <button className={styles.btn} onClick={() => changeNickname()}>
-                변경하기
-              </button>
             ) : (
               <button className={styles.btn} onClick={() => nicknameIsExist()}>
                 중복확인
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </>
