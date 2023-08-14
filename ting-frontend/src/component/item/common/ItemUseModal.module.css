@@ -112,13 +112,11 @@
   font-size: 18px;
 }
 
-
-
-
 .closeButton {
   position: absolute;
-  top:20px;
-  right:20px;
+  cursor: pointer;
+  top: 20px;
+  right: 20px;
   width: 15px;
   height: 15px;
 }
@@ -135,7 +133,7 @@
 }
 
 .input:focus {
-  outline: none !important; 
+  outline: none !important;
   border-color: #d6a8e9;
   box-shadow: 0 0 10px #2e6070;
 }
@@ -146,9 +144,8 @@
   border: none;
   background-color: #2e6070;
   color: whitesmoke;
-  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
-      5px 5px 10px 0px rgba(0, 0, 0, .1),
-      3px 3px 5px 0px rgba(0, 0, 0, .1);
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
   margin: 10px 5px;
 }
 

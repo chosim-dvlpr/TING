@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import { useSelector, useDispatch } from "react-redux";
 import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
-import { setMatchingId } from "../../redux/matchingStore";
+import { setMatchingId, resetMatchingStore } from "../../redux/matchingStore";
 import { setMyItemList } from "../../redux/itemStore";
 import styles from "./WaitingRoom.module.css";
 
@@ -106,6 +106,8 @@ function WaitingRoom() {
   // 웹소켓 연결
   const handleConnectClick = () => {
     const serverUrl = "wss://i9b107.p.ssafy.io:5157/matching";
+    // 웹소켓 연결할때 그전 데이터 삭제
+    dispatch(resetMatchingStore())
 
     // socket 생성
     const ws = new WebSocket(serverUrl);
@@ -183,6 +185,7 @@ function WaitingRoom() {
       // 컴포넌트가 언마운트될 때 웹 소켓 연결을 끊음
       if (socket) {
         socket.close();
+        dispatch(setOpenviduToken(null));
       }
     };
   }, [socket]);

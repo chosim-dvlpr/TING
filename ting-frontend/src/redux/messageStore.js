@@ -129,6 +129,7 @@ export default class MessageStore {
 
     // messageService의 sendMessage 함수 실행
     // sendMessage 함수 : messageTosend 내용 보냄
+    
     messageService.sendMessage({
       client: this.client,
       messageToSend: {

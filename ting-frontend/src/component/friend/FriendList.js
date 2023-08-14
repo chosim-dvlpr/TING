@@ -65,9 +65,7 @@ function FriendList({
 
   // 채팅방 입장할 때
   const handleClickEnterRoom = (data) => {
-    console.log("방=========", data);
-    console.log(data.index);
-    console.log("unread====", friendList[data.index].unread);
+    //friendList[i].unread + isNull(messageLogsObject[friend.chattingId])
     friendUnread(friendList[data.index].unread);
     if (connected) {
       messageStore.disconnect(currentRoomIndex);
@@ -76,7 +74,6 @@ function FriendList({
     showFriendList(false);
     showFriendChatting(true);
     setChattingObj(data.friend);
-    // console.log(roomIndex.friend)
     // Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
 
@@ -188,16 +185,16 @@ function FriendList({
         </button>
       </div>
       <div className={styles.searchArea}>
+        <input
+          type="text"
+          onChange={(e) => setSearchFriendNickname(e.target.value)}
+        ></input>
         <button
           className={styles.searchButton}
           onClick={() => setIsSearchFriend(!isSearchFriend)}
         >
           검색
         </button>
-        <input
-          type="text"
-          onChange={(e) => setSearchFriendNickname(e.target.value)}
-        ></input>
       </div>
       <div className={styles.list}>
         {friendList
@@ -232,17 +229,23 @@ function FriendList({
                   <div className={styles.time}>
                     {getTime(friend.lastChattingTime)}
                   </div>
-                  <div className={styles.unreadArea}>
-                    {friendList[i].unread + isNull(messageLogsObject[friend.chattingId]) != 0? <div className={styles.new}>N</div>: <div></div>}
-                    <div className={styles.unread}>
-                    {messageLogsObject[friend.chattingId]
-                        ? friendList[i].unread + messageLogsObject[friend.chattingId].length
-                        : friendList[i].unread}
+                {
+                  friendList[i].unread !== 0 ?  (
+                    <div className={styles.unreadArea}>
+                      {friendList[i].unread + isNull(messageLogsObject[friend.chattingId]) != 0? <div className={styles.new}>N</div>: <div></div>}
+                      <div className={styles.unread}>
+                        {friendList[i].unread}
                       {/* {messageLogsObject[friend.chattingId]
-                        ? messageLogsObject[friend.chattingId].length
+                          ? friendList[i].unread + messageLogsObject[friend.chattingId].length
+                          : friendList[i].unread}/
+                          {friendList[i].unread}/
+                        {messageLogsObject[friend.chattingId]? messageLogsObject[friend.chattingId].length :0} */}
+                        {/* {messageLogsObject[friend.chattingId]
+                          ? messageLogsObject[friend.chattingId].length
                         : 0} */}
                     </div>
-                  </div>
+                    </div> ) : ("")
+                }                 
                 </div>
                 <div className={styles.dropdown}>
                   <button>

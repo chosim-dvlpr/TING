@@ -1,36 +1,61 @@
+.profileContainer {
+  /* margin-right: 5px; */
+}
+
+/* .closeButtonContainer {
+  display: flex;
+  position: relative;
+  height: 60px;
+  background-color: red;
+} */
+
+.closeButtonContainer {
+  margin: 0 auto;
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
 .closeButton {
-    width: 36px;
+  width: 36px;
   height: 34px;
   background-color: #e58490;
   color: #fff;
   border: none;
   border-radius: 10px;
   padding: 5px 10px;
-  position: fixed;
-  right: 585px;
-  bottom: 570px;
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+.closeButton:hover {
+  background-color: #d75c6b;
+}
+
 .image {
-    margin: 60px auto 10px;
+  margin-bottom: 20px;
+    /* margin: 60px auto 10px; */
     /* background-color: white; */
   border: none;
   border-radius: 50%;
   width: 160px;
   height: 160px;
-  /* box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff; */
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-.friendImg {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 160px;
-  height: 160px;
-  margin-right: 60px;
+  overflow: hidden; /* 이미지 넘침 방지를 위해 */
+}
+
+.image img {
+  object-fit: cover; /* 이미지를 비율 유지하며 부모 요소에 맞춰 채우도록 설정 */
+  width: 100%; /* 이미지가 100% 영역을 차지하도록 설정 */
+  height: 100%; /* 이미지가 100% 영역을 차지하도록 설정 */
 }
 
 .nickname {
@@ -38,9 +63,9 @@
 }
 
 .temp {
-    position: fixed;
-  right: 585px;
-  bottom: 355px;
+  position: absolute;
+  left: 15px;
+  top: 120px;
 }
 
 .introduce {
@@ -54,9 +79,16 @@
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+.selfContainer {
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
 .self {
-    margin-left: 40px;
-    text-align: left;
+  text-align: left;
+  margin-bottom: 4px;
 }
 
 .hash {
@@ -65,18 +97,46 @@
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: center;
-    height: 160px;
-    width: 300px;
-    overflow-y: auto;
+    height: calc(160px - 12px);
+    width: 100%;
+    overflow-y: scroll;
+    /* scrollbar-color: pink; */
+    /* scrollbar-width: 2px; */
+    /* padding-bottom: 4px; */
 }
 
-.hash div {
+.hash p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #e58490;
     border: none;
     border-radius: 20px;
-    padding: 8px 16px;
-    margin: 5px;
-    height: 40px;
+    padding: 4px 12px;
+    height: 36px;
+    scale: 90%;
     box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.ThermoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 수직 스크롤바 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* 스크롤바 바탕 */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* 스크롤바 색상 */
+  border-radius: 8px; /* 스크롤바 모양 */
+}
+
+/* 스크롤바 경계 */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
