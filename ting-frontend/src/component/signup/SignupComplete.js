@@ -39,10 +39,6 @@ function SignupComplete() {
               // dispatch(completeSignupStep()); // signupReducer내용 초기화
               completeSignup("/login")
             }}>회원가입 완료하기</button>
-          <button 
-            className={styles.btnSecondary} 
-            onClick={() => navigate("/")}
-          >메인으로 이동</button>
         </div>
       </div>
     </div>
