@@ -6,15 +6,8 @@ import { useLocation, useNavigate } from "react-router";
 import basicHttp from "../../api/basicHttp";
 
 function SignupComplete() {
-  let dispatch = useDispatch();
-  let location = useLocation();
-  let navigate = useNavigate();
-
-  let signupReducer = useSelector((state) => state.signupReducer);
-
-  // useEffect(() => {
-  //   dispatch(completeSignupStep());
-  // }, [])
+  const navigate = useNavigate();
+  const signupReducer = useSelector((state) => state.signupReducer);
 
   const completeSignup = (moveTo) => {
     basicHttp.post('/user/signup', signupReducer).then((response) => {

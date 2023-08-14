@@ -113,6 +113,7 @@ function Detail() {
       switch (check) {
         case nicknameIsExist:
           nicknameIsExist();
+          setShowNicknameMessage(false);
           break;
       }
     }
@@ -176,7 +177,10 @@ function Detail() {
               onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
               placeholder="닉네임"
               onFocus={() => setShowNicknameMessage(true)}
-              onBlur={() => setShowNicknameMessage(false)}  
+              onBlur={() => {
+                setShowNicknameMessage(false);
+                inputNicknameRef.current.blur();
+              }}
               disabled={checkNickname}
             ></input>
           <button 
@@ -192,7 +196,6 @@ function Detail() {
           {/* <p className={styles.wrongMsg}>{ nicknameMsg }</p> */}
           <p 
           className={styles.rightMsg}
-          disabled
           >
             {
               checkNickname &&
@@ -258,10 +261,12 @@ function Detail() {
         </Dropdown>
       </div>
       {/* <label>추가 정보를 입력하시면 매칭 정확도가 올라가요!</label> */}
-      <button 
-        className={`${styles.btn} ${styles.nextBtn}`} 
-        onClick={() => goToSignupComplete("/signup/complete")}
-      >다음</button>
+      <div className={styles.nextContainer}>
+        <button 
+          className={`${styles.btn} ${styles.nextBtn}`} 
+          onClick={() => goToSignupComplete("/signup/complete")}
+        >다음</button>
+      </div>
       {/* <br/>
       <label>추가 정보 입력하지 않고 완료할게요!</label>
       <button className={styles.btn} onClick={() => completeSignup("/signup/complete")}>회원가입 완료</button> */}
