@@ -4,7 +4,6 @@ import useMessageStore from "./useMessageStore";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import tokenHttp from "../../api/tokenHttp";
-import FriendProfile from "./FriendProfile";
 
 import styles from "./FriendChatting.module.css";
 import { getFriendId } from "../../redux/friendStore";
@@ -123,17 +122,15 @@ function FriendChatting({
   return (
     <div>
       <div className={styles.top}>
-        <div>
+        {/* <div> */}
           <img src="/img/ting_logo_fish.png" alt="logo" />
-        </div>
+        {/* </div> */}
         <button
           className={styles.closeButton}
           type="button"
           disabled={!connected}
           onClick={() => handleClickQuitRoom()}
-        >
-          X
-        </button>
+        >X</button>
       </div>
       <div className={styles.infoArea}>
         <button
