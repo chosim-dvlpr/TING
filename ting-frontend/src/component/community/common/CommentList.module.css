@@ -20,12 +20,17 @@
   }
   
   .comment-container button {
-    padding: 5px 10px;
+    /* padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #fae6e8;
-    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff;
+    box-shadow: 4px 4px 10px #cbced1, -4px -4px 10px #ffffff; */
+    border: none;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
+    margin: 0 5px;
   }
   
   .comment-container textarea {
@@ -49,6 +54,13 @@
   .comment-details button {
     width: 60px;
     margin: 0 10px;
+    border: none;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
+    margin: 0 5px;
+    border-radius: 10px;
+    padding: 5px 15px;
   }
 
   /* 좋아요 버튼 스타일 */
@@ -63,7 +75,6 @@
     justify-content: center;
     width: 30px;
     height: 30px;
-    box-shadow: 5px 5px 10px #d9d9d9, -5px -5px 10px #ffffff;
     transition: background-color 0.3s ease;
   }
   
@@ -108,9 +119,27 @@
     width: 160px;
   }
   
-  .edit-button,
-  .delete-button {
+  
+  .deleteButton {
     cursor: pointer;
     width: 60px;
+    border: none;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
+    margin: 0 5px;
+    border-radius: 10px;
+    padding: 5px 15px;
+ 
   }
   
+  .voteButton {
+    border: none;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        5px 5px 10px 0px rgba(0, 0, 0, .1),
+        3px 3px 5px 0px rgba(0, 0, 0, .1);
+    margin: 0 5px;
+    border-radius: 10px;
+    padding: 5px 15px;
+
+  }

@@ -192,23 +192,31 @@ function IssueDetail() {
               className={`${styles.voteArea} ${styles.agreeArea}`}
               style={{ flex: issue.agreeCount }}
             >
-              <p>
-                {issue.agreeTitle} {issue.agreeCount}{" "}
+              <div clanssName = {styles.voteTitle}>
+                {issue.agreeTitle} 
+                </div>
+                <div>
+                {issue.agreeCount}{" "} 표
+                </div>
                 <button className={styles.voteButton} onClick={handleAgree}>
                   찬성
                 </button>
-                </p>
             </div>
             <div
               className={`${styles.voteArea} ${styles.opposeArea}`}
               style={{ flex: issue.opposeCount }}
             >
-              <p>
-                {issue.opposeTitle} {issue.opposeCount}{" "}
+              <div clanssName = {styles.voteTitle}>
+                {issue.opposeTitle}
+              </div>
+              <div>
+          
+              {issue.opposeCount}{" "}표
+
+              </div>
                 <button className={styles.voteButton} onClick={handleOppose}>
                   반대
                 </button>
-              </p>
             </div>
           </div>
 
