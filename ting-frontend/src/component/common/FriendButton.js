@@ -23,7 +23,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
   const friendId = useSelector((state) => state.friendReducer.friendId);
   const messageStore = useMessageStore();
   const { messageLogs } = messageStore;
-  const [totalUnread, setTotalUnread] = useState("");
+  const [totalUnread, setTotalUnread] = useState(0);
   const [initialUnread, setInitialUnread] = useState(0);
   const [friendUnread, setFriendUnread] = useState(0);
 
@@ -98,7 +98,8 @@ const FriendButton = ({ toggleWheelHandler }) => {
           response.data.data.map((data) => {
             num += data.unread;
           })
-          setInitialUnread(num);
+          setTotalUnread(totalUnread + num);
+          // setInitialUnread(num);
         } else if (response.data.code === 400) {
           console.log("실패");
         }
@@ -138,17 +139,21 @@ const FriendButton = ({ toggleWheelHandler }) => {
     if(messageLogs) {
       messageLogs.map((data) => {
         if(data.userId != userData.userId) {
-          num += 1;
+          setTotalUnread(totalUnread+1);
+          // num += 1;
         }
       })
     }
-    setTotalUnread(num);
+    // setTotalUnread(num);
   }, [messageLogs])
 
   return (
     <div className={styles.friendContainer}>
       <button className={styles.button} onClick={() => changeIsClosed()}>
-        <div className={styles.totalUnread}>{initialUnread + totalUnread}</div>
+        {
+          totalUnread == 0 ? "" : 
+          <div className={styles.totalUnread}>{totalUnread}</div>
+        }
         <img
           src={process.env.PUBLIC_URL + `/img/friend_${icon}.png`}
           className={styles.coinImage}
