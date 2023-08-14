@@ -15,9 +15,10 @@ export let matchingReducer = createSlice({
   },
   reducers: {
     resetMatchingStore: (state) => {
+      console.log('여기서 리덕스 리셋')
       state.questionData = {};
       state.questionNumber = 0;
-      // state.matchingId = null;
+      state.matchingId = null;
       state.myScore = [];
       state.yourScore = [];
       state.yourData = {};
