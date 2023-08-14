@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +134,7 @@ public class DateService {
                 chattingUserRepository.save(new ChattingUser(chatting, user));
                 chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
                 chatting.setLastChattingContent("♡대화를 시작해보세요♡");
+                chatting.setLastChattingTime(LocalDateTime.now());
             }
         }
     }
