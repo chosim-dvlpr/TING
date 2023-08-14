@@ -68,9 +68,6 @@
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
-  border: none;
-
   box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
     5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
   margin: 0 5px;
@@ -122,4 +119,29 @@
 .issueContent {
   min-height: 80px;
   margin-top: 40px;
+}
+
+/* 목록 돌아가기 버튼 */
+.listButton {
+  width: 60px;
+  min-height: 40px;
+  padding: 5px 15px;
+  background-color: #f1b7be;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
+}
+
+.listButton:hover {
+  background-color: #e58490;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
 }
