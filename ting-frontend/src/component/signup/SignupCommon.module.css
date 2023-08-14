@@ -18,6 +18,8 @@
     /* margin: 10px; */
 }
 
+.introduceContainer input,
+.height input,
 .input,
 .btn,
 .btnSecondary,
@@ -54,22 +56,24 @@
 .disabledBtn,
 .btn {
     border: none;
-    background-color: #2e6070;
+    background-color: #327488;
     color: whitesmoke;
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
         5px 5px 10px 0px rgba(0, 0, 0, .1),
         3px 3px 5px 0px rgba(0, 0, 0, .1);
     margin: 0 5px;
+    transition-duration: 0.2s;
 }
 
 .disabledBtn {
     border: none;
     background-color: #fafafa;
     color: #2e6070;
+    transition-duration: 0.2s;
 }
 
 .btn:hover {
-    background-color: #327488;
+    background-color: #398fa1;
 }
 
 .rightMsg {
@@ -95,22 +99,25 @@
 
 .selectBtn {
     border: none;
-    margin: 3px;
+    margin-right: 3px;
+    /* transition-duration: 0.2s; */
 }
 
 .selectBtn:hover {
-    background-color: #2e6070;
+    background-color: #398fa1;
     color: whitesmoke;
 }
 
 .genderSelected {
-    background-color: #2e6070;
+    background-color: #327488;
     color: whitesmoke;
+    transition-duration: 0.2s;
 
 }
 
 .genderBtn {
     width: 180px;
+    transition-duration: 0.2s;
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
     5px 5px 10px 0px rgba(0, 0, 0, .1),
     3px 3px 5px 0px rgba(0, 0, 0, .1);
@@ -143,7 +150,8 @@
 
 .btnSecondary {
     border: none;
-    background-color: #c5e5ea;
+    margin: 5px;
+    background-color: #fafafa;
     color: #2e6070;
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
         5px 5px 10px 0px rgba(0, 0, 0, .1),
@@ -201,12 +209,14 @@
 
 .nextBtn {
     margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #2e6070;
 }
 
-
-
-
-
+.nextBtn:hover {
+    background-color: #327488;
+}
 
 .inputContainer {
     position: relative;
@@ -227,18 +237,39 @@
 }
 
 .inputArrow:hover i {
-    color: #2e6070;
+    color: #398fa1;
 }
 
 .nicknameMessage {
     top: 100%;
     left: 0;
-    font-size: 14px;
+    font-size: 1rem;
     color: #ff0000;
     margin-top: 5px;
 }
 
-/* .inputContainer input {
-    width: calc(100% - 100px);
-} */
+.nextContainer {
+    display: flex;
+    justify-content: center;
+}
 
+.signupComplete {
+    margin: 5px;
+}
+
+.introduceContainer {
+    margin: 10px;
+}
+
+.profileImgContainer input {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    margin: auto;
+    width: 50%;
+}
+
+.goToLoginBtn {
+    margin: 10px;
+    width: 100%;
+}
