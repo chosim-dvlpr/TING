@@ -93,27 +93,33 @@ function MyPoint() {
       <div>
         <table className={styles.pointList}>
           <tbody>
-            {pointList.map((history, index) => (
-              <tr key={history.pointHistoryId}>
-                <td className={styles.time}>
-                  <div className={styles.tdDiv}>
-                    {getDate(history.changedTime)}
-                  </div>
-                </td>
-                <td class={styles.category}>{history.category}</td>
-                <td
-                  className={`${styles.cost} ${
-                    isPlus(history.category) ? styles.plus : styles.minus
-                  }`}
-                >
-                  {sign(history.category)}
-                  {addComma(history.changeCost)}
-                </td>
-                <td className={styles.point}>
-                  {addComma(history.resultPoint)}
-                </td>
+            {pointList && pointList.length > 0 ? (
+              pointList.map((history, index) => (
+                <tr key={history.pointHistoryId}>
+                  <td className={styles.time}>
+                    <div className={styles.tdDiv}>
+                      {getDate(history.changedTime)}
+                    </div>
+                  </td>
+                  <td class={styles.category}>{history.category}</td>
+                  <td
+                    className={`${styles.cost} ${
+                      isPlus(history.category) ? styles.plus : styles.minus
+                    }`}
+                  >
+                    {sign(history.category)}
+                    {addComma(history.changeCost)}
+                  </td>
+                  <td className={styles.point}>
+                    {addComma(history.resultPoint)}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4}>포인트 충전 내역이 없습니다.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
         <Pagination

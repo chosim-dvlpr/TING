@@ -7,10 +7,9 @@ import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
 import Pagination from "../community/common/Pagination";
 import tokenHttp from "../../api/tokenHttp";
 
-import commonStyles from "./ProfileCommon.module.css"
+import commonStyles from "./ProfileCommon.module.css";
 import styles from "./MyArticle.module.css";
-import {getDate} from "../common/TimeCalculate";
-
+import { getDate } from "../common/TimeCalculate";
 
 function MyArticleAdvice() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,29 +22,28 @@ function MyArticleAdvice() {
   const getMyAdviceArticle = () => {
     const params = {
       pageNo: currentPage,
-    }
+    };
 
-    tokenHttp.get('/advice/my', { params: params }).then((response) => {
-      if (response.data.code === 200) {
-        console.log('성공');
-        setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
-        setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
-      }
-      else if (response.data.code === 400) {
-        console.log('실패');
-      }
-      else if (response.data.code === 403) {
-        console.log('권한 없음');
-      }
-      // else { console.log('문의글이 없습니다.') }
-    })
+    tokenHttp
+      .get("/advice/my", { params: params })
+      .then((response) => {
+        if (response.data.code === 200) {
+          console.log("성공");
+          setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
+          setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+        } else if (response.data.code === 400) {
+          console.log("실패");
+        } else if (response.data.code === 403) {
+          console.log("권한 없음");
+        }
+        // else { console.log('문의글이 없습니다.') }
+      })
       .catch(() => console.log("실패"));
   };
 
   useEffect(() => {
     getMyAdviceArticle();
-  }, [])
-
+  }, []);
 
   // 페이지 이동
   const handlePageChange = (page) => {
@@ -68,18 +66,27 @@ function MyArticleAdvice() {
         </thead>
 
         <tbody>
-          {
-            myAdviceArticleList.length > 0 ?
-              myAdviceArticleList.map((article, i) => (
-                <tr key={i}>
-                  <td>{article.adviceId}</td>
-                  <td className={commonStyles.clickable} onClick={() => navigate(`/community/advice/detail/${article.adviceId}`)}>{article.title}</td>
-                  <td>{article.hit}</td>
-                  <td>{getDate(article.createdTime)}</td>
-                </tr>
-              ))
-              : <tr><td colSpan={4}>작성한 게시글이 없다!</td></tr>
-          }
+          {myAdviceArticleList.length > 0 ? (
+            myAdviceArticleList.map((article, i) => (
+              <tr key={i}>
+                <td>{article.adviceId}</td>
+                <td
+                  className={commonStyles.clickable}
+                  onClick={() =>
+                    navigate(`/community/advice/detail/${article.adviceId}`)
+                  }
+                >
+                  {article.title}
+                </td>
+                <td>{article.hit}</td>
+                <td>{getDate(article.createdTime)}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={4}>작성한 게시글이 없습니다.</td>
+            </tr>
+          )}
         </tbody>
       </table>
 
@@ -91,7 +98,7 @@ function MyArticleAdvice() {
         />
       </div>
     </div>
-  )
+  );
 }
 
 export default MyArticleAdvice;
