@@ -139,7 +139,9 @@ function FriendChatting({
           
         > <img className={styles.fishSkinImage} src={yourSkin} alt="물고기 스킨"></img></button>
         <div className={styles.nickname}>{chattingObj.nickname}</div>
-        <div>{chattingObj.temperature}℃</div>
+        <div>{chattingObj.temperature 
+        ? <p>{chattingObj.temperature}℃</p>
+        : null}</div>
         {/* <button className={styles.kebabButton}>
           <img className={styles.kebab} src="/img/kebab.png" alt="kebab" />
         </button> */}
