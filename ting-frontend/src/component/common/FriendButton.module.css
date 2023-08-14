@@ -22,8 +22,8 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: inherit;
-  /* background-color: white; */
+  /* background-color: inherit; */
+  background-color: white;
   position: fixed;
   bottom: 60px;
   right: 60px;

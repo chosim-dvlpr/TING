@@ -10,6 +10,7 @@ function FriendProfile(props){
   const [friendProfile, setFriendProfile] = useState([]);
   
   const [friendImg, setFriendImg] = useState("");
+  const [temp, setTemp] = useState("");
 
   const friendProfileAxios = () => {
     basicHttp.get(`/friend/profile/${props.userId}`).then((response) => {
@@ -32,6 +33,10 @@ function FriendProfile(props){
     friendProfileAxios();
   }, []);
 
+  useEffect(() => {
+    setTemp(props.temperature);
+  }, [props.temperature])
+
   const closeProfileModal = () => {
     dispatch(getFriendId(null))
   };
@@ -47,7 +52,7 @@ function FriendProfile(props){
       <img  src={`https://i9b107.p.ssafy.io:5157/${friendImg}`} alt="물고기 스킨" className={styles.friendImg}></img>
       </div>
       <div className={styles.nickname}>{ friendProfile.nickname }</div>
-      <div className={styles.temp}>{friendProfile.temperature}℃</div>
+      <div className={styles.temp}>{temp}℃</div>
       <div className={styles.introduce}>자기소개{ friendProfile.introduce }</div>
       <div className={styles.self}>#셀프 소개</div>
       <div className={styles.hash}>
