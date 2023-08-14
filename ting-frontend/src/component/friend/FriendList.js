@@ -185,16 +185,16 @@ function FriendList({
         </button>
       </div>
       <div className={styles.searchArea}>
+        <input
+          type="text"
+          onChange={(e) => setSearchFriendNickname(e.target.value)}
+        ></input>
         <button
           className={styles.searchButton}
           onClick={() => setIsSearchFriend(!isSearchFriend)}
         >
           검색
         </button>
-        <input
-          type="text"
-          onChange={(e) => setSearchFriendNickname(e.target.value)}
-        ></input>
       </div>
       <div className={styles.list}>
         {friendList

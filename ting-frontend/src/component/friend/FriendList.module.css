@@ -1,5 +1,8 @@
 .top {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .top img {
@@ -8,6 +11,8 @@
 
 .searchArea {
   margin-bottom: 10px;
+  display: flex;
+  padding: 10px;
 }
 
 .button {
@@ -18,7 +23,7 @@
   padding: 5px 10px;
 }
 
-.closeButton {
+/* .closeButton {
   width: 36px;
   height: 34px;
   background-color: #e58490;
@@ -31,6 +36,21 @@
   bottom: 570px;
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+} */
+
+.closeButton {
+  width: 36px;
+  height: 34px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .searchArea input {
@@ -40,20 +60,20 @@
   box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
   border-radius: 8px;
   padding: 8px;
-  margin-right: 10px;
-  width: 240px;
+  /* margin-right: 10px; */
+  width: fit-content;
   font-size: 16px;
 }
 
 .searchButton {
-  margin-right: 8px;
+  margin-left: 8px;
   pointer-events: none;
   background-color: #e58490;
   color: #fff;
   border: none;
   border-radius: 10px;
   padding: 5px 15px;
-  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   height: 40px;
 }
@@ -61,6 +81,7 @@
 .list {
   height: 440px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .friendItem {
@@ -72,7 +93,13 @@
   height: 66px;
   box-shadow: inset 2px 2px 4px #fad7db, inset -2px -2px 4px #ffffff;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
+
+.friendItem:hover {
+  transform: scale(1.03);
+}
+
 
 .alive {
   background-color: #fae6e8;

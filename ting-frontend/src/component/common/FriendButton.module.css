@@ -50,11 +50,11 @@
   display: none;
 }
 
+.profileContainer,
 .chatContainer {
   width: 360px;
   height: 600px;
   background-color: white;
-  /* background-color: #fae6e8; */
   position: fixed;
   bottom: 30px;
   right: 185px;
@@ -65,7 +65,7 @@
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.profileContainer {
+/* .profileContainer {
   width: 360px;
   height: 600px;
   background-color: #fae6e8;
@@ -75,6 +75,12 @@
   z-index: 200;
   border-radius: 20px;
   padding: 12px;
-  box-shadow: 2px 5px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
+  box-shadow: 2px 5px 5px #c4c4c4, -2px -2px 5px #ffffff;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+} */
+
+.profileContainer {
+  right: calc(185px + 360px);
+  background-color: #fae6e8;
+  margin-right: 5px;
 }

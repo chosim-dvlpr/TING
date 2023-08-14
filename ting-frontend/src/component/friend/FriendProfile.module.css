@@ -1,26 +1,46 @@
+.profileContainer {
+  /* margin-right: 5px; */
+}
+
+/* .closeButtonContainer {
+  display: flex;
+  position: relative;
+  height: 60px;
+  background-color: red;
+} */
+
+.closeButtonContainer {
+  margin: 0 auto;
+  display: flex;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
 .closeButton {
-    width: 36px;
+  width: 36px;
   height: 34px;
   background-color: #e58490;
   color: #fff;
   border: none;
   border-radius: 10px;
   padding: 5px 10px;
-  position: fixed;
-  right: 585px;
-  bottom: 570px;
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .image {
-    margin: 60px auto 10px;
+  /* margin-right: 20px; */
+    /* margin: 60px auto 10px; */
     /* background-color: white; */
   border: none;
   border-radius: 50%;
   width: 160px;
   height: 160px;
-  /* box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff; */
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
@@ -38,9 +58,9 @@
 }
 
 .temp {
-    position: fixed;
-  right: 585px;
-  bottom: 355px;
+  position: absolute;
+  left: 15px;
+  top: 120px;
 }
 
 .introduce {
@@ -50,7 +70,7 @@
     border-radius: 8px;
     padding: 10px;
     margin: 30px;
-    box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+    /* box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff; */
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
@@ -79,4 +99,10 @@
     height: 40px;
     box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.ThermoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
