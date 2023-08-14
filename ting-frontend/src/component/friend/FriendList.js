@@ -10,6 +10,7 @@ import useMessageStore from "./useMessageStore";
 import { useSelector } from "react-redux";
 import styles from "./FriendList.module.css";
 import { getTime } from "../common/TimeCalculate";
+import { fireEvent } from "@testing-library/dom";
 
 // websocket으로 구현하기 => 실시간 데이터!
 
@@ -18,12 +19,14 @@ function FriendList({
   showFriendList,
   showFriendChatting,
   setChattingObj,
+  friendUnread
 }) {
   const [friendList, setFriendList] = useState([]);
   // let [isModal, setIsModal] = useState(true);
   // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
   const userdata = useSelector((state) => state.userdataReducer);
   const [searchFriendNickname, setSearchFriendNickname] = useState("");
+  const [totalUnread, setTotalUnread] = useState("");
   const Navigate = useNavigate();
 
   // 친구 찾기 버튼 클릭 시 true
@@ -61,15 +64,18 @@ function FriendList({
     messageStore;
 
   // 채팅방 입장할 때
-  const handleClickEnterRoom = (roomIndex) => {
-    console.log("방=========", roomIndex);
+  const handleClickEnterRoom = (data) => {
+    console.log("방=========", data);
+    console.log(data.index);
+    console.log("unread====", friendList[data.index].unread);
+    friendUnread(friendList[data.index].unread);
     if (connected) {
       messageStore.disconnect(currentRoomIndex);
     }
-    messageStore.connect(roomIndex.roomIndex);
+    messageStore.connect(data.roomIndex);
     showFriendList(false);
     showFriendChatting(true);
-    setChattingObj(roomIndex.friend);
+    setChattingObj(data.friend);
     // console.log(roomIndex.friend)
     // Navigate("/friend/chat", { state: { friend: roomIndex.friend } })
   };
@@ -88,7 +94,6 @@ function FriendList({
 
   // 마지막 대화 업데이트
   useEffect(() => {
-    // console.log(messageLogs)
     friendListAxios();
   }, [messageLogsObject]);
 
@@ -167,9 +172,10 @@ function FriendList({
       });
   }
 
-  const openDropdown = () => {
+  const isNull = (data) => {
+    if(data) return data.length;
+    else return 0;
   }
-
 
   return (
     <div>
@@ -207,7 +213,8 @@ function FriendList({
                   } else {
                     handleClickEnterRoom({
                       roomIndex: friend.chattingId,
-                      friend: friend,
+                      index: i,
+                      friend: friend
                     });
                   }
                 }}
@@ -226,11 +233,14 @@ function FriendList({
                     {getTime(friend.lastChattingTime)}
                   </div>
                   <div className={styles.unreadArea}>
-                    {messageLogsObject[friend.chattingId]? <div className={styles.new}>N</div>: <div></div>}
+                    {friendList[i].unread + isNull(messageLogsObject[friend.chattingId]) != 0? <div className={styles.new}>N</div>: <div></div>}
                     <div className={styles.unread}>
-                      {messageLogsObject[friend.chattingId]
+                    {messageLogsObject[friend.chattingId]
+                        ? friendList[i].unread + messageLogsObject[friend.chattingId].length
+                        : friendList[i].unread}
+                      {/* {messageLogsObject[friend.chattingId]
                         ? messageLogsObject[friend.chattingId].length
-                        : 0}
+                        : 0} */}
                     </div>
                   </div>
                 </div>
