@@ -32,9 +32,9 @@ function SignupComplete() {
           {/* { location.state && location.state.name }님에 대해 더 알려주시면 <br /> 저희가 최선의 소개팅 상대를 찾아드려요. */}
         </p>
         <div className={styles.selectContainer}>
-          <button className={styles.btn} onClick={() => navigate("/signup/select")}>선택정보 입력하기</button>
+          <button className={`${styles.btn} ${styles.signupComplete}`} onClick={() => navigate("/signup/select")}>선택정보 입력하기</button>
           <button 
-            className={styles.btn} 
+            className={`${styles.btn} ${styles.signupComplete}`} 
             onClick={() => {
               // dispatch(completeSignupStep()); // signupReducer내용 초기화
               completeSignup("/login")
