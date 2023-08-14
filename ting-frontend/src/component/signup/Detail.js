@@ -18,6 +18,7 @@ function Detail() {
   const [nicknameMsg, setNicknameMsg] = useState("");
   let [currentRegion, setCurrentRegion] = useState("");
   const [genderSelected, setGenderSelected] = useState();
+  const [nameMsg, setNameMsg] = useState("");
 
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
@@ -31,6 +32,12 @@ function Detail() {
   // 이름 작성 확인
   const nameIsExist = (data) => {
     // 올바른 형태일 때 true로 변경
+    let reg = /\s/g;
+    if (data.search(reg) > -1) { // 공백 있으면 오류메세지
+      setNameMsg("공백은 입력 불가능합니다.");
+      
+      return;
+    } else { setNameMsg("") }
     if (koreanPattern.test(data)) {
       dispatch(setName(data)); // redux 저장
     }
@@ -158,14 +165,15 @@ function Detail() {
     <div className={styles.wrapper}>
       {/* <label>이름을 입력해주세요</label> */}
       <div className={styles.nameContainer}>
-        {/* <div className={styles.wrapper}> */}
           <input 
             className={styles.input} 
             id={styles.nameInput} 
             type="text" 
             onChange={(e) => { nameIsExist(e.target.value) }} 
             placeholder="이름"></input>
-        {/* </div> */}
+          <p
+            className={`${styles.nicknameMessage}`}
+          >{ nameMsg }</p>
         <div className={styles.wrapper}>
           <div className={styles.inputContainer}>
             {/* <p className={styles.label}>닉네임은 한글로만 작성해야하며, 중복될 수 없습니다.</p> */}
@@ -188,12 +196,11 @@ function Detail() {
             onClick={() => nicknameIsExist()}>
           중복확인</button>
           {showNicknameMessage && (
-              <div className={`${styles.nicknameMessage}`}>
-                닉네임은 한글로만 작성해야하며, 중복될 수 없습니다.
-              </div>
-            )}
+            <div className={`${styles.nicknameMessage}`}>
+              닉네임은 한글로만 작성해야하며, 중복될 수 없습니다.
+            </div>
+          )}
         </div>
-          {/* <p className={styles.wrongMsg}>{ nicknameMsg }</p> */}
           <p 
           className={styles.rightMsg}
           >
