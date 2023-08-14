@@ -24,6 +24,7 @@
   .sidebar li {
     margin: 10px;
     float: left;
+    margin-bottom: 20px;
   }
   
   /* 사이드바 내부의 링크 스타일 지정 */

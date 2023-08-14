@@ -174,6 +174,10 @@ function IssueDetail() {
       <NavBar />
       <div className={styles.issueBoardContainer}>
         <div className={styles.issueDetailContainer}>
+          <div className={styles.buttonContainer}>
+          <button className={styles.listButton}>
+            <span onClick={() => navigate(-1)}>목록</span>
+          </button>
           {showbutton(issue.nickname) && (
             <button className={styles.deleteButton}>
               <div>
@@ -181,6 +185,7 @@ function IssueDetail() {
               </div>
             </button>
           )}
+          </div>
           <div>
             <h1>{issue.title}</h1>
             <p>작성자: {issue.nickname}</p>
