@@ -83,6 +83,8 @@ public class UserDto {
         private AdditionalInfoDto religionCode;
         private AdditionalInfoDto jobCode;
 
+        private String fishSkin;
+
         List<AdditionalInfoDto> userHobbys = new ArrayList<>();
         List<AdditionalInfoDto> userStyles = new ArrayList<>();
         List<AdditionalInfoDto> userPersonalities = new ArrayList<>();
@@ -108,6 +110,7 @@ public class UserDto {
                     .userHobbys(hobbyAdditional)
                     .userStyles(styleAdditional)
                     .userPersonalities(personalityAdditional)
+                    .fishSkin(user.getFishSkin().getImagePath())
                     .build();
         }
     }
