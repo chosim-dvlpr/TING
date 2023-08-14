@@ -13,7 +13,7 @@ function CertificationPhonenumber() {
   let [phonenumberFirst, setPhonenumberFirst] = useState("");
   let [phonenumberMiddle, setPhonenumberMiddle] = useState("");
   let [phonenumberLast, setPhonenumberLast] = useState("");
-  let [phonenumber, setPhonenumber] = useState("");
+  let [phonenumberInput, setPhonenumberInput] = useState("");
   let [phonenumberAuthCode, setPhonenumberAuthCode] = useState("");
 
   let [isCheckPhonenumCode, setIsCheckPhonenumCode] = useState(false); // 휴대전화 인증버튼 클릭 시 true
@@ -54,7 +54,7 @@ function CertificationPhonenumber() {
   // 전화번호 형식에 맞게 저장
   useEffect(() => {
     const fullPhoneNumber = String(checkNumber(phonenumberFirst)) + String(checkNumber(phonenumberMiddle)) + String(checkNumber(phonenumberLast));
-    setPhonenumber(fullPhoneNumber);
+    setPhonenumberInput(fullPhoneNumber);
   }, [phonenumberFirst, phonenumberMiddle, phonenumberLast]);
 
   // 숫자만 입력 가능하도록
@@ -69,7 +69,7 @@ function CertificationPhonenumber() {
 
   const checkPhonenumberCode = () => {
     let data = {
-      phoneNumber: phonenumber,
+      phoneNumber: phonenumberInput,
       authCode: phonenumberAuthCode,
     };
 
@@ -96,18 +96,18 @@ function CertificationPhonenumber() {
 
   useEffect(() => {
     if (isConfirmPhonenumCode) {
-      dispatch(setPhoneNumber(phonenumber)); // redux에 저장
+      dispatch(setPhoneNumber(phonenumberInput)); // redux에 저장
     }
   }, [isConfirmPhonenumCode]);
 
   // 휴대전화 인증하기 버튼 클릭 시 실행
   const checkPhonenumber = () => {
-    if (phonenumber.length !== 11) {
+    if (phonenumberInput.length !== 11) {
       alert("올바른 전화번호를 입력해주세요");
       return;
     }
     basicHttp
-      .get(`/user/phoneauth/${phonenumber}`)
+      .get(`/user/phoneauth/${phonenumberInput}`)
       .then((response) => {
         if (response.data.code === 200) {
           alert("인증 메세지가 전송되었습니다.");
