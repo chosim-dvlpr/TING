@@ -11,14 +11,7 @@ import { getFriendId } from "../../redux/friendStore";
 import { getCurrent, getDateTime } from "../common/TimeCalculate";
 import basicHttp from "../../api/basicHttp";
 
-function FriendChatting({
-  onSearch2,
-  showFriendList,
-  showFriendChatting,
-  setChattingObj,
-  chattingObj,
-  getTemperature,
-}) {
+function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChattingObj, chattingObj, getTemperature }) {
   const location = useLocation();
   const Navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,8 +22,10 @@ function FriendChatting({
   const [isProfileModal, setIsProfileModal] = useState(false); // 프로필 모달 띄우기
   const [yourSkin, setYourSkin] = useState("");
 
-  let { connected, messageEntered, messageLogs, currentRoomIndex } =
-    messageStore;
+  // 채팅내용 입력시 값 검증
+  const [validateInput, setValidateInput] = useState('');
+
+  let { connected, messageEntered, messageLogs, currentRoomIndex } = messageStore;
 
   // 처음 렌더링 시 기존 데이터 DB에서 받아오기
   const getPreviousMessage = () => {
@@ -65,7 +60,9 @@ function FriendChatting({
         setYourSkin(`https://i9b107.p.ssafy.io:5157/${data.fishSkin}`);
         getTemperature(chattingObj.temperature);
       })
-      .catch(() => {console.log("/friend/profile error")});
+      .catch(() => {
+        console.log("/friend/profile error");
+      });
   }, []);
 
   const beforeUnloadListener = () => {
@@ -78,10 +75,15 @@ function FriendChatting({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (!messageEntered) {
+      setValidateInput('메세지를 입력해주세요');
+      return;
+    }
     messageStore.sendMessage({ type: "message" });
   };
 
   const handleChangeInput = (event) => {
+    setValidateInput('');
     const { value } = event.target;
     messageStore.changeInput(value);
   };
@@ -126,21 +128,15 @@ function FriendChatting({
         <div>
           <img src="/img/ting_logo_fish.png" alt="logo" />
         </div>
-        <button
-          className={styles.closeButton}
-          type="button"
-          disabled={!connected}
-          onClick={() => handleClickQuitRoom()}
-        >
+        <button className={styles.closeButton} type="button" disabled={!connected} onClick={() => handleClickQuitRoom()}>
           X
         </button>
       </div>
       <div className={styles.infoArea}>
-        <button
-          className={styles.imageButton}
-          onClick={() => showProfile(chattingObj.userId)}
-          
-        > <img className={styles.fishSkinImage} src={yourSkin} alt="물고기 스킨"></img></button>
+        <button className={styles.imageButton} onClick={() => showProfile(chattingObj.userId)}>
+          {" "}
+          <img className={styles.fishSkinImage} src={yourSkin} alt="물고기 스킨"></img>
+        </button>
         <div className={styles.nickname}>{chattingObj.nickname}</div>
         <div>{chattingObj.temperature}℃</div>
         {/* <button className={styles.kebabButton}>
@@ -152,44 +148,14 @@ function FriendChatting({
       <div className={styles.chattingArea}>
         <table>
           {previousMessage.map((message) => (
-            <tr
-              key={message.id}
-              className={
-                message.userId == chattingObj.userId
-                  ? styles.friend
-                  : styles.me
-              }
-            >
-              <td
-                className={
-                  message.userId == chattingObj.userId
-                    ? styles.content2
-                    : styles.content
-                }
-              >
-                {message.content}
-              </td>
+            <tr key={message.id} className={message.userId == chattingObj.userId ? styles.friend : styles.me}>
+              <td className={message.userId == chattingObj.userId ? styles.content2 : styles.content}>{message.content}</td>
               <td className={styles.time}>{getDateTime(message.sendTime)}</td>
             </tr>
           ))}
           {messageLogs.map((message) => (
-            <tr
-              key={message.id}
-              className={
-                message.userId == chattingObj.userId
-                  ? styles.friend
-                  : styles.me
-              }
-            >
-              <td
-                className={
-                  message.userId == chattingObj.userId
-                    ? styles.content2
-                    : styles.content
-                }
-              >
-                {message.content}
-              </td>
+            <tr key={message.id} className={message.userId == chattingObj.userId ? styles.friend : styles.me}>
+              <td className={message.userId == chattingObj.userId ? styles.content2 : styles.content}>{message.content}</td>
               <td className={styles.time}>{getCurrent(message.sendTime)}</td>
             </tr>
           ))}
@@ -198,11 +164,7 @@ function FriendChatting({
       </div>
       <div className={styles.submitArea}>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={messageEntered}
-            onChange={handleChangeInput}
-          />
+          <input className={styles.chattingInput} type="text" value={messageEntered} onChange={handleChangeInput} placeholder={validateInput} />
           <button className={styles.sendButton} type="submit">
             전송
           </button>
