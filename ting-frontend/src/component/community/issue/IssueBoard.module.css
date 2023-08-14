@@ -53,7 +53,9 @@
   overflow: hidden;
   position: relative; /* 추가 */
 }
-
+.card:hover{
+  transform: scale(1.03);
+}
 .cardNumContainer {
   display: flex;
   justify-content: space-between; /* 가운데 정렬 */

@@ -111,6 +111,14 @@ function AdviceBoard() {
         </div>
         <div>
           <table className={styles.adviceTable}>
+          <thead> 
+            <tr>
+              <th className={styles.tableHeader_1}>번호</th>
+              <th className={styles.tableHeader_2}>제목</th>
+              <th className={styles.tableHeader_3}>조회수</th>
+              <th className={styles.tableHeader_4}>날짜</th>
+            </tr>
+          </thead>
             <tbody>
               {searchClicked && searchResult.length === 0 ? (
                 <div>검색 결과가 없습니다.</div>
