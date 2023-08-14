@@ -30,7 +30,7 @@ const NavBar = () => {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [userData]);
 
   // 로그아웃 버튼 클릭시 동작
   const handleLogout = () => {
@@ -39,7 +39,7 @@ const NavBar = () => {
     dispatch(logout()); // redux의 user 정보 삭제
     messageStore.disconnect();
     setDropdown(false);
-    navigate("/"); // 로그인 완료되면 메인으로 이동
+    navigate("/"); // 로그아웃시 메인으로 이동
   };
 
   const handleMypage = () => {
@@ -49,70 +49,82 @@ const NavBar = () => {
       localStorage.setItem("userId", response.data.data.userId);
     });
 
-    navigate("/mypage"); 
-    setDropdown(false)
-  }
-
-  const openClam = e => {
-    e.target.src = process.env.PUBLIC_URL + '/img/조개.png';
-  }
-  const closeClam = e => {
-    e.target.src = process.env.PUBLIC_URL + '/img/조개2.png';
-  }
+    navigate("/mypage");
+    setDropdown(false);
+  };
 
   return (
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
         <Link className={styles.navMenu} to="/">
-          <img src={process.env.PUBLIC_URL + '/img/ting_logo_fish.png'} className={styles.logo} alt="logo"></img>
+          <img
+            src={process.env.PUBLIC_URL + "/img/ting_logo_fish.png"}
+            className={styles.logo}
+            alt="logo"
+          ></img>
           {/* <span>TING</span> */}
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
-          <img 
-            onMouseOver={openClam} 
-            onMouseLeave={closeClam} 
-            src={process.env.PUBLIC_URL + '/img/조개2.png'} 
-            className={styles.menuItem}></img>
+          <img
+            src={process.env.PUBLIC_URL + "/img/해마.png"}
+            className={styles.menuItem}
+          ></img>
           <div className={styles.menuName}>튜토리얼</div>
         </Link>
         <Link className={styles.navMenu} to="/community">
-          <img 
-            onMouseOver={openClam} 
-            onMouseLeave={closeClam} 
-            src={process.env.PUBLIC_URL + '/img/조개2.png'} 
-            className={styles.menuItem}></img>
+          <img
+            src={process.env.PUBLIC_URL + "/img/불가사리.png"}
+            className={styles.menuItem}
+          ></img>
           <div className={styles.menuName}>커뮤니티</div>
         </Link>
+        {userData ? (
+          <Link className={styles.navMenu} to="/item/shop">
+            <img
+              src={process.env.PUBLIC_URL + "/img/조개.png"}
+              className={styles.menuItem}
+            ></img>
+            <div className={styles.menuName}>아이템샵</div>
+          </Link>
+        ) : null}
       </div>
       <div className={styles.navRight}>
-        {userData ? (
-          <div ref={dropdownRef}>
-            {/* userData에서 프로필 이미지 받아서 표시 */}
-            {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
-            <img
-              // src={`https://i9b107.p.ssafy.io:5157/user/profile/${userData.userId}`}
-              src={process.env.PUBLIC_URL + '/img/조개.png'}
-              onClick={() => setDropdown(!dropdown)}
-              className={styles.profileImage}
-              alt="profile"
-            />
-            <div><span className={styles.nickname}>{userData.nickname}</span>님</div>
-            {dropdown ? (
-              <Dropdown.Menu show>
-                <Dropdown.Item eventKey="1" onClick={handleMypage}>Mypage</Dropdown.Item>
-                <Dropdown.Item eventKey="2" onClick={() => {navigate("/item/shop"); setDropdown(false)}}>아이템샵</Dropdown.Item>
-                <Dropdown.Item eventKey="3" onClick={handleLogout}>로그아웃</Dropdown.Item>
-              </Dropdown.Menu>
-            ) : null}
-          </div>
-        ) : (
-          <>
-            <span className={styles.navMenu} onClick={() => navigate("/login")}>
-              <img src={process.env.PUBLIC_URL + '/img/조개2.png'} onMouseOver={openClam} onMouseLeave={closeClam} className={styles.menuItem}></img>
-              <div className={styles.menuName}>로그인</div>
-            </span>
-          </>
-        )}
+        {
+          userData ? (
+            <div ref={dropdownRef} className={styles.yesLoginedDiv}>
+              {/* userData에서 프로필 이미지 받아서 표시 */}
+              {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
+              {dropdown ? (
+                <div className={styles.dropDownMenu}>
+                  <div onClick={handleMypage}>마이페이지</div>
+                  <div onClick={handleLogout}>로그아웃</div>
+                </div>
+              ) : null}
+              <div className={styles.profileImageDiv}>
+                <img
+                  src={`https://i9b107.p.ssafy.io:5157/${userData.fishSkin}`}
+                  onClick={() => setDropdown(!dropdown)}
+                  className={styles.profileImage}
+                  alt="profile"
+                />
+              </div>
+              <div>
+                <span className={styles.nickname}>{userData.nickname}</span>님
+              </div>
+            </div>
+          ) : (
+            <>
+              <div
+                id={styles.login}
+                className={styles.loginDiv}
+                onClick={() => navigate("/login")}
+              >
+                로그인
+              </div>
+            </>
+          )
+          // null
+        }
       </div>
     </div>
   );
