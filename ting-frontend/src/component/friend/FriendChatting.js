@@ -4,7 +4,6 @@ import useMessageStore from "./useMessageStore";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import tokenHttp from "../../api/tokenHttp";
-import FriendProfile from "./FriendProfile";
 
 import styles from "./FriendChatting.module.css";
 import { getFriendId } from "../../redux/friendStore";
@@ -23,7 +22,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
   const [yourSkin, setYourSkin] = useState("");
 
   // 채팅내용 입력시 값 검증
-  const [validateInput, setValidateInput] = useState('');
+  const [validateInput, setValidateInput] = useState("");
 
   let { connected, messageEntered, messageLogs, currentRoomIndex } = messageStore;
 
@@ -76,14 +75,14 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!messageEntered) {
-      setValidateInput('메세지를 입력해주세요');
+      setValidateInput("메세지를 입력해주세요");
       return;
     }
     messageStore.sendMessage({ type: "message" });
   };
 
   const handleChangeInput = (event) => {
-    setValidateInput('');
+    setValidateInput("");
     const { value } = event.target;
     messageStore.changeInput(value);
   };
@@ -125,9 +124,10 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
   return (
     <div>
       <div className={styles.top}>
-        <div>
-          <img src="/img/ting_logo_fish.png" alt="logo" />
-        </div>
+        {/* <div> */}
+        <img src="/img/ting_logo_fish.png" alt="logo" />
+
+        {/* </div> */}
         <button className={styles.closeButton} type="button" disabled={!connected} onClick={() => handleClickQuitRoom()}>
           X
         </button>
@@ -138,7 +138,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
           <img className={styles.fishSkinImage} src={yourSkin} alt="물고기 스킨"></img>
         </button>
         <div className={styles.nickname}>{chattingObj.nickname}</div>
-        <div>{chattingObj.temperature}℃</div>
+        <div>{chattingObj.temperature ? <p>{chattingObj.temperature}℃</p> : null}</div>
         {/* <button className={styles.kebabButton}>
           <img className={styles.kebab} src="/img/kebab.png" alt="kebab" />
         </button> */}
