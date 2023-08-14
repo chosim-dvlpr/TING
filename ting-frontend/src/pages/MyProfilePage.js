@@ -19,13 +19,13 @@ function MyProfilePage() {
 
   let dispatch = useDispatch();
 
-  useEffect(() => {
-    // 유저 데이터 redux에 저장
-    tokenHttp.get("/user").then((response) => {
-      dispatch(getCurrentUserdata(response.data.data));
-      localStorage.setItem("userId", response.data.data.userId);
-    });
-  });
+  // useEffect(() => {
+  //   // 유저 데이터 redux에 저장
+  //   tokenHttp.get("/user").then((response) => {
+  //     dispatch(getCurrentUserdata(response.data.data));
+  //     localStorage.setItem("userId", response.data.data.userId);
+  //   });
+  // }, []);
 
   return (
     <div className={styles.outer}>

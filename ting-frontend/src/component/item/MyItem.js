@@ -11,13 +11,12 @@ function MyItem() {
   const [modalSign, setModalSign] = useState(false);
   const [clickedItem, setClickedItem] = useState({});
 
-  useEffect(() => {
+  const makeItemList = () => {
     tokenHttp
       .get("/item/user")
       .then((response) => {
-        // console.log(response.data);
-        let myItems = [];
         if (response.data.code === 200) {
+          let myItems = [];
           response.data.data.map((item) => {
             switch (item.name) {
               case "구매한 티켓":
@@ -54,6 +53,10 @@ function MyItem() {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    makeItemList();
   }, []);
 
   // 모달을 여는 함수
@@ -67,8 +70,8 @@ function MyItem() {
   // 모달을 닫는 함수
   const closeModal = () => {
     setModalSign(false);
+    makeItemList();
   };
-
 
   return (
     <div>
@@ -76,7 +79,12 @@ function MyItem() {
         <div className={`row ${styles.ItemCardList}`}>
           {myItemList &&
             myItemList.map((item, idx) => (
-              <div className={`col-4 ${styles.ItemCardOuter}`} onClick={()=>{openModal(item)}}>
+              <div
+                className={`col-4 ${styles.ItemCardOuter}`}
+                onClick={() => {
+                  openModal(item);
+                }}
+              >
                 <div key={idx} className={styles.ItemCard}>
                   <div className={styles.ItemCardInside}>
                     <img src={process.env.PUBLIC_URL + item.img}></img>
@@ -94,7 +102,6 @@ function MyItem() {
       {modalSign ? (
         <ItemUseModal closeModal={closeModal} clickedItem={clickedItem} />
       ) : null}
-
     </div>
   );
 }

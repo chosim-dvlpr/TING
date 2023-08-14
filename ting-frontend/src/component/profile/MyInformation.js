@@ -1,15 +1,28 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { regionList } from "../../SelectionDataList";
+
+import tokenHttp from "../../api/tokenHttp";
+import { getCurrentUserdata } from "../../redux/userdata";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./MyInformation.module.css";
 
 function MyInformation() {
   let Navigate = useNavigate();
+  let dispatch = useDispatch();
 
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   const englishPattern = /^[A-Za-z]+$/;
+
+  useEffect(() => {
+    // 유저 데이터 redux에 저장
+    tokenHttp.get("/user").then((response) => {
+      dispatch(getCurrentUserdata(response.data.data));
+      localStorage.setItem("userId", response.data.data.userId);
+    });
+  }, []);
 
   // 지역 영어를 한글로 변환
   const matchRegion = (regionData) => {
