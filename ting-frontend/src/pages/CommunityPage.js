@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import IssueBoard from "../component/community/issue/IssueBoard";
 import AdviceBoard from "../component/community/advice/AdviceBoard";
@@ -13,7 +13,10 @@ function CommunityPage() {
       <div className="community-container">
         <div className="community-content">
           <Routes>
-            <Route path="/" element={<IssueBoard />} />
+            <Route
+              path="/"
+              element={<Navigate to="/community/issue" replace />}
+            />
 
             {/* adivce 게시판 */}
             <Route path="/advice" element={<AdviceBoard />} />
