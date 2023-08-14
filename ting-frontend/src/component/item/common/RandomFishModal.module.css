@@ -48,40 +48,14 @@
   }
 }
 
-@keyframes debris {
-  0% {
-    transform: translate(0, 0);
-    opacity: 0;
-  }
-  50% {
-    transform: translate(0, 0);
-    opacity: 0;
-  }
-  75%{
-    transform: translate(calc(var(--dx, 0) * 400px), calc(var(--dy, 0) * 300px));
-    opacity: 1;
-  }
-  100% {
-    transform: translate(calc(var(--dx, 0) * 400px), calc(var(--dy, 0) * 300px));
-    opacity: 0;
-  }
-}
-
-.fishDebris {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  animation: debris 1s ease-in-out; 
-  opacity: 0;
-}
-
-
 .closeButton {
   position: absolute;
   top:20px;
   right:20px;
   width: 15px;
   height: 15px;
+}
+
+.Confetti {
+  width: 100%;
 }
