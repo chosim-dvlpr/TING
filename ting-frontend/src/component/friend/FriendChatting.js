@@ -17,6 +17,7 @@ function FriendChatting({
   showFriendChatting,
   setChattingObj,
   chattingObj,
+  getTemperature,
 }) {
   const location = useLocation();
   const Navigate = useNavigate();
@@ -62,6 +63,7 @@ function FriendChatting({
         console.log("/friend/profile API Call", response);
         const data = response.data.data;
         setYourSkin(`https://i9b107.p.ssafy.io:5157/${data.fishSkin}`);
+        getTemperature(chattingObj.temperature);
       })
       .catch(() => {console.log("/friend/profile error")});
   }, []);

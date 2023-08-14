@@ -6,7 +6,7 @@ import FriendList from "./FriendList";
 import FriendChatting from "./FriendChatting";
 import { messageStore } from "../../redux/messageStore";
 
-function Friend({ onSearch, onSearch2 }){
+function Friend({ onSearch, onSearch2, temperature }){
   let Navigate = useNavigate();
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [isFriendList, setIsFriendList] = useState(true);
@@ -40,6 +40,10 @@ function Friend({ onSearch, onSearch2 }){
     setIsFriendChatting(data)
   };
 
+  const setTemperature = (data) => {
+    temperature(data);
+  }
+
   // const closeModal = () => {
   //   setIsModalOpened(false);
   // }
@@ -59,7 +63,7 @@ function Friend({ onSearch, onSearch2 }){
         }
         {
           isFriendChatting &&
-          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
+          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} getTemperature={setTemperature}/>
         }    
       </div>
 

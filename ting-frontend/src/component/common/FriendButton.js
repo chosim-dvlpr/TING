@@ -18,6 +18,7 @@ const FriendButton = () => {
   const [show, setShow] = useState(false);
   const [profileShow, setProfileShow] = useState(false);
   const [icon, setIcon] = useState("");
+  const [temperature, setTemperature] = useState("");
   // const [showProfile, setShowProfile] = useState(false);
   const userId = useSelector((state) => state.friendReducer.friendId);
 
@@ -95,6 +96,10 @@ const FriendButton = () => {
     else return "glass";
   };
 
+  const getTemperature = (data) => {
+    setTemperature(data);
+  }
+
   useEffect(() => {
     getIcon();
   }, [icon]);
@@ -112,13 +117,13 @@ const FriendButton = () => {
         {/* <div className={styles.profileContainer}></div> */}
         {show && (
           <div className={styles.chatContainer}>
-            <Friend onSearch={closeModal} onSearch2={openProfile} />
+            <Friend onSearch={closeModal} onSearch2={openProfile} temperature={getTemperature} />
           </div>
         )}
         <div>
           {profileShow && userId && (
             <div className={styles.profileContainer}>
-              <FriendProfile userId={userId} />
+              <FriendProfile userId={userId} temperature={temperature} />
             </div>
           )}
         </div>
