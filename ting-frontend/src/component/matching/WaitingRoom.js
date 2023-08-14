@@ -165,6 +165,8 @@ function WaitingRoom() {
         case "matchingSuccess":
           let enterToken = response.data.token;
           let matchingId = response.data.matchingId;
+          console.log(response.data)
+          console.log('매칭아이디',matchingId)
 
           dispatch(setOpenviduToken(enterToken));
           dispatch(setMatchingId(matchingId));

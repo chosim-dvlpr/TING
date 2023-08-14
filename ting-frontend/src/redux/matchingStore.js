@@ -72,7 +72,7 @@ export let matchingReducer = createSlice({
 
     setMatchingResult:(state,action)=>{
       state.matchingResult = action.payload;
-      console.log("++++++++++++++ matchingResult 저장 +++++++++++++++")
+      console.log("++++++++++++++ matchingResult(상대방의 결과) 저장 +++++++++++++++")
       console.log(state.matchingResult)
     }
 

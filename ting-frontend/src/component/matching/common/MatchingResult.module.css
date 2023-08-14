@@ -21,7 +21,7 @@
   justify-content: center;
   align-items: center;
   position:absolute;
-  width:90%;
+  width:95%;
   height:90%;
   background-color: white;
 }
@@ -135,4 +135,16 @@
 
 .Btn:hover {
   background-color: #327488;
+}
+
+.ConfettiOuter{
+  width: 100vw;
+}
+
+.Confetti {
+  width: 100vw;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index: 20;
 }
