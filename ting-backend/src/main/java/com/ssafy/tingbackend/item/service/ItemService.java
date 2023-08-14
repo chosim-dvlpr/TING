@@ -113,38 +113,30 @@ public class ItemService {
 
         List<Inventory> inventory = inventoryRepository.findByUserId(user.getId());
 
-
         List<InventoryDto> inventoryDtoList = new ArrayList<>();
 
         inventory.forEach(i -> {
             if (i.getQuantity() > 0) inventoryDtoList.add(InventoryDto.of(i));
         });
 
+        ItemType[] itemType = {ItemType.SKIN_10, ItemType.SKIN_5, ItemType.SKIN_3, ItemType.SKIN_2};
+
+        InventoryDto inventoryDto = null;
+        for (ItemType type : itemType) {
+            for (int i = 0; i < inventoryDtoList.size(); i++) {
+                if (inventoryDtoList.get(i).getItemType() == type) {
+                    if (inventoryDto == null) {
+                        inventoryDto = inventoryDtoList.get(i);
+                    }
+                    inventoryDtoList.remove(i--);
+                }
+            }
+        }
+
+        inventoryDtoList.add(inventoryDto);
+
         return inventoryDtoList;
     }
-
-//    public List<ItemDto.OwnItem> getOwnItemList(Long userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-//        List<UserItem> userItemList = userItemRepository.findAllByUser(user);
-//
-//        List<ItemDto.OwnItem> ownItemList = new ArrayList<>();
-//
-//        outer:
-//        for (UserItem userItem : userItemList) {
-//            Item item = userItem.getItem();
-//
-//            for (ItemDto.OwnItem ownItem : ownItemList) {
-//                if (ownItem.getCode().equals(item.getCode())) {
-//                    ownItem.addQuantity();
-//                    continue outer;
-//                }
-//            }
-//
-//            ownItemList.add(ItemDto.OwnItem.of(item));
-//        }
-//        return ownItemList;
-//    }
 
     public List<ItemDto.Basic> getStoreItemList() {
         List<Item> itemEntityList = itemRepository.findAll();
