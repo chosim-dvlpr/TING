@@ -11,13 +11,6 @@
     font-size: 20px;
 }
 
-.label,
-.btn,
-.btnSecondary,
-.disabledBtn {
-    /* margin: 10px; */
-}
-
 .introduceContainer input,
 .height input,
 .input,
@@ -106,12 +99,6 @@
     visibility: hidden;
 } */
 
-
-#nameInput,
-#regionInput {
-    /* margin-right: 120px; */
-    /* width: 390px; */
-}
 
 .selectBtn {
     border: none;
