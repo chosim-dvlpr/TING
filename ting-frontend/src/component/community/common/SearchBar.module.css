@@ -4,6 +4,7 @@
 }
 
 .searchInput {
+  min-width: 60px;
   padding: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;

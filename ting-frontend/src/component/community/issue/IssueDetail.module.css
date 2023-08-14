@@ -100,8 +100,8 @@
   align-items: center;
   padding: 8px;
   min-width: 120px;
-  min-height: 120px;
-  height: 160px;
+  min-height: 100px;
+  height: 140px;
   border-radius: 8px;
   overflow: hidden;
   transition: flex 0.3s ease-in-out;
@@ -117,6 +117,9 @@
   background-color: #8bcad5; /* Blue */
 }
 
-.voteTitle {
-  font-weight: 900;
+
+
+.issueContent {
+  min-height: 80px;
+  margin-top: 40px;
 }
