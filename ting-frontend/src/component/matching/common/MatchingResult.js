@@ -4,7 +4,7 @@ import { useSelector } from "react-redux/es/hooks/useSelector"
 import { useNavigate } from "react-router-dom"
 import tokenHttp from "../../../api/tokenHttp.js"
 
-function MatchingResult({ session, count }) {
+function MatchingResult({ session, count, result }) {
   const navigate = useNavigate()
   const [isFlipped, setIsFlipped] = useState(false)
 
@@ -14,14 +14,11 @@ function MatchingResult({ session, count }) {
   const matchingId = state.matchingReducer.matchingId
   const matchingResult = state.matchingReducer.matchingResult
 
-  const [result, setResult] = useState(false)
-
   // 클릭시 뒤집어져서 결과 확인
   const flipCard = (event) => {
     setIsFlipped(!isFlipped)
     // 결과 확인 누른거 sign 보내기
   }
-
 
   return (
     <>
@@ -48,7 +45,7 @@ function MatchingResult({ session, count }) {
             <h3>모두 YES일 경우</h3>
             <h3>자동으로 어항에 추가됩니다.</h3>
             <button onClick={() => { flipCard() }}>결과 확인하기</button>
-            <button className={styles.lastResultButton} onClick={() => { window.location.href = '/' }}>메인으로 돌아가기</button>
+            <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
           </div>
         </div>
 
