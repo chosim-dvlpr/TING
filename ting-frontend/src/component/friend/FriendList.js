@@ -24,7 +24,6 @@ function FriendList({
   // let [userId, setUserId] = useState(1); // 초기값은 ""으로 설정해두기
   const userdata = useSelector((state) => state.userdataReducer);
   const [searchFriendNickname, setSearchFriendNickname] = useState("");
-
   const Navigate = useNavigate();
 
   // 친구 찾기 버튼 클릭 시 true
@@ -166,7 +165,9 @@ function FriendList({
         }
       });
   }
-  
+
+  const openDropdown = () => {
+  }
 
 
   return (
@@ -180,16 +181,16 @@ function FriendList({
         </button>
       </div>
       <div className={styles.searchArea}>
-        <input
-          type="text"
-          onChange={(e) => setSearchFriendNickname(e.target.value)}
-        ></input>
         <button
           className={styles.searchButton}
           onClick={() => setIsSearchFriend(!isSearchFriend)}
         >
           검색
         </button>
+        <input
+          type="text"
+          onChange={(e) => setSearchFriendNickname(e.target.value)}
+        ></input>
       </div>
       <div className={styles.list}>
         {friendList
@@ -199,7 +200,7 @@ function FriendList({
               <div
                 className={`${styles.friendItem} 
                 ${friend.state === "ALIVE" ? styles.alive : styles.dead}`}
-                onClick={() => {
+                onDoubleClick={() => {
                   if (friend.state === "DEAD") {
                     handleReviveConfirmation();
                   } else {
@@ -219,19 +220,21 @@ function FriendList({
                     {friend.lastChattingContent}
                   </div>
                 </div>
-                <div>
+                <div className={styles.right}>
                   <div className={styles.time}>
                     {getTime(friend.lastChattingTime)}
                   </div>
-                  <div className={styles.unread}>
-                    {messageLogsObject[friend.chattingId]
-                      ? messageLogsObject[friend.chattingId].length
-                      : 0}
+                  <div className={styles.unreadArea}>
+                    {messageLogsObject[friend.chattingId]? <div className={styles.new}>N</div>: <div></div>}
+                    <div className={styles.unread}>
+                      {messageLogsObject[friend.chattingId]
+                        ? messageLogsObject[friend.chattingId].length
+                        : 0}
+                    </div>
                   </div>
                 </div>
                 <div className={styles.dropdown}>
-                  <button onClick={(e) => e.stopPropagation()}>
-                    {/* 부모 클릭 방지 */}
+                  <button>
                     <img className={styles.kebab} src="/img/kebab.png" alt="kebab" />
                   </button>
                   <div className={styles.dropdownContent}>
