@@ -125,14 +125,8 @@ function CertificationPhonenumber() {
   const activeEnter = (e, check) => {
     if (e.key === "Enter") {
       switch (check) {
-        // case checkEmailCode:
-        //   checkEmailCode();
-        //   break;
-        // case checkEmail:
-        //   checkEmail();
-        //   break;
-
-        default:
+        case checkPhonenumber:
+          checkPhonenumber();
           break;
       }
     }
@@ -141,7 +135,7 @@ function CertificationPhonenumber() {
   return (
     <div className={styles.wrapper}>
       <label className={styles.label} htmlFor="phonenumber">
-        전화번호를 인증해주세요
+        휴대폰 번호
       </label>
       <br></br>
       <div>
@@ -181,19 +175,22 @@ function CertificationPhonenumber() {
           ref={phonenumberLastRef}
           type="text"
           id="phonenumberLast"
-          onChange={(e) => {
-            setPhonenumberLast(e.target.value);
-          }}
+          onChange={(e) => {setPhonenumberLast(e.target.value)}}
+          onKeyDown={(e) => activeEnter(e, checkPhonenumber)}
           maxLength={4}
           disabled={isCheckPhonenumCode}
         />
       {!isCheckPhonenumCode && (
-        <button className={styles.btn} onClick={checkPhonenumber}>
+        <button 
+        className={`${isConfirmPhonenumCode 
+          ? styles.disabledBtn 
+          : styles.btn}`} 
+        onClick={checkPhonenumber}>
           인증하기
         </button>
       )}
+
       </div>
-      <br></br>
       {/* 인증하기 버튼 누른 뒤 인증번호 입력 */}
       {isCheckPhonenumCode && (
         <>
@@ -206,7 +203,11 @@ function CertificationPhonenumber() {
             placeholder="인증번호 4자리"
             disabled={isConfirmPhonenumCode}
           />
-          <button className={styles.btn} onClick={checkPhonenumberCode}>
+          <button 
+          className={`${isConfirmPhonenumCode 
+            ? styles.disabledBtn 
+            : styles.btn}`} 
+          onClick={checkPhonenumberCode}>
             인증확인
           </button>
           {/* <button 

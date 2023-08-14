@@ -11,7 +11,7 @@ function InputEmail() {
   const emailInput = useRef();
   const authCodeInput = useRef();
   let [showInputCode, setShowInputCode] = useState(false);
-  let [msg, setMsg] = useState("이메일 인증");
+  let [msg, setMsg] = useState("");
   let [authCode, setAuthCode] = useState("");
   let [isInputEmailDisabled, setIsInputEmailDisabled] = useState(false);
   let [isInputEmailCodeDisabled, setIsInputEmailCodeDisabled] = useState(false);
@@ -24,7 +24,7 @@ function InputEmail() {
   const checkEmail = () => {
     let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     // console.log(check.test(inputEmail))
-    // setMsg("");
+    setMsg("");
     if (check.test(inputEmail)) {
       basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
         if (response.data.code === 200) {
@@ -86,12 +86,14 @@ function InputEmail() {
       });
   };
 
+  useEffect(() => {
+    if (showInputCode) {
+      setMsg("인증 메일 전송 완료");
+    }
+  }, [showInputCode])
+
   return (
     <div className={styles.wrapper}>
-      <label className={styles.label} htmlFor="email">
-        이메일을 입력해주세요
-      </label>
-
       <br></br>
 
       {/* 중복확인 전 */}
@@ -124,19 +126,22 @@ function InputEmail() {
       {/* 중복확인 & 인증메일 발송 뒤 */}
       {showInputCode && (
         <>
-          <button className={`${styles.btn} ${styles.checkEmail}`} onClick={checkEmailCode} onKeyDown={(e) => activeEnter(e, checkEmailCode)}>
+          <button 
+          className={`${!isInputEmailCodeDisabled && styles.btn} ${!isInputEmailCodeDisabled ? styles.checkEmail : styles.disabledBtn}`} 
+          onClick={checkEmailCode} 
+          onKeyDown={(e) => activeEnter(e, checkEmailCode)}
+          disabled={isInputEmailCodeDisabled}>
             인증 코드 확인
           </button>
         </>
       )}
 
       <br />
-      <span className={`
+      <p className={`
       ${isInputEmailCodeDisabled 
         ? styles.rightMsg 
         : styles.wrongMsg}
-      ${!isEmailMsgVisible && styles.msgHide} 
-      ${styles.msg}`}>{msg}</span>
+      `}>{msg}</p>
 
     </div>
   );
