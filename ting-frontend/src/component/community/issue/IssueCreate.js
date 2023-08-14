@@ -87,31 +87,31 @@ const IssueCreate = () => {
             <label htmlFor="agreeTitle" className={styles.label}>
               A 투표 항목
             </label>
-            <textarea
+            <input
               id="agreeTitle"
               value={agreeTitle}
               onChange={(e) => setAgreeTitle(e.target.value)} 
               required
-              className={styles.textAreaField}
+              className={styles.inputField}
             />
             <label htmlFor="opposeTitle" className={styles.label}>
               B 투표 항목 
             </label>
-            <textarea
+            <input
               id="opposeTitle"
               value={opposeTitle}
               onChange={(e) => setOpposeTitle(e.target.value)} 
-              className={styles.textAreaField} 
+              className={styles.inputField} 
             />
             <label htmlFor="content" className={styles.label}>
               상세 내용
             </label>
-            <textarea
+            <input
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
-              className={styles.textAreaField}
+              className={styles.inputField}
             />
           </div>
           <div>
