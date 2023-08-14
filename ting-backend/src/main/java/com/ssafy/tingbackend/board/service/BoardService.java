@@ -339,7 +339,7 @@ public class BoardService {
                 .comment(comment)
                 .build();
 
-        comment.setLikeCount(comment.getLikeCount()+1);
+        commentRepository.upLike(commentId);
         commentLikeRepository.save(commentLike);
     }
 
@@ -349,12 +349,11 @@ public class BoardService {
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
-
         CommentLike commentLike = commentLikeRepository.find(user, comment)
                 .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_LIKE_NOT_FOUND));
 
         commentLikeRepository.delete(commentLike);
-        comment.setLikeCount(comment.getLikeCount()-1);
+        commentRepository.downLike(commentId);
     }
 
     public List<CommentDto.Response> commentList(BoardType boardType, Long boardId) {

@@ -26,4 +26,10 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c FROM Comment c WHERE c.issueBoard.id=:boardId AND c.depth=0 AND c.parent.id=:commentId AND " +
             " c.boardType=com.ssafy.tingbackend.entity.type.BoardType.ISSUE ORDER BY c.createdTime DESC")
     List<Comment> findChildIssue(Long boardId, Long commentId);
+
+    @Query("UPDATE Comment c SET c.likeCount = c.likeCount+1  WHERE c.id=:commentId")
+    void upLike(Long commentId);
+
+    @Query("UPDATE Comment c SET c.likeCount = c.likeCount-1  WHERE c.id=:commentId")
+    void downLike(Long commentId);
 }
