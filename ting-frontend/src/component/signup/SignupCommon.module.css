@@ -18,6 +18,8 @@
     /* margin: 10px; */
 }
 
+.introduceContainer input,
+.height input,
 .input,
 .btn,
 .btnSecondary,
@@ -149,7 +151,7 @@
 .btnSecondary {
     border: none;
     margin: 5px;
-    background-color: #gray;
+    background-color: #fafafa;
     color: #2e6070;
     box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
         5px 5px 10px 0px rgba(0, 0, 0, .1),
@@ -253,4 +255,21 @@
 
 .signupComplete {
     margin: 5px;
+}
+
+.introduceContainer {
+    margin: 10px;
+}
+
+.profileImgContainer input {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    margin: auto;
+    width: 50%;
+}
+
+.goToLoginBtn {
+    margin: 10px;
+    width: 100%;
 }

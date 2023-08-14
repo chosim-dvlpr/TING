@@ -83,6 +83,7 @@ function SelectionData(){
         <Dropdown.Item onClick={() => {
           handleDropdownItemClick(data)
           }}
+          className={styles.dropdownItem}
           key={i}
         >{ data.name }</Dropdown.Item>
       )))
@@ -161,7 +162,8 @@ function SelectionData(){
         <div>
           <h3>MBTI</h3>
           <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
             { signupReducer.mbtiCode ? signupReducer.mbtiCode.name : "MBTI" }
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -173,7 +175,8 @@ function SelectionData(){
 
           <h3>Drinking</h3>
           <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
             { signupReducer.drinkingCode ? signupReducer.drinkingCode.name : "주량" }
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -185,7 +188,8 @@ function SelectionData(){
           
           <h3>Smoking</h3>
           <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
             { signupReducer.smokingCode ? signupReducer.smokingCode.name : "흡연" }
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -197,7 +201,8 @@ function SelectionData(){
 
           <h3>Religion</h3>
           <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
             { signupReducer.religionCode ? signupReducer.religionCode.name : "종교" }
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -206,18 +211,20 @@ function SelectionData(){
               }
             </Dropdown.Menu>
           </Dropdown>
-
-          <h3>Height</h3>
-          <input 
-            ref={userHeight}
-            onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
-            type="number" min="100" max="250"></input> 
+          <div className={styles.height}>
+            <h3>Height</h3>
+            <input 
+              ref={userHeight}
+              onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
+              type="number" min="100" max="250"></input> 
+          </div>
         </div>
 
         <div>
         <h3>Hobby</h3>
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
           { "취미" }
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -236,7 +243,8 @@ function SelectionData(){
 
         <h3>Personality</h3>
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
           { "성격" }
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -255,7 +263,8 @@ function SelectionData(){
 
         <h3>Style</h3>
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
           { "선호 스타일" }
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -271,10 +280,11 @@ function SelectionData(){
           ))
         }
         </span>
-        <h4>자신을 간단하게 소개해주세요</h4>
-        <input type="text" onChange={(e) => dispatch(setIntroduce(e.target.value))}></input>
-        
-        <div>
+        <div className={styles.introduceContainer}>
+          <h4>자신을 간단하게 소개해주세요</h4>
+          <input type="text" onChange={(e) => dispatch(setIntroduce(e.target.value))}></input>
+        </div>
+        <div className={styles.profileImgContainer}>
           <h4>프로필 사진을 업로드해주세요</h4>
           <input type="file" accept='image/*' onChange={onUploadImage}></input>
         </div>
@@ -290,7 +300,7 @@ function SelectionData(){
       <div>
           <button 
             onClick={() => goToLogin("/login")}
-            className={styles.btn}  
+            className={`${styles.btn} ${styles.goToLoginBtn}`}  
           >로그인 하러 가기</button>
       </div>
     </div>
