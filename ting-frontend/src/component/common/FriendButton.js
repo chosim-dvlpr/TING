@@ -8,6 +8,8 @@ import Friend from "../friend/Friend";
 
 import { Link, useNavigate } from "react-router-dom";
 import FriendProfile from "../friend/FriendProfile";
+import useMessageStore from "../friend/useMessageStore";
+
 
 const FriendButton = ({ toggleWheelHandler }) => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
@@ -18,7 +20,12 @@ const FriendButton = ({ toggleWheelHandler }) => {
   const [icon, setIcon] = useState("");
   const [temperature, setTemperature] = useState("");
   // const [showProfile, setShowProfile] = useState(false);
-  const userId = useSelector((state) => state.friendReducer.friendId);
+  const friendId = useSelector((state) => state.friendReducer.friendId);
+  const messageStore = useMessageStore();
+  const { messageLogs } = messageStore;
+  const [totalUnread, setTotalUnread] = useState("");
+  const [initialUnread, setInitialUnread] = useState(0);
+  const [friendUnread, setFriendUnread] = useState(0);
 
   // let isClosed = true;
 
@@ -77,6 +84,28 @@ const FriendButton = ({ toggleWheelHandler }) => {
       });
   };
 
+  // 친구 목록 불러오기
+  const friendListAxios = () => {
+    tokenHttp
+      .get("/friend")
+      .then((response) => {
+        // 불러오기 성공 시 friendList에 친구목록 저장
+        if (response.data.code === 200) {
+          console.log("친구 목록 불러오기 성공");
+          // setFriendList(response.data.data); // 친구 리스트 state에 저장
+          console.log(response.data.data);
+          let num = 0;
+          response.data.data.map((data) => {
+            num += data.unread;
+          })
+          setInitialUnread(num);
+        } else if (response.data.code === 400) {
+          console.log("실패");
+        }
+      })
+      .catch(() => console.log("실패"));
+  };
+
   const getName = (category) => {
     if (category == "SKIN_3") return "bowl";
     else if (category == "SKIN_5") return "tank";
@@ -88,13 +117,38 @@ const FriendButton = ({ toggleWheelHandler }) => {
     setTemperature(data);
   }
 
+  const getFriendUnread = (data) => {
+    setFriendUnread(data);
+  }
+
+  useEffect(() => {
+    friendListAxios();
+  }, [])
+
   useEffect(() => {
     getIcon();
   }, [icon]);
 
+  useEffect(() => {
+    setTotalUnread(totalUnread - friendUnread);
+  }, [friendUnread])
+
+  useEffect(() => {
+    let num = 0;
+    if(messageLogs) {
+      messageLogs.map((data) => {
+        if(data.userId != userData.userId) {
+          num += 1;
+        }
+      })
+    }
+    setTotalUnread(num);
+  }, [messageLogs])
+
   return (
     <div className={styles.friendContainer}>
       <button className={styles.button} onClick={() => changeIsClosed()}>
+        <div className={styles.totalUnread}>{initialUnread + totalUnread}</div>
         <img
           src={process.env.PUBLIC_URL + `/img/friend_${icon}.png`}
           className={styles.coinImage}
@@ -105,13 +159,13 @@ const FriendButton = ({ toggleWheelHandler }) => {
         {/* <div className={styles.profileContainer}></div> */}
         {show && (
           <div className={styles.chatContainer}>
-            <Friend onSearch={closeModal} onSearch2={openProfile} temperature={getTemperature} />
+            <Friend onSearch={closeModal} onSearch2={openProfile} temperature={getTemperature} friendUnread={getFriendUnread} />
           </div>
         )}
         <div>
-          {profileShow && userId && (
+          {profileShow && friendId && (
             <div className={styles.profileContainer}>
-              <FriendProfile userId={userId} temperature={temperature} />
+              <FriendProfile friendId={friendId} temperature={temperature} />
             </div>
           )}
         </div>

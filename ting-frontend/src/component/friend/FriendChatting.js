@@ -155,14 +155,14 @@ function FriendChatting({
             <tr
               key={message.id}
               className={
-                message.nickname == chattingObj.nickname
+                message.userId == chattingObj.userId
                   ? styles.friend
                   : styles.me
               }
             >
               <td
                 className={
-                  message.nickname == chattingObj.nickname
+                  message.userId == chattingObj.userId
                     ? styles.content2
                     : styles.content
                 }
@@ -176,14 +176,14 @@ function FriendChatting({
             <tr
               key={message.id}
               className={
-                message.nickname == chattingObj.nickname
+                message.userId == chattingObj.userId
                   ? styles.friend
                   : styles.me
               }
             >
               <td
                 className={
-                  message.nickname == chattingObj.nickname
+                  message.userId == chattingObj.userId
                     ? styles.content2
                     : styles.content
                 }
