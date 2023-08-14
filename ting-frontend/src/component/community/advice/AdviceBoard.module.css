@@ -52,7 +52,7 @@
 .adviceTable td {
   padding: 10px;
   /* border: 1px solid rgb(0, 131, 159); */
-  text-align: center;
+  
   background-color: #fae6e8;
   margin: 10px 0;
 }
@@ -64,20 +64,54 @@
 .table_1 {
   width: 10%;
   border-right: 1px solid white;
+  text-align: center;
 }
 
 .table_2 {
   width: 50%;
   border-right: 1px solid white;
+  text-align: center;
+  
 }
 
 .table_3 {
   width: 10%;
   border-right: 1px solid white;
+  text-align: right;
 }
 
 .table_4 {
   width: 30%;
+  text-align: right;
+}
+
+/* 제목행 */
+.tableHeader_1 {
+  width: 10%;
+  border-right: 1px solid white;
+  text-align: center;
+ background-color: #e58490;
+}
+
+.tableHeader_2 {
+  width: 50%;
+  border-right: 1px solid white;
+  text-align: center;
+ background-color: #e58490;
+}
+
+.tableHeader_3 {
+  width: 10%;
+  border-right: 1px solid white;
+  text-align: center;
+ background-color: #e58490;
+}
+
+.tableHeader_4 {
+  width: 30%;
+  
+  text-align: center;
+ background-color: #e58490;
 }
 
 .adviceTable .option {
