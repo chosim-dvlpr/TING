@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./QnaBoard.module.css";
-import {getDate} from "../common/TimeCalculate";
+import { getDate } from "../common/TimeCalculate";
 
 function QnaBoard() {
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
@@ -17,23 +17,23 @@ function QnaBoard() {
   const navigate = useNavigate();
 
   const getQnaBoard = () => {
-    let params = { pageNo: currentPage }
+    let params = { pageNo: currentPage };
 
-    tokenHttp.get('/mypage/qna', { params: params }).then((response) => {
-      console.log(response.data.data);
-      if (response.data.code === 200) {
-        console.log('성공');
-        setQnaList(response.data.data.qnaList); // QNA 데이터를 저장
-        setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
-      }
-      else if (response.data.code === 400) {
-        console.log('실패');
-      }
-      else if (response.data.code === 403) {
-        console.log('권한 없음');
-      }
-      // else { console.log('문의글이 없습니다.') }
-    })
+    tokenHttp
+      .get("/mypage/qna", { params: params })
+      .then((response) => {
+        console.log(response.data.data);
+        if (response.data.code === 200) {
+          console.log("성공");
+          setQnaList(response.data.data.qnaList); // QNA 데이터를 저장
+          setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+        } else if (response.data.code === 400) {
+          console.log("실패");
+        } else if (response.data.code === 403) {
+          console.log("권한 없음");
+        }
+        // else { console.log('문의글이 없습니다.') }
+      })
       .catch(() => console.log("실패"));
   };
 
@@ -54,9 +54,8 @@ function QnaBoard() {
 
     if (userdata) {
       navigate("/mypage/qnadetail", { state: { qnaId: qnaId } });
-    }
-    else {
-      console.log('로그인 필요');
+    } else {
+      console.log("로그인 필요");
     }
   };
 
@@ -66,17 +65,20 @@ function QnaBoard() {
 
     if (userdata) {
       navigate("/mypage/qnacreate");
+    } else {
+      console.log("로그인 필요");
     }
-    else {
-      console.log('로그인 필요');
-    }
-  }
-
+  };
 
   return (
     <div className={commonStyles.wrapper}>
       <div className={styles.btnWrapper}>
-        <button className={commonStyles.btn} onClick={(event) => goToQnaCreate(event)}>문의 작성하기</button>
+        <button
+          className={commonStyles.btn}
+          onClick={(event) => goToQnaCreate(event)}
+        >
+          문의 작성하기
+        </button>
       </div>
       <div className={styles.innerWrapper}>
         <h3>제목을 클릭하면 상세 내용을 확인할 수 있습니다.</h3>
@@ -91,21 +93,28 @@ function QnaBoard() {
             </tr>
           </thead>
           <tbody>
-            {
-              qnaList.length == 0 ?
-                <td colSpan={5}>문의 내역이 없습니다</td> :
-                qnaList.map((qna, i) => (
-                  <tr key={i}>
-                    <td>{qna.qnaId}</td>
-                    <td>
-                      <span className={commonStyles.clickable} onClick={(event) => goToQnaDetail(qna.qnaId, event)}>{qna.title}</span>
-                    </td>
-                    <td>{getDate(qna.createdTime)}</td>
-                    <td>{qna.answer ? qna.answer : '처리 전'}</td>
-                    <td>{qna.completedTime ? getDate(qna.completedTime) : '-'}</td>
-                  </tr>
-                ))
-            }
+            {qnaList.length == 0 ? (
+              <td colSpan={5}>문의 내역이 없습니다.</td>
+            ) : (
+              qnaList.map((qna, i) => (
+                <tr key={i}>
+                  <td>{qna.qnaId}</td>
+                  <td>
+                    <span
+                      className={commonStyles.clickable}
+                      onClick={(event) => goToQnaDetail(qna.qnaId, event)}
+                    >
+                      {qna.title}
+                    </span>
+                  </td>
+                  <td>{getDate(qna.createdTime)}</td>
+                  <td>{qna.answer ? qna.answer : "처리 전"}</td>
+                  <td>
+                    {qna.completedTime ? getDate(qna.completedTime) : "-"}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div>
@@ -117,7 +126,7 @@ function QnaBoard() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default QnaBoard;
