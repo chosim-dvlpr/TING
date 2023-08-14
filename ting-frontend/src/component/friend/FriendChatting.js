@@ -143,9 +143,9 @@ function FriendChatting({
         > <img className={styles.fishSkinImage} src={yourSkin} alt="물고기 스킨"></img></button>
         <div className={styles.nickname}>{chattingObj.nickname}</div>
         <div>{chattingObj.temperature}℃</div>
-        <button className={styles.kebabButton}>
+        {/* <button className={styles.kebabButton}>
           <img className={styles.kebab} src="/img/kebab.png" alt="kebab" />
-        </button>
+        </button> */}
       </div>
       {/* <p>친구 닉네임 : { location.state.friend.nickname }</p> */}
       {/* <button onClick={() => setIsProfileModal(!isProfileModal)}>친구 프로필 사진 : { location.state.friend.profileImage ? location.state.friend.profileImage : '사진없음' }</button> */}
