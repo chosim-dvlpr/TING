@@ -109,8 +109,24 @@ public class MatchingService {
             String mSessionId = null;
             // ========= 이미 매칭된 상대는 매칭되지 않게 처리해야함 ============
 
+
+            List<MatchingUser> femaleMatchingUserList = matchingUserRepository.findByUserId(female.getId());
+
             for (String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();
+
+                // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- start
+//                boolean isMatched = false;
+//                for (MatchingUser femaleMatchingUser : femaleMatchingUserList) {
+//                    if (femaleMatchingUser.getUser().getId() == male.getId()) {
+//                        isMatched = true;
+//                        break;
+//                    }
+//                }
+//                if (isMatched) continue;
+                // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- end
+
+
                 int score = calculateScore(female, male) + calculateScore(male, female)
                         + socketInfos.get(fSessionId).getCount() + socketInfos.get(mId).getCount();
 
@@ -505,7 +521,7 @@ public class MatchingService {
             // 매칭 질문 생성하여 저장
             Question[] questions = getQuestions();
             List<MatchingQuestion> matchingQuestions = new ArrayList<>();
-            for(int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++) {
                 matchingQuestions.add(new MatchingQuestion(matching, questions[i], i + 1));
             }
             matchingQuestionRepository.saveAll(matchingQuestions);
@@ -579,9 +595,9 @@ public class MatchingService {
         boolean[] isSelected = new boolean[essentialQuestions.size()];
         int cnt = 0;
 
-        while(cnt < 3) {
+        while (cnt < 3) {
             int number = (int) (Math.random() * essentialQuestions.size());
-            if(!isSelected[number]) {
+            if (!isSelected[number]) {
                 selectedQuestions.add(essentialQuestions.get(number));
                 isSelected[number] = true;
                 cnt++;
@@ -593,9 +609,9 @@ public class MatchingService {
         List<Question> loveQuestions = questionRepository.findAllByCategory(QuestionType.LOVE);
         isSelected = new boolean[loveQuestions.size()];
         cnt = 0;
-        while(cnt < 2) {
+        while (cnt < 2) {
             int number = (int) (Math.random() * loveQuestions.size());
-            if(!isSelected[number]) {
+            if (!isSelected[number]) {
                 selectedQuestions.add(loveQuestions.get(number));
                 isSelected[number] = true;
                 cnt++;
@@ -625,7 +641,7 @@ public class MatchingService {
         // 순서 섞기
         Collections.shuffle(selectedQuestions);
         Question[] questions = new Question[10];
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             questions[i] = selectedQuestions.get(i);
         }
 
