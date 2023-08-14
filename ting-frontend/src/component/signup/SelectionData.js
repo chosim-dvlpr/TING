@@ -282,7 +282,11 @@ function SelectionData(){
         </span>
         <div className={styles.introduceContainer}>
           <h4>자신을 간단하게 소개해주세요</h4>
-          <input type="text" onChange={(e) => dispatch(setIntroduce(e.target.value))}></input>
+          <input 
+          type="text" 
+          onChange={(e) => dispatch(setIntroduce(e.target.value))}
+          maxLength={250}
+          ></input>
         </div>
         <div className={styles.profileImgContainer}>
           <h4>프로필 사진을 업로드해주세요</h4>
