@@ -46,8 +46,6 @@ public class DateService {
     private final ChattingUserRepository chattingUserRepository;
     private final MatchingQuestionRepository matchingQuestionRepository;
 
-    private final Map<Long, DeferredResult<DataResponse<Boolean>>> deferredResultQueue = new ConcurrentHashMap<>();  // 키 userId
-
     public List<QuestionDto> getMatchingQuestions(Long matchingId) {
         Matching matching = matchingRepository.findById(matchingId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
@@ -56,7 +54,7 @@ public class DateService {
         // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
         List<QuestionDto> questions = new ArrayList<>();
         questions.add(new QuestionDto("인사"));
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
         }
         questions.add(new QuestionDto("끝"));
@@ -105,7 +103,7 @@ public class DateService {
     }
 
     @Transactional
-    public void selectFinalChoice(Long matchingId, String selected, Long userId, DeferredResult<DataResponse<Boolean>> deferredResult) {
+    public void selectFinalChoice(Long matchingId, String selected, Long userId) {
         // DB에서 정보 불러오기
         Matching matching = matchingRepository.findById(matchingId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
@@ -119,10 +117,10 @@ public class DateService {
         // 상대방이 응답했는지 확인
         MatchingUser matchingPairUser = matchingUserRepository.findFriendInfo(matching, user)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
-        if(matchingPairUser.getFinalChoice() != null) {  // 상대방이 응답한 경우
+        if (matchingPairUser.getFinalChoice() != null) {  // 상대방이 응답한 경우
             boolean isSuccess = false;
             // 둘 다 yes 선택 - 성공O
-            if(matchingPairUser.getFinalChoice() && matchingUser.getFinalChoice()) isSuccess = true;
+            if (matchingPairUser.getFinalChoice() && matchingUser.getFinalChoice()) isSuccess = true;
 
             // DB에 최종 선택 결과값 저장
             matching.setIsSuccess(isSuccess);
@@ -134,14 +132,6 @@ public class DateService {
                 chattingUserRepository.save(new ChattingUser(chatting, user));
                 chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
             }
-
-            // 클라이언트에 결과 응답
-            DeferredResult<DataResponse<Boolean>> pairDeferredResult = deferredResultQueue.get(matchingPairUser.getUser().getId());
-            deferredResultQueue.remove(matchingPairUser.getUser().getId());
-            pairDeferredResult.setResult(new DataResponse<Boolean>(200, "최종 매칭 결과", isSuccess));
-            deferredResult.setResult(new DataResponse<Boolean>(200, "최종 매칭 결과", isSuccess));
-        } else {  // 상대방이 아직 응답하지 않은 경우
-            deferredResultQueue.put(userId, deferredResult);
         }
     }
 
