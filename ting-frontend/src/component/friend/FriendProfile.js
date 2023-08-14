@@ -15,13 +15,13 @@ function FriendProfile(props){
   const [temp, setTemp] = useState("");
 
   const friendProfileAxios = () => {
-    basicHttp.get(`/friend/profile/${props.userId}`).then((response) => {
+    basicHttp.get(`/friend/profile/${props.friendId}`).then((response) => {
       // 불러오기 성공 시 friendList에 친구목록 저장
       if (response.data.code === 200) {
         console.log('프로필 불러오기 성공');
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setFriendProfile(response.data.data);
-        setFriendImg(response.data.data.fishSkin)
+        // setFriendImg(response.data.data.fishSkin)
       }
       else if (response.data.code === 400) {
         console.log('프로필 불러오기 실패');
@@ -42,9 +42,8 @@ function FriendProfile(props){
   const closeProfileModal = () => {
     dispatch(getFriendId(null))
   };
-
-
-
+  console.log('friendProfile',friendProfile);
+  // console.log(fishSkin)
 
   return (
     <div className={styles.profileContainer}>
@@ -53,7 +52,7 @@ function FriendProfile(props){
       </div>  
       <div className={styles.ThermoContainer}>
         <div className={styles.image}>
-          <img src={`https://i9b107.p.ssafy.io:5157/${friendImg}`} alt="물고기 스킨" className={styles.friendImg}></img>
+          <img src={`https://i9b107.p.ssafy.io:5157/user/profile/${props.friendId}`} alt="물고기 스킨" className={styles.friendImg}></img>
         </div>
         <div className={styles.temp}>
         <Thermometer
@@ -68,28 +67,34 @@ function FriendProfile(props){
       </div>
       <div className={styles.nickname}>{ friendProfile.nickname }</div>
       <div className={styles.introduce}>자기소개{ friendProfile.introduce }</div>
-      <div className={styles.self}>#셀프 소개</div>
-      <div className={styles.hash}>
-        <div>#{ friendProfile.region }</div>
-        <div>#{ friendProfile.height }</div>
-        <div>#{ friendProfile.mbtiCode && friendProfile.mbtiCode.name }</div>
-        <div>#{ friendProfile.drinkingCode && friendProfile.drinkingCode.name }</div>
-        <div>#{ friendProfile.religionCode && friendProfile.religionCode.name }</div>
-        <div>#{ friendProfile.jobCode && friendProfile.jobCode.name }</div>
-        <div>#{ friendProfile.userHobbys &&
-          friendProfile.userHobbys.map((hobby, i) => (
-          hobby.name
-        )) }</div>
-        <div>#{ friendProfile.userStyles && 
-          friendProfile.userStyles.map((style, i) => (
-          style.name
-        )) }</div>
-        <div>#{ friendProfile.userPersonalities && 
-          friendProfile.userPersonalities.map((personality, i) => (
-          personality.name
-        )) }</div>
+      <div className={styles.selfContainer}>
+        <div className={styles.self}>#셀프 소개</div>
+        <div className={styles.hash}>
+          { <p>#{friendProfile.region}</p> }
+          { <p>#{friendProfile.height}</p> }
+          { friendProfile.mbtiCode && <p>#{friendProfile.mbtiCode.name}</p> }
+          { friendProfile.drinkingCode && <p>#{friendProfile.drinkingCode.name}</p> }
+          { friendProfile.religionCode && <p>#{friendProfile.religionCode.name}</p> }
+          { friendProfile.jobCode && <p>#{friendProfile.jobCode.name}</p> }
+          { friendProfile.userHobbys &&
+            friendProfile.userHobbys.map((hobby, i) => (
+              <p>
+                #{hobby.name}
+              </p>
+          )) }
+          { friendProfile.userStyles &&
+            friendProfile.userStyles.map((style, i) => (
+              <p>
+                #{style.name}
+              </p>
+          )) }{ friendProfile.userPersonalities &&
+            friendProfile.userPersonalities.map((personality, i) => (
+              <p>
+                #{personality.name}
+              </p>
+          )) }
+          </div>
       </div>
-      <hr/>
     </div>
   )
 }
