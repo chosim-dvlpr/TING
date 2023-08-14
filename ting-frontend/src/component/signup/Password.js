@@ -21,8 +21,11 @@ function Password() {
   // 비밀번호 형식 확인
   useEffect(() => {
     // 특수문자, 영문, 8-25자
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-    if (!passwordRegex.test(inputPassword)) {
+    let passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    let reg = /\s/g;
+    if (!passwordRegex.test(inputPassword) |
+      inputPassword.search(reg) > -1 // 공백 있으면 오류메세지
+    ) {
       setCheckPasswordMsg("비밀번호가 형식에 맞지 않습니다.");
       checkPwdMsgP.current.className = styles.wrongMsg;
       setIsPasswordPassed(false);
