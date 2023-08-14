@@ -6,14 +6,13 @@ import { useDispatch } from "react-redux";
 import styles from './SignupCommon.module.css';
 
 function Password() {
-  let Navigate = useNavigate();
   let [inputPassword, setInputPassword] = useState("");
   let [inputPasswordCheck, setInputPasswordCheck] = useState("");
   let [checkPasswordMsg, setCheckPasswordMsg] = useState("test");
   let [confirmPasswordMsg, setConfirmPasswordMsg] = useState("test");
   // let [isButtonDisabled, setIsButtonDisabled] = useState(true); // 버튼 활성화 여부
   let [isPasswordPassed, setIsPasswordPassed] = useState(false); // 형식에 맞는 비밀번호인지 확인
-
+  const [showPasswordMessage, setShowPasswordMessage] = useState(false);
   let dispatch = useDispatch();
 
   const checkPwdMsgP = useRef();
@@ -39,7 +38,6 @@ function Password() {
   useEffect(() => {
     if (inputPassword && inputPassword === inputPasswordCheck) {
       setConfirmPasswordMsg("비밀번호가 일치합니다.");
-      // setIsButtonDisabled(false); // 일치하면 다음 버튼 활성화
       confirmPwdMsgP.current.className = styles.rightMsg;
       setIsPasswordPassed(true);
     }
@@ -55,34 +53,39 @@ function Password() {
       dispatch(setPassword(inputPasswordCheck));
     }
     else { dispatch(setPassword(null)) }
-  }, [isPasswordPassed])
+  }, [isPasswordPassed]);
 
-  // 비밀번호 store에 저장
-  const storePassword = () => {
-  };
 
   return(
     <div className={styles.wrapper}>
-      <label 
+      {/* <p
         className={styles.label} 
-        htmlFor='password'
-      >사용할 비밀번호를 입력해주세요</label>
-      <p
-        className={styles.label} 
-      >영문/숫자/특수문자 모두 포함, 8자 이상</p>
+      >영문/숫자/특수문자 모두 포함, 8자 이상</p> */}
       <div className={styles.passwordContainer}>
-        <input 
-          className={`${styles.input} ${styles.pwdInput}`} 
-          type="password" 
-          id="password" 
-          onChange={(e) => setInputPassword(e.target.value)} 
-          placeholder="비밀번호"/>
-        <p ref={checkPwdMsgP} 
-          className={styles.wrongMsg}
+        <div className={styles.passwordMessage}>
+          <input 
+            className={`${styles.input} ${styles.pwdInput}`} 
+            type="password" 
+            id="password" 
+            onChange={(e) => setInputPassword(e.target.value)} 
+            onFocus={() => setShowPasswordMessage(true)}
+            onBlur={() => setShowPasswordMessage(false)}  
+            placeholder="비밀번호"/>
+            {
+              showPasswordMessage && (
+                <div className={`${styles.nicknameMessage}`}>
+                  영문/숫자/특수문자 모두 포함, 8자 이상
+                </div>
+              )
+            }
+        </div>
+        <div 
+        ref={checkPwdMsgP} 
+        className={styles.wrongMsg}
         >{ 
           inputPassword &&
           checkPasswordMsg }
-        </p>
+        </div>
       </div>
       <div className={styles.passwordContainer}>
         <input 

@@ -26,6 +26,7 @@ function Detail() {
   const koreanPattern = /^[가-힣]*$/;
   const koreanPatternAll = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z]*[ㄱ-ㅎㅏ-ㅣ가-힣]+[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z]*$/
 
+  const [showNicknameMessage, setShowNicknameMessage] = useState(false);
 
   // 이름 작성 확인
   const nameIsExist = (data) => {
@@ -57,6 +58,7 @@ function Detail() {
           else {
             alert("닉네임 사용이 가능합니다.");
             setCheckNickname(true);
+            setShowNicknameMessage(false);
             // redux 저장
             dispatch(setNickname(inputNickname));
             return
@@ -76,9 +78,9 @@ function Detail() {
   }
 
   const checkAdult = () => {
-    const year = signupReducer.birth && signupReducer.birth.slice(0,4);
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
+    let year = signupReducer.birth && signupReducer.birth.slice(0,4);
+    let currentDate = new Date();
+    let currentYear = currentDate.getFullYear();
 
     if (signupReducer.birth &&
         currentYear - Number(year) < 19) {
@@ -155,27 +157,43 @@ function Detail() {
     <div className={styles.wrapper}>
       {/* <label>이름을 입력해주세요</label> */}
       <div className={styles.nameContainer}>
-        <input 
-          className={styles.input} 
-          id={styles.nameInput} 
-          type="text" 
-          onChange={(e) => { nameIsExist(e.target.value) }} 
-          placeholder="이름"></input>
-        <div>
+        {/* <div className={styles.wrapper}> */}
           <input 
-            className={styles.input}
-            ref={inputNicknameRef} 
+            className={styles.input} 
+            id={styles.nameInput} 
             type="text" 
-            onChange={(e) => setInputNickname(e.target.value)}
-            onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
-            placeholder="닉네임"></input>
+            onChange={(e) => { nameIsExist(e.target.value) }} 
+            placeholder="이름"></input>
+        {/* </div> */}
+        <div className={styles.wrapper}>
+          <div className={styles.inputContainer}>
+            {/* <p className={styles.label}>닉네임은 한글로만 작성해야하며, 중복될 수 없습니다.</p> */}
+            <input 
+              className={`${styles.input} ${styles.nicknameInput}`}
+              ref={inputNicknameRef} 
+              type="text" 
+              onChange={(e) => setInputNickname(e.target.value)}
+              onKeyDown={(e) => activeEnter(e, nicknameIsExist)}
+              placeholder="닉네임"
+              onFocus={() => setShowNicknameMessage(true)}
+              onBlur={() => setShowNicknameMessage(false)}  
+              disabled={checkNickname}
+            ></input>
           <button 
-            className={styles.btn} 
+            className={checkNickname ? styles.disabledBtn : styles.btn} 
             onClick={() => nicknameIsExist()}>
           중복확인</button>
-          <p>닉네임은 한글로만 작성해야하며, 닉네임은 중복될 수 없습니다.</p>
-          <p className={styles.wrongMsg}>{ nicknameMsg }</p>
-          <p className={styles.rightMsg}>
+          {showNicknameMessage && (
+              <div className={`${styles.nicknameMessage}`}>
+                닉네임은 한글로만 작성해야하며, 중복될 수 없습니다.
+              </div>
+            )}
+        </div>
+          {/* <p className={styles.wrongMsg}>{ nicknameMsg }</p> */}
+          <p 
+          className={styles.rightMsg}
+          disabled
+          >
             {
               checkNickname &&
               "닉네임 중복 확인 완료"
@@ -183,52 +201,67 @@ function Detail() {
           </p>
         </div>
       </div>
-      <button
-        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "M" && styles.genderSelected}`} 
-        onClick={() => {
-          dispatch(setGender("M"));
-          setGenderSelected("M");
-      }}>남</button>
-      <button
-        className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "F" && styles.genderSelected}`} 
-        onClick={() => {
-          dispatch(setGender("F"));
-          setGenderSelected("F");
-      }}>여</button>
-      <br/>
 
-      <label>생년월일</label>
-      <input 
-        type="date" 
-        onChange={(e) => {
-          handleBirthChange(e.target.value)
-        }}
-        max="2004-12-31"
-        ></input>
-      <br/>
+      <div className={`${styles.wrapper} ${styles.flexContainer}`}>
+        <button
+          className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "M" && styles.genderSelected}`} 
+          onClick={() => {
+            dispatch(setGender("M"));
+            setGenderSelected("M");
+        }}>남</button>
+        <button
+          className={`${styles.selectBtn} ${styles.genderBtn} ${genderSelected === "F" && styles.genderSelected}`} 
+          onClick={() => {
+            dispatch(setGender("F"));
+            setGenderSelected("F");
+        }}>여</button>
+      </div>
 
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          지역 선택
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {
-            regionList.map((r, i) => (
-              <Dropdown.Item 
-              key={i}   
-              onClick={() => {
-                handleRegionChange(r)
-              }
-                }>{r.regionKor}</Dropdown.Item>
+      <div className={styles.wrapper}>
+        <label
+        className={`${styles.label} ${styles.birthLabel}`}
+        >생년월일</label>
+        <input 
+          className={styles.input}
+          type="date" 
+          onChange={(e) => {
+            handleBirthChange(e.target.value)
+          }}
+          max="2004-12-31"
+          ></input>
+      </div>
+
+      <div className={styles.wrapper}>
+        <Dropdown>
+          <Dropdown.Toggle 
+          className={`${styles.btn} ${styles.regionBtn}`}
+          id="dropdown-basic">
+            { currentRegion.regionKor ? currentRegion.regionKor : "지역 선택"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu
+          className={styles.regionList}
+          >
+            {
+              regionList.map((r, i) => (
+                <Dropdown.Item 
+                className={styles.dropdownItem}
+                key={i}   
+                onClick={() => {
+                  handleRegionChange(r)
+                }}
+                // active={currentRegion.regionEn === r.regionEn}
+                >{r.regionKor}</Dropdown.Item>
+                )
               )
-            )
-          }
-        </Dropdown.Menu>
-      </Dropdown>
-      <p>{ currentRegion.regionKor }</p>
-      <br/>
+            }
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
       {/* <label>추가 정보를 입력하시면 매칭 정확도가 올라가요!</label> */}
-      <button className={styles.btn} onClick={() => goToSignupComplete("/signup/complete")}>다음</button>
+      <button 
+        className={`${styles.btn} ${styles.nextBtn}`} 
+        onClick={() => goToSignupComplete("/signup/complete")}
+      >다음</button>
       {/* <br/>
       <label>추가 정보 입력하지 않고 완료할게요!</label>
       <button className={styles.btn} onClick={() => completeSignup("/signup/complete")}>회원가입 완료</button> */}

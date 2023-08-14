@@ -3,7 +3,7 @@
 }
 
 .wrapper {
-    margin: 0 0 10px;
+    margin: 0 0 15px;
 }
 
 .wrapper * {
@@ -49,12 +49,9 @@
     margin: 5px 0;
 }
 
-.disabledBtn {
-    border: none;
-    background-color: gainsboro;
-    color: whitesmoke;
-}
 
+.regionBtn:focus,
+.disabledBtn,
 .btn {
     border: none;
     background-color: #2e6070;
@@ -63,6 +60,12 @@
         5px 5px 10px 0px rgba(0, 0, 0, .1),
         3px 3px 5px 0px rgba(0, 0, 0, .1);
     margin: 0 5px;
+}
+
+.disabledBtn {
+    border: none;
+    background-color: #fafafa;
+    color: #2e6070;
 }
 
 .btn:hover {
@@ -78,16 +81,16 @@
     color: red;
     font-size: 1rem;
 }
-
+/* 
 .msgHide {
     visibility: hidden;
-}
+} */
 
 
 #nameInput,
 #regionInput {
     /* margin-right: 120px; */
-    width: 390px;
+    /* width: 390px; */
 }
 
 .selectBtn {
@@ -95,17 +98,22 @@
     margin: 3px;
 }
 
-.selectBtn:hover,
-.selectBtn:focus {
-    background-color: #98E0EF;
+.selectBtn:hover {
+    background-color: #2e6070;
+    color: whitesmoke;
 }
 
 .genderSelected {
-    background-color: #98E0EF;
+    background-color: #2e6070;
+    color: whitesmoke;
+
 }
 
 .genderBtn {
     width: 180px;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    5px 5px 10px 0px rgba(0, 0, 0, .1),
+    3px 3px 5px 0px rgba(0, 0, 0, .1);
 }
 
 .passwordContainer {
@@ -146,8 +154,13 @@
     background-color: #8bcad5;
 }
 
+.checkEmailHidden,
 .checkEmail {
     margin-left: 5px;
+}
+
+.checkEmailHidden {
+    visibility: hidden;
 }
 
 .pwdInput {
@@ -158,6 +171,74 @@
     margin: 0 2.5px;
 }
 
-.phonnumContainer {
-    
+.flexContainer {
+    display: flex;
+    justify-content: flex-start; /* 가로 정렬을 시작 부분에 맞춥니다 */
+    align-items: center; /* 버튼들을 세로로 가운데 정렬합니다 */
+    gap: 5px; /* 버튼 사이의 간격을 설정합니다 */
 }
+
+.birthLabel {
+    margin-right: 5px;
+}
+
+.regionBtn,
+.regionBtn:focus {
+    margin-left: 0;
+}
+
+.regionList {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.regionList .dropdownItem:focus,
+.regionList .dropdownItem:active,
+.regionList .dropdownItem:active:focus {
+    background-color: #2e6070;
+    color: whitesmoke;
+}
+
+.nextBtn {
+    margin-left: 0;
+}
+
+
+
+
+
+
+.inputContainer {
+    position: relative;
+    width: 100%;
+}
+
+.inputArrow {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.inputArrow i {
+    color: #ccc;
+    font-size: 20px;
+}
+
+.inputArrow:hover i {
+    color: #2e6070;
+}
+
+.nicknameMessage {
+    top: 100%;
+    left: 0;
+    font-size: 14px;
+    color: #ff0000;
+    margin-top: 5px;
+}
+
+/* .inputContainer input {
+    width: calc(100% - 100px);
+} */
+
