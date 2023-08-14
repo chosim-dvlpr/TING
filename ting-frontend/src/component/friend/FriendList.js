@@ -106,6 +106,7 @@ function FriendList({
       const confirmDelete = window.confirm("친구를 삭제하시겠습니까?");
       if (confirmDelete) {
         await tokenHttp.delete(`/friend/${chattingId}`);
+        friendListAxios();
         Navigate("/");
       }
     } catch (error) {

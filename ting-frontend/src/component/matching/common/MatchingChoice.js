@@ -85,7 +85,7 @@ function MatchingChoice({ session, count }) {
   return (
     <>
       {/* 최종 결과 */}
-      {finish ? <MatchingResult /> : null}
+      {finish ? <MatchingResult result={result}/> : null}
 
       <div className={styles.OuterContainer}>
         <h1>최종 선택</h1>
