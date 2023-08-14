@@ -23,6 +23,7 @@ import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.async.DeferredResult;
 
@@ -102,7 +103,7 @@ public class DateService {
         matchingUser.setTotalScore(map.get("totalScore").intValue());
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void selectFinalChoice(Long matchingId, String selected, Long userId) {
         // DB에서 정보 불러오기
         Matching matching = matchingRepository.findById(matchingId)
