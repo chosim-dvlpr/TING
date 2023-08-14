@@ -132,6 +132,7 @@ public class DateService {
                 chattingRepository.save(chatting);
                 chattingUserRepository.save(new ChattingUser(chatting, user));
                 chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
+                chatting.setLastChattingContent("♡대화를 시작해보세요♡");
             }
         }
     }
