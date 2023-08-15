@@ -136,9 +136,15 @@ function MatchingStart() {
           case 'VS':
             return 'VS';
           case 'ESSENTIAL':
-            return '필수';
-          default:
             return '기본';
+          case 'START':
+            return 'S';
+          case 'END':
+            return 'E';
+          case 'SCORE':
+            return 'S';
+          case 'APPEAL':
+            return 'A';
         }
       })()
     )
