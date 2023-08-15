@@ -16,6 +16,11 @@
   background-color: rgb(247, 205, 212);
   cursor: pointer;
   padding: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+.ItemCard:hover {
+  transform: scale(1.03);
 }
 
 .ItemCardOuter {
