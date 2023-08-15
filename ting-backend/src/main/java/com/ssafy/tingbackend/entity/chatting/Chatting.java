@@ -38,11 +38,12 @@ public class Chatting extends BaseUnmodifidableTimeEntity {
         this.temperature = this.temperature.add(diff);
 
         // 온도 범위 0.0~100.0
-        if(this.temperature.compareTo(BigDecimal.valueOf(100)) > 0) this.temperature = BigDecimal.valueOf(100.0);
-        else if(this.temperature.compareTo(BigDecimal.valueOf(0)) < 0) this.temperature = BigDecimal.valueOf(0.0);
+        if (this.temperature.compareTo(BigDecimal.valueOf(100)) > 0) this.temperature = BigDecimal.valueOf(100.0);
+        else if (this.temperature.compareTo(BigDecimal.valueOf(0)) < 0) this.temperature = BigDecimal.valueOf(0.0);
     }
 
     public Chatting(ChattingType state) {
         this.state = state;
+        this.temperature = new BigDecimal(36.5);
     }
 }
