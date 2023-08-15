@@ -37,24 +37,24 @@ function WaitingRoom() {
   useEffect(() => {
     async function fetchItemList() {
       try {
+        console.log('티켓 확인')
         const response = await tokenHttp.get("/item/user");
+        console.log(response.data)
         dispatch(setMyItemList(response.data.data));
-
         const matchingTicket = myItemList.filter((obj) => obj.itemType === "MATCHING_TICKET");
         const freeMatchingTicket = myItemList.filter((obj) => obj.itemType === "FREE_MATCHING_TICKET");
 
         // 아이템이 없을 경우 예외 처리
         const matchingTicketQuantity = matchingTicket.length > 0 ? matchingTicket[0].quantity : 0;
-        const freeMatchingTicketQuantity = freeMatchingTicket.length ? freeMatchingTicket[0].quantity : 0;
+        const freeMatchingTicketQuantity = freeMatchingTicket.length > 0 ? freeMatchingTicket[0].quantity : 0;
 
         setTotalTicket(matchingTicketQuantity + freeMatchingTicketQuantity);
       } catch (error) {
         console.log(error);
       }
     }
-
     fetchItemList();
-  }, [dispatch, totalTicket]);
+  }, [totalTicket]);
 
   // 마이크 비디오 상태 확인
   useEffect(() => {

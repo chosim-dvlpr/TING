@@ -9,17 +9,17 @@ function ItemSideBar(){
     <div className={styles.sideBar}>
       <div className={styles.sideBarList}>
       <NavLink to="/item/shop" className={({isActive}) => {
-        return isActive? styles.selected : '';
+        return isActive? styles.selected : styles.unSelected;
       }}>아이템 상점</NavLink>
       </div>
       <div className={styles.sideBarList}>
       <NavLink to="/item/myitem" className={({isActive}) => {
-        return isActive? styles.selected : '';
+        return isActive? styles.selected : styles.unSelected;
       }}>보유 아이템 관리</NavLink>
       </div>
       <div className={styles.sideBarList}>
       <NavLink to="/item/mypoint" className={({isActive}) => {
-        return isActive? styles.selected : '';
+        return isActive? styles.selected : styles.unSelected;
       }}>포인트 충전 및 관리</NavLink>
       </div>
       {/* <div className={styles.sideBarList} onClick={()=>{navigate('/item/shop')}}>아이템 상점</div>

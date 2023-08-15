@@ -65,7 +65,8 @@ function MatchingChoice({ session, count }) {
     try {
       // 양쪽에서 데이터를 받아서 친구 추가시켜주는 axios
       console.log('친구 추가 완료 or 패스')
-      const response = tokenHttp.post('/date/result', resultData)
+      const response = await tokenHttp.post('/date/result', resultData)
+      console.log(response)
     } catch (err) {
       console.log(err)
     }
@@ -123,7 +124,7 @@ function MatchingChoice({ session, count }) {
             <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
             <h3>{count}</h3>
             <button
-              className={`styles.Btn ${buttonToggleSign[0] ? styles.clickedButton : styles.button}`}
+              className={`${styles.Btn} ${buttonToggleSign[0] ? styles.clickedButton : styles.button}`}
               onClick={() => {
                 setResult(true);
                 flipCard();
@@ -131,7 +132,7 @@ function MatchingChoice({ session, count }) {
               }}
             >YES</button>
             <button
-              className={`styles.Btn ${buttonToggleSign[1] ? styles.clickedButton : styles.button}`}
+              className={`${styles.Btn} ${buttonToggleSign[1] ? styles.clickedButton : styles.button}`}
               onClick={() => {
                 setResult(false);
                 flipCard();

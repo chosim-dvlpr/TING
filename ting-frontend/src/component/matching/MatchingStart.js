@@ -69,7 +69,7 @@ function MatchingStart() {
 
     // 음악 무한 재생
     const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
-    bgmAudio.volume = 0.1
+    bgmAudio.volume = 0.3
     bgmAudio.play();
 
     audioRef.current = bgmAudio;
@@ -122,6 +122,7 @@ function MatchingStart() {
   useEffect(() => {
     setCardCategory(
       (() => {
+        console.log(questionData[questionNumber])
         switch (questionData[questionNumber]?.category) {
           case 'PREFER':
             return '호불호';
@@ -136,9 +137,15 @@ function MatchingStart() {
           case 'VS':
             return 'VS';
           case 'ESSENTIAL':
-            return '필수';
-          default:
             return '기본';
+          case 'END':
+            return 'I';
+          case 'SCORE':
+            return 'N';
+          case 'APPEAL':
+            return 'G';
+          default:
+            return 'T';
         }
       })()
     )
@@ -219,15 +226,19 @@ function MatchingStart() {
         totalScore: sumYourScore,
       }
       tokenHttp.post('/date/score/total', totalScoreData)
-        .then((response) => { console.log(response.data.message) })
-        .catch((err) => { console.log(err) })
+      .then((response) => { console.log(response.data.message) })
+      .catch((err) => { console.log(err) })
+    }
+    // 최종 어필
+    if (questionNumber === 13) {
+      setCount(20);
     }
     if (questionNumber === 14) {
       // 최종 선택 모달창 on
       setShowMatchingChoiceModal(true)
       // 사용자 video audio off
       toggleAudioAndVideo(false, false)
-      setCount(20)
+      setCount(15)
     }
   }, [questionNumber]);
 

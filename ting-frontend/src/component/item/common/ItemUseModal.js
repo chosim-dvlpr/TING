@@ -210,7 +210,7 @@ function ItemModal({ closeModal, clickedItem }) {
               placeholder="새 닉네임"
             ></input>
             <br />
-            <button className={styles.btn} onClick={() => changeNickname()}>
+            <button className={styles.button} onClick={() => changeNickname()}>
               변경하기
             </button>
             {/* {checkNickname ? (

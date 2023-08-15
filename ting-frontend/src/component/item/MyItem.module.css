@@ -16,6 +16,11 @@
   border-radius: 20px;
   box-shadow: 0 0 20px rgba(100, 100, 100, 0.5);
   background-color: #f7cdd4;
+  transition: all 0.3s ease-in-out;
+}
+
+.ItemCard:hover {
+  transform: scale(1.03);
 }
 
 .ItemCardOuter {

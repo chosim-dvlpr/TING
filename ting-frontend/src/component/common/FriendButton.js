@@ -23,8 +23,8 @@ const FriendButton = ({ toggleWheelHandler }) => {
   const messageStore = useMessageStore();
   const { messageLogs } = messageStore;
   const [totalUnread, setTotalUnread] = useState(0);
-  const [initialUnread, setInitialUnread] = useState(0);
   const [friendUnread, setFriendUnread] = useState(0);
+  const [curChattingId, setCurChattingId] = useState(0);
 
   // let isClosed = true;
 
@@ -122,6 +122,10 @@ const FriendButton = ({ toggleWheelHandler }) => {
     setFriendUnread(data);
   };
 
+  const getCurChatting = (data) => {
+    setCurChattingId(data);
+  }
+
   useEffect(() => {
     friendListAxios();
   }, []);
@@ -135,17 +139,16 @@ const FriendButton = ({ toggleWheelHandler }) => {
   }, [friendUnread]);
 
   useEffect(() => {
-    let num = 0;
-    if (messageLogs) {
+    if(messageLogs) {
       messageLogs.map((data) => {
-        if (data.userId != userData.userId) {
-          setTotalUnread(totalUnread + 1);
-          // num += 1;
+        if(data.userId != userData.userId) {
+          if(curChattingId == 0 || curChattingId != data.chattingId) {
+            setTotalUnread(totalUnread+1);
+          }
         }
       });
     }
-    // setTotalUnread(num);
-  }, [messageLogs]);
+  }, [messageLogs])
 
   return (
     <div className={styles.friendContainer}>
@@ -165,12 +168,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
         {/* <div className={styles.profileContainer}></div> */}
         {show && (
           <div className={styles.chatContainer}>
-            <Friend
-              onSearch={closeModal}
-              onSearch2={openProfile}
-              temperature={getTemperature}
-              friendUnread={getFriendUnread}
-            />
+            <Friend onSearch={closeModal} onSearch2={openProfile} temperature={getTemperature} friendUnread={getFriendUnread} curChattingObj={getCurChatting}/>
           </div>
         )}
         <div>
