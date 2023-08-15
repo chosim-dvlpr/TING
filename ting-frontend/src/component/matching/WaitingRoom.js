@@ -39,8 +39,8 @@ function WaitingRoom() {
       try {
         console.log('티켓 확인')
         const response = await tokenHttp.get("/item/user");
+        console.log(response.data)
         dispatch(setMyItemList(response.data.data));
-
         const matchingTicket = myItemList.filter((obj) => obj.itemType === "MATCHING_TICKET");
         const freeMatchingTicket = myItemList.filter((obj) => obj.itemType === "FREE_MATCHING_TICKET");
 
@@ -53,9 +53,8 @@ function WaitingRoom() {
         console.log(error);
       }
     }
-
     fetchItemList();
-  }, []);
+  }, [totalTicket]);
 
   // 마이크 비디오 상태 확인
   useEffect(() => {
