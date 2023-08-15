@@ -30,17 +30,27 @@ const AdviceCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!user) {
       navigate("/login");
       return;
     }
-
+  
+    
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
+  
+    if (trimmedTitle === "" || trimmedContent === "") {
+      console.log("제목 또는 내용이 공백입니다. 저장되지 않습니다.");
+      alert("제목 또는 내용을 입력해주세요")
+      return;
+    }
+  
     const newPost = {
-      title: title,
-      content: content,
+      title: trimmedTitle,
+      content: trimmedContent,
     };
-
+  
     try {
       const response = await tokenHttp.post("/advice", newPost);
       if (response.status === 200) {
@@ -52,7 +62,6 @@ const AdviceCreate = () => {
       console.error("Error saving the post:", error);
     }
   };
-
   return (
     <div>
       {/* <NavBar /> */}
