@@ -125,18 +125,3 @@
   align-items: center;
 }
 
-/* 수직 스크롤바 */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-/* 스크롤바 바탕 */
-::-webkit-scrollbar-thumb {
-  background-color: #ccc; /* 스크롤바 색상 */
-  border-radius: 8px; /* 스크롤바 모양 */
-}
-
-/* 스크롤바 경계 */
-::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-}

@@ -53,6 +53,10 @@
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+.closeButton:hover {
+  background-color: #d75c6b;
+}
+
 .searchArea input {
   flex: 1;
   border: none;
