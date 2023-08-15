@@ -14,8 +14,9 @@ public class QuestionDto {
     private String questionCard;
     private QuestionType category;
 
-    public QuestionDto(String questionCard) {
+    public QuestionDto(String questionCard, QuestionType category) {
         this.questionCard = questionCard;
+        this.category = category;
     }
 
     public static QuestionDto of(Question question) {

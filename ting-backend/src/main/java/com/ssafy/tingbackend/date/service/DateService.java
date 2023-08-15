@@ -55,13 +55,13 @@ public class DateService {
 
         // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
         List<QuestionDto> questions = new ArrayList<>();
-        questions.add(new QuestionDto("인사"));
+        questions.add(new QuestionDto("인사", QuestionType.START));
         for (int i = 0; i < 10; i++) {
             questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
         }
-        questions.add(new QuestionDto("끝"));
-        questions.add(new QuestionDto("최종 점수"));
-        questions.add(new QuestionDto("마지막 어필"));
+        questions.add(new QuestionDto("끝", QuestionType.END));
+        questions.add(new QuestionDto("최종 점수", QuestionType.SCORE));
+        questions.add(new QuestionDto("마지막 어필", QuestionType.APPEAL));
 
         return questions;
     }
