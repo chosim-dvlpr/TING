@@ -10,7 +10,6 @@ import { Link, useNavigate } from "react-router-dom";
 import FriendProfile from "../friend/FriendProfile";
 import useMessageStore from "../friend/useMessageStore";
 
-
 const FriendButton = ({ toggleWheelHandler }) => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
   const navigate = useNavigate();
@@ -50,7 +49,8 @@ const FriendButton = ({ toggleWheelHandler }) => {
       document.body.style.cssText = `
       position: fixed; 
       top: -${window.scrollY}px;
-      overflow: scroll;
+      overflow-y: scroll;
+      overflow-x: auto;
       width: 100%;`;
 
       toggleWheelHandler();
@@ -97,7 +97,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
           let num = 0;
           response.data.data.map((data) => {
             num += data.unread;
-          })
+          });
           setTotalUnread(totalUnread + num);
           // setInitialUnread(num);
         } else if (response.data.code === 400) {
@@ -116,11 +116,11 @@ const FriendButton = ({ toggleWheelHandler }) => {
 
   const getTemperature = (data) => {
     setTemperature(data);
-  }
+  };
 
   const getFriendUnread = (data) => {
     setFriendUnread(data);
-  }
+  };
 
   const getCurChatting = (data) => {
     setCurChattingId(data);
@@ -128,7 +128,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
 
   useEffect(() => {
     friendListAxios();
-  }, [])
+  }, []);
 
   useEffect(() => {
     getIcon();
@@ -136,7 +136,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
 
   useEffect(() => {
     setTotalUnread(totalUnread - friendUnread);
-  }, [friendUnread])
+  }, [friendUnread]);
 
   useEffect(() => {
     if(messageLogs) {
@@ -146,17 +146,18 @@ const FriendButton = ({ toggleWheelHandler }) => {
             setTotalUnread(totalUnread+1);
           }
         }
-      })
+      });
     }
   }, [messageLogs])
 
   return (
     <div className={styles.friendContainer}>
       <button className={styles.button} onClick={() => changeIsClosed()}>
-        {
-          totalUnread == 0 ? "" : 
+        {totalUnread == 0 ? (
+          ""
+        ) : (
           <div className={styles.totalUnread}>{totalUnread}</div>
-        }
+        )}
         <img
           src={process.env.PUBLIC_URL + `/img/friend_${icon}.png`}
           className={styles.coinImage}
