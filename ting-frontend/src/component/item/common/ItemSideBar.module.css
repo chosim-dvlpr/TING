@@ -7,6 +7,7 @@
   display: flex;
 }
 
+.unSelected,
 .selected {
   background-color: #fae6e8;
   /* background-color: rgb(234, 185, 134); */
@@ -21,4 +22,13 @@
 
 .sideBarList {
   margin: 0 20px;
+  margin-bottom: 10px;
+}
+
+.unSelected {
+  background-color: transparent;
+}
+
+.unSelected:hover {
+  background-color: #fcf4f5;
 }

@@ -105,6 +105,11 @@
   border: none;
   cursor: pointer;
   border-radius: 15px;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #d75c6b;
 }
 
 .priceDiv {
