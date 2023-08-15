@@ -65,7 +65,8 @@ function MatchingChoice({ session, count }) {
     try {
       // 양쪽에서 데이터를 받아서 친구 추가시켜주는 axios
       console.log('친구 추가 완료 or 패스')
-      const response = tokenHttp.post('/date/result', resultData)
+      const response = await tokenHttp.post('/date/result', resultData)
+      console.log(response)
     } catch (err) {
       console.log(err)
     }
