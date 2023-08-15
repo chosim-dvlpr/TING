@@ -21,7 +21,7 @@
 
 .fishImg {
   z-index: +4;
-  width: 400px;
+  width: 320px;
   height: auto;
   animation: explode 1s ease-in-out;
 }
@@ -57,4 +57,9 @@
 
 .Confetti {
   width: 100%;
+}
+
+h3 {
+  margin-bottom: 20px;
+  font-family: "UhBeeSe_hyun";
 }

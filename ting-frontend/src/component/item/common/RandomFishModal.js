@@ -12,7 +12,7 @@ function RandomFishModal({ randomFishData, closeModal }) {
       <Confetti className={styles.Confetti}/>
       <div className={styles.RandomFishModalInner}>
         <img src={`${process.env.PUBLIC_URL}/img/closeIcon.png`} className={styles.closeButton} onClick={() => { closeModal() }} />
-        <h1>당신의 새로운 물고기</h1>
+        <h3>새로운 물고기 등장</h3>
         <img src={`https://i9b107.p.ssafy.io:5157/${randomFishData}`} className={styles.fishImg} />
       </div>
     </>
