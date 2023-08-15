@@ -220,7 +220,7 @@ public class ItemService {
         throw new CommonException(ExceptionType.ITEM_NOT_ENOUGH);
     }
 
-    @Scheduled(cron = "0 0 7 * * *", zone = "Asia/Seoul")  // 매일 7시에 모든 사용자의 무료 티켓 2장으로 세팅
+    @Scheduled(cron = "0 0 7 * * *", zone = "Asia/Seoul")  // 매일 7시에 모든 사용자의 무료 티켓 3장으로 세팅
     @Async
     @Transactional
     public void updateFreeTicket() {
@@ -232,7 +232,7 @@ public class ItemService {
 
             for (Inventory inventory : inventoryList) {
                 if (inventory.getItemType() == ItemType.FREE_MATCHING_TICKET) {
-                    inventory.setQuantity(2);
+                    inventory.setQuantity(3);
                     inventoryRepository.save(inventory);
                     continue userLoop;
                 }
@@ -241,7 +241,7 @@ public class ItemService {
 
             Inventory freeTicketInventory = Inventory.builder()
                     .user(user)
-                    .quantity(2)
+                    .quantity(3)
                     .itemType(ItemType.FREE_MATCHING_TICKET)
                     .build();
             inventoryRepository.save(freeTicketInventory);
