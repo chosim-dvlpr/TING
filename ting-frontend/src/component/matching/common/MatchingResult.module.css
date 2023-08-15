@@ -11,8 +11,8 @@
   display: flex;
   justify-content: center;
   width:100%;
-  height:90%;
-  border-radius: 20px;
+  height:93%;
+  border-radius: 30px;
 }
 
 .Container {
@@ -22,7 +22,8 @@
   align-items: center;
   position:absolute;
   width:95%;
-  height:90%;
+  height:93%;
+  border-radius: 30px;
   background-color: white;
 }
 
@@ -139,6 +140,7 @@
 
 .ConfettiOuter{
   width: 100vw;
+  z-index: 1000;
 }
 
 .Confetti {
@@ -146,7 +148,6 @@
   position:absolute;
   top:0;
   left:0;
-  z-index: 1000;
 }
 
 .lastResultButton {
