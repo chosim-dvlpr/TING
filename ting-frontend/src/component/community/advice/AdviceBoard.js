@@ -17,6 +17,7 @@ function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(1);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
 
@@ -37,6 +38,7 @@ function AdviceBoard() {
       if (responseData.adviceBoardList) {
         setAdviceList(responseData.adviceBoardList);
         setTotalPages(responseData.totalPages);
+        setTotalElements(responseData.totalElements);
       }
     } catch (error) {
       console.error("Error fetching advice data:", error);
@@ -86,6 +88,7 @@ function AdviceBoard() {
       const searchData = response.data.data;
       setSearchResult(searchData.adviceBoardList);
       setTotalPages(searchData.totalPages); // 검색 결과에 따른 totalPages 설정
+      setTotalElements(searchData.totalElements);
       setCurrentPage(1); // 검색 시 첫 번째 페이지로 이동
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -126,7 +129,7 @@ function AdviceBoard() {
                 (searchResult.length > 0 ? searchResult : adviceList).map(
                   (advice, index) => (
                     <tr key={advice.adviceId}>
-                      <td className={styles.table_1}>{advice.adviceId}</td>
+                      <td className={styles.table_1}>{totalElements - 10*(currentPage-1) - index}</td>
                       <td className={styles.table_2}>
                         <span
                           className={styles.link}
