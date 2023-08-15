@@ -155,131 +155,149 @@ function SelectionData(){
 
 
   return(
-    <div>
+    <div className={styles.selectContainer}>
       <h3>추가 정보를 입력해주세요!</h3>
       {/* <Outlet></Outlet> */}
       <div className={styles.selectDataContainer}>
-        <div>
-          <h3>MBTI</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-            { signupReducer.mbtiCode ? signupReducer.mbtiCode.name : "MBTI" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("MBTI")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
+        <div className={styles.selectDataContainerBox}>
+          <div className={styles.contentContainer}>
+            <h3>MBTI</h3>
+            <Dropdown>
+              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+              { signupReducer.mbtiCode ? signupReducer.mbtiCode.name : "MBTI" }
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  contents("MBTI")
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
 
-          <h3>Drinking</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-            { signupReducer.drinkingCode ? signupReducer.drinkingCode.name : "주량" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("DRINKING")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
-          
-          <h3>Smoking</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-            { signupReducer.smokingCode ? signupReducer.smokingCode.name : "흡연" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("SMOKING")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
+          <div className={styles.contentContainer}>
+            <h3>Drinking</h3>
+            <Dropdown>
+              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+              { signupReducer.drinkingCode ? signupReducer.drinkingCode.name : "주량" }
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  contents("DRINKING")
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
 
-          <h3>Religion</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-            { signupReducer.religionCode ? signupReducer.religionCode.name : "종교" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("RELIGION")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
-          <div className={styles.height}>
-            <h3>Height</h3>
-            <input 
-              ref={userHeight}
-              onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
-              type="number" min="100" max="250"></input> 
+          <div className={styles.contentContainer}>
+            <h3>Smoking</h3>
+            <Dropdown>
+              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+              { signupReducer.smokingCode ? signupReducer.smokingCode.name : "흡연" }
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  contents("SMOKING")
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+
+          <div className={styles.contentContainer}>
+            <h3>Religion</h3>
+            <Dropdown>
+              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+              { signupReducer.religionCode ? signupReducer.religionCode.name : "종교" }
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  contents("RELIGION")
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+
+          <div className={styles.contentContainer}>
+            <div className={styles.height}>
+              <h3>Height</h3>
+              <input 
+                ref={userHeight}
+                onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
+                type="number" min="100" max="250"></input> 
+            </div>
           </div>
         </div>
 
-        <div>
-        <h3>Hobby</h3>
-        <Dropdown>
-          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-          { "취미" }
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {
-              contents("HOBBY")
-            }
-          </Dropdown.Menu>
-        </Dropdown>
-        <span>
-        {
-          signupReducer.hobbyCodeList.map((hobby, i) => (
-            <p>{ hobby.name }</p>
-          ))
-        }
-        </span>
+        <div className={styles.selectDataContainerBox}>
+          <div className={styles.contentContainer}>
+            <h3>Hobby</h3>
+            <Dropdown>
+              <Dropdown.Toggle classNfame={`${styles.btn} ${styles.regionBtn}`}
+                id="dropdown-basic">
+              { "취미" }
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {
+                  contents("HOBBY")
+                }
+              </Dropdown.Menu>
+            </Dropdown>
+          <span>
+          {
+            signupReducer.hobbyCodeList.map((hobby, i) => (
+              <p>{ hobby.name }</p>
+            ))
+          }
+          </span>
+        </div>
 
-        <h3>Personality</h3>
-        <Dropdown>
-          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-          { "성격" }
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {
-              contents("PERSONALITY")
-            }
-          </Dropdown.Menu>
-        </Dropdown>
-        <span>
-        {
-          signupReducer.personalityCodeList.map((personality, i) => (
-            <p>{ personality.name }</p>
-          ))
-        }
-        </span>
+        <div className={styles.contentContainer}>
+          <h3>Personality</h3>
+          <Dropdown>
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+            { "성격" }
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {
+                contents("PERSONALITY")
+              }
+            </Dropdown.Menu>
+          </Dropdown>
+          <span>
+          {
+            signupReducer.personalityCodeList.map((personality, i) => (
+              <p>{ personality.name }</p>
+            ))
+          }
+          </span>
+        </div>
 
-        <h3>Style</h3>
-        <Dropdown>
-          <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-            id="dropdown-basic">
-          { "선호 스타일" }
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {
-              contents("STYLE")
-            }
-          </Dropdown.Menu>
-        </Dropdown>
-        <span>
-        {
-          signupReducer.styleCodeList.map((style, i) => (
-            <p>{ style.name }</p>
-          ))
-        }
-        </span>
+        <div className={styles.contentContainer}>
+          <h3>Style</h3>
+          <Dropdown>
+            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
+              id="dropdown-basic">
+            { "선호 스타일" }
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {
+                contents("STYLE")
+              }
+            </Dropdown.Menu>
+          </Dropdown>
+          <span>
+          {
+            signupReducer.styleCodeList.map((style, i) => (
+              <p>{ style.name }</p>
+            ))
+          }
+          </span>
+        </div>
+
         <div className={styles.introduceContainer}>
           <h4>자신을 간단하게 소개해주세요</h4>
           <input 

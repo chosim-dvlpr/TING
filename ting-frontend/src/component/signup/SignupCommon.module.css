@@ -149,6 +149,8 @@
 .selectDataContainer {
     display: grid;
 	grid-template-columns: repeat(2, 1fr);
+    justify-items: stretch;
+    padding: 10px;
 }
 
 .btnSecondary {
@@ -275,4 +277,37 @@
 .goToLoginBtn {
     margin: 10px;
     width: 100%;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    justify-content: space-between;
+    margin: 8px;
+    padding-left: 30px;
+}
+
+.contentContainer > h3 {
+    margin-right: 8px;
+}
+
+.height {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    
+}
+
+.selectDataContainerBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100%;
+    /* padding-left: 10px; */
+}
+
+.selectContainer {
+
 }
