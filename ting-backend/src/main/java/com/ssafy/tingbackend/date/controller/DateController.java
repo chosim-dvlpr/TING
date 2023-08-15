@@ -82,12 +82,6 @@ public class DateController {
 
         dateService.selectFinalChoice(matchingId, requestMap.get("choice").toString(), userId);
 
-        TimeUnit.SECONDS.sleep(1);
-
-        if (requestMap.get("choice").toString().equals("yes")) {
-            dateService.checkAndCreateChattingRoom(matchingId, userId);
-        }
-
         return new CommonResponse(200, "최종 선택 완료");
     }
 

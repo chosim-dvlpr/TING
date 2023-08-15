@@ -104,7 +104,7 @@ public class DateService {
         matchingUser.setTotalScore(map.get("totalScore").intValue());
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public void selectFinalChoice(Long matchingId, String selected, Long userId) {
         // DB에서 정보 불러오기
         Matching matching = matchingRepository.findById(matchingId)
@@ -115,22 +115,20 @@ public class DateService {
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
 
         matchingUser.setFinalChoice(selected.equals("yes") ? true : false);  // 응답한 선택 저장
-    }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void checkAndCreateChattingRoom(Long matchingId, Long userId) {
         MatchingUser matchingPairUser = matchingUserRepository.findFriendMatchingUser(matchingId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
-        User user = userRepository.findByIdNotRemoved(userId)
-                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        if (matchingPairUser.getFinalChoice() != null && matchingPairUser.getFinalChoice()) {
+        if (matchingPairUser.getFinalChoice() != null && matchingPairUser.getFinalChoice() && selected.equals("yes")) {
             Chatting chatting = new Chatting(ChattingType.ALIVE);
             chattingRepository.save(chatting);
             chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
             chattingUserRepository.save(new ChattingUser(chatting, user));
             chatting.setLastChattingContent("♡대화를 시작해보세요♡");
             chatting.setLastChattingTime(LocalDateTime.now());
+
+            matching.setIsSuccess(true);
+            matching.setEndTime(LocalDateTime.now());
         }
     }
 }
