@@ -166,7 +166,7 @@ public class UserService {
         Inventory freeMatchingInventory = Inventory.builder()
                 .user(user)
                 .itemType(ItemType.FREE_MATCHING_TICKET)
-                .quantity(2)
+                .quantity(3)
                 .build();
         inventoryRepository.save(skin2Inventory);
         inventoryRepository.save(freeMatchingInventory);
