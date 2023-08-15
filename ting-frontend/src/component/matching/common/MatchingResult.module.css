@@ -140,6 +140,7 @@
 
 .ConfettiOuter{
   width: 100vw;
+  z-index: 1000;
 }
 
 .Confetti {
@@ -147,7 +148,6 @@
   position:absolute;
   top:0;
   left:0;
-  z-index: 1000;
 }
 
 .lastResultButton {
