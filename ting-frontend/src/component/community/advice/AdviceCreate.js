@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import tokenHttp from "../../../api/tokenHttp";
 import styles from "./AdviceCreate.module.css"; // module.css 파일을 가져옵니다
 import NavBar from "../../common/NavBar";
 import Sidebar from "../common/Sidebar";
 import adviceStyles from "./AdviceBoard.module.css";
+import FriendButton from "../../common/FriendButton";
 
 const AdviceCreate = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +14,8 @@ const AdviceCreate = () => {
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
 
   useEffect(() => {
     fetchUserInfo();
@@ -67,6 +71,11 @@ const AdviceCreate = () => {
       {/* <NavBar /> */}
       <div className={adviceStyles.adviceBoardBackground}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={adviceStyles.adviceBoardContainer}>
         <Sidebar />
       <div className={styles.formContainer}>

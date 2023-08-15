@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom"; 
 import styles from "./AdviceUpdate.module.css";
 import tokenHttp from "../../../api/tokenHttp";
@@ -7,6 +8,7 @@ import basicHttp from "../../../api/basicHttp";
 import NavBar from "../../common/NavBar";
 import Sidebar from "../common/Sidebar";
 import adviceStyles from "./AdviceBoard.module.css";
+import FriendButton from "../../common/FriendButton";
 
 
 function AdviceUpdate() {
@@ -15,6 +17,8 @@ function AdviceUpdate() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isUpdated, setIsUpdated] = useState(false);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
 
   useEffect(() => {
     getAdviceDetail();
@@ -63,6 +67,11 @@ function AdviceUpdate() {
     {/* <NavBar/> */}
     <div className={adviceStyles.adviceBoardBackground}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={adviceStyles.adviceBoardContainer}>
         <Sidebar />
     <div className={styles.adviceUpdateContainer}>   

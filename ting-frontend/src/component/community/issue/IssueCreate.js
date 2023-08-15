@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import tokenHttp from '../../../api/tokenHttp';
 import styles from './IssueCreate.module.css'; 
 import NavBar from '../../common/NavBar';
 import Sidebar from '../common/Sidebar';
-// import NavBar from '../../common/NavBar';
-
+import FriendButton from '../../common/FriendButton';
 
 
 const IssueCreate = () => {
@@ -14,6 +14,8 @@ const IssueCreate = () => {
     const [agreeTitle, setAgreeTitle] = useState(''); 
     const [opposeTitle, setOpposeTitle] = useState(''); 
     const [user, setUser] = useState(null);
+    const userdata = useSelector((state) => state.userdataReducer.userdata);
+    const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
   
     const navigate = useNavigate();
   
@@ -74,7 +76,12 @@ const IssueCreate = () => {
     return (
       <div>
       <div className={styles.issueBoardBackGround}>
-        <NavBar/>
+      <NavBar/>
+      {userdata && (
+      <FriendButton
+        toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+      />
+      )}
       <div className={styles.issueBoardContainer}>
         <Sidebar/>
 

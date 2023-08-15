@@ -9,6 +9,7 @@ import NavBar from "../../common/NavBar";
 import Sidebar from "../common/Sidebar";
 import adviceStyles from "./AdviceBoard.module.css";
 import {getDate} from "../../common/TimeCalculate";
+import FriendButton from "../../common/FriendButton";
 
 function AdviceDetail() {
   const { adviceId } = useParams();
@@ -17,6 +18,7 @@ function AdviceDetail() {
   const [myLike, setMyLike] = useState([]);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
   const showbutton = (nickname) => {
     return userdata && userdata.nickname === nickname;
   }
@@ -115,6 +117,11 @@ function AdviceDetail() {
   return (
     <div className={adviceStyles.adviceBoardBackground}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={adviceStyles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.deleteButtonContainer}>
