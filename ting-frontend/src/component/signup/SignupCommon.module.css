@@ -11,13 +11,6 @@
     font-size: 20px;
 }
 
-.label,
-.btn,
-.btnSecondary,
-.disabledBtn {
-    /* margin: 10px; */
-}
-
 .introduceContainer input,
 .height input,
 .input,
@@ -51,6 +44,15 @@
     margin: 5px 0;
 }
 
+.findPasswordInput {
+    width: 267px;
+    height: 44px;
+}
+
+.findPasswordPhonenumber {
+    width: 83px;
+    height: 44px;
+}
 
 .regionBtn:focus,
 .disabledBtn,
@@ -63,6 +65,13 @@
         3px 3px 5px 0px rgba(0, 0, 0, .1);
     margin: 0 5px;
     transition-duration: 0.2s;
+}
+
+.confirmBtn {
+    width: 64px;
+    height: 40px;
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .disabledBtn {
@@ -90,12 +99,6 @@
     visibility: hidden;
 } */
 
-
-#nameInput,
-#regionInput {
-    /* margin-right: 120px; */
-    /* width: 390px; */
-}
 
 .selectBtn {
     border: none;

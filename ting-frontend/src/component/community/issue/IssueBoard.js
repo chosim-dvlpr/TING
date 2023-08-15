@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { useSelector } from "react-redux";
 import styles from "./IssueBoard.module.css";
 import Sidebar from "../common/Sidebar";
@@ -141,8 +142,8 @@ function IssueBoard() {
                   className={styles.card}
                   style={getCardStyle(issue)}
                 >
-                  <div className={styles.title}>
-                    <span>
+                  <div className={styles.cardNumContainer}>
+                    <span className={styles.cardNum}>
                       {issue.agreeCount + issue.opposeCount === 0
                         ? 0
                         : Math.round(
@@ -151,13 +152,7 @@ function IssueBoard() {
                               100
                           )}
                     </span>
-                    <div
-                      className={styles.link}
-                      onClick={(event) => handleLinkClick(issue.issueId, event)}
-                    >
-                      {issue.title}
-                    </div>
-                    <span>
+                    <span className={styles.cardNum}>
                       {issue.agreeCount + issue.opposeCount === 0
                         ? 0
                         : Math.round(
@@ -167,6 +162,15 @@ function IssueBoard() {
                           )}
                     </span>
                   </div>
+                    <div className={styles.link}>
+                      <div
+                        onClick={(event) =>
+                          handleLinkClick(issue.issueId, event)
+                        } className={styles.title}
+                      >
+                        {issue.title}
+                      </div>
+                    </div>
                 </div>
               )
             )
