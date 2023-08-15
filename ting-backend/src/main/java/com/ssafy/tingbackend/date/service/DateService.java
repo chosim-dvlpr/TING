@@ -115,6 +115,7 @@ public class DateService {
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
 
         matchingUser.setFinalChoice(selected.equals("yes") ? true : false);  // 응답한 선택 저장
+        matchingUserRepository.save(matchingUser);
 
         MatchingUser matchingPairUser = matchingUserRepository.findFriendMatchingUser(matchingId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
@@ -130,6 +131,8 @@ public class DateService {
 
             matching.setIsSuccess(true);
             matching.setEndTime(LocalDateTime.now());
+
+            log.info("채팅방 생성 성공 {}", chatting);
         }
 
         log.info("matchingPairUser getFinalChoice : {}, selected : {}", matchingPairUser.getFinalChoice(), selected.equals("yes"));
