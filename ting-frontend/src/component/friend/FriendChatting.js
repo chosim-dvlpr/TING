@@ -10,7 +10,7 @@ import { getFriendId } from "../../redux/friendStore";
 import { getCurrent, getDateTime } from "../common/TimeCalculate";
 import basicHttp from "../../api/basicHttp";
 
-function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChattingObj, chattingObj, getTemperature }) {
+function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChattingObj, chattingObj, getTemperature, curChattingObj }) {
   const location = useLocation();
   const Navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,6 +37,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
           console.log("로그 불러오기 성공");
           console.log(response.data);
           setPreviousMessage([...response.data.data.chattingList]); // 대화 내용 저장
+          curChattingObj(chattingObj.chattingId);
         } else if (response.data.code === 400) {
           console.log("실패");
         }
@@ -89,6 +90,7 @@ function FriendChatting({ onSearch2, showFriendList, showFriendChatting, setChat
 
   // 채팅방 나가기
   const handleClickQuitRoom = async () => {
+    curChattingObj(null);
     // messageStore.disconnect(location.state.friend.chattingId);
     // messageStore.disconnect(chattingObj.chattingId);
     // messageStore.disconnect(currentRoomIndex);
