@@ -104,7 +104,7 @@ public class DateService {
         matchingUser.setTotalScore(map.get("totalScore").intValue());
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void selectFinalChoice(Long matchingId, String selected, Long userId) {
         // DB에서 정보 불러오기
         Matching matching = matchingRepository.findById(matchingId)
@@ -118,6 +118,7 @@ public class DateService {
 
         MatchingUser matchingPairUser = matchingUserRepository.findFriendMatchingUser(matchingId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+        log.info("matchingPairUser : {}, my userId : {}", matchingPairUser, userId);
 
         if (matchingPairUser.getFinalChoice() != null && matchingPairUser.getFinalChoice() && selected.equals("yes")) {
             Chatting chatting = new Chatting(ChattingType.ALIVE);
@@ -130,5 +131,8 @@ public class DateService {
             matching.setIsSuccess(true);
             matching.setEndTime(LocalDateTime.now());
         }
+
+        log.info("matchingPairUser getFinalChoice : {}, selected : {}", matchingPairUser.getFinalChoice(), selected.equals("yes"));
+
     }
 }
