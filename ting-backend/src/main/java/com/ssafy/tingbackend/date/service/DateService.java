@@ -115,28 +115,22 @@ public class DateService {
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
 
         matchingUser.setFinalChoice(selected.equals("yes") ? true : false);  // 응답한 선택 저장
-
-        // 상대방이 응답했는지 확인
-        MatchingUser matchingPairUser = matchingUserRepository.findFriendInfo(matching, user)
-                .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
-        if (matchingPairUser.getFinalChoice() != null) {  // 상대방이 응답한 경우
-            boolean isSuccess = false;
-            // 둘 다 yes 선택 - 성공O
-            if (matchingPairUser.getFinalChoice() && matchingUser.getFinalChoice()) isSuccess = true;
-
-            // DB에 최종 선택 결과값 저장
-            matching.setIsSuccess(isSuccess);
-
-            if (isSuccess) {
-                // 채팅방 생성
-                Chatting chatting = new Chatting(ChattingType.ALIVE);
-                chattingRepository.save(chatting);
-                chattingUserRepository.save(new ChattingUser(chatting, user));
-                chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
-                chatting.setLastChattingContent("♡대화를 시작해보세요♡");
-                chatting.setLastChattingTime(LocalDateTime.now());
-            }
-        }
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void checkAndCreateChattingRoom(Long matchingId, Long userId) {
+        MatchingUser matchingPairUser = matchingUserRepository.findFriendMatchingUser(matchingId, userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+        User user = userRepository.findByIdNotRemoved(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if (matchingPairUser.getFinalChoice() != null && matchingPairUser.getFinalChoice()) {
+            Chatting chatting = new Chatting(ChattingType.ALIVE);
+            chattingRepository.save(chatting);
+            chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
+            chattingUserRepository.save(new ChattingUser(chatting, user));
+            chatting.setLastChattingContent("♡대화를 시작해보세요♡");
+            chatting.setLastChattingTime(LocalDateTime.now());
+        }
+    }
 }

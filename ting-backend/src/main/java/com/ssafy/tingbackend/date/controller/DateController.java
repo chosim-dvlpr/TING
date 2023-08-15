@@ -16,6 +16,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -73,10 +74,19 @@ public class DateController {
      * @return 매칭 성공 여부
      */
     @PostMapping("/date/result")
-    public CommonResponse selectFinalChoice(@RequestBody Map<String, Object> requestMap, Principal principal) {
-        dateService.selectFinalChoice(Long.parseLong(requestMap.get("matchingId").toString()),
-                requestMap.get("choice").toString(),
-                Long.parseLong(principal.getName()));
+    public CommonResponse selectFinalChoice(@RequestBody Map<String, Object> requestMap, Principal principal) throws InterruptedException {
+        Long matchingId = Long.parseLong(requestMap.get("matchingId").toString());
+        Long userId = Long.parseLong(principal.getName());
+        log.info("/date/result - matchingId: {}", matchingId);
+        log.info("/date/result - userId: {}", userId);
+
+        dateService.selectFinalChoice(matchingId, requestMap.get("choice").toString(), userId);
+
+        TimeUnit.SECONDS.sleep(1);
+
+        if (requestMap.get("choice").toString().equals("yes")) {
+            dateService.checkAndCreateChattingRoom(matchingId, userId);
+        }
 
         return new CommonResponse(200, "최종 선택 완료");
     }
