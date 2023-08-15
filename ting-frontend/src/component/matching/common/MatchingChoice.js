@@ -20,9 +20,13 @@ function MatchingChoice({ session, count }) {
   const [matchingFinish, setMatchingFinish] = useState(false)
   const [buttonToggleSign, setButtonToggleSign] = useState([false, false])
   const [afterFirstClick, setAfterFirstClick] = useState(false)
+  
+
+  // result == 나의 선택, redux result == 상대방의 선택
 
   // 최종 선택 타이머 끝내는 로직
   useEffect(() => {
+    console.log(matchingId)
     if (count === 0 && !matchingFinish) {
       setFinish(true)
       setMatchingFinish(true)
@@ -59,10 +63,9 @@ function MatchingChoice({ session, count }) {
       };
     }
     try {
-      console.log('여기가 문제네?')
-      const response = await tokenHttp.post('/date/result', resultData)
-      console.log('친구 추가 되었는지에 대한 데이터',response.data);
-      
+      // 양쪽에서 데이터를 받아서 친구 추가시켜주는 axios
+      console.log('친구 추가 완료 or 패스')
+      const response = tokenHttp.post('/date/result', resultData)
     } catch (err) {
       console.log(err)
     }
@@ -70,13 +73,12 @@ function MatchingChoice({ session, count }) {
 
   // 상대에게 최종 결과를 전송하는 로직
   const sendResult = (result) => {
-    if (session) {
-      session.signal({
-        data: JSON.stringify({ result: result, userId: userData.userId }),
-        to: [],
-        type: "select",
-      })
-    }
+    session.signal({
+      data: JSON.stringify({ result: result, userId: userData.userId }),
+      to: [],
+      type: "select",
+    })
+
   }
 
   // 클릭시 뒤집어져서 결과 확인

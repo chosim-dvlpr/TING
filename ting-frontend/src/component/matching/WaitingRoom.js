@@ -76,7 +76,7 @@ function WaitingRoom() {
         console.log(res.data.data.length);
         setFriendCount(res.data.data.length);
       })
-      .catch((err) => {});
+      .catch((err) => { });
 
     await tokenHttp
       .get("/user/skin")
@@ -84,7 +84,7 @@ function WaitingRoom() {
         const count = res.data.data.itemType.split("_")[1];
         setMaxFriendCount(Number(count));
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const checkStreamStatus = async () => {
@@ -147,6 +147,7 @@ function WaitingRoom() {
       console.log(response);
 
       switch (response.type) {
+
         // 예상시간 출력
         case "expectedTime":
           let expectedTime = response.data.time;
@@ -164,6 +165,8 @@ function WaitingRoom() {
         case "matchingSuccess":
           let enterToken = response.data.token;
           let matchingId = response.data.matchingId;
+          console.log(response.data)
+          console.log('매칭아이디',matchingId)
 
           dispatch(setOpenviduToken(enterToken));
           dispatch(setMatchingId(matchingId));
@@ -173,7 +176,8 @@ function WaitingRoom() {
 
         // 한쪽이 매칭 거절
         case "matchingFail":
-          alert("상대방이 매칭을 받지 않았습니다.");
+          // alert("상대방이 매칭을 받지 않았습니다.");
+          rejectModal()
           break;
       }
     };
@@ -190,22 +194,32 @@ function WaitingRoom() {
     };
   }, [socket]);
 
+  // 거절 경고창
+  function rejectModal(){
+    Swal.fire({
+      icon: "error",
+      title: "상대방이 매칭을 거절했습니다.",
+      text:"다시 대기열로 돌아갑니다",
+    })
+  }
+
   // 경고창을 호출하는 함수
   function findPairModal(socket) {
     Swal.fire({
       icon: "success",
-      title: "매칭 성공",
-      text: "매칭을 시작하시겠습니까?",
+      title: "매칭을 시작하시겠습니까?",
+      // text: "매칭을 시작하시겠습니까?",
       timer: 15000,
       timerProgressBar: true,
       showCancelButton: true,
       cancelButtonText: "아니오",
       confirmButtonText: "네",
     }).then((res) => {
+      console.log('아니오 클릭했을 때', res)
       if (res.isConfirmed) {
         // TODO: findModal 에서 "네"를 눌렀을때, accept 메시지를 서버로 보내는 함수
         socket.send(JSON.stringify({ type: "accept" }));
-      } else if (res.isDenied) {
+      } else if (!res.isDenied) {
         // TODO: findModal 에서 "아니오"를 눌렀을 때, reject 메시지를 서버로 보내는 함수
         socket.send(JSON.stringify({ type: "reject" }));
       }

@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react"
+import Confetti from 'react-confetti'
 import styles from "./MatchingResult.module.css"
 import { useSelector } from "react-redux/es/hooks/useSelector"
 import { useNavigate } from "react-router-dom"
+import { resetMatchingStore } from "../../../redux/matchingStore"
+
 import tokenHttp from "../../../api/tokenHttp.js"
+import { useDispatch } from "react-redux"
 
 function MatchingResult({ session, count, result }) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [isFlipped, setIsFlipped] = useState(false)
 
   const state = useSelector((state) => state)
@@ -16,12 +21,25 @@ function MatchingResult({ session, count, result }) {
 
   // 클릭시 뒤집어져서 결과 확인
   const flipCard = (event) => {
-    setIsFlipped(!isFlipped)
+    setIsFlipped(true)
     // 결과 확인 누른거 sign 보내기
   }
 
+  // 언마운트 때 초기화
+  useEffect(() => {
+    console.log(matchingResult)
+    console.log(result)
+    console.log(isFlipped)
+    return () => {
+      dispatch(resetMatchingStore())
+    }
+  }, [])
+
   return (
     <>
+      <div className={styles.ConfettiOuter}>
+        {MatchingResult && result && isFlipped ? <Confetti className={styles.Confetti} /> : null}
+      </div>
       <div className={styles.OuterContainer}>
         <h1>최종 결과</h1>
       </div>
@@ -56,7 +74,7 @@ function MatchingResult({ session, count, result }) {
             <div className={styles.yourFront}></div>
             {/* 뒷면 */}
             <div className={styles.back}>
-              <p className={styles.CardContent}>{matchingResult.result ? 'YES' : 'NO'}</p>
+              <p className={styles.CardContent}>{matchingResult ? 'YES' : 'NO'}</p>
             </div>
           </div>
         </div>

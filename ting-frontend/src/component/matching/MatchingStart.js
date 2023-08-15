@@ -66,7 +66,6 @@ function MatchingStart() {
   // 초기화 useEffect hook
   useEffect(() => {
     console.log("====================useEffect (초기화) ======================");
-    dispatch(resetMatchingStore())
 
     // 음악 무한 재생
     const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
@@ -377,8 +376,8 @@ function MatchingStart() {
 
       // 내가 선택한 시그널은 무시
       if (data.userId === userData.userId) return;
-
-      dispatch(setMatchingResult(data))
+      console.log('상대방의 정보받음')
+      dispatch(setMatchingResult(data.result))
     })
 
 
