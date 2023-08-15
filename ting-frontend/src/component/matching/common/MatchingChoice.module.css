@@ -20,8 +20,8 @@
   justify-content: center;
   align-items: center;
   position:absolute;
-  width:90%;
-  height:90%;
+  width:97%;
+  height:95%;
   background-color: white;
 }
 
@@ -102,6 +102,8 @@
 
 
 .button {
+  width: 100px;
+  height: 50px;
   border-radius: 10px;
   padding: 5px 15px;
   border: none;
@@ -110,10 +112,6 @@
   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
   5px 5px 10px 0px rgba(0, 0 ,0, .1),
   3px 3px 5px 0px rgba(0, 0 ,0, .1); 
-}
-
-.button:hover {
-  background-color: #327488;
 }
 
 .clickedButton {
@@ -130,7 +128,7 @@
 .Btn {
   width: 100px;
   height: 50px;
-  margin: 30px;
+  margin: 10px;
   padding: 5px 20px;
   border-radius: 10px;
   border: none;
