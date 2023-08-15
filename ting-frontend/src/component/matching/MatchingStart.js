@@ -69,7 +69,7 @@ function MatchingStart() {
 
     // 음악 무한 재생
     const bgmAudio = new Audio(`${process.env.PUBLIC_URL}/sound/bgm/BGM.mp3`)
-    bgmAudio.volume = 0.3
+    bgmAudio.volume = 0.2
     bgmAudio.play();
 
     audioRef.current = bgmAudio;
