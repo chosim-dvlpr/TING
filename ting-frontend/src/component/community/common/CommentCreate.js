@@ -9,7 +9,6 @@ function CommentCreate({
   getCommentList,
   parentCommentId,
 }) {
-  // 글 작성 시 바로 commentlist로
   const [comment, setComment] = useState("");
   const [user, setUser] = useState(null);
   const [depth, setDepth] = useState(0);
@@ -20,8 +19,8 @@ function CommentCreate({
   useEffect(() => {
     fetchUserInfo();
 
-    setDepth(0); // 0 또는 1로 설정
-    setParent(null); // 대댓글의 부모 댓글 ID 설정 (대댓글이 아닌 경우 null)
+    setDepth(0);
+    setParent(null);
   }, []);
 
   const fetchUserInfo = () => {
@@ -43,6 +42,13 @@ function CommentCreate({
       return;
     }
 
+    if (comment.trim() === "") {
+      // 댓글 내용이 공백인 경우 저장 동작을 막음
+      console.log("댓글 내용이 공백입니다. 저장되지 않습니다.");
+      alert("내용을 입력해주세요.")
+      return;
+    }
+
     const commentData = {
       boardType: boardTypeProp,
       boardId: boardIdProp,
@@ -58,7 +64,6 @@ function CommentCreate({
       if (response.status === 200) {
         alert("댓글 작성이 완료되었습니다");
         setComment("");
-
         getCommentList();
       } else {
         throw new Error("Failed to save the post");
