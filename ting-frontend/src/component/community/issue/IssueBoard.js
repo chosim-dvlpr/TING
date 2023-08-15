@@ -9,6 +9,7 @@ import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
 import NavBar from "../../common/NavBar";
+import FriendButton from "../../common/FriendButton";
 
 function IssueBoard() {
   const [issueList, setIssueList] = useState([]);
@@ -16,6 +17,7 @@ function IssueBoard() {
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
 
   const boardType = "issue";
 
@@ -120,7 +122,11 @@ function IssueBoard() {
   return (
     <div className={styles.issueBoardBackground}>
       <NavBar />
-
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={styles.issueBoardContainer}>
         <Sidebar />
 

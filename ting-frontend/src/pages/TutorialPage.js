@@ -1,10 +1,21 @@
+import React, { useState } from "react";
 import styles from "./TutorialPage.module.css";
 import NavBar from "../component/common/NavBar";
+import FriendButton from "../component/common/FriendButton";
+import { useSelector } from "react-redux";
 
 function TutorialPage() {
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
+
   return (
     <div className={styles.outer}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={styles.container}>
         <h1 className={styles.title}>
           <img

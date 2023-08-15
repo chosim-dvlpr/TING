@@ -10,6 +10,7 @@ import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
 import NavBar from "../../common/NavBar";
+import FriendButton from "../../common/FriendButton";
 
 import { getDate } from "../../common/TimeCalculate";
 
@@ -20,6 +21,7 @@ function AdviceBoard() {
   const [totalElements, setTotalElements] = useState(1);
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
 
   const boardType = "advice";
 
@@ -104,6 +106,11 @@ function AdviceBoard() {
   return (
     <div className={styles.adviceBoardBackground}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={styles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.adviceTopTable}>

@@ -6,6 +6,7 @@ import CommentCreate from "../common/CommentCreate";
 import tokenHttp from "../../../api/tokenHttp";
 import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
+import FriendButton from "../../common/FriendButton";
 
 function IssueDetail() {
   const { issueId } = useParams();
@@ -13,6 +14,7 @@ function IssueDetail() {
   const [comments, setComments] = useState([]);
   const [myLike, setMyLike] = useState([]);
   const userdata = useSelector((state) => state.userdataReducer.userdata);
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
   const showbutton = (nickname) => {
     return userdata && userdata.nickname === nickname;
   };
@@ -164,6 +166,11 @@ function IssueDetail() {
   return (
     <div className={styles.issueBoardBackground}>
       <NavBar />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
       <div className={styles.issueBoardContainer}>
         <div className={styles.issueDetailContainer}>
           <div className={styles.buttonContainer}>
