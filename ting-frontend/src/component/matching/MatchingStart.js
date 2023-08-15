@@ -122,6 +122,7 @@ function MatchingStart() {
   useEffect(() => {
     setCardCategory(
       (() => {
+        console.log(questionData[questionNumber])
         switch (questionData[questionNumber]?.category) {
           case 'PREFER':
             return '호불호';
@@ -137,14 +138,14 @@ function MatchingStart() {
             return 'VS';
           case 'ESSENTIAL':
             return '기본';
-          case 'START':
-            return 'S';
           case 'END':
-            return 'E';
+            return 'I';
           case 'SCORE':
-            return 'S';
+            return 'N';
           case 'APPEAL':
-            return 'A';
+            return 'G';
+          default:
+            return 'T';
         }
       })()
     )
