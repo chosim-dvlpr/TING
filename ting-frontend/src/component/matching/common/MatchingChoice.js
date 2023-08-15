@@ -124,7 +124,7 @@ function MatchingChoice({ session, count }) {
             <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
             <h3>{count}</h3>
             <button
-              className={`styles.Btn ${buttonToggleSign[0] ? styles.clickedButton : styles.button}`}
+              className={`${styles.Btn} ${buttonToggleSign[0] ? styles.clickedButton : styles.button}`}
               onClick={() => {
                 setResult(true);
                 flipCard();
@@ -132,7 +132,7 @@ function MatchingChoice({ session, count }) {
               }}
             >YES</button>
             <button
-              className={`styles.Btn ${buttonToggleSign[1] ? styles.clickedButton : styles.button}`}
+              className={`${styles.Btn} ${buttonToggleSign[1] ? styles.clickedButton : styles.button}`}
               onClick={() => {
                 setResult(false);
                 flipCard();

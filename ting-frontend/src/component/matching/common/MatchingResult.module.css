@@ -146,5 +146,22 @@
   position:absolute;
   top:0;
   left:0;
-  z-index: 20;
+  z-index: 1000;
+}
+
+.lastResultButton {
+  height: 50px;
+  margin: 30px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+      5px 5px 10px 0px rgba(0, 0, 0, .1),
+      3px 3px 5px 0px rgba(0, 0, 0, .1);
+}
+
+.lastResultButton:hover {
+  background-color: #327488;
 }

@@ -19,10 +19,16 @@ function MatchingResult({ session, count, result }) {
   const matchingId = state.matchingReducer.matchingId
   const matchingResult = state.matchingReducer.matchingResult
 
+  const [lastResultSign, setLastResultSign] =useState(false)
+
   // 클릭시 뒤집어져서 결과 확인
   const flipCard = (event) => {
     setIsFlipped(true)
     // 결과 확인 누른거 sign 보내기
+  }
+
+  const checkLastResult = () => {
+    setLastResultSign(true)
   }
 
   // 언마운트 때 초기화
@@ -59,12 +65,27 @@ function MatchingResult({ session, count, result }) {
         </div>
 
         <div className={styles.InnerBox}>
-          <div>
-            <h3>모두 YES일 경우</h3>
-            <h3>자동으로 어항에 추가됩니다.</h3>
-            <button onClick={() => { flipCard() }}>결과 확인하기</button>
-            <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
-          </div>
+          { lastResultSign ? (
+            <>
+              { MatchingResult ? (
+                <>
+                  <h3>축하드립니다</h3>
+                  <h3>채팅으로 {yourData.nickname}님과 만남을 이어가보세요</h3>
+                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
+                </>
+              ):(
+                <>
+                  <h3>{yourData.nickname}님이 선택하지 않으셨습니다.</h3>
+                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
+                </>
+              )}
+            </>
+          ):(
+            <>
+              <h3>결과 확인</h3>
+              <button className={styles.lastResultButton} onClick={() => { flipCard(); checkLastResult(); }}>결과 확인하기</button>
+            </>
+          )}
         </div>
 
         {/* 상대의 카드 */}
