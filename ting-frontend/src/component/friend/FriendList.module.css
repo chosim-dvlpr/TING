@@ -101,9 +101,6 @@
   padding-left: 8px;
 }
 
-.nickname {
-}
-
 .content {
   font-size: 12px;
   white-space: nowrap; /* 줄 바꿈 방지 */
@@ -119,6 +116,7 @@
 .time {
   font-size: 12px;
   height: 18px;
+  width: 44px;
 }
 
 .unreadArea {
