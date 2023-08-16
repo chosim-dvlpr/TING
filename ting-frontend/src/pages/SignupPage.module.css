@@ -5,13 +5,16 @@
     font-style: normal;
   }
 
-.outer {
+  .outer {
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
     position: relative;
     min-height: 95vh;
+    width: 60%;
     margin-top: 5vh;
     background-color: white;
     margin-left: 130px;
@@ -26,6 +29,8 @@
     /* justify-content: center; */
     align-items: center;
     padding-top: 70px;
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+
 }
 
 .title {

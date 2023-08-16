@@ -7,11 +7,14 @@
 
 .outer {
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
     position: relative;
     min-height: 95vh;
+    width: 40%;
     top: 5vh;
     background-color: white;
     margin-left: 130px;
@@ -91,10 +94,12 @@
     color: red;
 }
 
+.btn,
+.btnSecondary,
 #nameInput,
 #regionInput {
     /* margin-right: 120px; */
-    width: 390px;
+    width: 290px;
 }
 
 .selectBtn {

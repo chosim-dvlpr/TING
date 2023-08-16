@@ -9,6 +9,8 @@ import InformationModal from "./common/InformationModal";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./MyInformation.module.css";
+// import { pink } from "@mui/material/colors";
+import { createTheme } from "@mui/material";
 
 function MyInformationUpdate() {
   let Navigate = useNavigate();
@@ -146,6 +148,16 @@ function MyInformationUpdate() {
     setModalSign(false);
   };
 
+  // 색 지정
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#c33f4f',
+      },
+      // secondary: '#8bcad6',
+    },
+});
+
   return (
     <div className={commonStyles.wrapper}>
       <div className={styles.btnWrapper}>
@@ -224,6 +236,7 @@ function MyInformationUpdate() {
               : setCurrentStyleList
           }
           closeFunc={closeModal}
+          color={theme.palette.primary.main}
         />
       ) : null}
 

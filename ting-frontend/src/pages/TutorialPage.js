@@ -125,7 +125,7 @@ function TutorialPage() {
           <div className={styles.description}>
             <div className={styles.numberImgBlue}>6</div>
             <div>
-              Yes! or No!
+              YES or NO
               <br />
               당신의 마지막 선택으로
               <br />
@@ -143,7 +143,7 @@ function TutorialPage() {
         <div className={styles.section}>
           <img
             className={styles.img}
-            src={process.env.PUBLIC_URL + "/img/tutorial/tutorial_12.png"}
+            src={process.env.PUBLIC_URL + "/img/tutorial/tutorial_12.PNG"}
             alt="main"
           />
           <div className={styles.description}>
@@ -162,7 +162,7 @@ function TutorialPage() {
             <div className={styles.numberImgBlue}>8</div>
             <div>
               채팅방에서는 상대방의 프로필과<br></br>
-              채팅방 온도를 확인할 수 있습니다!
+              채팅방 온도를 확인할 수 있습니다.
             </div>
           </div>
           <img
