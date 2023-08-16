@@ -65,6 +65,9 @@ public class UserService {
     @Value("${file.path}")
     private String uploadPath;
 
+    @Value("${file.defaultProfile}")
+    private String defaultProfile;
+
     public Map<String, String> login(UserDto.Basic userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
@@ -129,6 +132,9 @@ public class UserService {
         FishSkin defaultSkin = fishSkinRepository.findById(1L)
                 .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_FOUND));
         user.setFishSkin(defaultSkin);
+
+        // 기본 프로필 정보 저장
+        user.setProfileImage(defaultProfile);
 
         userRepository.save(user); // DB에 저장
 
