@@ -29,17 +29,23 @@ function SignupComplete() {
         {/* <h3>회원가입이 완료되었습니다</h3> */}
         <p className={styles.completeParagraph}>
           { signupReducer.name }님에 대해 더 알려주시면 <br /> 저희가 최선의 소개팅 상대를 찾아드려요.
-          {/* { location.state && location.state.name }님에 대해 더 알려주시면 <br /> 저희가 최선의 소개팅 상대를 찾아드려요. */}
         </p>
         <div className={styles.selectContainer}>
           <button className={`${styles.btn} ${styles.signupComplete}`} onClick={() => navigate("/signup/select")}>선택정보 입력하기</button>
+        </div>
+        <br />
+          <p className={styles.completeParagraph}>
+            선택정보를 입력하지 않아도<br />
+            회원가입을 완료할 수 있어요 :)
+          </p>
+          <div className={styles.selectContainer}>
           <button 
             className={`${styles.btn} ${styles.signupComplete}`} 
             onClick={() => {
               // dispatch(completeSignupStep()); // signupReducer내용 초기화
               completeSignup("/login")
             }}>회원가입 완료하기</button>
-        </div>
+          </div>
       </div>
     </div>
   );
