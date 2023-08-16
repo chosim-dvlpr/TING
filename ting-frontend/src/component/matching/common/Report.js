@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { userdataReducer } from "./../../../redux/userdata";
 import tokenHttp from "../../../api/tokenHttp";
+import styles from "./Report.module.css"
+import Swal from "sweetalert2";
 
 function Report({ setShowReportModal, session }) {
   const state = useSelector((state) => state);
@@ -37,10 +39,22 @@ function Report({ setShowReportModal, session }) {
         data: JSON.stringify({ userId: state.userdataReducer.userdata.userId }),
       });
 
-      alert("신고가 완료되었습니다.");
-      navigate("/");
+      reportAlert()
     }
   };
+
+  // 신고 완료 경고창
+  const reportAlert = () => {
+    // alert("신고가 완료되었습니다.")
+    Swal.fire({
+      icon: "success",
+      title: "신고 완료",
+      text: "메인으로 돌아갑니다",
+    }).then((res)=>{
+      navigate('/')
+    })
+  }
+
 
   // 취소 버튼 클릭
   const onClose = () => {
@@ -48,11 +62,15 @@ function Report({ setShowReportModal, session }) {
   };
 
   return (
-    <div style={{ width: "300px", height: "400px" }}>
-      <h3>신고하기</h3>
-      <textarea rows="4" cols="50" placeholder="신고 내용을 입력해주세요." onChange={handleInputChange} />
-      <button onClick={handleSubmit}>신고 완료</button>
-      <button onClick={onClose}>취소</button>
+    <div className={styles.ModalOuter}>
+
+      <div className={styles.ModalInner}>
+        <h3>신고하기</h3>
+        <p>허위 신고 시에는 불이익을 받으실수 있습니다.</p>
+        <textarea className={styles.ReportContent} placeholder="신고 내용을 입력해주세요." onChange={handleInputChange} />
+        <button className={styles.SuccessBtn} onClick={handleSubmit}>신고 완료</button>
+        <button className={styles.CancelBtn} onClick={onClose}>취소</button>
+      </div>
     </div>
   );
 }
