@@ -56,14 +56,16 @@ const ReportDetail = () => {
 
   // 유저 삭제하기
   const deleteUser = () => {
-    tokenHttp
-      .delete(`/admin/user/${report.reportedUserId}`)
-      .then(() => {
-        alert("유저가 삭제되었습니다.");
-      })
-      .catch(() => {
-        alert("유저 삭제에 실패하였습니다.");
-      });
+    if (window.confirm("정말 유저를 삭제하시겠습니까?")) {
+      tokenHttp
+        .delete(`/admin/user/${report.reportedUserId}`)
+        .then(() => {
+          alert("유저가 삭제되었습니다.");
+        })
+        .catch(() => {
+          alert("유저 삭제에 실패하였습니다.");
+        });
+    }
   };
 
   return (
@@ -102,7 +104,7 @@ const ReportDetail = () => {
             <div className={styles.commentDiv}>
               <label>관리자 의견</label>
               <div>
-                <input type="text" value={report.comment} onChange={changeCommentHandler} ref={commentRef} />
+                <input type="text" onChange={changeCommentHandler} ref={commentRef} />
                 <Button
                   variant="secondary"
                   onClick={() => {
