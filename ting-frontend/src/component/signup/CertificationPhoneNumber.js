@@ -1,15 +1,13 @@
-import { useCallback, useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 import basicHttp from "../../api/basicHttp";
 import { setPhoneNumber } from "../../redux/signup";
 
 import styles from "./SignupCommon.module.css";
+import Swal from "sweetalert2";
 
 function CertificationPhonenumber() {
-  // let phonenumber = useSelector((state) => state.signupReducer.phonenumber);
-
   let [phonenumberFirst, setPhonenumberFirst] = useState("");
   let [phonenumberMiddle, setPhonenumberMiddle] = useState("");
   let [phonenumberLast, setPhonenumberLast] = useState("");
@@ -24,36 +22,35 @@ function CertificationPhonenumber() {
   const phonenumberMiddleRef = useRef("");
   const phonenumberLastRef = useRef("");
 
-  const Navigate = useNavigate();
   let dispatch = useDispatch();
 
   useEffect(() => {
     if (!onlyNumbersRegex.test(phonenumberFirst)) {
-      alert("숫자를 입력하세요.");
+      Swal.fire({ title: "숫자를 입력하세요.", width: 400 });
       phonenumberFirstRef.current.value = "";
     }
   }, [phonenumberFirst, phonenumberMiddle, phonenumberLast]);
 
   useEffect(() => {
     if (!onlyNumbersRegex.test(phonenumberMiddle)) {
-      alert("숫자를 입력하세요.");
+      Swal.fire({ title: "숫자를 입력하세요.", width: 400 });
       phonenumberMiddleRef.current.value = "";
     }
   }, [phonenumberMiddle]);
 
   useEffect(() => {
     if (!onlyNumbersRegex.test(phonenumberLast)) {
-      alert("숫자를 입력하세요.");
+      Swal.fire({ title: "숫자를 입력하세요.", width: 400 });
       phonenumberLastRef.current.value = "";
     }
   }, [phonenumberLast]);
 
-  // 버튼 활성화 여부
-  // let [isCertPhoneButtonDisabled, setIsCertPhoneButtonDisabled] = useState(true);
-
   // 전화번호 형식에 맞게 저장
   useEffect(() => {
-    const fullPhoneNumber = String(checkNumber(phonenumberFirst)) + String(checkNumber(phonenumberMiddle)) + String(checkNumber(phonenumberLast));
+    const fullPhoneNumber =
+      String(checkNumber(phonenumberFirst)) +
+      String(checkNumber(phonenumberMiddle)) +
+      String(checkNumber(phonenumberLast));
     setPhonenumberInput(fullPhoneNumber);
   }, [phonenumberFirst, phonenumberMiddle, phonenumberLast]);
 
@@ -68,6 +65,14 @@ function CertificationPhonenumber() {
   };
 
   const checkPhonenumberCode = () => {
+    if (phonenumberAuthCode.trim() === "") {
+      Swal.fire({
+        title: "인증번호를 입력해주세요.",
+        width: 400,
+      });
+      return;
+    }
+
     let data = {
       phoneNumber: phonenumberInput,
       authCode: phonenumberAuthCode,
@@ -78,19 +83,34 @@ function CertificationPhonenumber() {
         .post("/user/phoneauth", data)
         .then((response) => {
           if (response.data.code === 200) {
-            alert("인증 성공");
+            Swal.fire({
+              title: "전화번호 인증에 \n성공하였습니다.",
+              width: 400,
+            });
             setIsConfirmPhonenumCode(true);
             return;
           } else if (response.data.code === 400) {
-            alert("인증 실패");
+            Swal.fire({
+              title: "전화번호 인증에 \n실패하였습니다.",
+              width: 400,
+            });
           } else if (response.data.code === 401) {
-            alert("문자 인증 실패");
+            Swal.fire({
+              title: "전화번호 인증에 \n실패하였습니다.",
+              width: 400,
+            });
           }
           setIsConfirmPhonenumCode(false);
         })
-        .catch(() => console.log("실패"));
+        .catch((error) => {
+          Swal.fire({
+            title: "인증번호가 \n올바르지 않습니다.",
+            width: 400,
+          });
+          console.log(error.response);
+        });
     } else {
-      alert("올바른 인증 코드를 입력해주세요.");
+      Swal.fire({ title: "올바른 인증 코드를 \n입력해주세요.", width: 400 });
     }
   };
 
@@ -103,22 +123,25 @@ function CertificationPhonenumber() {
   // 휴대전화 인증하기 버튼 클릭 시 실행
   const checkPhonenumber = () => {
     if (phonenumberInput.length !== 11) {
-      alert("올바른 전화번호를 입력해주세요");
+      Swal.fire({ title: "올바른 전화번호를 \n입력해주세요.", width: 400 });
       return;
     }
     basicHttp
       .get(`/user/phoneauth/${phonenumberInput}`)
       .then((response) => {
         if (response.data.code === 200) {
-          alert("인증 메세지가 전송되었습니다.");
+          Swal.fire({ title: "인증 메세지가 \n전송되었습니다.", width: 400 });
           setIsCheckPhonenumCode(true);
         } else if (response.data.code === 400) {
-          alert("인증 실패");
+          Swal.fire({ title: "전화번호 인증에 \n실패하였습니다.", width: 400 });
         } else if (response.data.code === 401) {
-          alert("문자 발송에 실패했습니다. 다시 인증해주세요.");
+          Swal.fire({
+            title: "문자 발송에 실패했습니다. \n다시 인증해주세요.",
+            width: 400,
+          });
         }
       })
-      .catch(() => console.log("실패"));
+      .catch((error) => console.log(error));
   };
 
   // 엔터키로 버튼 누를 수 있게
@@ -175,21 +198,23 @@ function CertificationPhonenumber() {
           ref={phonenumberLastRef}
           type="text"
           id="phonenumberLast"
-          onChange={(e) => {setPhonenumberLast(e.target.value)}}
+          onChange={(e) => {
+            setPhonenumberLast(e.target.value);
+          }}
           onKeyDown={(e) => activeEnter(e, checkPhonenumber)}
           maxLength={4}
           disabled={isCheckPhonenumCode}
         />
-      {!isCheckPhonenumCode && (
-        <button 
-        className={`${isConfirmPhonenumCode 
-          ? styles.disabledBtn 
-          : styles.btn}`} 
-        onClick={checkPhonenumber}>
-          인증하기
-        </button>
-      )}
-
+        {!isCheckPhonenumCode && (
+          <button
+            className={`${
+              isConfirmPhonenumCode ? styles.disabledBtn : styles.btn
+            }`}
+            onClick={checkPhonenumber}
+          >
+            인증하기
+          </button>
+        )}
       </div>
       {/* 인증하기 버튼 누른 뒤 인증번호 입력 */}
       {isCheckPhonenumCode && (
@@ -203,21 +228,19 @@ function CertificationPhonenumber() {
             placeholder="인증번호 4자리"
             disabled={isConfirmPhonenumCode}
           />
-          <button 
-          className={`${isConfirmPhonenumCode 
-            ? styles.disabledBtn 
-            : styles.btn}`} 
-          onClick={checkPhonenumberCode}>
+          <button
+            className={`${
+              isConfirmPhonenumCode ? styles.disabledBtn : styles.btn
+            }`}
+            onClick={checkPhonenumberCode}
+          >
             인증확인
           </button>
-          {/* <button 
-            className={styles.btn} 
-            onClick={checkPhonenumber}>
-            재전송
-          </button> */}
         </>
       )}
-      <p className={styles.rightMsg}>{isConfirmPhonenumCode && "휴대전화 인증 성공"}</p>
+      <p className={styles.rightMsg}>
+        {isConfirmPhonenumCode && "휴대전화 인증 성공"}
+      </p>
     </div>
   );
 }

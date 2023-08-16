@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import basicHttp from "../../api/basicHttp";
 import { useState } from "react";
-import styles from "../signup/SignupCommon.module.css";
+
+import styles from "../../pages/FindMyInfoPage.module.css";
+
+import Swal from "sweetalert2";
 
 function FindMyPassword() {
   let [name, setName] = useState("");
@@ -26,11 +29,11 @@ function FindMyPassword() {
 
   const FindPasswordFunc = () => {
     if (!name) {
-      alert("이름을 입력하세요");
+      Swal.fire({ title: "이름을 입력하세요.", width: 400 });
     } else if (!(phonenumberFirst + phonenumberMiddle + phonenumberLast)) {
-      alert("전화번호를 입력하세요");
+      Swal.fire({ title: "전화번호를 입력하세요.", width: 400 });
     } else if (!email) {
-      alert("이메일을 입력하세요");
+      Swal.fire({ title: "이메일을 입력하세요.", width: 400 });
     } else {
       let data = {
         name,
@@ -42,35 +45,57 @@ function FindMyPassword() {
         .post("/user/password", data)
         .then((response) => {
           if (response.data.code === 200) {
-            console.log("성공");
-            setIsTempPasswordSend(true);
+            Swal.fire({
+              title: "임시 비밀번호가 \n이메일로 전송되었습니다.",
+              width: 400,
+            });
+            setName("");
+            setPhoneNumber("");
+            setEmail("");
+            // setIsTempPasswordSend(true);
           } else {
-            console.log("실패");
-            setIsTempPasswordSend(false);
+            Swal.fire({
+              title: "비밀번호 찾기에 \n실패했습니다.",
+              width: 400,
+            });
+            // setIsTempPasswordSend(false);
           }
         })
-        .catch(() => {
-          alert("비밀번호 찾기에 실패했습니다.");
-          setIsTempPasswordSend(false);
+        .catch((error) => {
+          console.log(error.response);
+          if (error.response.data.code === 4100) {
+            Swal.fire({
+              title:
+                "비밀번호를 찾을 수 없습니다.\n 입력하신 정보를 다시 한번 \n확인해주세요.",
+              width: 400,
+            });
+          } else {
+            Swal.fire({
+              title: "비밀번호 찾기에 \n실패했습니다.",
+              width: 400,
+            });
+            // setIsTempPasswordSend(false);
+          }
         });
     }
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
+      <label className={styles.label}>이름</label>
       <input
         className={`${styles.input} ${styles.findPasswordInput}`}
         type="text"
         onChange={(e) => {
           setName(e.target.value);
         }}
-        placeholder="이름"
         autoFocus
       />
       <br />
       {/* 전화번호 인증 */}
       <div>
         {/* 휴대전화 인증 버튼 누르기 전 */}
+        <label className={styles.label}>휴대폰 번호</label>
         <input
           className={`${styles.phonenumInput} ${styles.findPasswordPhonenumber}`}
           ref={phonenumberFirstRef}
@@ -110,20 +135,30 @@ function FindMyPassword() {
           maxLength={4}
         />
       </div>
+      <label className={styles.label}>이메일</label>
       <input
         className={`${styles.input} ${styles.findPasswordInput}`}
         type="text"
         onChange={(e) => {
           setEmail(e.target.value);
         }}
-        placeholder="이메일"
       />
       <br />
       <br></br>
-      <button disabled={isButtonDisabled} className={`${styles.btn} ${styles.confirmBtn}`} onClick={FindPasswordFunc}>
+      <button
+        disabled={isButtonDisabled}
+        className={`${styles.btn} ${styles.confirmBtn}`}
+        onClick={FindPasswordFunc}
+      >
         확인
       </button>
-      <div>{isTempPasswordSend === true && <span style={{color: "blue"}}>임시 비밀번호가 전송 되었습니다.</span>}</div>
+      {/* <div>
+        {isTempPasswordSend === true && (
+          <span style={{ color: "blue" }}>
+            임시 비밀번호가 전송 되었습니다.
+          </span>
+        )}
+      </div> */}
     </div>
   );
 }

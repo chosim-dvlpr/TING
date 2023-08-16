@@ -1,39 +1,38 @@
-import { Outlet, useNavigate } from "react-router-dom"
-import Mbti from "./select/Mbti"
-import Height from "./select/Height"
-import Drink from "./select/Drink"
-import Smoke from "./select/Smoke"
-import Religion from "./select/Religion"
-import Job from "./select/Job"
-import Hobby from "./select/Hobby"
-import Personality from "./select/Personality"
-import Style from "./select/Style"
-import Introduce from "./select/Introduce"
-import ProfileImage from "./select/profileImage"
-import styles from './SignupCommon.module.css'
-import InformationModal from '../profile/common/InformationModal'
-// import { blue } from "@mui/material/colors";
+import { Outlet, useNavigate } from "react-router-dom";
+import styles from "./SignupCommon.module.css";
+import InformationModal from "../profile/common/InformationModal";
 
 import { useDispatch, useSelector } from "react-redux";
-import Dropdown from 'react-bootstrap/Dropdown';
-import { completeSignupStep, setDrinkingCode, setHeightCode, setHobbyCodeList, setIntroduce, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
-import { dataCode, regionList } from "../../SelectionDataList"
-import { useEffect, useRef, useState } from "react"
-import fileHttp from "../../api/fileHttp"
-import basicHttp from "../../api/basicHttp"
-import { createTheme } from "@mui/material"
+import Dropdown from "react-bootstrap/Dropdown";
+import {
+  completeSignupStep,
+  setDrinkingCode,
+  setHeightCode,
+  setHobbyCodeList,
+  setIntroduce,
+  setMbtiCode,
+  setPersonalityCodeList,
+  setReligionCode,
+  setSmokingCode,
+  setStyleCodeList,
+} from "../../redux/signup";
+import { dataCode, regionList } from "../../SelectionDataList";
+import { useEffect, useRef, useState } from "react";
+import fileHttp from "../../api/fileHttp";
+import basicHttp from "../../api/basicHttp";
+import { createTheme } from "@mui/material";
 
-function SelectionData(){
+import Swal from "sweetalert2";
+
+function SelectionData() {
   let navigate = useNavigate();
   let dispatch = useDispatch();
   let signupReducer = useSelector((state) => state.signupReducer);
-  const signupReducerKeys = Object.keys(signupReducer);
 
   const dataCodeCategory = Object.values(dataCode);
   const dataCodeCategorySet = new Set();
   const [dataCodeCategoryList, setDataCodeCategoryList] = useState([]);
-  
-  
+
   const email = signupReducer.email;
   const password = signupReducer.password;
   const formData = new FormData();
@@ -41,24 +40,23 @@ function SelectionData(){
   const userHeight = useRef();
 
   const getDataCodeCategory = () => {
-    dataCodeCategory.forEach((data) => 
-    dataCodeCategorySet.add(data.category));
+    dataCodeCategory.forEach((data) => dataCodeCategorySet.add(data.category));
 
     const categoryList = Array.from(dataCodeCategorySet); // Set을 배열로 변환
     setDataCodeCategoryList(categoryList); // 리스트로 변경
-  }
-  
+  };
+
   useEffect(() => {
     getDataCodeCategory();
-  }, [])  
+  }, []);
 
   const theme = createTheme({
-      palette: {
-        primary: {
-          main: '#398fa1',
-        },
-        // secondary: '#8bcad6',
+    palette: {
+      primary: {
+        main: "#398fa1",
       },
+      // secondary: '#8bcad6',
+    },
   });
 
   const handleDropdownItemClick = (data) => {
@@ -89,20 +87,20 @@ function SelectionData(){
 
   // 드롭다운
   const contents = (category) => {
-    return (dataCode
+    return dataCode
       .filter((data) => data.category.includes(category))
       .map((data, i) => (
-        <Dropdown.Item onClick={() => {
-          handleDropdownItemClick(data)
+        <Dropdown.Item
+          onClick={() => {
+            handleDropdownItemClick(data);
           }}
           className={styles.dropdownItem}
           key={i}
-        >{ data.name }</Dropdown.Item>
-      )))
+        >
+          {data.name}
+        </Dropdown.Item>
+      ));
   };
-
-
-
 
   // 모달 상태 관련
   const [modalSign, setModalSign] = useState(false);
@@ -110,7 +108,6 @@ function SelectionData(){
   const [clickedItems, setClickedItems] = useState();
   const [clickedCurrentData, setClickedCurrentData] = useState();
 
-  
   // 모달을 여는 함수
   const openModal = () => {
     setModalSign(true);
@@ -121,34 +118,13 @@ function SelectionData(){
     setModalSign(false);
   };
 
-
-
-
-
-  // 지역을 한글로 변환
-  const regionToKor = (regionData) => {
-    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
-    // console.log(regionName)
-    // return regionName
-    const matchingRegion = regionList.find(
-      (region) => region.regionEn === regionData
-    );
-    if (matchingRegion) {
-      return matchingRegion.regionKor;
-    } else {
-      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
-    }
-  };
-
   let [height, setHeight] = useState("");
   let [currentMbti, setCurrentMbti] = useState("");
   let [currentDrinking, setCurrentDrinking] = useState("");
   let [currentSmoking, setCurrentSmoking] = useState("");
   let [currentReligion, setCurrentReligion] = useState("");
   let [currentHobbyList, setCurrentHobbyList] = useState([]);
-  let [currentPersonalityList, setCurrentPersonalityList] = useState(
-    []
-  );
+  let [currentPersonalityList, setCurrentPersonalityList] = useState([]);
   let [currentJob, setCurrentJob] = useState("");
   let [currentStyleList, setCurrentStyleList] = useState([]);
   let [currentIntroduce, setCurrentIntroduce] = useState("");
@@ -158,7 +134,7 @@ function SelectionData(){
     []
   );
   let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
-  
+
   // list를 코드로 변환
   useEffect(() => {
     let hobbyListCode =
@@ -173,21 +149,6 @@ function SelectionData(){
     setCurrentStyleListCode(styleListCode);
   }, [currentHobbyList, currentPersonalityList, currentStyleList]);
 
-  // let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
-  // let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
-  //   []
-  // );
-  // let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
-  
-
-  // 키 저장
-  const changeHeight = (height) => {
-    if (height > 100 & height < 250) {
-      dispatch(setHeightCode(Number(height)));
-    };
-  };
-
-
   // 파일 업로드
   // 업로드된 이미지 보낼 때 이메일, 비밀번호 함께 보내기 (유저 확인)
   const onUploadImage = (e) => {
@@ -197,24 +158,23 @@ function SelectionData(){
       return;
     }
 
-    formData.append('file', e.target.files[0]);
+    formData.append("file", e.target.files[0]);
     formData.append("email", email);
     formData.append("password", password);
-  }
+  };
 
   // 파일 api 보내기
   const sendProfileImage = () => {
     fileHttp.post("/user/profile/noToken", formData).then((response) => {
       console.log(response);
       if (response.data.code === 200) {
-        return true
-      }
-      else {
-        console.log('파일 업로드 실패')
-        return false
+        return true;
+      } else {
+        console.log("파일 업로드 실패");
+        return false;
       }
     });
-  }
+  };
 
   const newProfileSelectData = {
     ...signupReducer,
@@ -230,50 +190,54 @@ function SelectionData(){
     hobbyCodeList: currentHobbyListCode,
     styleCodeList: currentStyleListCode,
     personalityCodeList: currentPersonalityListCode,
-  }
+  };
 
-  console.log(newProfileSelectData)
+  console.log(newProfileSelectData);
 
   // 로그인 버튼 클릭 시 데이터 보내기
   const goToLogin = async (MoveTo, data) => {
     try {
-      console.log(data)
-      if (data.height && 
-          Number(data.height) < 120 | Number(data.height) > 250) {
-            alert("올바른 키를 입력해주세요.\n100에서 250 사이의 키만 입력 가능합니다.");
-            userHeight.current.value = "";
-            return
+      console.log(data);
+      if (
+        data.height &&
+        (Number(data.height) < 120) | (Number(data.height) > 250)
+      ) {
+        Swal.fire({
+          title:
+            "올바른 키를 입력해주세요.\n100에서 250 사이의 값만 \n입력 가능합니다.",
+          width: 400,
+        });
+        userHeight.current.value = "";
+        return;
+      } else {
+        basicHttp.post("/user/signup", data).then((response) => {
+          console.log(response);
+          if (response.data.code === 200) {
+            if (formData && sendProfileImage()) {
+              // console.log("프로필 이미지 전송 성공");
+            }
+            Swal.fire({ title: "회원가입이 \n완료되었습니다.", width: 400 });
+            dispatch(completeSignupStep());
+            navigate(MoveTo);
+          } else if (response.data.code === 400) {
+            Swal.fire({
+              title: "회원가입에 실패하였습니다.\n정확한 정보를 입력해주세요.",
+              width: 400,
+            });
           }
-      else {
-        console.log('실행')
-        console.log(data)
-        basicHttp
-          .post('/user/signup', data)
-          .then((response) => {
-            console.log(response)
-            if (response.data.code === 200) {
-              if (formData && sendProfileImage) {
-                console.log("프로필 이미지 전송 성공")
-              }
-              alert("회원가입이 완료되었습니다.");
-              dispatch(completeSignupStep());
-              navigate(MoveTo);
-            }
-            else if (response.data.code === 400) {
-              alert("회원 가입 실패\n정확한 정보를 입력해주세요.");
-            }
-          })
-        } 
-      } catch (error) {
-        console.error("회원가입 실패 에러 ", error)
-        alert("회원가입 실패")
+        });
       }
-    };
+    } catch (error) {
+      console.error("회원가입 실패 에러 ", error);
+      Swal.fire({ title: "회원가입에 실패하였습니다." });
+    }
+  };
 
-
-  return(
+  return (
     <div className={styles.selectContainer}>
-      <p className={styles.selectTitle}>추가 정보를 입력하면 매칭 정확도가 올라가요 :)</p>
+      <p className={styles.selectTitle}>
+        추가 정보를 입력하면 매칭 정확도가 올라가요 :)
+      </p>
       {/* <Outlet></Outlet> */}
       {modalSign ? (
         <InformationModal
@@ -449,7 +413,7 @@ function SelectionData(){
               )}
             </div>
           </div>
-        </div>      
+        </div>
       </div>
 
       <div className={styles.selectContainerBox}>
@@ -471,7 +435,7 @@ function SelectionData(){
                 {currentHobbyList &&
                   currentHobbyList.map((hobby, i) => "#" + hobby.name + " ")}
               </span>
-              { currentHobbyList && currentHobbyList.length > 0 ? (
+              {currentHobbyList && currentHobbyList.length > 0 ? (
                 <div className={styles.xImg}>
                   <img
                     src={process.env.PUBLIC_URL + "/img/close_gray.png"}
@@ -569,22 +533,25 @@ function SelectionData(){
         </div>
         <div className={`${styles.updateDiv} ${styles.inputProfile}`}>
           <p className={styles.title}>프로필 사진</p>
-          <input 
-          id={styles.inputProfile}
-          type="file" 
-          accept='image/*' 
-          onChange={onUploadImage}></input>
+          <input
+            id={styles.inputProfile}
+            type="file"
+            accept="image/*"
+            onChange={onUploadImage}
+          ></input>
         </div>
       </div>
 
       <div>
-          <button 
-            onClick={() => goToLogin("/login", newProfileSelectData)}
-            className={`${styles.btn} ${styles.goToLoginBtn}`}  
-          >로그인 하러 가기</button>
+        <button
+          onClick={() => goToLogin("/login", newProfileSelectData)}
+          className={`${styles.btn} ${styles.goToLoginBtn}`}
+        >
+          회원가입 완료
+        </button>
       </div>
     </div>
-  )
+  );
 }
 
-export default SelectionData
+export default SelectionData;
