@@ -56,23 +56,9 @@ public class DateService {
         // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
         List<QuestionDto> questions = new ArrayList<>();
         questions.add(new QuestionDto("인사", QuestionType.START));
-//        for (int i = 0; i < 10; i++) {
-//            questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
-//        }
-
-        // 영상용 임시 질문리스트 시작
-        questions.add(new QuestionDto("첫인상", QuestionType.ESSENTIAL));
-        questions.add(new QuestionDto("성격", QuestionType.ESSENTIAL));
-        questions.add(new QuestionDto("직업", QuestionType.LIFE));
-        questions.add(new QuestionDto("남사친/여사친 수", QuestionType.LOVE));
-        questions.add(new QuestionDto("소비습관", QuestionType.LIFE));
-        questions.add(new QuestionDto("민초", QuestionType.PREFER));
-        questions.add(new QuestionDto("주종", QuestionType.LIFE));
-        questions.add(new QuestionDto("짜장면 vs 짬뽕", QuestionType.VS));
-        questions.add(new QuestionDto("최애 드라마", QuestionType.FAVORITE));
-        questions.add(new QuestionDto("기념일 챙기는 스타일", QuestionType.LOVE));
-        // 영상용 임시 질문리스트 끝
-
+        for (int i = 0; i < 10; i++) {
+            questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
+        }
 
         questions.add(new QuestionDto("끝", QuestionType.END));
         questions.add(new QuestionDto("최종 점수", QuestionType.SCORE));
