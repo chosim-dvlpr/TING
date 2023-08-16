@@ -1,20 +1,18 @@
-import InputEmail from './Email';
-import Password from './Password';
-import CertificationPhonenumber from './CertificationPhoneNumber';
-import Detail from './Detail';
-import styles from './SignupCommon.module.css';
+import Email from "./Email";
+import Password from "./Password";
+import CertificationPhonenumber from "./CertificationPhoneNumber";
+import Detail from "./Detail";
+import styles from "./SignupCommon.module.css";
 
-function SignUpAll(){
-
-  return(
+function SignUpAll() {
+  return (
     <div className={styles.signupAll}>
-        <InputEmail />
-        <Password />
-        <CertificationPhonenumber />
-        <Detail />
+      <Email />
+      <Password />
+      <CertificationPhonenumber />
+      <Detail />
     </div>
-  )
-  
+  );
 }
 
-export default SignUpAll
+export default SignUpAll;
