@@ -40,23 +40,13 @@ public class BoardService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        for(int i=1; i<101; i++) {
-            AdviceBoard adviceBoard = AdviceBoard.builder()
-                    .user(user)
-                    .title("상담 글" + i)
-                    .content("상담 글 내용" + i)
-                    .build();
+        AdviceBoard adviceBoard = AdviceBoard.builder()
+                .user(user)
+                .title(adviceBoardRequest.getTitle())
+                .content(adviceBoardRequest.getContent())
+                .build();
 
-            adviceBoardRepository.save(adviceBoard);
-        }
-
-//        AdviceBoard adviceBoard = AdviceBoard.builder()
-//                .user(user)
-//                .title(adviceBoardRequest.getTitle())
-//                .content(adviceBoardRequest.getContent())
-//                .build();
-//
-//        adviceBoardRepository.save(adviceBoard);
+        adviceBoardRepository.save(adviceBoard);
     }
 
     @Transactional
@@ -160,26 +150,15 @@ public class BoardService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
-        for(int i=1; i<101; i++) {
-            IssueBoard issueBoard = IssueBoard.builder()
-                    .user(user)
-                    .title("논쟁 글" + i)
-                    .content("논쟁 글 내용" + i)
-                    .agreeTitle("찬성")
-                    .opposeTitle("반대")
-                    .build();
+        IssueBoard issueBoard = IssueBoard.builder()
+                .user(user)
+                .title(issueBoardRequest.getTitle())
+                .content(issueBoardRequest.getContent())
+                .agreeTitle(issueBoardRequest.getAgreeTitle())
+                .opposeTitle(issueBoardRequest.getOpposeTitle())
+                .build();
 
-            issueBoardRepository.save(issueBoard);
-        }
-//        IssueBoard issueBoard = IssueBoard.builder()
-//                .user(user)
-//                .title(issueBoardRequest.getTitle())
-//                .content(issueBoardRequest.getContent())
-//                .agreeTitle(issueBoardRequest.getAgreeTitle())
-//                .opposeTitle(issueBoardRequest.getOpposeTitle())
-//                .build();
-//
-//        issueBoardRepository.save(issueBoard);
+        issueBoardRepository.save(issueBoard);
     }
 
     @Transactional
