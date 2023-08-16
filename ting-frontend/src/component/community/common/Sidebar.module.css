@@ -2,7 +2,10 @@
 
 .selected {
   background-color: #fae6e8;
-  /* background-color: rgb(234, 185, 134); */
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+.noSelected {
   padding: 10px 15px;
   border-radius: 20px;
 }
@@ -11,31 +14,29 @@
   margin: 0 auto 24px;
   border-bottom: 2px solid #fae6e8;
   font-family: "UhBeeSe_hyun";
-  }
-  
-  /* 사이드바 내부의 ul 요소 스타일 지정 */
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 20px;
-  }
-  
-  /* 사이드바 내부의 li 요소 스타일 지정 */
-  .sidebar li {
-    margin: 10px;
-    float: left;
-    margin-bottom: 20px;
-  }
-  
-  /* 사이드바 내부의 링크 스타일 지정 */
-  .sidebar a {
-    text-decoration: none;
-    color: black;
-    /* margin: 0 20px; */
-  }
-  
-  /* 사이드바 내부의 링크 호버(hover) 스타일 지정 */
-  .sidebar a:hover {
-    text-decoration: underline;
-  }
-  
+}
+
+/* 사이드바 내부의 ul 요소 스타일 지정 */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px;
+}
+
+/* 사이드바 내부의 li 요소 스타일 지정 */
+.sidebar li {
+  margin: 10px;
+  float: left;
+  margin-bottom: 20px;
+}
+
+/* 사이드바 내부의 링크 스타일 지정 */
+.sidebar a {
+  text-decoration: none;
+  color: black;
+}
+
+/* 사이드바 내부의 링크 호버(hover) 스타일 지정 */
+.noSelected:hover {
+  background-color: #fcf4f5;
+}

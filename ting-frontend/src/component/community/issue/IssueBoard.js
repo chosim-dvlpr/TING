@@ -5,16 +5,20 @@ import { useSelector } from "react-redux";
 import styles from "./IssueBoard.module.css";
 import Sidebar from "../common/Sidebar";
 import Pagination from "../common/Pagination";
-import tokenHttp from "../../../api/tokenHttp";
 import basicHttp from "../../../api/basicHttp";
 import SearchBar from "../common/SearchBar";
 import NavBar from "../../common/NavBar";
 import FriendButton from "../../common/FriendButton";
 
+import Swal from "sweetalert2";
+
 function IssueBoard() {
   const [issueList, setIssueList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState();
+  const [searchItem, setSearchItem] = useState();
+
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata);
   const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
@@ -22,11 +26,14 @@ function IssueBoard() {
   const boardType = "issue";
 
   useEffect(() => {
-    getAllIssueData();
-  }, [currentPage]);
+    if (searchKeyword) getSearchIssueData();
+    else getAllIssueData();
+  }, [currentPage, searchKeyword]);
 
   const getAllIssueData = async () => {
     try {
+      setSearchResult([]);
+
       const response = await basicHttp.get("/issue", {
         params: { pageNo: currentPage },
       });
@@ -41,12 +48,33 @@ function IssueBoard() {
     }
   };
 
+  const getSearchIssueData = async () => {
+    try {
+      setIssueList([]);
+      const response = await basicHttp.get(`/issue/search/`, {
+        params: {
+          pageNo: currentPage,
+          item: searchItem,
+          keyword: searchKeyword,
+        },
+      });
+
+      const responseData = response.data.data;
+      if (responseData.issueBoardList) {
+        setSearchResult(responseData.issueBoardList);
+        setTotalPages(responseData.totalPages);
+      }
+    } catch (error) {
+      console.error("Error fetching issue data:", error);
+    }
+  };
+
   const handleLinkClick = (issueId, event) => {
     event.preventDefault();
     if (userdata) {
       navigate(`/community/issue/detail/${issueId}`);
     } else {
-      alert("로그인이 필요합니다.");
+      Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
     }
   };
 
@@ -54,7 +82,7 @@ function IssueBoard() {
     if (userdata) {
       navigate("/community/issue/create");
     } else {
-      alert("로그인이 필요합니다.");
+      Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
     }
   };
 
@@ -70,6 +98,13 @@ function IssueBoard() {
 
   const handleSearch = async ({ keyword, item }) => {
     try {
+      if (keyword.trim() === "") {
+        setSearchClicked(false);
+        setSearchKeyword(null);
+        setSearchItem(null);
+        return;
+      }
+
       setSearchClicked(true);
       const response = await basicHttp.get(`/issue/search/`, {
         params: {
@@ -79,24 +114,20 @@ function IssueBoard() {
         },
       });
 
+      setSearchKeyword(keyword);
+      setSearchItem(item);
       const searchData = response.data;
       setSearchResult(searchData.data.issueBoardList);
       setTotalPages(searchData.data.totalPages); // 검색 결과에 따른 totalPages 설정
       setCurrentPage(1); // 검색 시 첫 번째 페이지로 이동
 
-      console.log("===========Search Data:", searchData);
-
-      console.log("============", searchData.issueBoardList);
       setSearchResult(searchData.data.issueBoardList);
-
-      console.log("============Search Result:", searchResult);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
   };
-  useEffect(() => {
-    console.log("============Search Result:", searchResult);
-  }, [searchResult]);
+
+  useEffect(() => {}, [searchResult]);
 
   // 투표율에 따른 배경 색 설정
   const calculateTotalCount = (issue) => issue.agreeCount + issue.opposeCount;

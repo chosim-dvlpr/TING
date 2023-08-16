@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import tokenHttp from "../../../api/tokenHttp";
 import styles from "./CommentLikeButton.module.css";
-import { async } from "q";
 
-function CommentLikeButton({ commentId, initialLiked, initialLikes, onUpdateLikes }) {
+function CommentLikeButton({
+  commentId,
+  initialLiked,
+  initialLikes,
+  onUpdateLikes,
+}) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(initialLiked);
-
-
-  // useEffect(()=>{
-  //   // 좋아요가 눌렸는지 안눌렸는지 확인
-  //   // 눌렷으면 setLiked(true)
-  //   // 아니면 패스
-  // })
 
   const handleLikeClick = async () => {
     try {
       const newLikes = liked ? likes - 1 : likes + 1;
-      if(liked) {
+      if (liked) {
         await deleteLike(commentId, newLikes);
       } else {
         await updateLikesOnServer(commentId, newLikes);
@@ -47,7 +44,6 @@ function CommentLikeButton({ commentId, initialLiked, initialLikes, onUpdateLike
       const response = await tokenHttp.delete(`/comment/like/${commentId}`);
       if (response.status === 200) {
         onUpdateLikes(commentId, newLikes);
-
       } else {
         console.error("좋아요 삭제 실패");
       }
