@@ -3,21 +3,12 @@ import { useEffect, useState } from "react";
 import styles from "./Pagination.module.css";
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
-  const [currentClick, setCurrentClick] = useState(0);
-  const [prevClick, setPrevClick] = useState(null);
   const [tenth, setTenth] = useState();
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   useEffect(() => {
-    console.log(currentPage);
     setTenth(Math.floor((currentPage - 1) / 10) * 10);
-    console.log("tenth", tenth);
   }, [currentPage]);
-
-  const getClick = (e) => {
-    console.log(e.target.id);
-    setCurrentClick(e.target.id);
-  };
 
   const check = (index, totalPages) => {
     if (tenth + index + 1 > totalPages) return false;
@@ -30,9 +21,8 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         <button
           className={styles.btn}
           id="prevBtn"
-          onClick={(e) => {
+          onClick={() => {
             onPageChange(tenth - 9);
-            getClick(e);
           }}
         >
           {"<<"}
@@ -49,22 +39,20 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
               className={
                 currentPage === tenth + num ? styles.activePage : styles.page
               }
-              onClick={(e) => {
+              onClick={() => {
                 onPageChange(tenth + num);
-                getClick(e);
               }}
             >
               {tenth + num}
             </button>
           )
       )}
-      {tenth + 11 < totalPages ? (
+      {tenth + 10 < totalPages ? (
         <button
           className={styles.btn}
           id="nextBtn"
-          onClick={(e) => {
+          onClick={() => {
             onPageChange(tenth + 11);
-            getClick(e);
           }}
         >
           {">>"}
