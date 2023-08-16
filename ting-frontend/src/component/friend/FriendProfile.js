@@ -66,7 +66,7 @@ function FriendProfile(props){
         </div>
       </div>
       <div className={styles.nickname}>{ friendProfile.nickname }</div>
-      <div className={styles.introduce}>자기소개{ friendProfile.introduce }</div>
+      <div className={styles.introduce}>{ friendProfile.introduce }</div>
       <div className={styles.selfContainer}>
         <div className={styles.self}>#셀프 소개</div>
         <div className={styles.hash}>
