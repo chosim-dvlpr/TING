@@ -12,7 +12,7 @@
 }
 
 .introduceContainer input,
-.height input,
+/* .height input, */
 .input,
 .btn,
 .btnSecondary,
@@ -135,7 +135,7 @@
 .selectContainer {
     display: flex;
     flex-direction: column;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .completeContainer {
@@ -275,7 +275,7 @@
 }
 
 .goToLoginBtn {
-    margin: 10px;
+    margin: 10px 0;
     width: 100%;
 }
 
@@ -324,4 +324,153 @@
 .birthContainer {
     display: flex;
     align-items: center;
+}
+
+.updateDiv {
+    display: flex;
+    align-items: center;
+  }
+
+  .title {
+    font-weight: 600;
+    /* padding-right: 30px; */
+    width: 120px;
+    display: flex;
+
+  }
+
+  .dropDown {
+    position: relative;
+    /* height: auto; */
+  }
+  
+  #introduceInput,
+  #heightInput,
+  .dropDownMenu {
+    position: relative;
+    width: 130px;
+    height: 33px;
+    padding: 3px 10px;
+    margin: 3px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    background-color: white;
+    /* text-align: center; */
+    cursor: pointer;
+    border-collapse: collapse;
+  }
+  
+  .dropDownMenu > span {
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+  }
+  
+  .xImg {
+    position: absolute;
+    right: 7px;
+    top: 0;
+    width: 15px;
+    height: 100%;
+    padding-left: 5px;
+  }
+  .xImg > img {
+    position: relative;
+    width: 10px;
+  }
+  
+  .dropDownMenu.multiple {
+    min-width: 220px;
+    padding-right: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .dropDownMenu.multiple > span {
+    display: inline-block;
+    min-width: 180px;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .dropDownBtn {
+    width: 130px;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px;
+    background-color: white;
+  }
+  
+  .dropDownBtn:hover {
+    background-color: #f7d1d6;
+  }
+  
+  .multiple > .dropDownBtn {
+    width: 220px;
+  }
+  
+  .isOpen {
+    display: inline-block;
+    position: absolute;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-collapse: collapse;
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 130px;
+  }
+  
+  .isOpen.multiple {
+    width: 220px;
+  }
+  
+  #jobOpen.isOpen,
+  #hobbyOpen.isOpen,
+  #personalityOpen.isOpen {
+    top: -297px;
+    border-bottom: none;
+    border-top: 1px solid gray;
+  }
+  
+  #styleOpen.isOpen {
+    top: -193.8px;
+    border-bottom: none;
+    border-top: 1px solid gray;
+  }
+  
+  .isClose {
+    display: none;
+  }
+
+  
+#heightInput {
+    width: 100px;
+}
+
+#introduceInput {
+    width: 380px;
+}
+
+.selectTitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+#inputProfile {
+    margin: 3px;
+}
+
+.selectContainerBox {
+    background-color: #f1fafa;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
 }

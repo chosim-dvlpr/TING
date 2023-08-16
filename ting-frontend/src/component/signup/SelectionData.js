@@ -11,11 +11,12 @@ import Style from "./select/Style"
 import Introduce from "./select/Introduce"
 import ProfileImage from "./select/profileImage"
 import styles from './SignupCommon.module.css'
+import InformationModal from '../profile/common/InformationModal'
 
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { completeSignupStep, setDrinkingCode, setHeightCode, setHobbyCodeList, setIntroduce, setMbtiCode, setPersonalityCodeList, setReligionCode, setSmokingCode, setStyleCodeList } from "../../redux/signup"
-import { dataCode } from "../../SelectionDataList"
+import { dataCode, regionList } from "../../SelectionDataList"
 import { useEffect, useRef, useState } from "react"
 import fileHttp from "../../api/fileHttp"
 import basicHttp from "../../api/basicHttp"
@@ -154,168 +155,377 @@ function SelectionData(){
   };
 
 
+
+
+
+  // 모달 상태 관련
+  const [modalSign, setModalSign] = useState(false);
+  const [clickedType, setClickedType] = useState();
+  const [clickedItems, setClickedItems] = useState();
+  const [clickedCurrentData, setClickedCurrentData] = useState();
+
+  
+  // 모달을 여는 함수
+  const openModal = () => {
+    setModalSign(true);
+  };
+
+  // 모달을 닫는 함수
+  const closeModal = () => {
+    setModalSign(false);
+  };
+
+
+  // list를 코드로 변환
+  // useEffect(() => {
+  //   let hobbyListCode =
+  //     currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
+  //   let personalityListCode =
+  //     currentPersonalityList &&
+  //     currentPersonalityList.map((style, i) => style.code);
+  //   let styleListCode =
+  //     currentStyleList && currentStyleList.map((style, i) => style.code);
+  //   setCurrentHobbyListCode(hobbyListCode);
+  //   setCurrentPersonalityListCode(personalityListCode);
+  //   setCurrentStyleListCode(styleListCode);
+  // }, [currentHobbyList, currentPersonalityList, currentStyleList]);
+
+  // 지역을 한글로 변환
+  const regionToKor = (regionData) => {
+    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
+    // console.log(regionName)
+    // return regionName
+    const matchingRegion = regionList.find(
+      (region) => region.regionEn === regionData
+    );
+    if (matchingRegion) {
+      return matchingRegion.regionKor;
+    } else {
+      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
+    }
+  };
+
+  let [height, setHeight] = useState("");
+  let [currentMbti, setCurrentMbti] = useState("");
+  let [currentDrinking, setCurrentDrinking] = useState("");
+  let [currentSmoking, setCurrentSmoking] = useState("");
+  let [currentReligion, setCurrentReligion] = useState("");
+  let [currentHobbyList, setCurrentHobbyList] = useState([]);
+  let [currentPersonalityList, setCurrentPersonalityList] = useState(
+    []
+  );
+  let [currentJob, setCurrentJob] = useState("");
+  let [currentStyleList, setCurrentStyleList] = useState([]);
+  let [currentIntroduce, setCurrentIntroduce] = useState("");
+
+  // let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
+  // let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
+  //   []
+  // );
+  // let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
+
+
   return(
     <div className={styles.selectContainer}>
-      <h3>추가 정보를 입력해주세요!</h3>
+      <p className={styles.selectTitle}>추가 정보를 입력하면 매칭 정확도가 올라가요 :)</p>
       {/* <Outlet></Outlet> */}
-      <div className={styles.selectDataContainer}>
-        <div className={styles.selectDataContainerBox}>
-          <div className={styles.contentContainer}>
-            <h3>MBTI</h3>
-            <Dropdown>
-              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-              { signupReducer.mbtiCode ? signupReducer.mbtiCode.name : "MBTI" }
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  contents("MBTI")
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+      {modalSign ? (
+        <InformationModal
+          type={clickedType}
+          items={clickedItems}
+          currentData={clickedCurrentData}
+          setter={
+            clickedType === "MBTI"
+              ? setCurrentMbti
+              : clickedType === "음주"
+              ? setCurrentDrinking
+              : clickedType === "흡연"
+              ? setCurrentSmoking
+              : clickedType === "종교"
+              ? setCurrentReligion
+              : clickedType === "직업"
+              ? setCurrentJob
+              : clickedType === "취미"
+              ? setCurrentHobbyList
+              : clickedType === "성격"
+              ? setCurrentPersonalityList
+              : setCurrentStyleList
+          }
+          closeFunc={closeModal}
+        />
+      ) : null}
 
-          <div className={styles.contentContainer}>
-            <h3>Drinking</h3>
-            <Dropdown>
-              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-              { signupReducer.drinkingCode ? signupReducer.drinkingCode.name : "주량" }
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  contents("DRINKING")
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+      <div className={styles.selectContainerBox}>
+        {/* <div className={styles.updateWrapper}> */}
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>키</p>
+          <input
+            id={styles.heightInput}
+            className={styles.input}
+            type="number"
+            onChange={(e) => changeHeight(e.target.value)}
+          ></input>
+        </div>
 
-          <div className={styles.contentContainer}>
-            <h3>Smoking</h3>
-            <Dropdown>
-              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-              { signupReducer.smokingCode ? signupReducer.smokingCode.name : "흡연" }
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  contents("SMOKING")
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-
-          <div className={styles.contentContainer}>
-            <h3>Religion</h3>
-            <Dropdown>
-              <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-              { signupReducer.religionCode ? signupReducer.religionCode.name : "종교" }
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  contents("RELIGION")
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-
-          <div className={styles.contentContainer}>
-            <div className={styles.height}>
-              <h3>Height</h3>
-              <input 
-                ref={userHeight}
-                onChange={(e) => dispatch(setHeightCode(Number(e.target.value)))}
-                type="number" min="100" max="250"></input> 
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>음주</p>
+          <div className={styles.dropDown}>
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentDrinking);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("DRINKING")
+                    )
+                  );
+                  setClickedType("음주");
+                  openModal();
+                }}
+              >
+                {currentDrinking && currentDrinking.name}
+              </span>
+              {currentDrinking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentDrinking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
 
-        <div className={styles.selectDataContainerBox}>
-          <div className={styles.contentContainer}>
-            <h3>Hobby</h3>
-            <Dropdown>
-              <Dropdown.Toggle classNfame={`${styles.btn} ${styles.regionBtn}`}
-                id="dropdown-basic">
-              { "취미" }
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {
-                  contents("HOBBY")
-                }
-              </Dropdown.Menu>
-            </Dropdown>
-          <span>
-          {
-            signupReducer.hobbyCodeList.map((hobby, i) => (
-              <p>{ hobby.name }</p>
-            ))
-          }
-          </span>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>흡연</p>
+          <div className={styles.dropDown}>
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentSmoking);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("SMOKING"))
+                  );
+                  setClickedType("흡연");
+                  openModal();
+                }}
+              >
+                {currentSmoking && currentSmoking.name}
+              </span>
+              {currentSmoking ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentSmoking("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className={styles.contentContainer}>
-          <h3>Personality</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-            { "성격" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("PERSONALITY")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
-          <span>
-          {
-            signupReducer.personalityCodeList.map((personality, i) => (
-              <p>{ personality.name }</p>
-            ))
-          }
-          </span>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>종교</p>
+          <div className={styles.dropDown}>
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentReligion);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("RELIGION")
+                    )
+                  );
+                  setClickedType("종교");
+                  openModal();
+                }}
+              >
+                {currentReligion && currentReligion.name}
+              </span>
+              {currentReligion ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentReligion("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className={styles.contentContainer}>
-          <h3>Style</h3>
-          <Dropdown>
-            <Dropdown.Toggle className={`${styles.btn} ${styles.regionBtn}`}
-              id="dropdown-basic">
-            { "선호 스타일" }
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {
-                contents("STYLE")
-              }
-            </Dropdown.Menu>
-          </Dropdown>
-          <span>
-          {
-            signupReducer.styleCodeList.map((style, i) => (
-              <p>{ style.name }</p>
-            ))
-          }
-          </span>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>직업</p>
+          <div className={styles.dropDown}>
+            <div className={styles.dropDownMenu}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentJob);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("JOB"))
+                  );
+                  setClickedType("직업");
+                  openModal();
+                }}
+              >
+                {currentJob && currentJob.name}
+              </span>
+              {currentJob ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentJob("");
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </div>      
+      </div>
+
+      <div className={styles.selectContainerBox}>
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>취미</p>
+          <div className={styles.dropDown}>
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentHobbyList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("HOBBY"))
+                  );
+                  setClickedType("취미");
+                  openModal();
+                }}
+              >
+                {currentHobbyList &&
+                  currentHobbyList.map((hobby, i) => "#" + hobby.name + " ")}
+              </span>
+              { currentHobbyList && currentHobbyList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentHobbyList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className={styles.introduceContainer}>
-          <h4>자신을 간단하게 소개해주세요</h4>
-          <input 
-          type="text" 
-          onChange={(e) => dispatch(setIntroduce(e.target.value))}
-          maxLength={250}
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>성격</p>
+          <div className={styles.dropDown}>
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentPersonalityList);
+                  setClickedItems(
+                    dataCode.filter((data) =>
+                      data.category.includes("PERSONALITY")
+                    )
+                  );
+                  setClickedType("성격");
+                  openModal();
+                }}
+              >
+                {currentPersonalityList &&
+                  currentPersonalityList.map(
+                    (personality, i) => "#" + personality.name + " "
+                  )}
+              </span>
+              {currentPersonalityList && currentPersonalityList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentPersonalityList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>스타일</p>
+          <div className={styles.dropDown}>
+            <div className={[styles.dropDownMenu, styles.multiple].join(" ")}>
+              <span
+                onClick={() => {
+                  if (modalSign) closeModal();
+                  setClickedCurrentData(currentStyleList);
+                  setClickedItems(
+                    dataCode.filter((data) => data.category.includes("STYLE"))
+                  );
+                  setClickedType("스타일");
+                  openModal();
+                }}
+              >
+                {currentStyleList &&
+                  currentStyleList.map((style, i) => "#" + style.name + " ")}
+              </span>
+              {currentStyleList && currentStyleList.length > 0 ? (
+                <div className={styles.xImg}>
+                  <img
+                    src={process.env.PUBLIC_URL + "/img/close_gray.png"}
+                    onClick={() => {
+                      setCurrentStyleList([]);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.updateDiv}>
+          <p className={styles.title}>자기소개</p>
+          <input
+            id={styles.introduceInput}
+            className={styles.input}
+            onChange={(e) => setCurrentIntroduce(e.target.value)}
           ></input>
         </div>
-        <div className={styles.profileImgContainer}>
-          <h4>프로필 사진을 업로드해주세요</h4>
-          <input type="file" accept='image/*' onChange={onUploadImage}></input>
-        </div>
-
-          {/* <Hobby />
-          <Personality />
-          <Style />
-          <Introduce />
-          <ProfileImage /> */}
+        <div className={`${styles.updateDiv} ${styles.inputProfile}`}>
+          <p className={styles.title}>프로필 사진</p>
+          <input 
+          id={styles.inputProfile}
+          type="file" 
+          accept='image/*' 
+          onChange={onUploadImage}></input>
         </div>
       </div>
       
