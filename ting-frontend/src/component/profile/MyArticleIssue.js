@@ -46,7 +46,7 @@ function MyArticleIssue() {
 
   useEffect(() => {
     getMyIssueArticle();
-  }, [])
+  }, [currentPage])
 
 
   // 페이지 이동
