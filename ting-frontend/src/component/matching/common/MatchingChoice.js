@@ -37,7 +37,7 @@ function MatchingChoice({ session, count }) {
   // 결과 선택 로직
   useEffect(() => {
     // 결과 선택 저장
-    sendResult(result)
+    // sendResult(result)
     // 버튼 토글
     if (result) {
       setButtonToggleSign([true, false])
@@ -122,21 +122,26 @@ function MatchingChoice({ session, count }) {
         <div className={styles.InnerBox}>
           <div>
             <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
+            <h3>한번 선택하시면 바꿀 수 없습니다.</h3>
             <h3>{count}</h3>
             <button
               className={`${styles.Btn} ${buttonToggleSign[0] ? styles.clickedButton : styles.button}`}
+              disabled={afterFirstClick}
               onClick={() => {
                 setResult(true);
                 flipCard();
                 setAfterFirstClick(true);
+                sendResult(true)
               }}
             >YES</button>
             <button
               className={`${styles.Btn} ${buttonToggleSign[1] ? styles.clickedButton : styles.button}`}
+              disabled={afterFirstClick}
               onClick={() => {
                 setResult(false);
                 flipCard();
                 setAfterFirstClick(true);
+                sendResult(false)
               }}
             >NO</button>
           </div>
