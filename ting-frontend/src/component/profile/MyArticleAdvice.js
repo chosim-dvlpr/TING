@@ -43,7 +43,7 @@ function MyArticleAdvice() {
 
   useEffect(() => {
     getMyAdviceArticle();
-  }, []);
+  }, [currentPage]);
 
   // 페이지 이동
   const handlePageChange = (page) => {
