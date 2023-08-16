@@ -524,11 +524,11 @@ function MatchingStart() {
           {/* 비디오 화면 */}
           <div className={styles.videoContainer}>
 
-            <div className={`stream-container col-md-5 col-xs-5`} onClick={() => handleMainVideoStream(publisher)}>
+            <div className={styles.eachVideo} onClick={() => handleMainVideoStream(publisher)}>
               <UserVideoComponent streamManager={publisher} />
             </div>
 
-            <div className="stream-container col-md-5 col-xs-5" onClick={() => handleMainVideoStream(subscribers[0])}>
+            <div className={styles.eachVideo} onClick={() => handleMainVideoStream(subscribers[0])}>
               <UserVideoComponent streamManager={subscribers[0]} />
             </div>
 

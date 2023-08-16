@@ -12,6 +12,7 @@ function MatchingResult({ session, count, result }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [isFlipped, setIsFlipped] = useState(false)
+  const [sendedResult,setSendedResult] = useState(result)
 
   const state = useSelector((state) => state)
   const yourData = state.matchingReducer.yourData
@@ -33,9 +34,6 @@ function MatchingResult({ session, count, result }) {
 
   // 언마운트 때 초기화
   useEffect(() => {
-    console.log(matchingResult)
-    console.log(result)
-    console.log(isFlipped)
     return () => {
       dispatch(resetMatchingStore())
     }
@@ -44,7 +42,7 @@ function MatchingResult({ session, count, result }) {
   return (
     <>
       <div className={styles.ConfettiOuter}>
-        {MatchingResult && result && isFlipped ? <Confetti className={styles.Confetti} /> : null}
+        {matchingResult && sendedResult && isFlipped ? <Confetti className={styles.Confetti} /> : null}
       </div>
       <div className={styles.OuterContainer}>
         <h1>최종 결과</h1>
@@ -59,7 +57,7 @@ function MatchingResult({ session, count, result }) {
             <div className={styles.front}></div>
             {/* 뒷면 */}
             <div className={styles.back}>
-              <p className={styles.CardContent}>{result ? 'YES' : 'NO'}</p>
+              <p className={styles.CardContent}>{sendedResult ? 'YES' : 'NO'}</p>
             </div>
           </div>
         </div>
@@ -67,16 +65,16 @@ function MatchingResult({ session, count, result }) {
         <div className={styles.InnerBox}>
           { lastResultSign ? (
             <>
-              { MatchingResult ? (
+              { matchingResult ? (
                 <>
                   <h3>축하드립니다</h3>
                   <h3>채팅으로 {yourData.nickname}님과 만남을 이어가보세요</h3>
-                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
+                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; }}>메인으로 돌아가기</button>
                 </>
               ):(
                 <>
                   <h3>{yourData.nickname}님이 선택하지 않으셨습니다.</h3>
-                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; session.close() }}>메인으로 돌아가기</button>
+                  <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; }}>메인으로 돌아가기</button>
                 </>
               )}
             </>
