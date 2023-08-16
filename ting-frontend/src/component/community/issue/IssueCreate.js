@@ -74,8 +74,7 @@ const IssueCreate = () => {
     };
   
     return (
-      <div>
-      <div className={styles.issueBoardBackGround}>
+      <div className={styles.issueBoardBackground}>
       <NavBar/>
       {userdata && (
       <FriendButton
@@ -142,7 +141,6 @@ const IssueCreate = () => {
       </div>
       </div>
       </div> 
-      </div>
     );
   };
   
