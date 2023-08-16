@@ -52,7 +52,7 @@ public class ChattingService {
                         .orElseThrow(() -> new CommonException(ExceptionType.CHATTING_NOT_FOUND));
         if(chatting.getState().equals(ChattingType.ALIVE)) {
             template.convertAndSend("/subscription/list/" + friendChattingUser.getUser().getId(), chattingMessageDto);
-            template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
+//            template.convertAndSend("/subscription/chat/room/" + roomId, chattingMessageDto);
 
             chattingMessageRepository.save(chattingMessageDto);
 
