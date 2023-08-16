@@ -65,7 +65,7 @@ ncloud:
 file:
   path: /app/profile
   fishSkinPath: /skin/fish
-  defaultProfile: defaultProfile.png
+  defaultProfile: default/defaultProfile.png
 
 # natural language api
 cloud:
