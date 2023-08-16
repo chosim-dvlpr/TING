@@ -1,5 +1,6 @@
 .signupAll {
     text-align: left;
+    
 }
 
 .wrapper {
@@ -144,6 +145,7 @@
 
 .completeParagraph {
     margin-top: 20px;
+    font-size: 18px;
 }
 
 .selectDataContainer {
@@ -336,6 +338,7 @@
     /* padding-right: 30px; */
     width: 120px;
     display: flex;
+    font-size: 18px;
 
   }
 
@@ -353,7 +356,7 @@
     padding: 3px 10px;
     margin: 3px;
     border: 2px solid gray;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: white;
     /* text-align: center; */
     cursor: pointer;
