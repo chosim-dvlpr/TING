@@ -13,12 +13,12 @@ import {
   FormGroup,
   Checkbox,
 } from "@mui/material";
-import { pink } from "@mui/material/colors";
+// import { pink, blue } from "@mui/material/colors";
 import { current } from "immer";
 
-function ItemModal({ closeFunc, type, currentData, items, setter }) {
+function ItemModal({ closeFunc, type, currentData, items, setter, color }) {
   const [checked, setChecked] = useState(
-    type === "취미" || type === "스타일" || type === "성격"
+    (type === "취미" || type === "스타일" || type === "성격")
       ? items.map((item, i) =>
           currentData && currentData.some((d) => d.code === item.code)
             ? true
@@ -51,14 +51,15 @@ function ItemModal({ closeFunc, type, currentData, items, setter }) {
           <FormGroup>
             {items.map((item, i) => (
               <FormControlLabel
+                key={i}
                 value={item.name}
                 control={
                   <Checkbox
                     checked={checked[i]}
                     sx={{
-                      color: pink[800],
+                      color: color,
                       "&.Mui-checked": {
-                        color: pink[600],
+                        color: color,
                       },
                     }}
                     onChange={(event) => {
@@ -82,15 +83,15 @@ function ItemModal({ closeFunc, type, currentData, items, setter }) {
               );
             }}
           >
-            {items.map((item, i) => (
+            {items && items.map((item, i) => (
               <FormControlLabel
                 value={item.name}
                 control={
                   <Radio
                     sx={{
-                      color: pink[800],
+                      color: color,
                       "&.Mui-checked": {
-                        color: pink[600],
+                        color: color,
                       },
                     }}
                   />

@@ -12,6 +12,7 @@ import Introduce from "./select/Introduce"
 import ProfileImage from "./select/profileImage"
 import styles from './SignupCommon.module.css'
 import InformationModal from '../profile/common/InformationModal'
+// import { blue } from "@mui/material/colors";
 
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -20,6 +21,7 @@ import { dataCode, regionList } from "../../SelectionDataList"
 import { useEffect, useRef, useState } from "react"
 import fileHttp from "../../api/fileHttp"
 import basicHttp from "../../api/basicHttp"
+import { createTheme } from "@mui/material"
 
 function SelectionData(){
   let navigate = useNavigate();
@@ -49,6 +51,15 @@ function SelectionData(){
   useEffect(() => {
     getDataCodeCategory();
   }, [])  
+
+  const theme = createTheme({
+      palette: {
+        primary: {
+          main: '#398fa1',
+        },
+        // secondary: '#8bcad6',
+      },
+  });
 
   const handleDropdownItemClick = (data) => {
     switch (data.category) {
@@ -90,6 +101,85 @@ function SelectionData(){
       )))
   };
 
+
+
+
+  // 모달 상태 관련
+  const [modalSign, setModalSign] = useState(false);
+  const [clickedType, setClickedType] = useState();
+  const [clickedItems, setClickedItems] = useState();
+  const [clickedCurrentData, setClickedCurrentData] = useState();
+
+  
+  // 모달을 여는 함수
+  const openModal = () => {
+    setModalSign(true);
+  };
+
+  // 모달을 닫는 함수
+  const closeModal = () => {
+    setModalSign(false);
+  };
+
+
+
+
+
+  // 지역을 한글로 변환
+  const regionToKor = (regionData) => {
+    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
+    // console.log(regionName)
+    // return regionName
+    const matchingRegion = regionList.find(
+      (region) => region.regionEn === regionData
+    );
+    if (matchingRegion) {
+      return matchingRegion.regionKor;
+    } else {
+      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
+    }
+  };
+
+  let [height, setHeight] = useState("");
+  let [currentMbti, setCurrentMbti] = useState("");
+  let [currentDrinking, setCurrentDrinking] = useState("");
+  let [currentSmoking, setCurrentSmoking] = useState("");
+  let [currentReligion, setCurrentReligion] = useState("");
+  let [currentHobbyList, setCurrentHobbyList] = useState([]);
+  let [currentPersonalityList, setCurrentPersonalityList] = useState(
+    []
+  );
+  let [currentJob, setCurrentJob] = useState("");
+  let [currentStyleList, setCurrentStyleList] = useState([]);
+  let [currentIntroduce, setCurrentIntroduce] = useState("");
+
+  let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
+  let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
+    []
+  );
+  let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
+  
+  // list를 코드로 변환
+  useEffect(() => {
+    let hobbyListCode =
+      currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
+    let personalityListCode =
+      currentPersonalityList &&
+      currentPersonalityList.map((style, i) => style.code);
+    let styleListCode =
+      currentStyleList && currentStyleList.map((style, i) => style.code);
+    setCurrentHobbyListCode(hobbyListCode);
+    setCurrentPersonalityListCode(personalityListCode);
+    setCurrentStyleListCode(styleListCode);
+  }, [currentHobbyList, currentPersonalityList, currentStyleList]);
+
+  // let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
+  // let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
+  //   []
+  // );
+  // let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
+  
+
   // 키 저장
   const changeHeight = (height) => {
     if (height > 100 & height < 250) {
@@ -126,103 +216,59 @@ function SelectionData(){
     });
   }
 
+  const newProfileSelectData = {
+    ...signupReducer,
+    mbtiCode: "",
+    profileImage: "",
+    height: Number(height),
+    introduce: currentIntroduce,
+    jobCode: currentJob && currentJob.code,
+    drinkingCode: currentDrinking && currentDrinking.code,
+    religionCode: currentReligion && currentReligion.code,
+    mbtiCode: currentMbti && currentMbti.code,
+    smokingCode: currentSmoking && currentSmoking.code,
+    hobbyCodeList: currentHobbyListCode,
+    styleCodeList: currentStyleListCode,
+    personalityCodeList: currentPersonalityListCode,
+  }
+
+  console.log(newProfileSelectData)
+
   // 로그인 버튼 클릭 시 데이터 보내기
-  const goToLogin = (MoveTo) => {
-    if (signupReducer.heightCode && 
-        signupReducer.heightCode < 120 | signupReducer.heightCode > 250) {
-          alert("올바른 키를 입력해주세요.\n100에서 250 사이의 키만 입력 가능합니다.");
-          userHeight.current.value = "";
-          return
-        }
-    else {
-      basicHttp.post('/user/signup', signupReducer).then((response) => {
-        if (response.data.code === 200) {
-          if (sendProfileImage()) {
-            alert("회원가입이 완료되었습니다.");
-            dispatch(completeSignupStep());
-            navigate(MoveTo);
+  const goToLogin = async (MoveTo, data) => {
+    try {
+      console.log(data)
+      if (data.height && 
+          Number(data.height) < 120 | Number(data.height) > 250) {
+            alert("올바른 키를 입력해주세요.\n100에서 250 사이의 키만 입력 가능합니다.");
+            userHeight.current.value = "";
+            return
           }
-          else {
-            alert("프로필 사진 업로드에 실패했습니다.")
-          }
-        }
-        else if (response.data.code === 400) {
-          alert("회원 가입 실패\n정확한 정보를 입력해주세요.");
-        }
-      })
-      .catch(() => alert("회원가입 실패"))
-    }
-  };
-
-
-
-
-
-  // 모달 상태 관련
-  const [modalSign, setModalSign] = useState(false);
-  const [clickedType, setClickedType] = useState();
-  const [clickedItems, setClickedItems] = useState();
-  const [clickedCurrentData, setClickedCurrentData] = useState();
-
-  
-  // 모달을 여는 함수
-  const openModal = () => {
-    setModalSign(true);
-  };
-
-  // 모달을 닫는 함수
-  const closeModal = () => {
-    setModalSign(false);
-  };
-
-
-  // list를 코드로 변환
-  // useEffect(() => {
-  //   let hobbyListCode =
-  //     currentHobbyList && currentHobbyList.map((hobby, i) => hobby.code);
-  //   let personalityListCode =
-  //     currentPersonalityList &&
-  //     currentPersonalityList.map((style, i) => style.code);
-  //   let styleListCode =
-  //     currentStyleList && currentStyleList.map((style, i) => style.code);
-  //   setCurrentHobbyListCode(hobbyListCode);
-  //   setCurrentPersonalityListCode(personalityListCode);
-  //   setCurrentStyleListCode(styleListCode);
-  // }, [currentHobbyList, currentPersonalityList, currentStyleList]);
-
-  // 지역을 한글로 변환
-  const regionToKor = (regionData) => {
-    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
-    // console.log(regionName)
-    // return regionName
-    const matchingRegion = regionList.find(
-      (region) => region.regionEn === regionData
-    );
-    if (matchingRegion) {
-      return matchingRegion.regionKor;
-    } else {
-      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
-    }
-  };
-
-  let [height, setHeight] = useState("");
-  let [currentMbti, setCurrentMbti] = useState("");
-  let [currentDrinking, setCurrentDrinking] = useState("");
-  let [currentSmoking, setCurrentSmoking] = useState("");
-  let [currentReligion, setCurrentReligion] = useState("");
-  let [currentHobbyList, setCurrentHobbyList] = useState([]);
-  let [currentPersonalityList, setCurrentPersonalityList] = useState(
-    []
-  );
-  let [currentJob, setCurrentJob] = useState("");
-  let [currentStyleList, setCurrentStyleList] = useState([]);
-  let [currentIntroduce, setCurrentIntroduce] = useState("");
-
-  // let [currentHobbyListCode, setCurrentHobbyListCode] = useState([]);
-  // let [currentPersonalityListCode, setCurrentPersonalityListCode] = useState(
-  //   []
-  // );
-  // let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
+      else {
+        console.log('실행')
+        console.log(data)
+        basicHttp
+          .post('/user/signup', data)
+          .then((response) => {
+            console.log(response)
+            if (response.data.code === 200) {
+              if (formData && sendProfileImage) {
+                console.log("프로필 이미지 전송 성공")
+              }
+              alert("회원가입이 완료되었습니다.");
+              dispatch(completeSignupStep());
+              navigate(MoveTo);
+            }
+            else if (response.data.code === 400) {
+              alert("회원 가입 실패\n정확한 정보를 입력해주세요.");
+            }
+          })
+        } 
+      } catch (error) {
+        console.error("회원가입 실패 에러 ", error)
+        alert("회원가입 실패")
+      }
+    };
 
 
   return(
@@ -252,6 +298,7 @@ function SelectionData(){
               : setCurrentStyleList
           }
           closeFunc={closeModal}
+          color={theme.palette.primary.main}
         />
       ) : null}
 
@@ -260,10 +307,11 @@ function SelectionData(){
         <div className={styles.updateDiv}>
           <p className={styles.title}>키</p>
           <input
+            ref={userHeight}
             id={styles.heightInput}
             className={styles.input}
             type="number"
-            onChange={(e) => changeHeight(e.target.value)}
+            onChange={(e) => setHeight(e.target.value)}
           ></input>
         </div>
 
@@ -307,7 +355,7 @@ function SelectionData(){
           <div className={styles.dropDown}>
             <div className={styles.dropDownMenu}>
               <span
-                onClick={() => {
+                onClick={(data) => {
                   if (modalSign) closeModal();
                   setClickedCurrentData(currentSmoking);
                   setClickedItems(
@@ -528,10 +576,10 @@ function SelectionData(){
           onChange={onUploadImage}></input>
         </div>
       </div>
-      
+
       <div>
           <button 
-            onClick={() => goToLogin("/login")}
+            onClick={() => goToLogin("/login", newProfileSelectData)}
             className={`${styles.btn} ${styles.goToLoginBtn}`}  
           >로그인 하러 가기</button>
       </div>
