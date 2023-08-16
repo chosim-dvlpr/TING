@@ -81,10 +81,20 @@ const NavBar = () => {
         {userData ? (
           <Link className={styles.navMenu} to="/item/shop">
             <img
-              src={process.env.PUBLIC_URL + "/img/조개.png"}
+              src={process.env.PUBLIC_URL + "/img/해초2.png"}
               className={styles.menuItem}
             ></img>
             <div className={styles.menuName}>아이템샵</div>
+          </Link>
+        ) : null}
+        {userData ? (
+          <Link className={styles.navMenu} to="/matching">
+            <img
+              id={styles.tingBtn}
+              src={process.env.PUBLIC_URL + "/img/air-balloon.png"}
+              className={styles.menuItem}
+            ></img>
+            {/* <div className={styles.menuName}>매칭</div> */}
           </Link>
         ) : null}
       </div>
