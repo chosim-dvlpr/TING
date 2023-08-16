@@ -144,3 +144,7 @@
   border-bottom: 2px dotted rgb(180, 180, 180);
   /* padding-bottom: 6px; */
 }
+
+#tingBtn {
+  margin-top: 10px;
+}
