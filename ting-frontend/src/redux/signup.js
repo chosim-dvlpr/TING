@@ -15,7 +15,7 @@ export const signupReducer = createSlice({
     // 선택값
     profileImage: "",
     mbtiCode: "",
-    heightCode: "",
+    height: "",
     drinkingCode: "",
     smokingCode: "",
     religionCode: "",
