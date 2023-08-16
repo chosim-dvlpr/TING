@@ -109,7 +109,32 @@ public class AdminService {
     public AdminReportDto getReport(Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new CommonException(ExceptionType.REPORT_NOT_FOUND));
-        return AdminReportDto.of(report);
+
+        AdminReportDto saveDto = AdminReportDto.of(report);
+
+        if (report.getType() == ReportType.MATCHING) {
+            MatchingUser matchingUser = matchingUserRepository.findByMatchingAndNotUser(report.getTypeId(), report.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+            saveDto.setReportedUserId(matchingUser.getUser().getId());
+            saveDto.setReportedUserNickname(matchingUser.getUser().getNickname());
+        } else if (report.getType() == ReportType.ADVICE_BOARD) {
+            AdviceBoard adviceBoard = adviceBoardRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
+            saveDto.setReportedUserId(adviceBoard.getUser().getId());
+            saveDto.setReportedUserNickname(adviceBoard.getUser().getNickname());
+        } else if (report.getType() == ReportType.ISSUE_BOARD) {
+            IssueBoard issueBoard = issueBoardRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
+            saveDto.setReportedUserId(issueBoard.getUser().getId());
+            saveDto.setReportedUserNickname(issueBoard.getUser().getNickname());
+        } else if (report.getType() == ReportType.COMMENT) {
+            Comment comment = commentRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+            saveDto.setReportedUserId(comment.getUser().getId());
+            saveDto.setReportedUserNickname(comment.getUser().getNickname());
+        }
+
+        return saveDto;
     }
 
     @Transactional
