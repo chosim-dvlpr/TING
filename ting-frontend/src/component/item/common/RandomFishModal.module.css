@@ -1,7 +1,7 @@
 /* 물고기 랜덤 박스 사용 모달 */
 
 .RandomFishModalInner {
-  z-index: +2;
+  z-index: +12;
   position: fixed;
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -20,7 +20,7 @@
 }
 
 .fishImg {
-  z-index: +4;
+  z-index: +14;
   width: 320px;
   height: auto;
   animation: explode 1s ease-in-out;
