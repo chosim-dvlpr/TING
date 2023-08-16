@@ -228,45 +228,47 @@ function Detail() {
       </div>
 
       <div className={styles.wrapper}>
-        <label
-        className={`${styles.label} ${styles.birthLabel}`}
-        >생년월일</label>
-        <input 
-          className={styles.input}
-          type="date" 
-          onChange={(e) => {
-            handleBirthChange(e.target.value)
-          }}
-          max="2004-12-31"
-          ></input>
+        <div className={styles.brithRegion}>
+          <div className={styles.birthContainer}>
+            <label
+            className={`${styles.label} ${styles.birthLabel}`}
+            >생년월일</label>
+            <input 
+              className={styles.input}
+              type="date" 
+              onChange={(e) => {
+                handleBirthChange(e.target.value)
+              }}
+              max="2004-12-31"
+              ></input>
+          </div>
+          <Dropdown>
+            <Dropdown.Toggle 
+            className={`${styles.btn} ${styles.regionBtn}`}
+            id="dropdown-basic">
+              { currentRegion.regionKor ? currentRegion.regionKor : "지역 선택"}
+            </Dropdown.Toggle>
+            <Dropdown.Menu
+            className={styles.regionList}
+            >
+              {
+                regionList.map((r, i) => (
+                  <Dropdown.Item 
+                  className={styles.dropdownItem}
+                  key={i}   
+                  onClick={() => {
+                    handleRegionChange(r)
+                  }}
+                  // active={currentRegion.regionEn === r.regionEn}
+                  >{r.regionKor}</Dropdown.Item>
+                  )
+                )
+              }
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </div>
 
-      <div className={styles.wrapper}>
-        <Dropdown>
-          <Dropdown.Toggle 
-          className={`${styles.btn} ${styles.regionBtn}`}
-          id="dropdown-basic">
-            { currentRegion.regionKor ? currentRegion.regionKor : "지역 선택"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu
-          className={styles.regionList}
-          >
-            {
-              regionList.map((r, i) => (
-                <Dropdown.Item 
-                className={styles.dropdownItem}
-                key={i}   
-                onClick={() => {
-                  handleRegionChange(r)
-                }}
-                // active={currentRegion.regionEn === r.regionEn}
-                >{r.regionKor}</Dropdown.Item>
-                )
-              )
-            }
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
       {/* <label>추가 정보를 입력하시면 매칭 정확도가 올라가요!</label> */}
       <div className={styles.nextContainer}>
         <button 
