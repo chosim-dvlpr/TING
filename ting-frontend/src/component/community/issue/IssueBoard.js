@@ -71,7 +71,7 @@ function IssueBoard() {
   const handleSearch = async ({ keyword, item }) => {
     try {
       setSearchClicked(true);
-      const response = await tokenHttp.get(`/issue/search/`, {
+      const response = await basicHttp.get(`/issue/search/`, {
         params: {
           pageNo: 1, // 검색 시 첫 번째 페이지부터 조회
           item,
@@ -168,15 +168,14 @@ function IssueBoard() {
                           )}
                     </span>
                   </div>
-                    <div className={styles.link}>
-                      <div
-                        onClick={(event) =>
-                          handleLinkClick(issue.issueId, event)
-                        } className={styles.title}
-                      >
-                        {issue.title}
-                      </div>
+                  <div className={styles.link}>
+                    <div
+                      onClick={(event) => handleLinkClick(issue.issueId, event)}
+                      className={styles.title}
+                    >
+                      {issue.title}
                     </div>
+                  </div>
                 </div>
               )
             )
