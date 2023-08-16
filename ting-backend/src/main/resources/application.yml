@@ -17,12 +17,12 @@ spring:
 
   jpa:
     open-in-view: false
-    show-sql: true
+#    show-sql: true
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
 
   # 이메일 설정
   mail:
