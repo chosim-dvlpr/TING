@@ -23,6 +23,8 @@ function MatchingResult({ session, count, result }) {
 
   // 클릭시 뒤집어져서 결과 확인
   const flipCard = (event) => {
+    console.log('상대방과의 결과1---------------------',matchingResult)
+    console.log('내결과------------------------------',result)
     setIsFlipped(true)
     // 결과 확인 누른거 sign 보내기
   }
@@ -44,7 +46,7 @@ function MatchingResult({ session, count, result }) {
   return (
     <>
       <div className={styles.ConfettiOuter}>
-        {MatchingResult && result && isFlipped ? <Confetti className={styles.Confetti} /> : null}
+        {matchingResult && result && isFlipped ? <Confetti className={styles.Confetti} /> : null}
       </div>
       <div className={styles.OuterContainer}>
         <h1>최종 결과</h1>
@@ -67,7 +69,7 @@ function MatchingResult({ session, count, result }) {
         <div className={styles.InnerBox}>
           { lastResultSign ? (
             <>
-              { MatchingResult ? (
+              { matchingResult ? (
                 <>
                   <h3>축하드립니다</h3>
                   <h3>채팅으로 {yourData.nickname}님과 만남을 이어가보세요</h3>
