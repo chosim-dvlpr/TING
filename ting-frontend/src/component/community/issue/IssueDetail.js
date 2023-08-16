@@ -8,6 +8,10 @@ import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
 import FriendButton from "../../common/FriendButton";
 
+import AuthenticationCheck from "../../../util/Auth";
+
+import Swal from "sweetalert2";
+
 function IssueDetail() {
   const { issueId } = useParams();
   const [issue, setIssue] = useState();
@@ -25,21 +29,18 @@ function IssueDetail() {
   const [opposeRatio, setOpposeRatio] = useState(50); // 초기에 50%로 설정
 
   useEffect(() => {
+    AuthenticationCheck();
     getIssueDetail();
     getCommentList();
     getLikeList();
   }, []);
 
-  useEffect(() => {
-    console.log("==========", issue);
-  }, [issue]);
+  useEffect(() => {}, [issue]);
 
   const getIssueDetail = async () => {
     try {
       const response = await tokenHttp.get(`/issue/${issueId}`);
-      console.log("issue response", response);
       const data = response.data.data;
-      console.log("data", data);
       setIssue({ ...data });
     } catch (error) {
       console.error("Error fetching issue detail:", error);
@@ -72,8 +73,6 @@ function IssueDetail() {
       const response = await tokenHttp.put(`/comment/${commentId}`, {
         content: content,
       });
-      console.log("Edit comment response:", response);
-
       // 댓글 목록을 다시 가져와서 업데이트
       getCommentList();
     } catch (error) {
@@ -85,8 +84,6 @@ function IssueDetail() {
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await tokenHttp.delete(`/comment/${commentId}`);
-      console.log("Delete comment response:", response);
-
       const updatedComments = comments.filter(
         (comment) => comment.commentId !== commentId
       );
@@ -99,10 +96,20 @@ function IssueDetail() {
   // 글 삭제 (수정은 불가)
   const handleDelete = async (issueId) => {
     try {
-      await tokenHttp.delete(`issue/${issueId}`);
-      alert("글이 정상적으로 삭제 되었습니다");
-      // 글 삭제 후 해당 경로로 이동
-      navigate("/community/issue");
+      Swal.fire({
+        title: "삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        width: 400,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          tokenHttp.delete(`issue/${issueId}`);
+          // Swal.fire({ title: "글이 정상적으로 \n삭제되었습니다", width: 400 });
+          // 글 삭제 후 해당 경로로 이동
+          navigate("/community/issue");
+        }
+      });
     } catch (error) {
       console.error("Error deleting issue:", error);
     }
@@ -113,7 +120,6 @@ function IssueDetail() {
       const response = await tokenHttp.post(`/issue/vote/${issueId}`, {
         isAgree: true,
       });
-      console.log("Agree response:", response);
 
       // Issue 데이터 업데이트
       setIssue((prevIssue) => ({
@@ -139,7 +145,6 @@ function IssueDetail() {
       const response = await tokenHttp.post(`/issue/vote/${issueId}`, {
         isAgree: false,
       });
-      console.log("Oppose response:", response);
 
       // Issue 데이터 업데이트
       setIssue((prevIssue) => ({
@@ -220,6 +225,7 @@ function IssueDetail() {
           />
 
           <CommentList
+            boardType="ISSUE"
             comments={comments}
             myLike={myLike}
             onUpdateComment={handleUpdateComment}

@@ -8,8 +8,10 @@ import CommentList from "../common/CommentList";
 import NavBar from "../../common/NavBar";
 import Sidebar from "../common/Sidebar";
 import adviceStyles from "./AdviceBoard.module.css";
-import {getDate} from "../../common/TimeCalculate";
+import { getDate } from "../../common/TimeCalculate";
 import FriendButton from "../../common/FriendButton";
+
+import Swal from "sweetalert2";
 
 function AdviceDetail() {
   const { adviceId } = useParams();
@@ -21,7 +23,7 @@ function AdviceDetail() {
   const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
   const showbutton = (nickname) => {
     return userdata && userdata.nickname === nickname;
-  }
+  };
 
   useEffect(() => {
     getAdviceDetail();
@@ -29,16 +31,12 @@ function AdviceDetail() {
     getLikeList();
   }, []);
 
-  useEffect(() => {
-    console.log("==========", advice);
-  }, [advice]);
+  useEffect(() => {}, [advice]);
 
   const getAdviceDetail = async () => {
     try {
       const response = await tokenHttp.get(`/advice/${adviceId}`);
-      console.log("advice response", response);
       const data = response.data.data;
-      console.log("data", data);
       setAdvice({ ...data });
     } catch (error) {
       console.error("Error fetching advice detail:", error);
@@ -71,7 +69,6 @@ function AdviceDetail() {
       const response = await tokenHttp.put(`/comment/${commentId}`, {
         content: content,
       });
-      console.log("Edit comment response:", response);
 
       // 댓글 목록을 다시 가져와서 업데이트
       getCommentList();
@@ -84,7 +81,6 @@ function AdviceDetail() {
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await tokenHttp.delete(`/comment/${commentId}`);
-      console.log("Delete comment response:", response);
 
       const updatedComments = comments.filter(
         (comment) => comment.commentId !== commentId
@@ -95,7 +91,6 @@ function AdviceDetail() {
     }
   };
 
-  
   // 글 수정
   const handleUpdate = (adviceId) => {
     navigate(`/community/advice/update/${adviceId}`);
@@ -104,11 +99,19 @@ function AdviceDetail() {
   // 글 삭제
   const handleDelete = async (adviceId) => {
     try {
-      await tokenHttp.delete(`advice/${adviceId}`);
-      console.log("delete성공");
-      alert("글이 정상적으로 삭제 되었습니다")
-      navigate("/community/advice");
-      
+      Swal.fire({
+        title: "삭제하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        width: 400,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          tokenHttp.delete(`advice/${adviceId}`);
+          // Swal.fire({ title: "글이 정상적으로 \n삭제되었습니다", width: 400 });
+          navigate("/community/advice");
+        }
+      });
     } catch (error) {
       console.error("Error deleting advice:", error);
     }
@@ -128,27 +131,29 @@ function AdviceDetail() {
           <div className={styles.listButton}>
             <span onClick={() => navigate(-1)}>목록</span>
           </div>
-        {showbutton(advice.nickname) && (
-          <button className={styles.deleteButton}>
-            <div>
-              <span onClick={() => handleUpdate(advice.adviceId)}>수정</span>
-            </div>
-          </button>
-        )}
-        {showbutton(advice.nickname) && (
-          <button className={styles.deleteButton}>
-            <div>
-              <span onClick={() => handleDelete(advice.adviceId)}>삭제</span>
-            </div>
-          </button>
-        )}
+          {showbutton(advice.nickname) && (
+            <button className={styles.deleteButton}>
+              <div>
+                <span onClick={() => handleUpdate(advice.adviceId)}>수정</span>
+              </div>
+            </button>
+          )}
+          {showbutton(advice.nickname) && (
+            <button className={styles.deleteButton}>
+              <div>
+                <span onClick={() => handleDelete(advice.adviceId)}>삭제</span>
+              </div>
+            </button>
+          )}
         </div>
         <div className={styles.adviceDetailContainer}>
           <div className={styles.detailTop}>
             <div className={styles.title}>{advice.title}</div>
-            <div className={styles.time}>{advice.modifiedTime === null
-              ? getDate(advice.createdTime)
-              : `${getDate(advice.modifiedTime)}`}</div>
+            <div className={styles.time}>
+              {advice.modifiedTime === null
+                ? getDate(advice.createdTime)
+                : `${getDate(advice.modifiedTime)}`}
+            </div>
             <div className={styles.hit}>조회수:{advice.hit}</div>
           </div>
           <div className={styles.content}>{advice.content}</div>
@@ -158,11 +163,11 @@ function AdviceDetail() {
             getCommentList={getCommentList}
           />
           <CommentList
+            boardType="ADVICE"
             comments={comments}
             myLike={myLike}
             onUpdateComment={handleUpdateComment}
             onDeleteComment={handleDeleteComment}
-            boardType="ADVICE"
             boardId={advice.adviceId}
           />
         </div>

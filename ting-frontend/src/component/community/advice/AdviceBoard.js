@@ -13,12 +13,14 @@ import NavBar from "../../common/NavBar";
 import FriendButton from "../../common/FriendButton";
 
 import { getDate } from "../../common/TimeCalculate";
+import Swal from "sweetalert2";
 
 function AdviceBoard() {
   const [adviceList, setAdviceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalElements, setTotalElements] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState();
   const navigate = useNavigate();
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
   const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
@@ -26,16 +28,18 @@ function AdviceBoard() {
   const boardType = "advice";
 
   useEffect(() => {
-    getAllAdviceData();
-  }, [currentPage]);
+    if (searchKeyword) getSearchAdviceData();
+    else getAllAdviceData();
+  }, [currentPage, searchKeyword]);
 
   const getAllAdviceData = async () => {
     try {
+      setSearchResult([]);
+
       const response = await basicHttp.get("/advice", {
         params: { pageNo: currentPage },
       });
       const responseData = response.data.data;
-      console.log(responseData);
 
       if (responseData.adviceBoardList) {
         setAdviceList(responseData.adviceBoardList);
@@ -47,15 +51,35 @@ function AdviceBoard() {
     }
   };
 
+  const getSearchAdviceData = async () => {
+    try {
+      setAdviceList([]);
+
+      const response = await tokenHttp.get(`/advice/search/`, {
+        params: {
+          pageNo: currentPage,
+          keyword: searchKeyword,
+        },
+      });
+
+      const responseData = response.data.data;
+      if (responseData.adviceBoardList) {
+        setSearchResult(responseData.adviceBoardList);
+        setTotalPages(responseData.totalPages);
+        setTotalElements(responseData.totalElements);
+      }
+    } catch (error) {
+      console.error("Error fetching advice data:", error);
+    }
+  };
+
   const handleLinkClick = (adviceId, event) => {
     event.preventDefault();
-    console.log("handleLinkClick called");
-    console.log(userdata);
+
     if (userdata) {
-      console.log(userdata);
       navigate(`/community/advice/detail/${adviceId}`);
     } else {
-      alert("로그인이 필요합니다.");
+      Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
     }
   };
 
@@ -63,7 +87,7 @@ function AdviceBoard() {
     if (userdata) {
       navigate("/community/advice/create");
     } else {
-      alert("로그인이 필요합니다.");
+      Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
     }
   };
 
@@ -79,6 +103,12 @@ function AdviceBoard() {
 
   const handleSearch = async ({ keyword }) => {
     try {
+      if (keyword.trim() === "") {
+        setSearchClicked(false);
+        setSearchKeyword(null);
+        return;
+      }
+
       setSearchClicked(true);
       const response = await tokenHttp.get(`/advice/search/`, {
         params: {
@@ -87,6 +117,7 @@ function AdviceBoard() {
         },
       });
 
+      setSearchKeyword(keyword);
       const searchData = response.data.data;
       setSearchResult(searchData.adviceBoardList);
       setTotalPages(searchData.totalPages); // 검색 결과에 따른 totalPages 설정
@@ -97,11 +128,7 @@ function AdviceBoard() {
     }
   };
 
-  useEffect(() => {
-    console.log("============search Result", searchResult);
-  }, [searchResult]);
-
-  // ... (이전 코드)
+  useEffect(() => {}, [searchResult]);
 
   return (
     <div className={styles.adviceBoardBackground}>
@@ -121,22 +148,28 @@ function AdviceBoard() {
         </div>
         <div>
           <table className={styles.adviceTable}>
-          <thead> 
-            <tr>
-              <th className={styles.tableHeader_1}>번호</th>
-              <th className={styles.tableHeader_2}>제목</th>
-              <th className={styles.tableHeader_3}>조회수</th>
-              <th className={styles.tableHeader_4}>날짜</th>
-            </tr>
-          </thead>
+            <thead>
+              <tr>
+                <th className={styles.tableHeader_1}>번호</th>
+                <th className={styles.tableHeader_2}>제목</th>
+                <th className={styles.tableHeader_3}>조회수</th>
+                <th className={styles.tableHeader_4}>날짜</th>
+              </tr>
+            </thead>
             <tbody>
               {searchClicked && searchResult.length === 0 ? (
-                <div>검색 결과가 없습니다.</div>
+                <tr>
+                  <td colSpan={4} id={styles.noResult}>
+                    검색 결과가 없습니다.
+                  </td>
+                </tr>
               ) : (
                 (searchResult.length > 0 ? searchResult : adviceList).map(
                   (advice, index) => (
                     <tr key={advice.adviceId}>
-                      <td className={styles.table_1}>{totalElements - 10*(currentPage-1) - index}</td>
+                      <td className={styles.table_1}>
+                        {totalElements - 10 * (currentPage - 1) - index}
+                      </td>
                       <td className={styles.table_2}>
                         <span
                           className={styles.link}
