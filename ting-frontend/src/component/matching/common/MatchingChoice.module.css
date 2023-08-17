@@ -14,6 +14,9 @@
   height:93%;
   border-radius: 30px;
 }
+.OuterContainer h1{
+  font-family: UhBeeSe_hyun;
+}
 
 .Container {
   z-index: 8;
@@ -29,8 +32,11 @@
 
 .InnerBox {
   padding:30px;
-
 } 
+
+.InnerBox h3{
+  font-family: UhBeeSe_hyun;
+}
 
 /* 카드 뒤집는 효과 */
 .flip { 

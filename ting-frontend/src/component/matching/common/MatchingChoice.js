@@ -121,7 +121,7 @@ function MatchingChoice({ session, count }) {
 
         <div className={styles.InnerBox}>
           <div>
-            <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
+            <h3>{yourData.nickname} 님을 선택하시겠습니까?</h3>
             <h3>한번 선택하시면 바꿀 수 없습니다.</h3>
             <h3>{count}</h3>
             <button
