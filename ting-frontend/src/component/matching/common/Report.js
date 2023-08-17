@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { userdataReducer } from "./../../../redux/userdata";
 import tokenHttp from "../../../api/tokenHttp";
-import styles from "./Report.module.css"
+import styles from "./Report.module.css";
 import Swal from "sweetalert2";
 
 function Report({ setShowReportModal, session }) {
@@ -25,11 +25,11 @@ function Report({ setShowReportModal, session }) {
       alert("신고 내용을 입력해주세요.");
     } else {
       // 서버로 신고 내용 전송
-      console.log(state.matchingReducer.matchingId);
+      console.log("finalMatchingId", state.finalMatchingReducer.matchingId);
       tokenHttp.post("/report", {
         type: "MATCHING",
         content: reportContent,
-        typeId: state.matchingReducer.matchingId,
+        typeId: state.finalMatchingReducer.matchingId,
       });
 
       // 상대에게 신고 신호 전달 (나와 상대방이 방에서 나가짐)
@@ -39,7 +39,7 @@ function Report({ setShowReportModal, session }) {
         data: JSON.stringify({ userId: state.userdataReducer.userdata.userId }),
       });
 
-      reportAlert()
+      reportAlert();
     }
   };
 
@@ -50,11 +50,10 @@ function Report({ setShowReportModal, session }) {
       icon: "success",
       title: "신고 완료",
       text: "메인으로 돌아갑니다",
-    }).then((res)=>{
-      navigate('/')
-    })
-  }
-
+    }).then((res) => {
+      navigate("/");
+    });
+  };
 
   // 취소 버튼 클릭
   const onClose = () => {
@@ -63,13 +62,16 @@ function Report({ setShowReportModal, session }) {
 
   return (
     <div className={styles.ModalOuter}>
-
       <div className={styles.ModalInner}>
         <h3>신고하기</h3>
         <p>허위 신고 시에는 불이익을 받으실수 있습니다.</p>
         <textarea className={styles.ReportContent} placeholder="신고 내용을 입력해주세요." onChange={handleInputChange} />
-        <button className={styles.SuccessBtn} onClick={handleSubmit}>신고 완료</button>
-        <button className={styles.CancelBtn} onClick={onClose}>취소</button>
+        <button className={styles.SuccessBtn} onClick={handleSubmit}>
+          신고 완료
+        </button>
+        <button className={styles.CancelBtn} onClick={onClose}>
+          취소
+        </button>
       </div>
     </div>
   );
