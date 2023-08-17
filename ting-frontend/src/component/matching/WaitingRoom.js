@@ -10,6 +10,7 @@ import Webcam from "react-webcam";
 import { setOpenviduToken } from "../../redux/openviduStore";
 import { setMatchingId, resetMatchingStore } from "../../redux/matchingStore";
 import { setMyItemList } from "../../redux/itemStore";
+import { setFinalMatchingId } from "../../redux/finalMatchingStore";
 import styles from "./WaitingRoom.module.css";
 
 import NavBar from "../common/NavBar";
@@ -170,6 +171,7 @@ function WaitingRoom() {
 
           dispatch(setOpenviduToken(enterToken));
           dispatch(setMatchingId(matchingId));
+          dispatch(setFinalMatchingId(matchingId));
 
           navigate("/matching/start");
           break;
