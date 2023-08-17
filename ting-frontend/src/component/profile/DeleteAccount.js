@@ -60,9 +60,9 @@ function DeleteAccount() {
         confirmButtonText: "확인",
         cancelButtonText: "취소",
         width: 400,
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          checkUserAxios();
+          await checkUserAxios();
         }
       });
     } else {
@@ -74,10 +74,10 @@ function DeleteAccount() {
   };
 
   // 회원 탈퇴
-  const checkUserAxios = () => {
-    tokenHttp.delete("/user").then((response) => {
+  const checkUserAxios = async () => {
+    tokenHttp.delete("/user").then(async (response) => {
       if (response.data.code === 200) {
-        Navigate("/");
+        await Navigate("/");
         dispatch(logout()); // redux의 user 정보 삭제
       } else if (response.data.code === 400) {
         console.log("회원 탈퇴 실패");
