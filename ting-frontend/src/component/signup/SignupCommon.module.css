@@ -93,6 +93,7 @@
   color: red;
   font-size: 1rem;
 }
+
 /* 
 .msgHide {
     visibility: hidden;
@@ -176,15 +177,18 @@
   margin-right: 5px;
 }
 
-.wrapper > span {
+.wrapper>span {
   margin: 0 2.5px;
 }
 
 .flexContainer {
   display: flex;
-  justify-content: flex-start; /* 가로 정렬을 시작 부분에 맞춥니다 */
-  align-items: center; /* 버튼들을 세로로 가운데 정렬합니다 */
-  gap: 5px; /* 버튼 사이의 간격을 설정합니다 */
+  justify-content: flex-start;
+  /* 가로 정렬을 시작 부분에 맞춥니다 */
+  align-items: center;
+  /* 버튼들을 세로로 가운데 정렬합니다 */
+  gap: 5px;
+  /* 버튼 사이의 간격을 설정합니다 */
 }
 
 .birthLabel {
@@ -284,7 +288,7 @@
   padding-left: 30px;
 }
 
-.contentContainer > h3 {
+.contentContainer>h3 {
   margin-right: 8px;
 }
 
@@ -308,6 +312,7 @@
   justify-content: space-between;
   align-items: center;
   width: 65%;
+
   .btn {
     position: relative;
     display: flex;
@@ -355,7 +360,7 @@
   border-collapse: collapse;
 }
 
-.dropDownMenu > span {
+.dropDownMenu>span {
   display: inline-block;
   width: 100px;
   height: 100%;
@@ -369,7 +374,8 @@
   height: 100%;
   padding-left: 5px;
 }
-.xImg > img {
+
+.xImg>img {
   position: relative;
   width: 10px;
 }
@@ -382,7 +388,7 @@
   text-overflow: ellipsis;
 }
 
-.dropDownMenu.multiple > span {
+.dropDownMenu.multiple>span {
   display: inline-block;
   min-width: 180px;
   height: 100%;
@@ -405,7 +411,7 @@
   background-color: #f7d1d6;
 }
 
-.multiple > .dropDownBtn {
+.multiple>.dropDownBtn {
   width: 220px;
 }
 
@@ -467,4 +473,26 @@
   border-radius: 10px;
   margin: 10px 0;
   padding: 10px;
+}
+
+
+.spinnerContainer {
+  z-index: 10000;
+  position: fixed;
+  /* position: relative; */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(125, 125, 125);
+  opacity: 0.5;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  z-index: 20000;
+  position: fixed;
+  top: 47%;
+  left: 47%;
 }
