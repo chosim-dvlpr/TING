@@ -163,16 +163,18 @@ public class UserService {
             userStyleRepository.saveAll(userStyles); // DB에 저장
         }
 
-        // 기본 제공 아이템 - 유리병, 매칭티켓 2개
+        // 기본 제공 아이템 - 유리병, 매칭티켓 3개(남)/5개(여)
         Inventory skin2Inventory = Inventory.builder()
                 .user(user)
                 .itemType(ItemType.SKIN_2)
                 .quantity(1)
                 .build();
+
+        int quantity = (user.getGender().equals("M")) ? 3 : 5;
         Inventory freeMatchingInventory = Inventory.builder()
                 .user(user)
                 .itemType(ItemType.FREE_MATCHING_TICKET)
-                .quantity(3)
+                .quantity(quantity)
                 .build();
         inventoryRepository.save(skin2Inventory);
         inventoryRepository.save(freeMatchingInventory);
