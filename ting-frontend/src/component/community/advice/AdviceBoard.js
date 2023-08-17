@@ -80,6 +80,7 @@ function AdviceBoard() {
       navigate(`/community/advice/detail/${adviceId}`);
     } else {
       Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
+      navigate("/login");
     }
   };
 
@@ -88,6 +89,7 @@ function AdviceBoard() {
       navigate("/community/advice/create");
     } else {
       Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
+      navigate("/login");
     }
   };
 

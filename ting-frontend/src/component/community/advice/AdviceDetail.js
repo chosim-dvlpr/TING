@@ -128,8 +128,8 @@ function AdviceDetail() {
       <div className={adviceStyles.adviceBoardContainer}>
         <Sidebar />
         <div className={styles.deleteButtonContainer}>
-          <div className={styles.listButton}>
-            <span onClick={() => navigate(-1)}>목록</span>
+          <div className={styles.listButton} onClick={() => navigate(-1)}>
+            <span>목록</span>
           </div>
           {showbutton(advice.nickname) && (
             <button className={styles.deleteButton}>

@@ -179,8 +179,8 @@ function IssueDetail() {
       <div className={styles.issueBoardContainer}>
         <div className={styles.issueDetailContainer}>
           <div className={styles.buttonContainer}>
-            <button className={styles.listButton}>
-              <span onClick={() => navigate(-1)}>목록</span>
+            <button className={styles.listButton} onClick={() => navigate(-1)}>
+              <span>목록</span>
             </button>
             {showbutton(issue.nickname) && (
               <button className={styles.deleteButton}>
