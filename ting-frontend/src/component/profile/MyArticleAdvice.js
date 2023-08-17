@@ -13,6 +13,7 @@ import { getDate } from "../common/TimeCalculate";
 function MyArticleAdvice() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
   const [myAdviceArticleList, setMyAdviceArticleList] = useState([]);
 
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ function MyArticleAdvice() {
         if (response.data.code === 200) {
           setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
           setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+          setTotalElements(response.data.data.totalElements);
         } else if (response.data.code === 400) {
           console.log("실패");
         } else if (response.data.code === 403) {
@@ -67,7 +69,7 @@ function MyArticleAdvice() {
           {myAdviceArticleList.length > 0 ? (
             myAdviceArticleList.map((article, i) => (
               <tr key={i}>
-                <td>{article.adviceId}</td>
+                <td>{totalElements - 10 * (currentPage - 1) - i}</td>
                 <td
                   className={commonStyles.clickable}
                   onClick={() =>

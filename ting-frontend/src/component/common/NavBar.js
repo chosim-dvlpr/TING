@@ -56,45 +56,25 @@ const NavBar = () => {
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
         <Link className={styles.navMenu} to="/">
-          <img
-            src={process.env.PUBLIC_URL + "/img/ting_logo_fish.png"}
-            className={styles.logo}
-            alt="logo"
-          ></img>
+          <img src={process.env.PUBLIC_URL + "/img/ting_logo_fish.png"} className={styles.logo} alt="logo"></img>
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
-          <img
-            src={process.env.PUBLIC_URL + "/img/해마.png"}
-            className={styles.menuItem}
-          ></img>
+          <img src={process.env.PUBLIC_URL + "/img/해마.png"} className={styles.menuItem}></img>
           <div className={styles.menuName}>튜토리얼</div>
         </Link>
         <Link className={styles.navMenu} to="/community">
-          <img
-            src={process.env.PUBLIC_URL + "/img/불가사리.png"}
-            className={styles.menuItem}
-          ></img>
+          <img src={process.env.PUBLIC_URL + "/img/불가사리.png"} className={styles.menuItem}></img>
           <div className={styles.menuName}>커뮤니티</div>
         </Link>
         {userData ? (
           <Link className={styles.navMenu} to="/item/shop">
-            <img
-              src={process.env.PUBLIC_URL + "/img/해초2.png"}
-              className={styles.menuItem}
-            ></img>
+            <img src={process.env.PUBLIC_URL + "/img/해초2.png"} className={styles.menuItem}></img>
             <div className={styles.menuName}>아이템샵</div>
           </Link>
         ) : null}
         {userData ? (
-          <Link
-            className={`${styles.navMenu} ${styles.matchingMenu}`}
-            to="/matching"
-          >
-            <img
-              id={styles.tingBtn}
-              src={process.env.PUBLIC_URL + "/img/air-balloon.png"}
-              className={styles.menuItem}
-            ></img>
+          <Link className={`${styles.navMenu} ${styles.matchingMenu}`} to="/matching">
+            <img id={styles.tingBtn} src={process.env.PUBLIC_URL + "/img/air-balloon.png"} className={styles.menuItem}></img>
             <div className={styles.menuName}>시작하기</div>
           </Link>
         ) : null}
@@ -105,6 +85,7 @@ const NavBar = () => {
             {dropdown ? (
               <div className={styles.dropDownMenu}>
                 <div onClick={handleMypage}>마이페이지</div>
+                {userData && userData.email === "admin@admin.com" ? <div onClick={() => navigate("/admin")}>관리자페이지</div> : null}
                 <div onClick={handleLogout}>로그아웃</div>
               </div>
             ) : null}
@@ -122,11 +103,7 @@ const NavBar = () => {
           </div>
         ) : (
           <>
-            <div
-              id={styles.login}
-              className={styles.loginDiv}
-              onClick={() => navigate("/login")}
-            >
+            <div id={styles.login} className={styles.loginDiv} onClick={() => navigate("/login")}>
               로그인
             </div>
           </>
