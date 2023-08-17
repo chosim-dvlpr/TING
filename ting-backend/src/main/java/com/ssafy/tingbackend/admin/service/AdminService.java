@@ -4,16 +4,26 @@ import com.ssafy.tingbackend.admin.dto.AdminLoginLogDto;
 import com.ssafy.tingbackend.admin.dto.AdminQnaDto;
 import com.ssafy.tingbackend.admin.dto.AdminReportDto;
 import com.ssafy.tingbackend.admin.repository.*;
+import com.ssafy.tingbackend.board.repository.AdviceBoardRepository;
+import com.ssafy.tingbackend.board.repository.CommentRepository;
+import com.ssafy.tingbackend.board.repository.IssueBoardRepository;
 import com.ssafy.tingbackend.common.dto.PageResult;
 import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.entity.QnA;
 import com.ssafy.tingbackend.entity.Report;
+import com.ssafy.tingbackend.entity.board.AdviceBoard;
+import com.ssafy.tingbackend.entity.board.Comment;
+import com.ssafy.tingbackend.entity.board.IssueBoard;
 import com.ssafy.tingbackend.entity.matching.Matching;
+import com.ssafy.tingbackend.entity.matching.MatchingUser;
 import com.ssafy.tingbackend.entity.payment.PointPayment;
+import com.ssafy.tingbackend.entity.type.ReportType;
 import com.ssafy.tingbackend.entity.user.LoginLog;
 import com.ssafy.tingbackend.entity.user.User;
+import com.ssafy.tingbackend.user.dto.UserDto;
 import com.ssafy.tingbackend.user.repository.UserRepository;
+import com.ssafy.tingbackend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,8 +31,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +51,13 @@ public class AdminService {
     private final AdminQnaRepository qnaRepository;
     private final AdminPointPaymentRepository pointPaymentRepository;
     private final AdminMatchingRepository matchingRepository;
+    private final AdminMatchingUserRepository matchingUserRepository;
+    private final AdviceBoardRepository adviceBoardRepository;
+    private final IssueBoardRepository issueBoardRepository;
+    private final CommentRepository commentRepository;
+    private final UserService userService;
 
+    @Transactional
     public Map<String, Object> getReportList(PageRequest pageRequest) {
         Page<Report> reportList = reportRepository.findAll(pageRequest);
 
@@ -57,7 +71,33 @@ public class AdminService {
         );
 
         List<AdminReportDto> adminReportDtoList = new ArrayList<>();
-        reportList.map(report -> adminReportDtoList.add(AdminReportDto.of(report)));
+        reportList.map(report -> {
+            AdminReportDto saveDto = AdminReportDto.of(report);
+
+            if (report.getType() == ReportType.MATCHING) {
+                MatchingUser matchingUser = matchingUserRepository.findByMatchingAndNotUser(report.getTypeId(), report.getUser().getId())
+                        .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+                saveDto.setReportedUserId(matchingUser.getUser().getId());
+                saveDto.setReportedUserNickname(matchingUser.getUser().getNickname());
+            } else if (report.getType() == ReportType.ADVICE_BOARD) {
+                AdviceBoard adviceBoard = adviceBoardRepository.findById(report.getTypeId())
+                        .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
+                saveDto.setReportedUserId(adviceBoard.getUser().getId());
+                saveDto.setReportedUserNickname(adviceBoard.getUser().getNickname());
+            } else if (report.getType() == ReportType.ISSUE_BOARD) {
+                IssueBoard issueBoard = issueBoardRepository.findById(report.getTypeId())
+                        .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
+                saveDto.setReportedUserId(issueBoard.getUser().getId());
+                saveDto.setReportedUserNickname(issueBoard.getUser().getNickname());
+            } else if (report.getType() == ReportType.COMMENT) {
+                Comment comment = commentRepository.findById(report.getTypeId())
+                        .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+                saveDto.setReportedUserId(comment.getUser().getId());
+                saveDto.setReportedUserNickname(comment.getUser().getNickname());
+            }
+
+            return adminReportDtoList.add(saveDto);
+        });
 
         return Map.of(
                 "reportList", adminReportDtoList,
@@ -69,7 +109,39 @@ public class AdminService {
     public AdminReportDto getReport(Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new CommonException(ExceptionType.REPORT_NOT_FOUND));
-        return AdminReportDto.of(report);
+
+        AdminReportDto saveDto = AdminReportDto.of(report);
+
+        if (report.getType() == ReportType.MATCHING) {
+            MatchingUser matchingUser = matchingUserRepository.findByMatchingAndNotUser(report.getTypeId(), report.getUser().getId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
+            saveDto.setReportedUserId(matchingUser.getUser().getId());
+            saveDto.setReportedUserNickname(matchingUser.getUser().getNickname());
+        } else if (report.getType() == ReportType.ADVICE_BOARD) {
+            AdviceBoard adviceBoard = adviceBoardRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
+            saveDto.setReportedUserId(adviceBoard.getUser().getId());
+            saveDto.setReportedUserNickname(adviceBoard.getUser().getNickname());
+        } else if (report.getType() == ReportType.ISSUE_BOARD) {
+            IssueBoard issueBoard = issueBoardRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
+            saveDto.setReportedUserId(issueBoard.getUser().getId());
+            saveDto.setReportedUserNickname(issueBoard.getUser().getNickname());
+        } else if (report.getType() == ReportType.COMMENT) {
+            Comment comment = commentRepository.findById(report.getTypeId())
+                    .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
+            saveDto.setReportedUserId(comment.getUser().getId());
+            saveDto.setReportedUserNickname(comment.getUser().getNickname());
+        }
+
+        return saveDto;
+    }
+
+    @Transactional
+    public void registerComment(Long reportId, String comment) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new CommonException(ExceptionType.REPORT_NOT_FOUND));
+        report.setComment(comment);
     }
 
     @Transactional
@@ -102,6 +174,7 @@ public class AdminService {
         );
     }
 
+    @Transactional
     public Map<String, Object> getQnaList(PageRequest pageRequest) {
         Page<QnA> qnaList = qnaRepository.findAll(pageRequest);
 
@@ -229,5 +302,9 @@ public class AdminService {
 
     public Long totalProfit() {
         return pointPaymentRepository.findTotalProfit();
+    }
+
+    public UserDto.Detail getUser(Long userId) {
+        return userService.userDetail(userId);
     }
 }

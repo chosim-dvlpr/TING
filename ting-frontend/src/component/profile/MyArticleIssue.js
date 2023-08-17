@@ -9,6 +9,7 @@ import tokenHttp from "../../api/tokenHttp";
 
 import commonStyles from "./ProfileCommon.module.css"
 import styles from "./MyArticle.module.css";
+import {getDate} from "../common/TimeCalculate";
 
 function MyArticleIssue() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +30,6 @@ function MyArticleIssue() {
     tokenHttp.get('/issue/search', { params: params }).then((response) => {
       // console.log(response)
       if (response.data.code === 200) {
-        console.log('성공');
         setMyIssueArticleList(response.data.data.issueBoardList); // 내가 쓴 게시글 데이터를 저장
         setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
       }
@@ -71,13 +71,13 @@ function MyArticleIssue() {
 
         <tbody>
           {
-            myIssueArticleList > 0 ?
+            myIssueArticleList.length > 0 ?
               myIssueArticleList.map((article, i) => (
                 <tr key={i}>
                   <td>{article.issueId}</td>
                   <td className={commonStyles.clickable} onClick={() => navigate(`/community/issue/detail/${article.issueId}`)}>{article.title}</td>
                   <td>{article.hit}</td>
-                  <td>{article.createdTime}</td>
+                  <td>{getDate(article.createdTime)}</td>
                 </tr>
               ))
               : <tr><td colSpan={4}>작성한 게시글이 없습니다.</td></tr>

@@ -38,8 +38,8 @@ public class TemperatureService {
     private final ChattingMessageRepository chattingMessageRepository;
 
     @Scheduled(cron = "0 0 2,6,10,14,18,20,22 * * *", zone = "Asia/Seoul")  // 매일 2시, 6시, 10시, 14시, 18시, 20시, 22시
-    @Transactional
     @Async
+    @Transactional
     public void updateTeperature() throws IOException {
         log.info("채팅방 온도 업데이트 시작 ({})", LocalDateTime.now());
 
@@ -47,32 +47,37 @@ public class TemperatureService {
         List<Chatting> chattingList = chattingRepository.findAllByState(ChattingType.ALIVE);
         LocalDateTime now = LocalDateTime.now();
         int durationTime;  // 이전 업데이트와 차이 시간
-        if(now.getHour() == 20 || now.getHour() == 22) {
+        if (now.getHour() == 20 || now.getHour() == 22) {
             durationTime = 7200;  // 7200초 = 2시간
         } else {
             durationTime = 14400;  // 14400 = 4시간
         }
 
-        for(Chatting chatting : chattingList) {
+        for (Chatting chatting : chattingList) {
             // 마지막 대화가 3일이 넘었는데 상태가 ALIVE인 경우 상태 DEAD로 바꿔주기
             Duration chattingDuration;
-            if(chatting.getLastChattingTime() != null) chattingDuration = Duration.between(now, chatting.getLastChattingTime());
-            else chattingDuration = Duration.between(now, chatting.getCreatedTime());
+            if (chatting.getLastChattingTime() != null)
+                chattingDuration = Duration.between(chatting.getLastChattingTime(), now);
+            else chattingDuration = Duration.between(chatting.getCreatedTime(), now);
 
-            if(chattingDuration.getSeconds() > 259200) chatting.setState(ChattingType.DEAD);  // 259200초=3일
+            if (chattingDuration.getSeconds() > 259200) { // 259200초=3일
+                chatting.setState(ChattingType.DEAD);
+//                chattingRepository.save(chatting);
+                continue;
+            }
 
             List<ChattingMessageDto> chattingMessages =
                     chattingMessageRepository.findAllByChattingIdOrderBySendTimeDesc(chatting.getId());
-            if(chattingMessages.size() == 0) continue;
-            
+            if (chattingMessages.size() == 0) continue;
+
             String messagesText = "";
             int count = 1;  // 채팅을 주고받은 횟수 (메세지 보낸 사용자가 바뀌는 경우 +1)
             Long userId = chattingMessages.get(0).getUserId();
-            for(ChattingMessageDto message : chattingMessages) {
-                Duration messageDuration = Duration.between(now, message.getSendTime());
-                if(messageDuration.getSeconds() > durationTime) break;  // 이전 업데이트에 포함됐던 메세지면 그만 보기
+            for (ChattingMessageDto message : chattingMessages) {
+                Duration messageDuration = Duration.between(message.getSendTime(), now);
+                if (messageDuration.getSeconds() > durationTime) break;  // 이전 업데이트에 포함됐던 메세지면 그만 보기
 
-                if(message.getUserId() != userId) {
+                if (message.getUserId() != userId) {
                     count++;
                     userId = message.getUserId();
                 }
@@ -80,7 +85,7 @@ public class TemperatureService {
             }
 
             // 주고받은 메세지가 하나도 없는 경우 온도-0.2
-            if(messagesText.length() == 0) {
+            if (messagesText.length() == 0) {
                 chatting.changeTemperature(new BigDecimal("-0.2"));
                 continue;
             }
@@ -89,27 +94,27 @@ public class TemperatureService {
 
             // 감정 점수에 대한 온도 반영
             BigDecimal sentimentScore = analyzeMessage(messagesText);
-            if(sentimentScore.compareTo(new BigDecimal("-0.2")) <= 0 &&
-                sentimentScore.compareTo(new BigDecimal("-0.5")) > 0) {
+            if (sentimentScore.compareTo(new BigDecimal("-0.2")) <= 0 &&
+                    sentimentScore.compareTo(new BigDecimal("-0.5")) > 0) {
                 temperatureDiff += -0.1;
-            } else if(sentimentScore.compareTo(new BigDecimal("-0.5")) <= 0) {
+            } else if (sentimentScore.compareTo(new BigDecimal("-0.5")) <= 0) {
                 temperatureDiff += -0.2;
-            } else if(sentimentScore.compareTo(new BigDecimal("0.2")) >= 0 &&
+            } else if (sentimentScore.compareTo(new BigDecimal("0.2")) >= 0 &&
                     sentimentScore.compareTo(new BigDecimal("0.5")) < 0) {
                 temperatureDiff += 0.1;
-            } else if(sentimentScore.compareTo(new BigDecimal("0.5")) >= 0) {
+            } else if (sentimentScore.compareTo(new BigDecimal("0.5")) >= 0) {
                 temperatureDiff += 0.2;
             }
 
             // 채팅 빈도에 대한 온도 반영
             count /= 2;
-            if(count == 0) {
+            if (count == 0) {
                 temperatureDiff += -0.2;
-            } else if(count == 1 || count == 2) {
+            } else if (count == 1 || count == 2) {
                 temperatureDiff += -0.1;
-            } else if(count >= 6 && count <= 10) {
+            } else if (count >= 6 && count <= 10) {
                 temperatureDiff += 0.1;
-            } else if(count >= 10) {
+            } else if (count >= 10) {
                 temperatureDiff += 0.2;
             }
 

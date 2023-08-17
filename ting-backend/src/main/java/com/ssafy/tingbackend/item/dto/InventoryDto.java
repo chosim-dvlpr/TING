@@ -2,10 +2,7 @@ package com.ssafy.tingbackend.item.dto;
 
 import com.ssafy.tingbackend.entity.item.Inventory;
 import com.ssafy.tingbackend.entity.type.ItemType;
-import com.ssafy.tingbackend.entity.user.User;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -22,6 +19,7 @@ public class InventoryDto {
 
     private int quantity;
 
+    private String name;
     private String description;
 
     public static InventoryDto of(Inventory inventory) {
@@ -30,7 +28,8 @@ public class InventoryDto {
                 .userId(inventory.getUser().getId())
                 .itemType(inventory.getItemType())
                 .quantity(inventory.getQuantity())
-                .description(inventory.getItemType().getName())
+                .name(inventory.getItemType().getName())
+                .description(inventory.getItemType().getDescription())
                 .build();
     }
 }

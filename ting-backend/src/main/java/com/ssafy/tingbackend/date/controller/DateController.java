@@ -16,6 +16,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class DateController {
 
     /**
      * 질문카드 조회 API
+     *
      * @return 질문카드 리스트
      */
     @GetMapping("/date/question/{matchingId}")
@@ -36,7 +38,8 @@ public class DateController {
 
     /**
      * 질문별 점수 저장 API
-     * @param principal 로그인한 유저의 id (자동주입)
+     *
+     * @param principal       로그인한 유저의 id (자동주입)
      * @param scoreHistoryDto matchingId, questionId, score, questionOrder
      * @return Only code and message
      */
@@ -50,8 +53,9 @@ public class DateController {
 
     /**
      * 최종 점수 저장 API
+     *
      * @param principal 로그인한 유저의 id (자동주입)
-     * @param map matchingId, totalScore
+     * @param map       matchingId, totalScore
      * @return Only code and message
      */
     @PostMapping("/date/score/total")
@@ -64,23 +68,21 @@ public class DateController {
 
     /**
      * 최종 선택 API
-     * @param principal 로그인한 유저의 id (자동주입)
+     *
+     * @param principal  로그인한 유저의 id (자동주입)
      * @param requestMap matchingId, choice
      * @return 매칭 성공 여부
      */
     @PostMapping("/date/result")
-    public DeferredResult<DataResponse<Boolean>> selectFinalChoice(@RequestBody Map<String, Object> requestMap, Principal principal) {
-        DeferredResult deferredResult = new DeferredResult(30_000L);  // 타임아웃 시간 30초
-        deferredResult.onTimeout(() -> {
-            throw new CommonException(ExceptionType.MATCHING_CHOICE_TIME_OUT);
-        });
+    public CommonResponse selectFinalChoice(@RequestBody Map<String, Object> requestMap, Principal principal) throws InterruptedException {
+        Long matchingId = Long.parseLong(requestMap.get("matchingId").toString());
+        Long userId = Long.parseLong(principal.getName());
+        log.info("/date/result - matchingId: {}", matchingId);
+        log.info("/date/result - userId: {}", userId);
 
-        dateService.selectFinalChoice(Long.parseLong(requestMap.get("matchingId").toString()),
-                requestMap.get("choice").toString(),
-                Long.parseLong(principal.getName()),
-                deferredResult);
+        dateService.selectFinalChoice(matchingId, requestMap.get("choice").toString(), userId);
 
-        return deferredResult;
+        return new CommonResponse(200, "최종 선택 완료");
     }
 
 }

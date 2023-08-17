@@ -12,7 +12,7 @@ public interface IssueBoardRepository extends JpaRepository<IssueBoard, Long> {
     @Query("SELECT i FROM IssueBoard i WHERE i.isRemoved=false")
     Page<IssueBoard> findList(Pageable pageable);
 
-    Page<IssueBoard> findByUserId(Long userId, PageRequest pageRequest);
+    Page<IssueBoard> findAllByUserIdAndIsRemovedFalse(Long userId, PageRequest pageRequest);
 
     @Query("SELECT i FROM IssueBoard i WHERE i.isRemoved=false AND i.title Like %:keyword%")
     Page<IssueBoard> findByTitleContaining(String keyword, PageRequest pageRequest);

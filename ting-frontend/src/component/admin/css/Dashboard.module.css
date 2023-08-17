@@ -93,7 +93,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3px;
+    padding: 13px;
 }
 
 .chartPrice {
@@ -101,7 +101,7 @@
 }
 
 .chartMatching {
-    background-color: #49A54D;   
+    background-color: #49A54D;
 }
 
 .chartDescription {
@@ -110,4 +110,18 @@
     background-color: white;
     margin-top: 70px;
     border-radius: 10px;
+}
+
+.descriptionContainer {
+    position: absolute;
+    top: 280px;
+    left: 25px;
+}
+
+.descriptionTitle {
+    margin-bottom: 30px;
+}
+
+.updateTime {
+    color: #929292;
 }

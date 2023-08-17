@@ -6,21 +6,19 @@ import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
 import com.ssafy.tingbackend.common.security.JwtUtil;
 import com.ssafy.tingbackend.user.dto.UserDto;
+import com.ssafy.tingbackend.user.dto.UserSkinDto;
 import com.ssafy.tingbackend.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -79,7 +77,14 @@ public class UserController {
 
     @PostMapping("/user/profile")
     public CommonResponse profile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
-        userService.saveProfile(file, principal);
+        userService.saveProfile(file, Long.parseLong(principal.getName()));
+        return new CommonResponse(200, "프로필 등록 성공");
+    }
+
+    @PostMapping("/user/profile/noToken")
+    public CommonResponse profileNoToken(@RequestParam("file") MultipartFile file, @RequestParam("email") String email,
+                                         @RequestParam("password") String password) throws IOException {
+        userService.saveProfileNoToken(file, email, password);
         return new CommonResponse(200, "프로필 등록 성공");
     }
 
@@ -88,10 +93,19 @@ public class UserController {
         return userService.getProfile(Long.parseLong(principal.getName()));
     }
 
+    /**
+     * 프로필 이미지 조회
+     */
     @GetMapping("/user/profile/{userId}")
     public ResponseEntity<Resource> getProfile(@PathVariable Long userId) {
         return userService.getProfile(userId);
     }
+
+    @GetMapping("/skin/fish/{fileName}")
+    public ResponseEntity<Resource> getFishSkin(@PathVariable String fileName) {
+        return userService.getFishSkin(fileName);
+    }
+
 
     /**
      * 닉네임 중복 확인 API
@@ -254,4 +268,9 @@ public class UserController {
         return new CommonResponse(200, "임시 비밀번호 전송 성공");
     }
 
+    @GetMapping("/user/skin")
+    public DataResponse<UserSkinDto> getSkin(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        return new DataResponse<>(200, "현재 유저의 어항 반환", userService.getSkin(userId));
+    }
 }

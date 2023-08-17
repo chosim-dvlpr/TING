@@ -32,7 +32,7 @@ import NavBar from "./component/common/NavBar";
 import MatchingPage from "./pages/MatchingPage.js";
 import WaitingRoom from "./component/matching/WaitingRoom.js";
 import MatchingStart from "./component/matching/MatchingStart.js";
-import MatchingFinal from "./component/matching/MatchingFinal";
+import MatchingResult from "./component/matching/MatchingResult";
 
 // 커뮤니티
 
@@ -64,12 +64,16 @@ import ItemPage from "./pages/ItemPage";
 // 관리자
 import AdminPage from "./pages/AdminPage";
 import Dashboard from "./component/admin/Dashboard";
+import Report from "./component/admin/Report";
+import ReportDetail from "./component/admin/ReportDetail";
+import User from "./component/admin/User";
+import Qna from "./component/admin/Qna";
 
 // 친구
-import Friend from './component/friend/Friend';
-import FriendList from './component/friend/FriendList';
-import FriendChatting from './component/friend/FriendChatting';
-import FriendProfile from './component/friend/FriendProfile';
+import Friend from "./component/friend/Friend";
+import FriendList from "./component/friend/FriendList";
+import FriendChatting from "./component/friend/FriendChatting";
+import FriendProfile from "./component/friend/FriendProfile";
 
 // 아이템샵
 import ItemShop from "./component/item/ItemShop";
@@ -82,6 +86,7 @@ import QnaDetail from "./component/profile/QnaDetail";
 
 import KakaoPayCancel from "./pages/pay-result-page/KakaoPayCancel";
 import KakaoPayFail from "./pages/pay-result-page/KakaoPayFail";
+import ProfileImage from "./component/signup/select/profileImage";
 
 function App() {
   let accessToken = localStorage.getItem("access-token");
@@ -123,6 +128,7 @@ function App() {
             <Route path="personality" element={<Personality />}></Route>
             <Route path="style" element={<Style />}></Route>
             <Route path="introduce" element={<Introduce />}></Route>
+            <Route path="profileimage" element={<ProfileImage />}></Route>
           </Route>
         </Route>
 
@@ -130,6 +136,7 @@ function App() {
         <Route path="/matching" element={<MatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
           <Route path="start" element={<MatchingStart />}></Route>
+          <Route path="result" element={<MatchingResult />}></Route>
         </Route>
 
         {/* 커뮤니티 페이지 */}
@@ -178,9 +185,14 @@ function App() {
         <Route path="/payment/kakaoPayCancel" element={<KakaoPayCancel />} />
         <Route path="/payment/kakaoPayFail" element={<KakaoPayFail />} />
 
+        {/* 관리자 페이지 */}
         <Route path="/admin" element={<AdminPage />}>
           <Route path="" element={<Dashboard />}></Route>
-          <Route path="dashboard" element={<Dashboard />}></Route>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="report" element={<Report />} />
+          <Route path="report/detail" element={<ReportDetail />} />
+          <Route path="user" element={<User />} />
+          <Route path="qna" element={<Qna />} />
         </Route>
       </Routes>
     </div>

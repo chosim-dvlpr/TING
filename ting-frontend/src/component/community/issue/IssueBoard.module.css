@@ -1,60 +1,81 @@
+.issueBoardBackground {
+  padding: 20px 0;
+  min-height: 100vh;
+}
+
+
 .issueBoardContainer {
   margin: 0 auto;
   background-color: white;
   width: 80%;
   min-width: 1200px;
-  height: 1000pxs;
-  padding: 20px;
+  height: 100%;
+  padding: 10px 20px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  border-radius: 50px;
 }
 
-.createButton {
-  width: 120px;
-  height: 50px;
-  padding: 8px 16px;
-  background-color: rgb(0, 131, 159);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  float: right;
-  border-radius: 15px;
-  /* margin: 10px; */
-}
-
-.createButton:hover {
-  background-color: #0056b3;
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+  min-width: 1000px;
+  margin: 0 auto;
 }
 
 .cardList {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 800px; 
-  margin: 0 auto;
+  width: 70%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  margin: 4px auto 16px;
+  font-size: 16px;
 }
 
 .card {
-  border: 1px solid #ccc;
-  padding: 15px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent; 
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 30px;
   margin-bottom: 20px;
-  border-radius: 5px;
-  background-color: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 24px; 
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(20px); 
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); 
+  flex-direction: column;
+  justify-content: space-between; 
+  line-height: 1.5;
+  
+
+}
+
+.card span {
+  display: flex;
+  align-items: center;
+  height: 100px;
+  font-size: 144px;
+  padding: 0;
+  color: white;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .link {
   cursor: pointer;
-  color: #007bff;
+ 
 }
 
-.cardFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+.link:hover {
+  text-decoration: underline;
 }
+
+
 
 .cardVotes {
   display: flex;
@@ -69,6 +90,8 @@
 
 .dropdownContainer {
   position: relative;
+  float: right;
+  margin-left:10px;
 }
 
 .dropdownKebab {
@@ -78,6 +101,7 @@
 }
 
 .dropdownContent {
+  display:none;
   position: absolute;
   top: 100%;
   right: 0;
@@ -102,4 +126,37 @@
 
 .dropdownContent span:hover {
   background-color: #f8f8f8;
+}
+
+.createButton {
+  height: 44px;
+  padding: 8px 16px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 15px;
+  /* margin: 10px; */
+}
+
+.createButton:hover {
+  background-color: #d75c6b;
+}
+
+
+.title {
+  display: flex;
+  justify-content: space between;
+  align-items: center;
+}
+
+.title div {
+  flex: 1; /* 각 아이템이 가득 차게 설정 */
+  text-align: center; /* 내부 아이템 가운데 정렬 */
+}
+
+.title .link {
+  flex: 2; /* 제목 아이템이 더 크게 설정 */
+  text-align: center; /* 가운데 정렬 */
 }

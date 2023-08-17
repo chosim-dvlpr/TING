@@ -10,7 +10,7 @@ export function PriceChart() {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        display: false,
       },
     },
   };
@@ -22,10 +22,9 @@ export function PriceChart() {
     labels,
     datasets: [
       {
-        label: "sales price",
+        label: "profit",
         data: dataSet,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        borderColor: "rgb(255, 255, 255)",
       },
     ],
   };

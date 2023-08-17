@@ -2,32 +2,14 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CommentLikeButton from "./CommentLikeButton"; 
 import styles from "./CommentList.module.css";
-
-
-
+import {getDate} from "../../common/TimeCalculate";
 
 function CommentList({ comments, onUpdateComment, onDeleteComment }) {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState("");
   const userdata = useSelector((state) => state.userdataReducer.userdata); // Redux의 userdata 상태 가져오기
-
-  // 날짜 시간 나누기
-  const calculateDate = (boardTime) => {
-    if (!boardTime) return "";
-    console.log(boardTime);
-    if (isSameDate(boardTime)) {
-      return boardTime.substr(11, 5);
-    } else return boardTime.substr(0, 10);
-  };
-
-  const isSameDate = (boardTime) => {
-    const time = new Date(boardTime);
-    const currentTime = new Date();
-    return (
-      time.getFullYear() === currentTime.getFullYear() &&
-      time.getMonth() === currentTime.getMonth() &&
-      time.getDate() === currentTime.getDate()
-    );
+  const showbutton = (nickname) => {
+    return userdata && userdata.nickname === nickname
   };
 
   // 댓글 수정
@@ -93,7 +75,7 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
             <div className={styles["comment-details"]}>
               {editingCommentId === comment.commentId ? (
                 <div>
-                  <textarea
+                  <input
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
@@ -108,23 +90,27 @@ function CommentList({ comments, onUpdateComment, onDeleteComment }) {
               ) : (
                 // 댓글 div
                 <div className={styles.comment}>
-                <span className={styles["nickname"]}>{userdata.nickname}</span>
+                <span className={styles["nickname"]}>{comment.nickname}</span>
                   <p className={styles["comment-content"]}>{comment.content}</p>
                   <span className={styles["comment-time"]}>
                     {comment.modifiedTime === null
-                      ? calculateDate(comment.createdTime)
-                      : `${calculateDate(comment.modifiedTime)} (수정됨)`}</span>
+                      ? getDate(comment.createdTime)
+                      : `${getDate(comment.modifiedTime)}`}</span>
                 <span className={styles["comment-like-button"]}>
                   <CommentLikeButton commentId={comment.commentId}
                     initialLikes={comment.likeCount}
                     onUpdateLikes={handleUpdateLikes}/></span>
-          
-                <button onClick={() => handleUpdate(comment.commentId, comment.content)} className={styles["edit-button"]}>
+
+                        
+
+                <div>
+                {showbutton(comment.nickname) && (<button onClick={() => handleUpdate(comment.commentId, comment.content)} className={styles["edit-button"]}>
                   수정
-                </button>
-                <button onClick={() => handleDelete(comment.commentId)} className={styles["delete-button"]}>
+                </button>)}
+                {showbutton(comment.nickname) && (<button onClick={() => handleDelete(comment.commentId)} className={styles["delete-button"]}>
                  삭제
-                </button>
+                </button>)}
+                </div>
               </div>
               )}
             </div>

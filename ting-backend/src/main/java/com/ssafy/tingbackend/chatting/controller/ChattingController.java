@@ -29,6 +29,7 @@ public class ChattingController {
      */
     @GetMapping("/chatting/{chattingId}")
     public DataResponse<Map<String, Object>> chattingList(@PathVariable Long chattingId) {
+        log.info("채팅 목록 조회 API, chattingId = {}", chattingId);
         Map<String, Object> result = chattingService.chattingList(chattingId);
         return new DataResponse<>(200, "채팅 목록 조회 성공", result);
     }
@@ -39,6 +40,7 @@ public class ChattingController {
      */
     @MessageMapping("/chat/enter")
     public void enter(MessageRequestDto messageRequestDto) {
+        log.info("리스트 -> 방 이동 messageRequestDto : {}", messageRequestDto);
         chattingService.enter(messageRequestDto);
     }
 
@@ -48,6 +50,7 @@ public class ChattingController {
      */
     @MessageMapping("/chat/quit")
     public void quit(MessageRequestDto messageRequestDto) {
+        log.info("방 -> 리스트 이동 messageRequestDto : {}", messageRequestDto);
         chattingService.quit(messageRequestDto);
     }
 
@@ -57,6 +60,7 @@ public class ChattingController {
      */
     @MessageMapping("/chat/message")
     public void message(MessageRequestDto messageRequestDto) {
+        log.info("방 안에서 메세지 보내기 messageRequestDto : {}", messageRequestDto);
         chattingService.convertAndSendMessage(
             messageRequestDto.getRoomId(),
             messageRequestDto.getUserId(),
@@ -69,6 +73,7 @@ public class ChattingController {
      */
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        log.info("웹 소캣 연결 끊김");
         chattingService.checkAndReset();
     }
 
@@ -78,6 +83,7 @@ public class ChattingController {
      */
     @GetMapping("/chatting/delete")
     public CommonResponse deleteMessages() {
+        log.info("채팅 삭제 API");
         chattingService.deleteMessages();
         return new CommonResponse();
     }

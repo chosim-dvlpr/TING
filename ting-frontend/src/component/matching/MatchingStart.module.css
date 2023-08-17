@@ -50,6 +50,7 @@ p{
 .session {
   display: flex;
   align-items: center;
+  height: 75%;
 }
 
 .sessionHeader{
@@ -188,4 +189,33 @@ p{
 .timer {
   font-family: UhBeeSe_hyun;
   font-size: 32px;
+}
+
+
+.MatchingChoice {
+  position: absolute;
+  top:0;
+  background-color: aqua;
+}
+
+.ScoreSumResult {
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+
+.ScoreSumResult p{
+  font-size: 70px;
+  font-family: UhBeeSe_hyun;
+}
+
+.ScoreSumResult h1 {
+  margin: 0 130px;
+  font-family: UhBeeSe_hyun;
+}
+
+.ScoreCheckBox h1{
+  height: 86px;
+  margin-bottom:10px;
+  line-height: 86px;
 }

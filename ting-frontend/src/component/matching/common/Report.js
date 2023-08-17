@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { userdataReducer } from "./../../../redux/userdata";
+import tokenHttp from "../../../api/tokenHttp";
 
 function Report({ setShowReportModal, session }) {
   const state = useSelector((state) => state);
@@ -22,6 +23,14 @@ function Report({ setShowReportModal, session }) {
       alert("신고 내용을 입력해주세요.");
     } else {
       // 서버로 신고 내용 전송
+      console.log(state.matchingReducer.matchingId);
+      tokenHttp.post("/report", {
+        type: "MATCHING",
+        content: reportContent,
+        typeId: state.matchingReducer.matchingId,
+      });
+
+      // 상대에게 신고 신호 전달 (나와 상대방이 방에서 나가짐)
       session.signal({
         type: "report",
         to: [],

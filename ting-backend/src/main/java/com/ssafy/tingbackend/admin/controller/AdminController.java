@@ -5,6 +5,7 @@ import com.ssafy.tingbackend.admin.dto.AdminReportDto;
 import com.ssafy.tingbackend.admin.service.AdminService;
 import com.ssafy.tingbackend.common.response.CommonResponse;
 import com.ssafy.tingbackend.common.response.DataResponse;
+import com.ssafy.tingbackend.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,20 @@ public class AdminController {
         AdminReportDto adminReportDto = adminService.getReport(reportId);
 
         return new DataResponse<>(200, "신고 조회 성공", adminReportDto);
+    }
+
+    @PostMapping("/admin/report")
+    public CommonResponse registerComment(@RequestBody Map<String, String> requestMap) {
+        Long reportId = Long.parseLong(requestMap.get("reportId"));
+        String comment = requestMap.get("comment");
+        adminService.registerComment(reportId, comment);
+
+        return new CommonResponse(200, "관리자 의견 등록 성공");
+    }
+
+    @GetMapping("/admin/user/{userId}")
+    public DataResponse<UserDto.Detail> getUser(@PathVariable Long userId) {
+        return new DataResponse<>(200, "유저 조회 성공", adminService.getUser(userId));
     }
 
     @DeleteMapping("/admin/user/{userId}")

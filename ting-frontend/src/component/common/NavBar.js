@@ -8,6 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/userdata";
+import useMessageStore from "../friend/useMessageStore";
 
 const NavBar = () => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
@@ -15,6 +16,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   let [dropdown, setDropdown] = useState(false);
+  const messageStore = useMessageStore();
 
   // drop down 토글 동작 로직
   const dropdownRef = useRef(null);
@@ -35,6 +37,7 @@ const NavBar = () => {
     localStorage.removeItem("access-token"); // localStorage의 access-token 삭제
     localStorage.removeItem("refresh-token"); // localStorage의 refresh-token 삭제
     dispatch(logout()); // redux의 user 정보 삭제
+    messageStore.disconnect();
     setDropdown(false);
     navigate("/"); // 로그인 완료되면 메인으로 이동
   };

@@ -1,0 +1,84 @@
+server:
+  port: 8080
+  ssl:
+    key-store: { KEY_STORE_PATH }
+    key-store-type: { KEY_STORE_TYPE }
+    key-store-password: { KEY_STORE_PASSWORD }
+
+
+spring:
+  jackson:
+    time-zone: Asia/Seoul
+
+  datasource:
+    driver-class-name: { DB_DRIVER_CLASS_NAME }
+    url: { DB_URL }
+    username: { DB_USERNAME }
+    password: { DB_PASSWORD }
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+
+  # 이메일 설정
+  mail:
+    host: { MAIL_HOST }
+    port: { MAIL_PORT }
+    username: { MAIL_USERNAME }
+    password: { MAIL_PASSWORD }
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  # mongoDB
+  data:
+    mongodb:
+      host: { MONGO_HOST }
+      port: { MONGO_PORT }
+      database: { MONGO_DATABASE }
+      authentication-database: { MONGO_AUTHENTICATION_DATABASE }
+      auto-index-creation: true
+      username: { MONGO_USERNAME }
+      password: { MONGO_PASSWORD }
+
+jwt:
+  secretKey: { JWT_SECRET_KEY }
+
+openvidu:
+  url: { OPENVIDU_URL }
+  secret: { OPENVIDU_SECRET }
+
+ncloud:
+  sens:
+    serviceId: { SENS_SERVICE_ID }
+    accessKeyId: { SENS_ACCESS_KEY_ID }
+    secretKey: { SENS_SECRET_KEY }
+    senderPhone: { SENS_SENDER_PHONE }
+
+# profile 이미지 파일경로
+file:
+  path: /app/profile
+  fishSkinPath: /skin/fish
+
+# natural language api
+cloud:
+  gcp:
+    credentials:
+      location: { GCP_CREDENTIALS_LOCATION }
+
+payment:
+  kakaopay:
+    admin:
+      key: { KAKAO_ADMIN_KEY }
+    cid: { KAKAO_CID }
+    url:
+      ready: { KAKAO_READY_URL }
+      approve: { KAKAO_APPROVE_URL }
+    redirectUrl:
+      approvalRedirectUrl: { KAKAO_APPROVAL_REDIRECT_URL }
+      cancelRedirectUrl: { KAKAO_CANCEL_REDIRECT_URL }
+      failRedirectUrl: { KAKAO_FAIL_REDIRECT_URL }

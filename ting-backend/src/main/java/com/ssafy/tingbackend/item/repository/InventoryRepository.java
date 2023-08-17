@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
-    Optional<Inventory> findByItemType(ItemType itemType);
+    @Query("SELECT i FROM Inventory i WHERE i.itemType = :itemType AND i.user.id = :userId")
+    Optional<Inventory> findByItemTypeAndUserId(ItemType itemType, Long userId);
 
     @Query("select i from Inventory i where i.user.id = :userId")
     List<Inventory> findByUserId(@Param("userId") Long userId);
+
+    Optional<Inventory> findByUserIdAndItemType(Long id, ItemType itemType);
 }

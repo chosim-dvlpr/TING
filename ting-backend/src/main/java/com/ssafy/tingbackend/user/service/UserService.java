@@ -4,8 +4,14 @@ import com.ssafy.tingbackend.common.exception.CommonException;
 import com.ssafy.tingbackend.common.exception.ExceptionType;
 import com.ssafy.tingbackend.common.security.JwtAuthenticationProvider;
 import com.ssafy.tingbackend.common.security.JwtUtil;
+import com.ssafy.tingbackend.entity.item.FishSkin;
+import com.ssafy.tingbackend.entity.item.Inventory;
+import com.ssafy.tingbackend.entity.type.ItemType;
 import com.ssafy.tingbackend.entity.type.SidoType;
 import com.ssafy.tingbackend.entity.user.*;
+import com.ssafy.tingbackend.item.dto.InventoryDto;
+import com.ssafy.tingbackend.item.repository.FishSkinRepository;
+import com.ssafy.tingbackend.item.repository.InventoryRepository;
 import com.ssafy.tingbackend.user.dto.*;
 import com.ssafy.tingbackend.user.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +20,23 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,11 +57,16 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final EmailRepository emailRepository;
     private final PhoneNumberAuthRepository phoneNumberRepository;
+    private final InventoryRepository inventoryRepository;
+    private final FishSkinRepository fishSkinRepository;
 
     private final SmsService smsService;
 
     @Value("${file.path}")
     private String uploadPath;
+
+    @Value("${file.defaultProfile}")
+    private String defaultProfile;
 
     public Map<String, String> login(UserDto.Basic userDto) {
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -96,6 +106,14 @@ public class UserService {
     public void signUp(UserDto.Signup userDto) {
         userDto.encodePassword(passwordEncoder.encode(userDto.getPassword()));  // 비밀번호 암호화
 
+        // 이메일, 닉네임 중복체크 처리
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new CommonException(ExceptionType.DUPLICATED_EMAIL);
+        }
+        if (checkNickname(userDto.getNickname())) {
+            throw new CommonException(ExceptionType.DUPLICATED_NICKNAME);
+        }
+
         // 기본 정보 UserDto -> User 변환
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
@@ -109,6 +127,14 @@ public class UserService {
         if (userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
         if (userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
         if (userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        // 기본 제공 물고기 스킨
+        FishSkin defaultSkin = fishSkinRepository.findById(1L)
+                .orElseThrow(() -> new CommonException(ExceptionType.ITEM_NOT_FOUND));
+        user.setFishSkin(defaultSkin);
+
+        // 기본 프로필 정보 저장
+        user.setProfileImage(defaultProfile);
 
         userRepository.save(user); // DB에 저장
 
@@ -136,6 +162,20 @@ public class UserService {
 
             userStyleRepository.saveAll(userStyles); // DB에 저장
         }
+
+        // 기본 제공 아이템 - 유리병, 매칭티켓 2개
+        Inventory skin2Inventory = Inventory.builder()
+                .user(user)
+                .itemType(ItemType.SKIN_2)
+                .quantity(1)
+                .build();
+        Inventory freeMatchingInventory = Inventory.builder()
+                .user(user)
+                .itemType(ItemType.FREE_MATCHING_TICKET)
+                .quantity(3)
+                .build();
+        inventoryRepository.save(skin2Inventory);
+        inventoryRepository.save(freeMatchingInventory);
     }
 
     public boolean checkNickname(String nickname) {
@@ -203,15 +243,63 @@ public class UserService {
             emailRepository.delete(emailAuthDto);
         }
         insertCode(email, Long.toString(verifiedCode));
-        // 이메일 발신될 데이터 적재
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email); // 수신자 바꾸기
-        simpleMailMessage.setSubject("이메일 인증 코드입니다.");
-        simpleMailMessage.setText("아래의 인증 코드를 입력해주세요. \n" +
-                verifiedCode + " \n");
 
-        // 이메일 발신
-        javaMailSender.send(simpleMailMessage);
+        MimeMessageHelper messageHelper = new MimeMessageHelper(javaMailSender.createMimeMessage(), "UTF-8");
+        try {
+            messageHelper.setTo(email);
+            messageHelper.setSubject("Ting 회원가입 이메일 인증코드 안내");
+            messageHelper.setText("    <div style=\"width: 700px; height: 500px; margin: 50px\">\n" +
+                    "      <img src=\"https://i.ibb.co/ctnXLZr/email-ting-logo-removebg-preview.png\" alt=\"ting logo\" style=\"width: 100px\" />\n" +
+                    "      <h2 style=\"font-weight: 900\">Ting 서비스의 이메일 확인을 위해 인증번호를 보내드려요</h2>\n" +
+                    "      <p>이메일 인증 화면에서 아래의 인증번호를 입력하고 인증을 완료해주세요.</p>\n" +
+                    "      <h1>" + verifiedCode + "</h1>\n" +
+                    "\n" +
+                    "      <hr />\n" +
+                    "      <pre>\n" +
+                    "혹시 요청하지 않은 인증 메일을 받으셨나요?\n" +
+                    "누군가 실수로 메일 주소를 잘못 입력했을 수 있어요. 계정이 도용된 것은 아니니 안심하세요.\n" +
+                    "직접요청한 인증 메일이 아닌 경우 무시해주세요.\n" +
+                    "      </pre>\n" +
+                    "      <hr style=\"border: 0; height: 3px; background: #ccc\" />\n" +
+                    "\n" +
+                    "<pre>\n" +
+                    "이 메일은 발신 전용 메일이에요.\n" +
+                    "Ting에 궁금한 점이 있으시면 답장을 통해 질문해주세요. © SSAFY Ting Inc.\n" +
+                    "</pre>\n" +
+                    "    </div>", true);
+            javaMailSender.send(messageHelper.getMimeMessage());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.EMAIL_SEND_FAIL);
+        }
+
+        // 이메일 발신될 데이터 적재
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//        simpleMailMessage.setTo(email); // 수신자
+//        simpleMailMessage.setSubject("Ting 회원가입 이메일 인증코드 안내");
+//
+//        simpleMailMessage.setText("    <div style=\"width: 700px; height: 500px; margin: 50px\">\n" +
+//                "      <img src=\"https://i.ibb.co/ctnXLZr/email-ting-logo-removebg-preview.png\" alt=\"ting logo\" style=\"width: 100px\" />\n" +
+//                "      <h2 style=\"font-weight: 900\">Ting 서비스의 이메일 확인을 위해 인증번호를 보내드려요</h2>\n" +
+//                "      <p>이메일 인증 화면에서 아래의 인증번호를 입력하고 인증을 완료해주세요.</p>\n" +
+//                "      <h1>" + verifiedCode + "</h1>\n" +
+//                "\n" +
+//                "      <hr />\n" +
+//                "      <pre>\n" +
+//                "혹시 요청하지 않은 인증 메일을 받으셨나요?\n" +
+//                "누군가 실수로 메일 주소를 잘못 입력했을 수 있어요. 계정이 도용된 것은 아니니 안심하세요.\n" +
+//                "직접요청한 인증 메일이 아닌 경우 무시해주세요.\n" +
+//                "      </pre>\n" +
+//                "      <hr style=\"border: 0; height: 3px; background: #ccc\" />\n" +
+//                "\n" +
+//                "<pre>\n" +
+//                "이 메일은 발신 전용 메일이에요.\n" +
+//                "Ting에 궁금한 점이 있으시면 답장을 통해 질문해주세요. © SSAFY Ting Inc.\n" +
+//                "</pre>\n" +
+//                "    </div>");
+//
+//        // 이메일 발신
+//        javaMailSender.send(simpleMailMessage);
     }
 
     public void validateEmailCode(String email, String authCode) {
@@ -285,11 +373,21 @@ public class UserService {
         user.setRegion(SidoType.getEnumType(userDto.getRegion()));
         user.setHeight(userDto.getHeight());
         user.setIntroduce(userDto.getIntroduce());
-        user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
-        user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
-        user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
-        user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
-        user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+
+        if (userDto.getJobCode() != null) user.setJobCode(getAdditionalInfo(userDto.getJobCode()));
+        else user.setJobCode(null);
+
+        if (userDto.getDrinkingCode() != null) user.setDrinkingCode(getAdditionalInfo(userDto.getDrinkingCode()));
+        else user.setDrinkingCode(null);
+
+        if (userDto.getReligionCode() != null) user.setReligionCode(getAdditionalInfo(userDto.getReligionCode()));
+        else user.setReligionCode(null);
+
+        if (userDto.getMbtiCode() != null) user.setMbtiCode(getAdditionalInfo(userDto.getMbtiCode()));
+        else user.setMbtiCode(null);
+
+        if (userDto.getSmokingCode() != null) user.setSmokingCode(getAdditionalInfo(userDto.getSmokingCode()));
+        else user.setSmokingCode(null);
 
         userHobbyRepository.deleteAll(user.getUserHobbys());
         userStyleRepository.deleteAll(user.getUserStyles());
@@ -336,6 +434,7 @@ public class UserService {
                 password + " \n");
         javaMailSender.send(simpleMailMessage);
         user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     public static String createKey() {
@@ -367,7 +466,7 @@ public class UserService {
 
 
     @Transactional
-    public void saveProfile(MultipartFile file, Principal principal) throws IOException {
+    public void saveProfile(MultipartFile file, Long userId) throws IOException {
         if (file == null) {
             throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
         }
@@ -388,7 +487,7 @@ public class UserService {
                 file.transferTo(new File(folder, saveFileName));
 
                 // 프로필 세팅
-                User user = userRepository.findById(Long.parseLong(principal.getName()))
+                User user = userRepository.findById(userId)
                         .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
                 user.setProfileImage(today + File.separator + saveFileName);
                 userRepository.save(user);
@@ -426,18 +525,76 @@ public class UserService {
             contentType = "image/gif";
         }
 
-//        String contentType;
-//        try {
-//            contentType = Files.probeContentType(filePath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-//        }
+        // 다운로드할 이미지 파일의 HTTP 헤더 설정
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+    }
+
+    public void saveProfileNoToken(MultipartFile file, String email, String password) throws IOException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new CommonException(ExceptionType.PASSWORD_NOT_MATCH);
+        }
+
+        saveProfile(file, user.getId());
+    }
+
+    public UserSkinDto getSkin(Long userId) {
+        List<Inventory> inventoryList = inventoryRepository.findByUserId(userId);
+
+        ItemType[] itemtypes = {ItemType.SKIN_10, ItemType.SKIN_5, ItemType.SKIN_3, ItemType.SKIN_2};
+
+        for (ItemType i : itemtypes) {
+            for (Inventory inventory : inventoryList) {
+                if (inventory.getItemType() == i) {
+                    return UserSkinDto.of(inventory);
+                }
+            }
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
+
+        Inventory basicSkin = Inventory.builder()
+                .quantity(1)
+                .itemType(ItemType.SKIN_2)
+                .user(user)
+                .build();
+
+        inventoryRepository.save(basicSkin);
+
+        return UserSkinDto.of(basicSkin);
+    }
+
+    public ResponseEntity<Resource> getFishSkin(String fileName) {
+        // 다운로드할 이미지 파일의 경로 생성
+        Path filePath = Paths.get(uploadPath, "skin/fish", fileName);
+
+        Resource resource;
+        try {
+            resource = new UrlResource(filePath.toUri());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CommonException(ExceptionType.PROFILE_FILE_NOT_FOUND);
+        }
+
+        // 이미지 파일의 MIME 타입 지정
+        // 이미지의 Content-Type을 확인하여 적절한 MIME 타입을 지정합니다.
+        String contentType = "image/jpeg"; // 예시로 jpeg 이미지를 사용합니다.
+        if (fileName.endsWith(".png")) {
+            contentType = "image/png";
+        } else if (fileName.endsWith(".gif")) {
+            contentType = "image/gif";
+        } else if (fileName.endsWith(".jpg")) {
+            contentType = "image/jpg";
+        }
 
         // 다운로드할 이미지 파일의 HTTP 헤더 설정
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 }

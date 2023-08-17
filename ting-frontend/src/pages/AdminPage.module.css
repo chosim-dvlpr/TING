@@ -35,3 +35,7 @@
 .sidebarMenu img {
     margin-right: 15px;
 }
+
+.sideList:hover {
+    cursor: pointer;
+}

@@ -1,5 +1,6 @@
 package com.ssafy.tingbackend.item.dto;
 
+import com.ssafy.tingbackend.entity.item.FishSkin;
 import com.ssafy.tingbackend.entity.item.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,12 +17,14 @@ public class ItemDto {
         private Long code;
         private String name;
         private Long price;
+        private String description;
 
         public static Basic of(Item item) {
             return Basic.builder()
                     .code(item.getCode())
                     .name(item.getName())
                     .price(item.getPrice())
+                    .description(item.getDescription())
                     .build();
         }
     }
@@ -50,4 +53,19 @@ public class ItemDto {
         }
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @Builder
+    public static class FishSkinDto {
+        private Long FishSkinCode;
+        private String imagePath;
+
+        public static FishSkinDto of(FishSkin fishSkin) {
+            return FishSkinDto.builder()
+                    .FishSkinCode(fishSkin.getCode())
+                    .imagePath(fishSkin.getImagePath())
+                    .build();
+        }
+    }
 }

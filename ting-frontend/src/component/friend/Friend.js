@@ -6,7 +6,7 @@ import FriendList from "./FriendList";
 import FriendChatting from "./FriendChatting";
 import { messageStore } from "../../redux/messageStore";
 
-function Friend({ onSearch }){
+function Friend({ onSearch, onSearch2 }){
   let Navigate = useNavigate();
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [isFriendList, setIsFriendList] = useState(true);
@@ -24,21 +24,19 @@ function Friend({ onSearch }){
   const closeModal = () => {
     console.log('채팅 모달 닫기');
     onSearch(false);
-    messageStore.disconnectAll();
+    // messageStore.disconnectAll();
     // Navigate((-1));
   };
+  
+  const showProfile = () => {
+    onSearch2(true);
+  }
 
   const showFriendList = (data) => {
-    console.log('isFriendList', isFriendList)
-    console.log('data', data)
-    
     setIsFriendList(data)
   };
 
   const showFriendChatting = (data) => {
-    console.log('isFriendChatting', isFriendChatting)
-    console.log('data', data)
-    
     setIsFriendChatting(data)
   };
 
@@ -50,24 +48,19 @@ function Friend({ onSearch }){
     <div>
       {/* 닫기 버튼 누르면 뒤로가기로 일단 만들어놨음 */}
       {/* <button onClick={() => Navigate(-1)}>닫기버튼</button> */}
-      <br/>
-      <div className={styles.Modal}>
-        <div className={styles.modalBody} onClick={(e) => e.stopPropagation()}>
-          <h3>내 어항</h3>
-          {/* <button id="modalCloseBtn" onClick={closeModal}>
-            채팅 모달 닫기
-          </button> */}
-          {/* <FriendList /> */}
-          {
-            isFriendList &&
-            <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} />
-          }
-          {
-            isFriendChatting &&
-            <FriendChatting showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
-          }
-          
-        </div>
+      <div onClick={(e) => e.stopPropagation()}>
+        {/* <button id="modalCloseBtn" onClick={closeModal}>
+          채팅 모달 닫기
+        </button> */}
+        {/* <FriendList /> */}
+        {
+          isFriendList &&
+          <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} />
+        }
+        {
+          isFriendChatting &&
+          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
+        }    
       </div>
 
       {/* 돋보기 버튼 클릭 시 닉네임 검색 창 뜨도록 */}

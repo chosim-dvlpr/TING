@@ -1,19 +1,18 @@
 import { useEffect } from "react";
 import tokenHttp from "../api/tokenHttp";
 
-import { Outlet } from "react-router-dom"
-import ProfileHeader from "../component/profile/common/ProfileHeader"
-import ProfileSideBar from "../component/profile/common/ProfileSideBar"
-import NavBar from "../component/common/NavBar"
+import { Outlet } from "react-router-dom";
+import ProfileHeader from "../component/profile/common/ProfileHeader";
+import ProfileSideBar from "../component/profile/common/ProfileSideBar";
+import NavBar from "../component/common/NavBar";
 
 import { useState } from "react";
 import Friend from "../component/friend/Friend";
 
-import styles from "./MyProfilePage.module.css"
+import styles from "./MyProfilePage.module.css";
 
 import { useDispatch } from "react-redux";
 import { getCurrentUserdata } from "../redux/userdata";
-
 
 function MyProfilePage() {
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -26,7 +25,7 @@ function MyProfilePage() {
       dispatch(getCurrentUserdata(response.data.data));
       localStorage.setItem("userId", response.data.data.userId);
     });
-  })
+  });
 
   return (
     <div className={styles.outer}>
@@ -45,8 +44,7 @@ function MyProfilePage() {
         </div>
       </div>
     </div>
-
-  )
+  );
 }
 
-export default MyProfilePage
+export default MyProfilePage;

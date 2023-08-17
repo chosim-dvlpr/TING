@@ -1,0 +1,123 @@
+.top {
+  margin: 0 auto;
+}
+
+.top img {
+  height: 60px;
+}
+
+.searchArea {
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+.closeButton {
+  width: 36px;
+  height: 34px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  position: fixed;
+  right: 215px;
+  bottom: 570px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.searchArea input {
+  flex: 1;
+  border: none;
+  background-color: #f0f0f0;
+  box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
+  border-radius: 8px;
+  padding: 8px;
+  margin-right: 10px;
+  width: 240px;
+  font-size: 16px;
+}
+
+.searchButton {
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 15px;
+  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  height: 40px;
+}
+
+.list {
+  height: 440px;
+  overflow-y: auto;
+}
+
+.friendItem {
+  display: flex;
+  background-color: #fae6e8;
+  padding: 10px;
+  border-radius: 24px;
+  margin: 5px 5px;
+  height: 66px;
+  box-shadow: inset 2px 2px 4px #fad7db, inset -2px -2px 4px #ffffff;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.image {
+  background-color: white;
+  border-radius: 50%;
+  width: 48px;
+}
+
+.middle {
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 8px;
+}
+
+.nickname {
+
+}
+
+.content {
+  font-size: 12px;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 텍스트에 대해 ... 표시 */
+  max-width: 140px;
+}
+
+.time {
+  font-size: 12px;
+  height: 18px;
+}
+
+.unread {
+  margin: 0 auto;
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.friendItem button {
+  background-color: inherit;
+  border: none;
+}
+.friendItem img {
+  height: 20px;
+}

@@ -23,9 +23,11 @@ import com.ssafy.tingbackend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +48,6 @@ public class DateService {
     private final ChattingUserRepository chattingUserRepository;
     private final MatchingQuestionRepository matchingQuestionRepository;
 
-    private final Map<Long, DeferredResult<DataResponse<Boolean>>> deferredResultQueue = new ConcurrentHashMap<>();  // 키 userId
-
     public List<QuestionDto> getMatchingQuestions(Long matchingId) {
         Matching matching = matchingRepository.findById(matchingId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
@@ -55,13 +55,14 @@ public class DateService {
 
         // 인사 -> 질문카드 10개 -> 끝 -> 최종 점수 -> 마지막 어필
         List<QuestionDto> questions = new ArrayList<>();
-        questions.add(new QuestionDto("인사"));
-        for(int i = 0; i < 10; i++) {
+        questions.add(new QuestionDto("인사", QuestionType.START));
+        for (int i = 0; i < 10; i++) {
             questions.add(QuestionDto.of(matchingQuestions.get(i).getQuestion()));
         }
-        questions.add(new QuestionDto("끝"));
-        questions.add(new QuestionDto("최종 점수"));
-        questions.add(new QuestionDto("마지막 어필"));
+
+        questions.add(new QuestionDto("끝", QuestionType.END));
+        questions.add(new QuestionDto("최종 점수", QuestionType.SCORE));
+        questions.add(new QuestionDto("마지막 어필", QuestionType.APPEAL));
 
         return questions;
     }
@@ -104,8 +105,8 @@ public class DateService {
         matchingUser.setTotalScore(map.get("totalScore").intValue());
     }
 
-    @Transactional
-    public void selectFinalChoice(Long matchingId, String selected, Long userId, DeferredResult<DataResponse<Boolean>> deferredResult) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void selectFinalChoice(Long matchingId, String selected, Long userId) {
         // DB에서 정보 불러오기
         Matching matching = matchingRepository.findById(matchingId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
@@ -115,34 +116,27 @@ public class DateService {
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
 
         matchingUser.setFinalChoice(selected.equals("yes") ? true : false);  // 응답한 선택 저장
+        matchingUserRepository.save(matchingUser);
 
-        // 상대방이 응답했는지 확인
-        MatchingUser matchingPairUser = matchingUserRepository.findFriendInfo(matching, user)
+        MatchingUser matchingPairUser = matchingUserRepository.findFriendMatchingUser(matchingId, userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.MATCHING_NOT_FOUND));
-        if(matchingPairUser.getFinalChoice() != null) {  // 상대방이 응답한 경우
-            Boolean isSuccess;
-            // 둘 다 yes 선택 - 성공O
-            if(matchingPairUser.getFinalChoice() && matchingUser.getFinalChoice()) isSuccess = true;
-            // 그 외의 경우 - 성공X
-            else isSuccess = false;
+        log.info("matchingPairUser : {}, my userId : {}", matchingPairUser, userId);
 
-            // DB에 최종 선택 결과값 저장
-            matching.setIsSuccess(isSuccess);
-
-            // 채팅방 생성
+        if (matchingPairUser.getFinalChoice() != null && matchingPairUser.getFinalChoice() && selected.equals("yes")) {
             Chatting chatting = new Chatting(ChattingType.ALIVE);
             chattingRepository.save(chatting);
-            chattingUserRepository.save(new ChattingUser(chatting, user));
             chattingUserRepository.save(new ChattingUser(chatting, matchingPairUser.getUser()));
+            chattingUserRepository.save(new ChattingUser(chatting, user));
+            chatting.setLastChattingContent("♡대화를 시작해보세요♡");
+            chatting.setLastChattingTime(LocalDateTime.now());
 
-            // 클라이언트에 결과 응답
-            DeferredResult<DataResponse<Boolean>> pairDeferredResult = deferredResultQueue.get(matchingPairUser.getUser().getId());
-            deferredResultQueue.remove(matchingPairUser.getUser().getId());
-            pairDeferredResult.setResult(new DataResponse<Boolean>(200, "최종 매칭 결과", isSuccess));
-            deferredResult.setResult(new DataResponse<Boolean>(200, "최종 매칭 결과", isSuccess));
-        } else {  // 상대방이 아직 응답하지 않은 경우
-            deferredResultQueue.put(userId, deferredResult);
+            matching.setIsSuccess(true);
+            matching.setEndTime(LocalDateTime.now());
+
+            log.info("채팅방 생성 성공 {}", chatting);
         }
-    }
 
+        log.info("matchingPairUser getFinalChoice : {}, selected : {}", matchingPairUser.getFinalChoice(), selected.equals("yes"));
+
+    }
 }
