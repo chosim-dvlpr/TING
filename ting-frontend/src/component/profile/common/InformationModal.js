@@ -26,7 +26,7 @@ function ItemModal({ closeFunc, type, currentData, items, setter, color }) {
       setChecked(newChecked);
       setSelectedData(null);
     } else {
-      setSelectedData(currentData.name);
+      setSelectedData(currentData ? currentData.name : null);
       setChecked(null);
     }
   }, [type]);
