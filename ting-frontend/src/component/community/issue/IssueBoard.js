@@ -75,6 +75,7 @@ function IssueBoard() {
       navigate(`/community/issue/detail/${issueId}`);
     } else {
       Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
+      navigate("/login");
     }
   };
 
@@ -83,6 +84,7 @@ function IssueBoard() {
       navigate("/community/issue/create");
     } else {
       Swal.fire({ title: "로그인이 필요합니다.", width: 400 });
+      navigate("/login");
     }
   };
 
