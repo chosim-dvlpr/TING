@@ -3,16 +3,35 @@ import { useState, useEffect } from "react";
 import basicHttp from "../../api/basicHttp";
 
 import ItemModal from "./common/ItemModal";
+import tokenHttp from "../../api/tokenHttp";
 
 function ItemShop() {
   // 모달 상태 관련
   const [modalSign, setModalSign] = useState(false);
   const [clickedItem, setClickedItem] = useState({});
   const [itemList, setItemList] = useState([]);
+  const [itemType, setItemType] = useState("");
 
   useEffect(() => {
+    getIcon();
     getItemList();
-  }, []);
+  }, [itemType]);
+
+  const getIcon = () => {
+    tokenHttp
+      .get("/user/skin")
+      .then((response) => {
+        if (response.data.code == 200) {
+          console.log(response.data.data);
+          setItemType(response.data.data.itemType);
+        } else {
+          console.log("아이콘 불러오기 실패");
+        }
+      })
+      .catch(() => {
+        console.log("아이콘 불러오기 실패");
+      });
+  };
 
   const getItemList = () => {
     basicHttp
@@ -52,6 +71,8 @@ function ItemShop() {
             items = [...items, item];
           });
           setItemList(items);
+          console.log("========",itemList);
+          console.log(items);
         } else {
           console.log("아이템 불러오기 실패");
         }
@@ -79,13 +100,28 @@ function ItemShop() {
     return returnString;
   };
 
+  const checkFish = (item) => {
+    if( item.code==7 ) {
+      if(itemType=='SKIN_2') return true;
+      return false;
+    } else if(item.code == 8) {
+      if(itemType == 'SKIN_3') return true;
+      return false;
+    } else if(item.code == 9) {
+      if(itemType == 'SKIN_5') return true;
+      return false;
+    }
+    return true;
+  }
+
   return (
     <div>
       <div className={styles.outBox}>
         <div className="container">
           <div className={`row ${styles.ItemCardList}`}>
             {itemList.map((item, idx) => (
-              <div
+              checkFish(item) && (
+                <div
                 className={`col-4 ${styles.ItemCardOuter}`}
                 onClick={() => {
                   openModal(item);
@@ -109,6 +145,7 @@ function ItemShop() {
                   <div>{item.description}</div>
                 </div>
               </div>
+              )
             ))}
           </div>
         </div>
