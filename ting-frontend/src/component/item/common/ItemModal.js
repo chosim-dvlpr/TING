@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styles from "./ItemModal.module.css";
 
 import tokenHttp from "../../../api/tokenHttp";
@@ -10,6 +11,7 @@ function ItemModal({ closeModal, clickedItem }) {
   const [quantity, setQuantity] = useState(1);
   const [itemPrice, setItemPrice] = useState(clickedItem.price);
   const priceRef = useRef();
+  const navigate = useNavigate();
 
   const changeQuantity = (sign) => {
     if (sign === "-") {
@@ -35,6 +37,7 @@ function ItemModal({ closeModal, clickedItem }) {
         if (response.data.code == 200) {
           Swal.fire("아이템 구매를 완료하였습니다.");
           closeModal();
+          navigate("/item/shop");
         }
       })
       .catch((err) => {
