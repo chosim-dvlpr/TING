@@ -5,6 +5,7 @@ import { useState } from "react";
 import styles from "../../pages/FindMyInfoPage.module.css";
 
 import Swal from "sweetalert2";
+import Spinner from "react-bootstrap/Spinner";
 
 function FindMyPassword() {
   let [name, setName] = useState("");
@@ -22,6 +23,9 @@ function FindMyPassword() {
   const phonenumberFirstRef = useRef();
   const phonenumberMiddleRef = useRef();
   const phonenumberLastRef = useRef();
+
+  // Spinner 관련 state
+  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     setIsButtonDisabled(false);
@@ -41,9 +45,11 @@ function FindMyPassword() {
         email,
       };
 
+      setShowSpinner(true);
       basicHttp
         .post("/user/password", data)
         .then((response) => {
+          setShowSpinner(false);
           if (response.data.code === 200) {
             Swal.fire({
               title: "임시 비밀번호가 \n이메일로 전송되었습니다.",
@@ -62,11 +68,11 @@ function FindMyPassword() {
           }
         })
         .catch((error) => {
+          setShowSpinner(false);
           console.log(error.response);
           if (error.response.data.code === 4100) {
             Swal.fire({
-              title:
-                "비밀번호를 찾을 수 없습니다.\n 입력하신 정보를 다시 한번 \n확인해주세요.",
+              title: "비밀번호를 찾을 수 없습니다.\n 입력하신 정보를 다시 한번 \n확인해주세요.",
               width: 400,
             });
           } else {
@@ -82,6 +88,12 @@ function FindMyPassword() {
 
   return (
     <div className={styles.wrapper}>
+      {showSpinner && (
+        <div className={styles.spinnerContainer}>
+          <Spinner className={styles.spinner} animation="border" variant="primary" />
+        </div>
+      )}
+
       <label className={styles.label}>이름</label>
       <input
         className={`${styles.input} ${styles.findPasswordInput}`}
@@ -145,11 +157,7 @@ function FindMyPassword() {
       />
       <br />
       <br></br>
-      <button
-        disabled={isButtonDisabled}
-        className={`${styles.btn} ${styles.confirmBtn}`}
-        onClick={FindPasswordFunc}
-      >
+      <button disabled={isButtonDisabled} className={`${styles.btn} ${styles.confirmBtn}`} onClick={FindPasswordFunc}>
         확인
       </button>
       {/* <div>
