@@ -67,13 +67,13 @@ function MatchingResult({ session, count, result }) {
             <>
               { matchingResult ? (
                 <>
-                  <h3>축하드립니다</h3>
-                  <h3>채팅으로 {yourData.nickname}님과 만남을 이어가보세요</h3>
+                  <h3>축하합니다!</h3>
+                  <h3>어항에 {yourData.nickname} 님이 추가되었습니다.</h3>
                   <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; }}>메인으로 돌아가기</button>
                 </>
               ):(
                 <>
-                  <h3>{yourData.nickname}님이 선택하지 않으셨습니다.</h3>
+                  <h3>{yourData.nickname} 님이 도망가셨습니다.</h3>
                   <button className={styles.lastResultButton} onClick={() => { window.location.href = '/'; }}>메인으로 돌아가기</button>
                 </>
               )}

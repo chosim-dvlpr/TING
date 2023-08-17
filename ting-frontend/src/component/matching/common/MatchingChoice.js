@@ -14,6 +14,7 @@ function MatchingChoice({ session, count }) {
   const userData = state.userdataReducer.userdata
   const matchingId = state.matchingReducer.matchingId
   const matchingResult = state.matchingReducer.matchingResult
+  const finalMatchingId = state.finalMatchingReducer.matchingId;
 
   const [finish, setFinish] = useState(false)
   const [result, setResult] = useState(false)
@@ -51,17 +52,19 @@ function MatchingChoice({ session, count }) {
   // 최종 결과 비동기로 친구 매칭 보내는 함수
   const becomeFriend = async () => {
     let resultData;
+    console.log("finalMatchingId", finalMatchingId);
     if (result) {
       resultData = {
-        matchingId: matchingId,
+        matchingId: finalMatchingId,
         choice: "yes"
       };
     } else {
       resultData = {
-        matchingId: matchingId,
+        matchingId: finalMatchingId,
         choice: "no"
       };
     }
+    console.log("resultData", resultData)
     try {
       // 양쪽에서 데이터를 받아서 친구 추가시켜주는 axios
       console.log('친구 추가 완료 or 패스')
@@ -121,7 +124,7 @@ function MatchingChoice({ session, count }) {
 
         <div className={styles.InnerBox}>
           <div>
-            <h3>{yourData.nickname}님을 선택하시겠습니까?</h3>
+            <h3>{yourData.nickname} 님을 선택하시겠습니까?</h3>
             <h3>한번 선택하시면 바꿀 수 없습니다.</h3>
             <h3>{count}</h3>
             <button
