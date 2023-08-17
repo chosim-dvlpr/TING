@@ -238,7 +238,11 @@ function MatchingStart() {
       setShowMatchingChoiceModal(true)
       // 사용자 video audio off
       toggleAudioAndVideo(false, false)
-      setCount(15)
+      // 시연 후 주석 해제
+      // setCount(15)
+
+      // 시연
+      setCount(10);
     }
   }, [questionNumber]);
 
