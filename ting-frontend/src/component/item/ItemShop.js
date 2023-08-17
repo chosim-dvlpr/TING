@@ -154,7 +154,7 @@ function ItemShop() {
       {/* 구매 모달 */}
 
       {modalSign ? (
-        <ItemModal closeModal={closeModal} clickedItem={clickedItem} />
+        <ItemModal closeModal={closeModal} clickedItem={clickedItem}/>
       ) : null}
     </div>
   );
