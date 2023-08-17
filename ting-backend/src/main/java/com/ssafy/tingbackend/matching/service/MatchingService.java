@@ -66,6 +66,8 @@ public class MatchingService {
 
 
     public void waitForMatching(String socketSessionId, String token) throws IOException {
+        log.info("waitForMatching");
+
         // 소켓연결정보에 유저 정보 넣기
         Long userId = Long.parseLong(JwtUtil.getPayloadAndCheckExpired(token).get("userId").toString());
         User user = getUserAllData(userId);
@@ -99,6 +101,7 @@ public class MatchingService {
 
     @Scheduled(fixedDelay = 10_000L)  // 스케줄러 - 10초에 한번씩 수행
     public void matchingUsers() {
+        log.info("matchingUsers 실행 - (10초 주기)");
         // 먼저 들어온 여성 사용자들부터 순서대로 점수 계산, 가장 점수합이 높은 쌍부터 내보내기(기준 점수 50점)
         // 오래 대기하는 사용자들을 위한 가산점 -> 함수 한번 돌 떄마다 count++, 점수에 count 더해서 계산
         Iterator<String> iter = fQueue.iterator();
@@ -110,21 +113,23 @@ public class MatchingService {
             // ========= 이미 매칭된 상대는 매칭되지 않게 처리해야함 ============
 
             List<MatchingUser> femaleMatchingUserList = matchingUserRepository.findByUserId(female.getId());
+            log.info("femaleUser - {}", female);
             log.info("femaleMatchingUserList - {}", femaleMatchingUserList);
 
             for (String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();
+                log.info("maleUser - {}", male);
 
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- start
                 boolean isMatched = false;
                 for (MatchingUser femaleMatchingUser : femaleMatchingUserList) {
-                    Optional<MatchingUser> byMatchingAndUser = matchingUserRepository.findByMatchingAndUser(femaleMatchingUser.getMatching(), male);
+                    Optional<MatchingUser> byMatchingAndUser = matchingUserRepository.findMatchingExist(femaleMatchingUser.getMatching().getId(), male.getId());
                     if (byMatchingAndUser.isPresent()) {
                         isMatched = true;
                         break;
                     }
                 }
-                if (isMatched ) continue;
+                if (isMatched) continue;
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- end
 
                 int score = calculateScore(female, male) + calculateScore(male, female)
@@ -174,6 +179,7 @@ public class MatchingService {
     }
 
     public User getUserAllData(Long userId) {
+        log.info("getUserAllData 실행 - userId - {}", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
