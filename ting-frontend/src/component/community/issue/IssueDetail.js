@@ -29,7 +29,6 @@ function IssueDetail() {
   const [opposeRatio, setOpposeRatio] = useState(50); // 초기에 50%로 설정
 
   useEffect(() => {
-    AuthenticationCheck();
     getIssueDetail();
     getCommentList();
     getLikeList();
