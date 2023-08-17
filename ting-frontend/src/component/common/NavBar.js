@@ -88,13 +88,16 @@ const NavBar = () => {
           </Link>
         ) : null}
         {userData ? (
-          <Link className={styles.navMenu} to="/matching">
+          <Link
+            className={`${styles.navMenu} ${styles.matchingMenu}`}
+            to="/matching"
+          >
             <img
               id={styles.tingBtn}
               src={process.env.PUBLIC_URL + "/img/air-balloon.png"}
               className={styles.menuItem}
             ></img>
-            {/* <div className={styles.menuName}>매칭</div> */}
+            <div className={styles.menuName}>시작하기</div>
           </Link>
         ) : null}
       </div>

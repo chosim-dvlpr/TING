@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./PasswordUpdate.module.css";
 
+import Swal from "sweetalert2";
+
 function PasswordUpdate() {
   const [isCurrentPasswordModal, setIsCurrentPasswordModal] = useState(true); // 기존 비밀번호 모달
-  // const [isNewPasswordModal, setIsNewPasswordModal] = useState(false); // 새로운 비밀번호 모달
 
   function CurrentPasswordModal() {
     const [currentPassword, setCurrentPassword] = useState(""); // 현재 비밀번호
@@ -26,25 +27,43 @@ function PasswordUpdate() {
       tokenHttp
         .post("/user/check", data)
         .then((response) => {
-          // console.log(response.data)
-
           if (response.data.code === 200) {
             // 비밀번호 일치 시 true
             if (response.data.data) {
-              console.log("비밀번호 일치");
               setIsCurrentPasswordModal(false);
             } else {
-              console.log("정확한 비밀번호를 입력해주세요.");
+              Swal.fire({
+                title: "정확한 비밀번호를 \n입력해주세요.",
+                width: 400,
+              });
             }
           } else if (response.data.code === 400) {
+            Swal.fire({
+              title: "사용자 확인에 \n실패하였습니다.",
+              width: 400,
+            });
             console.log("확인 실패");
           } else if (response.data.code === 401) {
+            Swal.fire({
+              title: "사용자 확인에 \n실패하였습니다.",
+              width: 400,
+            });
             console.log("로그인이 필요합니다");
           } else if (response.data.code === 403) {
+            Swal.fire({
+              title: "사용자 확인에 \n실패하였습니다.",
+              width: 400,
+            });
             console.log("권한이 없습니다");
           }
         })
-        .catch(() => console.log("실패"));
+        .catch(() => {
+          Swal.fire({
+            title: "사용자 확인에 \n실패하였습니다.",
+            width: 400,
+          });
+          console.log("실패");
+        });
     };
 
     return (
@@ -126,21 +145,25 @@ function PasswordUpdate() {
       tokenHttp
         .put("/user/password", data)
         .then((response) => {
-          // console.log(response.data)
-
           // 비밀번호 변경 완!
           if (response.data.code === 200) {
-            console.log("비밀번호 변경 완료!");
+            Swal.fire({ title: "비밀번호가 변경되었습니다.", width: 400 });
             Navigate("/"); // 메인으로 이동하기
           } else if (response.data.code === 400) {
+            Swal.fire({ title: "비밀번호 변경에 실패하였습니다.", width: 400 });
             console.log("변경 실패");
           } else if (response.data.code === 401) {
+            Swal.fire({ title: "비밀번호 변경에 실패하였습니다.", width: 400 });
             console.log("로그인이 필요합니다");
           } else if (response.data.code === 403) {
+            Swal.fire({ title: "비밀번호 변경에 실패하였습니다.", width: 400 });
             console.log("권한이 없습니다");
           }
         })
-        .catch(() => console.log("실패"));
+        .catch(() => {
+          Swal.fire({ title: "비밀번호 변경에 실패하였습니다.", width: 400 });
+          console.log("실패");
+        });
     };
 
     return (
