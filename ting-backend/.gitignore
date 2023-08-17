@@ -36,4 +36,8 @@ out/
 
 ### VS Code ###
 .vscode/
-keystore.p12
+
+### 설정파일 및 민감정보 ###
+src/main/resources/keystore.p12
+src/main/resources/application.yml
+src/main/resources/service-account-key.json
