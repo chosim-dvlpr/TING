@@ -20,7 +20,8 @@
 }
 
 .logo {
-  height: 65px;
+  height: 28px;
+  margin: 5px 0 20px 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +29,6 @@
 
 .navMenu {
   cursor: pointer;
-  /* font-weight: 700; */
   width: 80px;
   text-decoration: none;
   font-family: "UhBeeSe_hyun";

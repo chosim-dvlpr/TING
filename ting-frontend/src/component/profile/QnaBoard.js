@@ -13,6 +13,7 @@ function QnaBoard() {
   const [qnaList, setQnaList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 (기본값 : 1)
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
+  const [totalElements, setTotalElements] = useState(0);
 
   const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ function QnaBoard() {
           console.log("성공");
           setQnaList(response.data.data.qnaList); // QNA 데이터를 저장
           setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+          setTotalElements(response.data.data.totalElements);
         } else if (response.data.code === 400) {
           console.log("실패");
         } else if (response.data.code === 403) {
@@ -98,7 +100,7 @@ function QnaBoard() {
             ) : (
               qnaList.map((qna, i) => (
                 <tr key={i}>
-                  <td>{qna.qnaId}</td>
+                  <td>{totalElements - 10 * (currentPage - 1) - i}</td>
                   <td>
                     <span
                       className={commonStyles.clickable}

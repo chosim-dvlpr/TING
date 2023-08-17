@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import basicHttp from "../../api/basicHttp";
 import { setEmail } from "../../redux/signup";
 import styles from "./SignupCommon.module.css";
+import Spinner from "react-bootstrap/Spinner";
 
 import Swal from "sweetalert2";
 
@@ -18,28 +19,41 @@ function InputEmail() {
   const [isEmailMsgVisible, setIsEmailMsgVisible] = useState(false);
   let dispatch = useDispatch();
 
+  const [showSpinner, setShowSpinner] = useState(false);
+
   // 이메일 중복 체크
-  const checkEmail = () => {
+  const checkEmail = async () => {
     let check = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     setMsg("");
     if (check.test(inputEmail)) {
-      basicHttp.get(`/user/email/${inputEmail}`).then((response) => {
-        if (response.data.code === 200) {
+      setShowSpinner(true);
+      await basicHttp
+        .get(`/user/email/${inputEmail}`)
+        .then((response) => {
+          setShowSpinner(false);
+          if (response.data.code === 200) {
+            Swal.fire({
+              title: "인증 메일이 \n전송되었습니다.",
+              width: 400,
+            });
+            setShowInputCode(true);
+            setIsInputEmailDisabled(true);
+          } else {
+            Swal.fire({
+              title: "중복된 이메일입니다. \n다른 이메일을 입력해주세요.",
+              width: 400,
+            });
+            emailInput.current.value = "";
+          }
+        })
+        .catch((e) => {
+          setShowSpinner(false);
           Swal.fire({
-            title: "인증 메일이 \n전송되었습니다.",
+            title: "인증 메일 전송에 \n실패하였습니다.",
             width: 400,
           });
-          setShowInputCode(true);
-          setIsInputEmailDisabled(true);
-        } else {
-          Swal.fire({
-            title: "중복된 이메일입니다. \n다른 이메일을 입력해주세요.",
-            width: 400,
-          });
-          emailInput.current.value = "";
-        }
-      });
+        });
     } else {
       Swal.fire({
         title: "올바른 이메일을 \n입력해주세요.",
@@ -117,6 +131,12 @@ function InputEmail() {
 
   return (
     <div className={styles.wrapper}>
+      {showSpinner && (
+        <div className={styles.spinnerContainer}>
+          <Spinner className={styles.spinner} animation="border" variant="primary" />
+        </div>
+      )}
+
       <br></br>
 
       {/* 중복확인 전 */}
@@ -152,9 +172,7 @@ function InputEmail() {
       {showInputCode && (
         <>
           <button
-            className={`${!isInputEmailCodeDisabled && styles.btn} ${
-              !isInputEmailCodeDisabled ? styles.checkEmail : styles.disabledBtn
-            }`}
+            className={`${!isInputEmailCodeDisabled && styles.btn} ${!isInputEmailCodeDisabled ? styles.checkEmail : styles.disabledBtn}`}
             onClick={checkEmailCode}
             onKeyDown={(e) => activeEnter(e, checkEmailCode)}
             disabled={isInputEmailCodeDisabled}

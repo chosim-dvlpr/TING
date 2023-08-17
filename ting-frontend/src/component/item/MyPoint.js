@@ -77,7 +77,7 @@ function MyPoint() {
             className={styles.coinImage}
             alt="coin"
           ></img>
-          {addComma(myPoint)} Point
+          {addComma(myPoint)} 팅
         </span>
         <div
           className={styles.ChargeButton}
@@ -186,12 +186,16 @@ function SelectMoney() {
     tokenHttp
       .post("/point/kakaopay/ready", data)
       .then((response) => {
-        console.log(response.data.data);
         dispatch(setPointPaymentId(response.data.data.pointPaymentId));
         window.location.href = response.data.data.redirectUrl;
       })
       .catch((err) => console.log(err));
   };
+
+  const threeComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
+  }
 
   return (
     <div>
@@ -206,7 +210,8 @@ function SelectMoney() {
               getClick(e);
             }}
           >
-            {money.totalAmount}
+            {/* {money.totalAmount} */}
+            {threeComma(money.totalAmount)}
           </button>
         ))}
       </div>

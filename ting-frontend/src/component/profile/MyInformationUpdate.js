@@ -9,8 +9,9 @@ import InformationModal from "./common/InformationModal";
 
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./MyInformation.module.css";
-// import { pink } from "@mui/material/colors";
 import { createTheme } from "@mui/material";
+
+import Swal from "sweetalert2";
 
 function MyInformationUpdate() {
   let Navigate = useNavigate();
@@ -36,15 +37,6 @@ function MyInformationUpdate() {
   );
   let [currentStyleListCode, setCurrentStyleListCode] = useState([]);
 
-  let [openMbti, setOpenMbti] = useState(false);
-  let [openDrinking, setOpenDrinking] = useState(false);
-  let [openSmoking, setOpenSmoking] = useState(false);
-  let [openReligion, setOpenReligion] = useState(false);
-  let [openJob, setOpenJob] = useState(false);
-  let [openHobby, setOpenHobby] = useState(false);
-  let [openPersonality, setOpenPersonality] = useState(false);
-  let [openStyle, setOpenStyle] = useState(false);
-
   // 모달 상태 관련
   const [modalSign, setModalSign] = useState(false);
   const [clickedType, setClickedType] = useState();
@@ -67,9 +59,6 @@ function MyInformationUpdate() {
 
   // 지역을 한글로 변환
   const regionToKor = (regionData) => {
-    // const regionName = regionList.filter((region) => region.regionEn === regionData ? region.regionKor : null)[0].regionKor
-    // console.log(regionName)
-    // return regionName
     const matchingRegion = regionList.find(
       (region) => region.regionEn === regionData
     );
@@ -83,7 +72,6 @@ function MyInformationUpdate() {
   let newProfileData = {
     phoneNumber: userdata.phoneNumber,
     region: regionToKor(userdata.region),
-    // profileImage: userdata.profileImage,
     profileImage: "",
     height: Number(height),
     introduce: currentIntroduce,
@@ -102,20 +90,25 @@ function MyInformationUpdate() {
     tokenHttp
       .put("/user", newProfileData)
       .then((response) => {
-        console.log(response);
         if (response.data.code === 200) {
-          console.log("저장 완료");
+          Swal.fire({ title: "프로필 수정을 \n완료하였습니다.", width: 400 });
           storeNewProfileToRedux();
           Navigate("/mypage");
         } else if (response.data.code === 400) {
+          Swal.fire({ title: "프로필 수정에 \n실패하였습니다.", width: 400 });
           console.log("확인 실패");
         } else if (response.data.code === 401) {
+          Swal.fire({ title: "프로필 수정에 \n실패하였습니다.", width: 400 });
           console.log("로그인이 필요합니다");
         } else if (response.data.code === 403) {
+          Swal.fire({ title: "프로필 수정에 \n실패하였습니다.", width: 400 });
           console.log("권한이 없습니다");
         }
       })
-      .catch(() => console.log("실패"));
+      .catch(() => {
+        Swal.fire({ title: "프로필 수정에 \n실패하였습니다.", width: 400 });
+        console.log("실패");
+      });
   };
 
   // 변경된 프로필을 redux에 저장
@@ -135,7 +128,6 @@ function MyInformationUpdate() {
       userPersonalities: currentPersonalityList,
     };
     dispatch(getCurrentUserdata(newProfileData));
-    console.log("Updated profile data:", newProfileData);
   };
 
   // 모달을 여는 함수
@@ -152,11 +144,10 @@ function MyInformationUpdate() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: '#c33f4f',
+        main: "#c33f4f",
       },
-      // secondary: '#8bcad6',
     },
-});
+  });
 
   return (
     <div className={commonStyles.wrapper}>

@@ -14,10 +14,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 60px;
 }
 
-.top img {
-  height: 60px;
+.logoImg {
+  height: 30px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .closeButton {
@@ -83,7 +86,7 @@
   padding: 0 12px 0 0;
   height: 380px;
   overflow-y: auto;
-  display:flex;
+  display: flex;
   flex-direction: column-reverse;
 }
 

@@ -7,6 +7,7 @@
 }
 
 .wrapper {
+  position: relative;
   width: 85%;
   height: 200px;
   padding: 20px 50px;
@@ -24,18 +25,25 @@
 
 .profile {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 150px;
   width: 150px;
   overflow: hidden;
+  border-radius: 50%;
 }
 
 #profileImg {
-  height: 150px;
-  width: 150px;
-  border-radius: 50%;
-  object-fit: fill;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   box-shadow: 0px 0px 7px #bdbdbd;
   background-color: white;
+  transform: translate(-50%, -50%); /* 이미지를 가운데 정렬 */
+  position: relative; /* 부모에 대해 상대 위치 설정 */
+  top: 50%;
+  left: 50%;
 }
 
 #noImg {
@@ -53,8 +61,8 @@
 #editImg {
   cursor: pointer;
   position: absolute;
-  left: 120px;
-  top: 120px;
+  left: 170px;
+  top: 140px;
   height: 25px;
   z-index: 100;
   border-radius: 30%;

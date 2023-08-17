@@ -4,7 +4,6 @@ import tokenHttp from "../../api/tokenHttp";
 import { getCurrentUserdata } from "../../redux/userdata";
 
 import styles from "./NavBar.module.css";
-import Dropdown from "react-bootstrap/Dropdown";
 
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/userdata";
@@ -57,87 +56,58 @@ const NavBar = () => {
     <div className={styles.mainNav}>
       <div className={styles.navLeft}>
         <Link className={styles.navMenu} to="/">
-          <img
-            src={process.env.PUBLIC_URL + "/img/ting_logo_fish.png"}
-            className={styles.logo}
-            alt="logo"
-          ></img>
-          {/* <span>TING</span> */}
+          <img src={process.env.PUBLIC_URL + "/img/ting_logo_fish.png"} className={styles.logo} alt="logo"></img>
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
-          <img
-            src={process.env.PUBLIC_URL + "/img/해마.png"}
-            className={styles.menuItem}
-          ></img>
+          <img src={process.env.PUBLIC_URL + "/img/해마.png"} className={styles.menuItem}></img>
           <div className={styles.menuName}>튜토리얼</div>
         </Link>
         <Link className={styles.navMenu} to="/community">
-          <img
-            src={process.env.PUBLIC_URL + "/img/불가사리.png"}
-            className={styles.menuItem}
-          ></img>
+          <img src={process.env.PUBLIC_URL + "/img/불가사리.png"} className={styles.menuItem}></img>
           <div className={styles.menuName}>커뮤니티</div>
         </Link>
         {userData ? (
           <Link className={styles.navMenu} to="/item/shop">
-            <img
-              src={process.env.PUBLIC_URL + "/img/해초2.png"}
-              className={styles.menuItem}
-            ></img>
+            <img src={process.env.PUBLIC_URL + "/img/해초2.png"} className={styles.menuItem}></img>
             <div className={styles.menuName}>아이템샵</div>
           </Link>
         ) : null}
         {userData ? (
-          <Link
-            className={`${styles.navMenu} ${styles.matchingMenu}`}
-            to="/matching"
-          >
-            <img
-              id={styles.tingBtn}
-              src={process.env.PUBLIC_URL + "/img/air-balloon.png"}
-              className={styles.menuItem}
-            ></img>
+          <Link className={`${styles.navMenu} ${styles.matchingMenu}`} to="/matching">
+            <img id={styles.tingBtn} src={process.env.PUBLIC_URL + "/img/air-balloon.png"} className={styles.menuItem}></img>
             <div className={styles.menuName}>시작하기</div>
           </Link>
         ) : null}
       </div>
       <div className={styles.navRight}>
-        {
-          userData ? (
-            <div ref={dropdownRef} className={styles.yesLoginedDiv}>
-              {/* userData에서 프로필 이미지 받아서 표시 */}
-              {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
-              {dropdown ? (
-                <div className={styles.dropDownMenu}>
-                  <div onClick={handleMypage}>마이페이지</div>
-                  <div onClick={handleLogout}>로그아웃</div>
-                </div>
-              ) : null}
-              <div className={styles.profileImageDiv}>
-                <img
-                  src={`https://i9b107.p.ssafy.io:5157/${userData.fishSkin}`}
-                  onClick={() => setDropdown(!dropdown)}
-                  className={styles.profileImage}
-                  alt="profile"
-                />
+        {userData ? (
+          <div ref={dropdownRef} className={styles.yesLoginedDiv}>
+            {dropdown ? (
+              <div className={styles.dropDownMenu}>
+                <div onClick={handleMypage}>마이페이지</div>
+                {userData && userData.email === "admin@admin.com" ? <div onClick={() => navigate("/admin")}>관리자페이지</div> : null}
+                <div onClick={handleLogout}>로그아웃</div>
               </div>
-              <div>
-                <span className={styles.nickname}>{userData.nickname}</span>님
-              </div>
+            ) : null}
+            <div className={styles.profileImageDiv}>
+              <img
+                src={`https://i9b107.p.ssafy.io:5157/${userData.fishSkin}`}
+                onClick={() => setDropdown(!dropdown)}
+                className={styles.profileImage}
+                alt="profile"
+              />
             </div>
-          ) : (
-            <>
-              <div
-                id={styles.login}
-                className={styles.loginDiv}
-                onClick={() => navigate("/login")}
-              >
-                로그인
-              </div>
-            </>
-          )
-          // null
-        }
+            <div>
+              <span className={styles.nickname}>{userData.nickname}</span>님
+            </div>
+          </div>
+        ) : (
+          <>
+            <div id={styles.login} className={styles.loginDiv} onClick={() => navigate("/login")}>
+              로그인
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

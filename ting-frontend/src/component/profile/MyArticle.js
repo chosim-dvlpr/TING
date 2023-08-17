@@ -8,7 +8,6 @@ import styles from "./MyArticle.module.css";
 
 function MyArticle() {
   let [issueBoard, setIssueBoard] = useState(true); // 논쟁 게시판을 초기값으로
-  // let [adviceBoard, setAdviceBoard] = useEffect(false); // 상담 게시판
 
   const issueBtn = useRef();
   const adviceBtn = useRef();
@@ -33,24 +32,21 @@ function MyArticle() {
         <div
           ref={issueBtn}
           className={styles.yesClicked}
-          onClick={() => showIssueBoard()}>
+          onClick={() => showIssueBoard()}
+        >
           논쟁 게시판
         </div>
         <div
           ref={adviceBtn}
           className={styles.noClicked}
-          onClick={() => showAdviceBoard()}>
+          onClick={() => showAdviceBoard()}
+        >
           상담 게시판
         </div>
       </div>
 
-      {
-        issueBoard ?
-          <MyArticleIssue /> :
-          <MyArticleAdvice />
-      }
-
+      {issueBoard ? <MyArticleIssue /> : <MyArticleAdvice />}
     </div>
-  )
+  );
 }
 export default MyArticle;

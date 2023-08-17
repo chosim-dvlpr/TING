@@ -6,10 +6,11 @@ import { logout } from "../../redux/userdata";
 
 import commonStyles from "./ProfileCommon.module.css";
 
+import Swal from "sweetalert2";
+
 function DeleteAccount() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [checkData, setCheckData] = useState([false, false]);
   let userdata = useSelector((state) => state.userdataReducer.userdata);
 
   let Navigate = useNavigate();
@@ -23,18 +24,14 @@ function DeleteAccount() {
 
     try {
       const response = await tokenHttp.post("/user/check", data);
-      console.log("비밀번호 불러오기", response);
 
       if (response.data.code === 200) {
-        console.log("불러오기 성공");
         // 비밀번호 일치 시
         if (response.data.data) {
-          console.log("비밀번호 일치");
           return true;
         }
         // 비밀번호 불일치
         else {
-          console.log("비밀번호 불일치");
           return false;
         }
       } else if (response.data.code === 400) {
@@ -57,21 +54,31 @@ function DeleteAccount() {
     const isPasswordValid = await checkUserPassword();
 
     if (isEmailValid && isPasswordValid) {
-      if (window.confirm("탈퇴하시겠습니까?")) checkUserAxios();
+      Swal.fire({
+        title: "탈퇴하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "확인",
+        cancelButtonText: "취소",
+        width: 400,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await checkUserAxios();
+        }
+      });
     } else {
-      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+      Swal.fire({
+        title: "이메일 또는 비밀번호가 \n올바르지 않습니다.",
+        width: 400,
+      });
     }
   };
 
   // 회원 탈퇴
-  const checkUserAxios = () => {
-    tokenHttp.delete("/user").then((response) => {
-      console.log("탈퇴", response);
-
+  const checkUserAxios = async () => {
+    tokenHttp.delete("/user").then(async (response) => {
       if (response.data.code === 200) {
-        console.log("회원 탈퇴 성공");
+        await Navigate("/");
         dispatch(logout()); // redux의 user 정보 삭제
-        Navigate("/");
       } else if (response.data.code === 400) {
         console.log("회원 탈퇴 실패");
       } else if (response.data.code === 401) {
@@ -85,7 +92,6 @@ function DeleteAccount() {
   return (
     <div className={commonStyles.wrapper}>
       <p>이메일과 비밀번호를 확인해주세요.</p>
-      {/* <label className={commonStyles.label} htmlFor='email'>이메일</label> */}
       <input
         className={commonStyles.input}
         type="text"
@@ -94,7 +100,6 @@ function DeleteAccount() {
         onChange={(e) => setEmail(e.target.value)}
       ></input>
       <br></br>
-      {/* <label className={commonStyles.label} htmlFor='password'>비밀번호</label> */}
       <input
         className={commonStyles.input}
         type="password"

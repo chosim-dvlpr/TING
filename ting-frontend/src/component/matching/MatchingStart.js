@@ -81,7 +81,7 @@ function MatchingStart() {
 
     // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
     if (accessToken === null) {
-      alert("로그인 후 돌아오세요");
+      Swal.fire({ title: "로그인 후 돌아오세요", width: 400 });
       navigate("/");
     }
 
@@ -238,7 +238,11 @@ function MatchingStart() {
       setShowMatchingChoiceModal(true)
       // 사용자 video audio off
       toggleAudioAndVideo(false, false)
-      setCount(15)
+      // 시연 후 주석 해제
+      // setCount(15)
+
+      // 시연
+      setCount(10);
     }
   }, [questionNumber]);
 
@@ -376,7 +380,7 @@ function MatchingStart() {
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
 
-      alert("상대방과의 연결이 끊어졌습니다.");
+      Swal.fire({ title: "상대방과의 연결이\n끊어졌습니다.", width: 400 });
       navigate("/");
     });
 
@@ -543,7 +547,7 @@ function MatchingStart() {
               {questionNumber === 0 ? (
                 <div>
                   <h1>서로 간단히 인사를 나누세요 :)</h1>
-                  <h2>뒤에 나올 카드에 대한 질문에 대해 이야기를 나누어 보세요</h2>
+                  <h3>뒤에 나올 카드에 대한 질문에 대해 이야기를 나누어 보세요</h3>
                 </div>
               ) : questionNumber === 11 ? (
                 <h1>질문 카드가 끝났습니다.</h1>
