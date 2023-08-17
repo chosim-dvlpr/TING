@@ -251,7 +251,7 @@ function FriendList({
         </button>
       </div>
       <div className={styles.list}>
-        {friendList
+        {friendList.length>0? (friendList
           .filter((friend) => friend.nickname.includes(searchFriendNickname))
           .map((friend, i) => (
             <div key={i}>
@@ -316,7 +316,13 @@ function FriendList({
               
             </div>
             // </div>
-          ))}
+          )))
+          : 
+          (
+            <div>
+            친구가 없습니다.<br></br>매칭을 통해 새로운 인연을 만들어보세요!
+            </div>
+          )}
       </div>
     </div>
   );

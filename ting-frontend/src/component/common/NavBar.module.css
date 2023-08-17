@@ -13,7 +13,6 @@
   top: 0;
   left: 0;
   display: flex;
-  /* background-color: #fee5ef; */
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -21,7 +20,7 @@
 }
 
 .logo {
-  height: 70px;
+  height: 65px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,25 +28,23 @@
 
 .navMenu {
   cursor: pointer;
-  /* margin-left: 64px; */
-  font-size: 40px;
-  font-weight: 700;
-  width: 90px;
+  /* font-weight: 700; */
+  width: 80px;
   text-decoration: none;
-  /* color: #888888; */
   font-family: "UhBeeSe_hyun";
   color: black;
   position: relative;
 }
 
 .menuItem {
-  height: 65px;
+  height: 60px;
   cursor: pointer;
 }
 
 .menuName {
   font-family: "UhBeeSe_hyun";
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 500;
   width: 100%;
   margin-bottom: 10px;
   padding: 3px 0;
@@ -55,13 +52,6 @@
   border-radius: 7px;
   z-index: 1002;
 }
-
-/* .menuItem:hover {
-  visibility: hidden;
-} */
-/* .menuItem:hover + .menuName {
-  display: inline-block;
-} */
 
 .navLeft {
   margin-top: 20px;
@@ -71,8 +61,6 @@
 }
 
 .navRight {
-  /* margin-left: auto;
-  margin-right: 150px; */
   margin-left: 10px;
   margin-bottom: 20px;
   display: flex;
@@ -82,24 +70,21 @@
 }
 
 .yesLoginedDiv {
-  /* overflow: visible; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 }
 
 .profileImage {
   height: 70px;
   cursor: pointer;
   position: absolute;
-  /* left: 50%; */
   transform: translateX(-50%);
 }
 .profileImageDiv {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
   margin: 0 10px;
   overflow: hidden;
   border-radius: 50%;
@@ -107,14 +92,14 @@
 }
 .loginDiv {
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 65px;
+  height: 65px;
   margin: 0 10px 20px 10px;
   overflow: hidden;
   border-radius: 50%;
   background-color: #f5f5f599;
   font-family: "UhBeeSe_hyun";
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -128,12 +113,12 @@
 
 .dropDownMenu {
   background-color: #f5f5f599;
-  width: 90px;
-  height: 68px;
+  width: 80px;
+  height: 62px;
   margin-bottom: 10px;
   border-radius: 7px;
   font-family: "UhBeeSe_hyun";
-  font-size: 14px;
+  font-size: 12px;
 }
 .dropDownMenu > div {
   margin: 2px;
@@ -142,9 +127,12 @@
 }
 .dropDownMenu > div:first-child {
   border-bottom: 2px dotted rgb(180, 180, 180);
-  /* padding-bottom: 6px; */
 }
 
 #tingBtn {
   margin-top: 10px;
+}
+
+.matchingMenu .menuName {
+  margin-top: 5px;
 }

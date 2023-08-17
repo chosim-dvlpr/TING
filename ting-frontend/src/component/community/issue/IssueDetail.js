@@ -29,7 +29,6 @@ function IssueDetail() {
   const [opposeRatio, setOpposeRatio] = useState(50); // 초기에 50%로 설정
 
   useEffect(() => {
-    AuthenticationCheck();
     getIssueDetail();
     getCommentList();
     getLikeList();
@@ -179,8 +178,8 @@ function IssueDetail() {
       <div className={styles.issueBoardContainer}>
         <div className={styles.issueDetailContainer}>
           <div className={styles.buttonContainer}>
-            <button className={styles.listButton}>
-              <span onClick={() => navigate(-1)}>목록</span>
+            <button className={styles.listButton} onClick={() => navigate(-1)}>
+              <span>목록</span>
             </button>
             {showbutton(issue.nickname) && (
               <button className={styles.deleteButton}>
