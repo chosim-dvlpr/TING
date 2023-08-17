@@ -3,42 +3,65 @@ import { useEffect, useState } from "react";
 import styles from "./Pagination.module.css";
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
-    const [currentClick, setCurrentClick] = useState(0);
-    const [prevClick, setPrevClick] = useState(null);
+  const [tenth, setTenth] = useState();
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    useEffect((e) => {
-        if(currentClick != null) {
-          let current = document.getElementById(currentClick);
-          current.style.backgroundColor = "#d75c6b";
-          // current.style.borderBottom = "2px solid black";
-        }
-        if(prevClick != null) {
-          let prev = document.getElementById(prevClick);
-          prev.style.backgroundColor = "#e58490";
-          // prev.style.borderBottom = "none";
-        }
-        setPrevClick(currentClick);
-      },[currentClick])
+  useEffect(() => {
+    setTenth(Math.floor((currentPage - 1) / 10) * 10);
+  }, [currentPage]);
 
-    const getClick = (e) => {
-        console.log(e.target.id);
-    setCurrentClick(e.target.id);
-    }
+  const check = (index, totalPages) => {
+    if (tenth + index + 1 > totalPages) return false;
+    return true;
+  };
 
-    return (
-        <div className={styles.pagination}>
-            {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                    id={index}
-                    key={index + 1}
-                    className={currentPage === index + 1 ? styles.activePage : styles.page}
-                    onClick={(e) => {onPageChange(index + 1); getClick(e);}}
-                >
-                    {index + 1}
-                </button>
-            ))}
-        </div>
-    );
+  return (
+    <div className={styles.pagination}>
+      {tenth > 0 ? (
+        <button
+          className={styles.btn}
+          id="prevBtn"
+          onClick={() => {
+            onPageChange(tenth - 9);
+          }}
+        >
+          {"<<"}
+        </button>
+      ) : (
+        ""
+      )}
+      {arr.map(
+        (num, index) =>
+          check(index, totalPages) && (
+            <button
+              id={index}
+              key={index + 1}
+              className={
+                currentPage === tenth + num ? styles.activePage : styles.page
+              }
+              onClick={() => {
+                onPageChange(tenth + num);
+              }}
+            >
+              {tenth + num}
+            </button>
+          )
+      )}
+      {tenth + 10 < totalPages ? (
+        <button
+          className={styles.btn}
+          id="nextBtn"
+          onClick={() => {
+            onPageChange(tenth + 11);
+          }}
+        >
+          {">>"}
+        </button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }
 
 export default Pagination;

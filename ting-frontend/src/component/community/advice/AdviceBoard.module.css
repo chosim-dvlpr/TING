@@ -27,13 +27,13 @@
 }
 
 /* Table styles */
-.adviceTable th:first-child, 
+.adviceTable th:first-child,
 .adviceTable td:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
 
-.adviceTable th:last-child, 
+.adviceTable th:last-child,
 .adviceTable td:last-child {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -52,10 +52,9 @@
 .adviceTable td {
   padding: 10px;
   /* border: 1px solid rgb(0, 131, 159); */
-  text-align: center;
+
   background-color: #fae6e8;
   margin: 10px 0;
-  
 }
 
 .adviceTable tr {
@@ -65,20 +64,53 @@
 .table_1 {
   width: 10%;
   border-right: 1px solid white;
+  text-align: center;
 }
 
 .table_2 {
   width: 50%;
   border-right: 1px solid white;
+  text-align: center;
 }
 
 .table_3 {
   width: 10%;
   border-right: 1px solid white;
+  text-align: right;
 }
 
 .table_4 {
   width: 30%;
+  text-align: right;
+}
+
+/* 제목행 */
+.tableHeader_1 {
+  width: 10%;
+  border-right: 1px solid white;
+  text-align: center;
+  background-color: #e58490;
+}
+
+.tableHeader_2 {
+  width: 50%;
+  border-right: 1px solid white;
+  text-align: center;
+  background-color: #e58490;
+}
+
+.tableHeader_3 {
+  width: 10%;
+  border-right: 1px solid white;
+  text-align: center;
+  background-color: #e58490;
+}
+
+.tableHeader_4 {
+  width: 30%;
+
+  text-align: center;
+  background-color: #e58490;
 }
 
 .adviceTable .option {
@@ -92,15 +124,20 @@
 
 /* Button styles */
 .createButton {
-  height: 44px;
-  padding: 8px 16px;
+  min-height: 40px;
+
   background-color: #e58490;
   color: #fff;
   border: none;
   cursor: pointer;
   float: right;
-  border-radius: 15px;
-  /* margin: 10px; */
+
+  border-radius: 10px;
+  padding: 5px 15px;
+
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
 }
 
 .createButton:hover {
@@ -117,20 +154,18 @@
   text-decoration: underline;
 }
 
-
 .dropdownKebab {
   width: 20px;
-  height:20px;
- 
-  margin-left:10px;
+  height: 20px;
+
+  margin-left: 10px;
   cursor: pointer;
-  
 }
 .dropdownContainer {
   position: relative;
-  
+
   float: right;
-  margin-left:10px;
+  margin-left: 10px;
 }
 
 .dropdownContent {
@@ -138,7 +173,7 @@
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -158,4 +193,6 @@
   display: block;
 }
 
-
+#noResult {
+  background-color: white;
+}

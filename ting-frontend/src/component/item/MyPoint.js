@@ -6,7 +6,7 @@ import { setPoint } from "../../redux/itemStore";
 import { setPointPaymentId } from "../../redux/itemStore";
 import styles from "./MyPoint.module.css";
 import Pagination from "../community/common/Pagination";
-import {getDate} from "../common/TimeCalculate";
+import { getDate } from "../common/TimeCalculate";
 
 function MyPoint() {
   const [chargeMenu, setChargeMenu] = useState(false);
@@ -63,6 +63,11 @@ function MyPoint() {
     else return false;
   };
 
+  const addComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
+  };
+
   return (
     <div>
       <div className={styles.MyPoint}>
@@ -72,7 +77,7 @@ function MyPoint() {
             className={styles.coinImage}
             alt="coin"
           ></img>
-          {myPoint} Point
+          {addComma(myPoint)} Point
         </span>
         <div
           className={styles.ChargeButton}
@@ -88,25 +93,33 @@ function MyPoint() {
       <div>
         <table className={styles.pointList}>
           <tbody>
-            {pointList.map((history, index) => (
-              <tr key={history.pointHistoryId}>
-                <td className={styles.time}>
-                  <div className={styles.tdDiv}>
-                    {getDate(history.changedTime)}
-                  </div>
-                </td>
-                <td class={styles.category}>{history.category}</td>
-                <td
-                  className={`${styles.cost} ${
-                    isPlus(history.category) ? styles.plus : styles.minus
-                  }`}
-                >
-                  {sign(history.category)}
-                  {history.changeCost}
-                </td>
-                <td className={styles.point}>{history.resultPoint}</td>
+            {pointList && pointList.length > 0 ? (
+              pointList.map((history, index) => (
+                <tr key={history.pointHistoryId}>
+                  <td className={styles.time}>
+                    <div className={styles.tdDiv}>
+                      {getDate(history.changedTime)}
+                    </div>
+                  </td>
+                  <td class={styles.category}>{history.category}</td>
+                  <td
+                    className={`${styles.cost} ${
+                      isPlus(history.category) ? styles.plus : styles.minus
+                    }`}
+                  >
+                    {sign(history.category)}
+                    {addComma(history.changeCost)}
+                  </td>
+                  <td className={styles.point}>
+                    {addComma(history.resultPoint)}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4}>포인트 충전 내역이 없습니다.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
         <Pagination

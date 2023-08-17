@@ -3,7 +3,7 @@ import tokenHttp from "../../api/tokenHttp";
 import { useDispatch, useSelector } from "react-redux";
 import { setMyItemList } from "../../redux/itemStore";
 import styles from "./MyItem.module.css";
-import ItemModal from "./common/ItemModal";
+import ItemUseModal from "./common/ItemUseModal";
 
 function MyItem() {
   const myItemList = useSelector((state) => state.itemReducer.myItemList);
@@ -11,13 +11,12 @@ function MyItem() {
   const [modalSign, setModalSign] = useState(false);
   const [clickedItem, setClickedItem] = useState({});
 
-  useEffect(() => {
+  const makeItemList = () => {
     tokenHttp
       .get("/item/user")
       .then((response) => {
-        // console.log(response.data);
-        let myItems = [];
         if (response.data.code === 200) {
+          let myItems = [];
           response.data.data.map((item) => {
             switch (item.name) {
               case "구매한 티켓":
@@ -54,7 +53,25 @@ function MyItem() {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    makeItemList();
   }, []);
+
+  // 모달을 여는 함수
+  const openModal = (item) => {
+    // 모달에 띄울 정보를 보내줌
+    setClickedItem(item);
+    // 모달을 열어줌
+    setModalSign(true);
+  };
+
+  // 모달을 닫는 함수
+  const closeModal = () => {
+    setModalSign(false);
+    makeItemList();
+  };
 
   return (
     <div>
@@ -62,7 +79,12 @@ function MyItem() {
         <div className={`row ${styles.ItemCardList}`}>
           {myItemList &&
             myItemList.map((item, idx) => (
-              <div className={`col-4 ${styles.ItemCardOuter}`}>
+              <div
+                className={`col-4 ${styles.ItemCardOuter}`}
+                onClick={() => {
+                  openModal(item);
+                }}
+              >
                 <div key={idx} className={styles.ItemCard}>
                   <div className={styles.ItemCardInside}>
                     <img src={process.env.PUBLIC_URL + item.img}></img>
@@ -74,6 +96,12 @@ function MyItem() {
             ))}
         </div>
       </div>
+
+      {/* 구매 모달 */}
+
+      {modalSign ? (
+        <ItemUseModal closeModal={closeModal} clickedItem={clickedItem} />
+      ) : null}
     </div>
   );
 }

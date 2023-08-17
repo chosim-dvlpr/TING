@@ -1,0 +1,162 @@
+.fishContainer {
+  width: 100%;
+} 
+
+/* 물고기 */
+.fish {
+  background-image: url('../../../public/img/물고기1.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 50%; /* 화면 중앙에 위치 */
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath 14s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
+.fish2 {
+  background-image: url('../../../public/img/물고기2.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 75%; 
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath2 10s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
+
+.fish3 {
+  background-image: url('../../../public/img/물고기4.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 25%; 
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath3 12s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
+
+.fish4 {
+  background-image: url('../../../public/img/물고기5.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 25%; 
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath4 14s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
+
+.fish5 {
+  background-image: url('../../../public/img/물고기5.png');
+  background-size: auto 100%;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  top: 70%; 
+  will-change: transform;
+  transform: translateX(-100%);
+  animation: moveSPath5 16s infinite; /* S자 모양 이동 애니메이션 적용 */
+  position:absolute;
+}
+
+
+
+
+@keyframes moveSPath {
+  0% {
+    transform: translateX(-100%);
+  }
+  25%{
+    transform: translateX(500%) translateY(-50%);
+  }
+  50% {
+    transform: translateX(1000%) translateY(-70%);
+  }
+  75% {
+    transform: translateX(1500%) translateY(-50%);
+  }
+  100% {
+    transform: translateX(2500%);
+  }
+}
+
+
+@keyframes moveSPath2 {
+  0% {
+    transform: translateX(-200%);
+  }
+  25%{
+    transform: translateX(400%) translateY(50%);
+  }
+  50% {
+    transform: translateX(1000%) translateY(70%);
+  }
+  75% {
+    transform: translateX(1500%) translateY(50%);
+  }
+  100% {
+    transform: translateX(2500%);
+  }
+}
+
+@keyframes moveSPath3 {
+  0% {
+    transform: translateX(-300%);
+  }
+  25%{
+    transform: translateX(300%) translateY(50%);
+  }
+  50% {
+    transform: translateX(800%) translateY(80%);
+  }
+  75% {
+    transform: translateX(1500%) translateY(50%);
+  }
+  100% {
+    transform: translateX(2300%);
+  }
+}
+@keyframes moveSPath4 {
+  0% {
+    transform: translateX(-300%);
+  }
+  25%{
+    transform: translateX(300%) translateY(-50%);
+  }
+  50% {
+    transform: translateX(800%) translateY(-70%);
+  }
+  75% {
+    transform: translateX(1500%) translateY(-50%);
+  }
+  100% {
+    transform: translateX(2300%);
+  }
+}
+
+
+@keyframes moveSPath5 {
+  0% {
+    transform: translateX(-200%);
+  }
+  25%{
+    transform: translateX(400%) translateY(50%);
+  }
+  50% {
+    transform: translateX(1200%) translateY(70%);
+  }
+  75% {
+    transform: translateX(1700%) translateY(50%);
+  }
+  100% {
+    transform: translateX(2500%);
+  }
+}

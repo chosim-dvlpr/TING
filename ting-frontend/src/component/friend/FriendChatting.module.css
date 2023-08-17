@@ -11,6 +11,9 @@
 
 .top {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .top img {
@@ -25,11 +28,16 @@
   border: none;
   border-radius: 10px;
   padding: 5px 10px;
-  position: fixed;
-  right: 215px;
-  bottom: 570px;
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.sendButton:hover,
+.closeButton:hover {
+  background-color: #d75c6b;
 }
 
 .infoArea {
@@ -41,11 +49,18 @@
 }
 
 .imageButton {
-  background-color: #fae6e8;
   border: none;
   border-radius: 50%;
   width: 48px;
   height: 48px;
+  background-color: white;
+}
+
+.fishSkinImage {
+  width: 53px;
+  height: 53px;
+  margin-left: -6px;
+  margin-top: -4px;
 }
 
 .nickname {
@@ -140,7 +155,12 @@
   border: none;
   border-radius: 10px;
   padding: 5px 15px;
-  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   height: 40px;
+}
+
+.chattingInput::placeholder {
+  font-size: 13px;
+  color: rgb(228, 104, 104);
 }

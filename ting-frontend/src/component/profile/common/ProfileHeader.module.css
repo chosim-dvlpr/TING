@@ -35,6 +35,7 @@
   border-radius: 50%;
   object-fit: fill;
   box-shadow: 0px 0px 7px #bdbdbd;
+  background-color: white;
 }
 
 #noImg {
@@ -73,5 +74,5 @@
   text-align: left;
   font-family: UhBeeSe_hyun;
   margin-bottom: 10px;
+  font-size: 20px;
 }
-

@@ -4,6 +4,8 @@ import styles from "./ItemModal.module.css";
 
 import tokenHttp from "../../../api/tokenHttp";
 
+import Swal from "sweetalert2";
+
 function ItemModal({ closeModal, clickedItem }) {
   const [quantity, setQuantity] = useState(1);
   const [itemPrice, setItemPrice] = useState(clickedItem.price);
@@ -24,22 +26,34 @@ function ItemModal({ closeModal, clickedItem }) {
   };
 
   const buyItem = () => {
-    console.log(clickedItem.code);
-    console.log(quantity);
+    // console.log(clickedItem.code);
+    // console.log(quantity);
     tokenHttp
       .get(`/item/${clickedItem.code}/${quantity}`)
       .then((response) => {
+        console.log(response.data.code);
         if (response.data.code == 200) {
-          alert("아이템 구매를 완료하였습니다.");
+          Swal.fire("아이템 구매를 완료하였습니다.");
           closeModal();
-        } else if (response.data.code == 4970) {
-          alert("포인트가 부족합니다.");
-        } else {
-          console.log(response.data);
-          alert("아이템 구매 중 오류가 발생하였습니다.");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response.data.code === 4970) {
+          Swal.fire("포인트가 부족합니다.");
+          closeModal();
+        } else if (err.response.data.code === 4977) {
+          Swal.fire("이미 더 큰 어항을 보유하고 있습니다.");
+          closeModal();
+        } else {
+          Swal.fire("아이템 구매 중 오류가 발생하였습니다.");
+          closeModal();
+        }
+      });
+  };
+
+  const addComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
   };
 
   return (
@@ -51,6 +65,13 @@ function ItemModal({ closeModal, clickedItem }) {
         }}
       ></div>
       <div className={styles.ModalInner}>
+        <img
+          src={`${process.env.PUBLIC_URL}/img/closeIcon.png`}
+          className={styles.closeButton}
+          onClick={() => {
+            closeModal();
+          }}
+        />
         <div className={styles.image}>
           <img src={clickedItem.img} />
         </div>
@@ -87,44 +108,13 @@ function ItemModal({ closeModal, clickedItem }) {
             </div>
           </div>
         )}
-        {/* <div className={styles.QuantityBox}> */}
-        {/* <div
-            className={
-              clickedItem.name === "작은 어항" ||
-              clickedItem.name === "수조" ||
-              clickedItem.name === "아쿠아리움"
-                ? styles.noButton
-                : styles.MinusButton
-            }
-            onClick={() => {
-              changeQuantity("-");
-            }}
-          >
-            -
-          </div>
-          <div className={styles.QuantityNum}>{quantity}</div>
-          <div
-            className={
-              clickedItem.name === "작은 어항" ||
-              clickedItem.name === "수조" ||
-              clickedItem.name === "아쿠아리움"
-                ? styles.noButton
-                : styles.PlusButton
-            }
-            onClick={() => {
-              changeQuantity("+");
-            }}
-          >
-            +
-          </div>
-        </div> */}
         <div className={styles.priceDiv}>
           <img
             src={process.env.PUBLIC_URL + "/img/coin.png"}
             className={styles.coinImage}
             alt="coin"
           ></img>
-          <span ref={priceRef}>{itemPrice}</span>
+          <span ref={priceRef}>{addComma(itemPrice)}</span>
         </div>
         {/* 구매하기 버튼 */}
         <div>

@@ -5,14 +5,17 @@
     font-style: normal;
   }
 
-.outer {
+  .outer {
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
 }
 
 .container {
     position: relative;
     min-height: 95vh;
-    top: 5vh;
+    width: 60%;
+    margin-top: 5vh;
     background-color: white;
     margin-left: 130px;
     margin-right: 130px;
@@ -26,9 +29,12 @@
     /* justify-content: center; */
     align-items: center;
     padding-top: 70px;
+    transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
+
 }
 
 .title {
     font-family: 'UhBeese_hyun';
     font-size: 32px;
+    margin: 20px;
 }

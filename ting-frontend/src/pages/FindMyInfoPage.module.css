@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "UhBeeSe_hyun";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.outer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  position: relative;
+  min-height: 95vh;
+  width: 40%;
+  top: 5vh;
+  background-color: white;
+  margin-left: 130px;
+  /* padding-right: 130px; */
+  margin-right: 130px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-left: 3px solid #2e6070;
+  border-right: 3px solid #2e6070;
+  border-top: 3px solid #2e6070;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding-top: 70px;
+}
+
+.title {
+  font-family: "UhBeese_hyun";
+  font-size: 32px;
+}
+
+.wrapper {
+  margin: 20px;
+  width: 280px;
+  text-align: center;
+}
+.wrapper * {
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.btn,
+.disabledBtn {
+  margin: 10px;
+}
+.input,
+.btn,
+.disabledBtn,
+.selectBtn {
+  border-radius: 10px;
+  padding: 5px 15px;
+}
+
+.label {
+  color: rgb(145, 145, 145);
+  display: block;
+  width: 200px;
+  text-align: left;
+  padding: 0 10px;
+  font-size: 18px;
+}
+
+.input {
+  border: 2px solid gray;
+  margin: 5px 0;
+}
+
+.disabledBtn {
+  border: none;
+  background-color: gainsboro;
+  color: whitesmoke;
+}
+
+.btn {
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+}
+.btn:hover {
+  background-color: #327488;
+}
+
+.rightMsg {
+  color: green;
+}
+.wrongMsg {
+  color: red;
+}
+
+#nameInput,
+#regionInput {
+  /* margin-right: 120px; */
+  width: 390px;
+}
+
+.selectBtn {
+  border: none;
+  margin: 3px;
+}
+.selectBtn:hover,
+.selectBtn:focus {
+  background-color: #98e0ef;
+}
+
+.genderBtn {
+  width: 180px;
+}
+
+.phonenumInput {
+  width: 80px;
+  border: 2px solid gray;
+  margin: 5px 0;
+  border-radius: 10px;
+  padding: 5px 15px;
+}
+
+.findPasswordInput {
+  width: 267px;
+  height: 44px;
+}
+
+.findPasswordPhonenumber {
+  width: 83px;
+  height: 44px;
+}
+
+.confirmBtn {
+  width: 64px;
+  height: 40px;
+  font-size: 20px;
+  margin-bottom: 10px;
+}

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import commonStyles from "./ProfileCommon.module.css";
 import styles from "./PasswordUpdate.module.css";
 
+import Swal from "sweetalert2";
+
 function PasswordUpdate() {
   const [isCurrentPasswordModal, setIsCurrentPasswordModal] = useState(true); // 기존 비밀번호 모달
   // const [isNewPasswordModal, setIsNewPasswordModal] = useState(false); // 새로운 비밀번호 모달
@@ -131,7 +133,9 @@ function PasswordUpdate() {
           // 비밀번호 변경 완!
           if (response.data.code === 200) {
             console.log("비밀번호 변경 완료!");
-            Navigate("/"); // 메인으로 이동하기
+            // 수정 완료 창
+            Swal.fire({ title: "비밀번호 변경이 \n완료되었습니다.", width: 400 });
+            Navigate("/mypage"); // 마이페이지로 이동하기
           } else if (response.data.code === 400) {
             console.log("변경 실패");
           } else if (response.data.code === 401) {
@@ -142,6 +146,9 @@ function PasswordUpdate() {
         })
         .catch(() => console.log("실패"));
     };
+
+    // 수정 완료 창
+
 
     return (
       <div>

@@ -1,6 +1,8 @@
 import "./App.css";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+// 로그인
 import LoginPage from "./pages/LoginPage.js";
 import SignupPage from "./pages/SignupPage.js";
 import SignupEmail from "./component/signup/Email.js";
@@ -20,7 +22,11 @@ import Hobby from "./component/signup/select/Hobby";
 import Personality from "./component/signup/select/Personality";
 import Style from "./component/signup/select/Style";
 import Introduce from "./component/signup/select/Introduce";
+import SignupComplete from "./component/signup/SignupComplete";
 import Openvidu from "./pages/openvidu/openvidu-main.js";
+
+// 로그인 이메일, 비밀번호 찾기
+import FindMyInfoPage from "./pages/FindMyInfoPage";
 
 // 메인페이지
 import MainPage from "./pages/MainPage";
@@ -32,7 +38,6 @@ import NavBar from "./component/common/NavBar";
 import MatchingPage from "./pages/MatchingPage.js";
 import WaitingRoom from "./component/matching/WaitingRoom.js";
 import MatchingStart from "./component/matching/MatchingStart.js";
-import MatchingResult from "./component/matching/MatchingResult";
 
 // 커뮤니티
 
@@ -88,6 +93,10 @@ import KakaoPayCancel from "./pages/pay-result-page/KakaoPayCancel";
 import KakaoPayFail from "./pages/pay-result-page/KakaoPayFail";
 import ProfileImage from "./component/signup/select/profileImage";
 
+// 라우트 가드 (인증)
+import Auth from "./util/Auth";
+import SignUpAll from "./component/signup/SignupAll";
+
 function App() {
   let accessToken = localStorage.getItem("access-token");
   // accessToken이 있다면 isLogin에 true 저장
@@ -97,6 +106,15 @@ function App() {
     localStorage.removeItem("access-token"); // localStorage의 access-token 삭제
     setIsLogin(false);
   };
+
+  const AuthMatchingPage = Auth(MatchingPage);
+  const AuthAdviceCreate = Auth(AdviceCreate);
+  const AuthAdviceUpdate = Auth(AdviceUpdate);
+  const AuthIssueCreate = Auth(IssueCreate);
+  const AuthFriend = Auth(Friend);
+  const AuthMyProfilePage = Auth(MyProfilePage);
+  const AuthItemPage = Auth(ItemPage);
+  const AuthAdminPage = Auth(AdminPage, true);
 
   return (
     <div className="App">
@@ -111,12 +129,16 @@ function App() {
 
         {/* 회원가입 */}
         <Route path="/signup" element={<SignupPage />}>
-          <Route path="" element={<SignupEmail />}></Route>
+          <Route path="" element={<SignUpAll />}></Route>
           <Route path="certEmail" element={<CertificationEmail />}></Route>
           <Route path="password" element={<SignupPassword />}></Route>
           <Route path="phonenum" element={<SignupPhoneNumber />}></Route>
-          <Route path="certPhonenum" element={<CertificationPhonenumber />}></Route>
+          <Route
+            path="certPhonenum"
+            element={<CertificationPhonenumber />}
+          ></Route>
           <Route path="detail" element={<SignupDetail />}></Route>
+          <Route path="complete" element={<SignupComplete />}></Route>
           <Route path="select" element={<SelectionData />}>
             <Route path="mbti" element={<Mbti />}></Route>
             <Route path="height" element={<Height />}></Route>
@@ -132,34 +154,46 @@ function App() {
           </Route>
         </Route>
 
-        {/* 매칭 */}
-        <Route path="/matching" element={<MatchingPage />}>
+        {/* 로그인 아이디, 비번 찾기 */}
+        <Route path="/login/forget" element={<FindMyInfoPage />}></Route>
+
+        {/* 매칭 - 로그인 인증 */}
+        {/* <Route path="/matching" element={<MatchingPage  />}> */}
+        <Route path="/matching" element={<AuthMatchingPage />}>
           <Route path="" element={<WaitingRoom />}></Route>
           <Route path="start" element={<MatchingStart />}></Route>
-          <Route path="result" element={<MatchingResult />}></Route>
         </Route>
+        {/* </Route> */}
 
         {/* 커뮤니티 페이지 */}
-
         <Route path="/community//*" element={<CommunityPage />} />
 
-        <Route path="/community/advice/detail/:adviceId" element={<AdviceDetail />} />
+        <Route
+          path="/community/advice/detail/:adviceId"
+          element={<AdviceDetail />}
+        />
         <Route path="/community/advice" element={<AdviceBoard />} />
-        <Route path="/community/advice/create" element={<AdviceCreate />} />
-        <Route path="/community/advice/update/:adviceId" element={<AdviceUpdate />} />
+        <Route path="/community/advice/create" element={<AuthAdviceCreate />} />
+        <Route
+          path="/community/advice/update/:adviceId"
+          element={<AuthAdviceUpdate />}
+        />
 
         <Route path="/community/issue" element={<IssueBoard />} />
-        <Route path="/community/issue/create" element={<IssueCreate />} />
-        <Route path="/community/issue/detail/:issueId" element={<IssueDetail />} />
+        <Route path="/community/issue/create" element={<AuthIssueCreate />} />
+        <Route
+          path="/community/issue/detail/:issueId"
+          element={<IssueDetail />}
+        />
 
-        {/* 친구목록 임시 */}
-        <Route path="/friend" element={<Friend />}>
+        {/* 친구목록 */}
+        <Route path="/friend" element={<AuthFriend />}>
           <Route path="" element={<FriendList />}></Route>
           <Route path="chat" element={<FriendChatting />}></Route>
         </Route>
 
         {/* 마이페이지 */}
-        <Route path="/mypage" element={<MyProfilePage />}>
+        <Route path="/mypage" element={<AuthMyProfilePage />}>
           <Route path="" element={<MyInformation />}></Route>
           <Route path="update" element={<MyInformationUpdate />}></Route>
           <Route path="passwordupdate" element={<PasswordUpdate />}></Route>
@@ -171,7 +205,7 @@ function App() {
         </Route>
 
         {/* 아이템 페이지 */}
-        <Route path="/item" element={<ItemPage />}>
+        <Route path="/item" element={<AuthItemPage />}>
           {/* 아이템 상점 */}
           <Route path="shop" element={<ItemShop />}></Route>
           {/* 보유 아이템 관리 */}
@@ -186,7 +220,7 @@ function App() {
         <Route path="/payment/kakaoPayFail" element={<KakaoPayFail />} />
 
         {/* 관리자 페이지 */}
-        <Route path="/admin" element={<AdminPage />}>
+        <Route path="/admin" element={<AuthAdminPage />}>
           <Route path="" element={<Dashboard />}></Route>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="report" element={<Report />} />

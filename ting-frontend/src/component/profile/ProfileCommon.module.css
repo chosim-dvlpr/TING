@@ -18,6 +18,10 @@
   margin: 5px;
 }
 
+.label {
+  text-align: left;
+}
+
 .input,
 .btn,
 .disabledBtn,

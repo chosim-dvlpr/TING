@@ -39,7 +39,7 @@ function ProfileImage(){
         console.log('파일 업로드 실패')
       }
     });
-  }
+  };
 
   return(
     <div className="Introduce">

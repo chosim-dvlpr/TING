@@ -1,0 +1,168 @@
+@font-face {
+  font-family: 'UhBeeSe_hyun';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.OuterContainer {
+  z-index: 11;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width:100%;
+  height:93%;
+  border-radius: 30px;
+}
+
+.Container {
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+  width:100%;
+  height:93%;
+  border-radius: 50px;
+  background-color: white;
+}
+
+.InnerBox {
+  padding:30px;
+
+} 
+
+/* 카드 뒤집는 효과 */
+.flip { 
+  width: 200px;
+  height: 273px;
+  perspective: 1100px;
+}
+
+.card {
+  width: 100%; 
+  height: 100%; 
+  position: relative;
+  transition: .4s;
+  transform-style: preserve-3d;
+}	
+
+.front, .back, .yourFront{
+  position: absolute;
+  width: 100%; 
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.front {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/cardresult.png); 
+  background-size:100%;
+}
+
+.yourFront {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/yourcardresult.png); 
+  background-size:100%;
+}
+
+/* 뒷면은 사전에 미리 뒤집기 */
+.back { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url(../../../../public/img/card/card0.png); 
+  transform: rotateY(180deg);
+  background-size:100%; 
+}
+
+ /* 호버 시 뒤집기 */
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.CardContent {
+  font-size: 40px;
+  font-family: UhBeeSe_hyun;
+}
+
+
+/* 버튼 토글 */
+
+
+.button {
+  border-radius: 10px;
+  padding: 5px 15px;
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+  5px 5px 10px 0px rgba(0, 0 ,0, .1),
+  3px 3px 5px 0px rgba(0, 0 ,0, .1); 
+}
+
+.button:hover {
+  background-color: #327488;
+}
+
+.clickedButton {
+  border-radius: 10px;
+  padding: 5px 15px;
+  border: none;
+  background-color: #327488;
+  color: whitesmoke;
+  box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+  5px 5px 10px 0px rgba(0, 0 ,0, .1),
+  3px 3px 5px 0px rgba(0, 0 ,0, .1); 
+}
+
+.Btn {
+  width: 100px;
+  height: 50px;
+  margin: 30px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+      5px 5px 10px 0px rgba(0, 0, 0, .1),
+      3px 3px 5px 0px rgba(0, 0, 0, .1);
+}
+
+.Btn:hover {
+  background-color: #327488;
+}
+
+.ConfettiOuter{
+  width: 100vw;
+  z-index: 1000;
+}
+
+.Confetti {
+  width: 100vw;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.lastResultButton {
+  height: 50px;
+  margin: 30px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2e6070;
+  color: whitesmoke;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+      5px 5px 10px 0px rgba(0, 0, 0, .1),
+      3px 3px 5px 0px rgba(0, 0, 0, .1);
+}
+
+.lastResultButton:hover {
+  background-color: #327488;
+}

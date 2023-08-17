@@ -1,5 +1,8 @@
 .top {
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .top img {
@@ -8,6 +11,8 @@
 
 .searchArea {
   margin-bottom: 10px;
+  display: flex;
+  padding: 10px;
 }
 
 .button {
@@ -18,7 +23,7 @@
   padding: 5px 10px;
 }
 
-.closeButton {
+/* .closeButton {
   width: 36px;
   height: 34px;
   background-color: #e58490;
@@ -31,6 +36,25 @@
   bottom: 570px;
   box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+} */
+
+.closeButton {
+  width: 36px;
+  height: 34px;
+  background-color: #e58490;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  position: absolute;
+  right: 10px;
+  margin-right: 10px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.closeButton:hover {
+  background-color: #d75c6b;
 }
 
 .searchArea input {
@@ -40,18 +64,20 @@
   box-shadow: inset 2px 2px 4px #cbced1, inset -2px -2px 4px #ffffff;
   border-radius: 8px;
   padding: 8px;
-  margin-right: 10px;
-  width: 240px;
+  /* margin-right: 10px; */
+  width: fit-content;
   font-size: 16px;
 }
 
 .searchButton {
+  margin-left: 8px;
+  pointer-events: none;
   background-color: #e58490;
   color: #fff;
   border: none;
   border-radius: 10px;
   padding: 5px 15px;
-  box-shadow: inset 2px 2px 4px #fae6e8, inset -2px -2px 4px #ffffff;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #fae6e8;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   height: 40px;
 }
@@ -59,23 +85,43 @@
 .list {
   height: 440px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .friendItem {
+  cursor: pointer;
   display: flex;
-  background-color: #fae6e8;
   padding: 10px;
   border-radius: 24px;
   margin: 5px 5px;
   height: 66px;
   box-shadow: inset 2px 2px 4px #fad7db, inset -2px -2px 4px #ffffff;
   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-.image {
+.friendItem:hover {
+  transform: scale(1.03);
+}
+
+
+.alive {
+  background-color: #fae6e8;
+}
+
+.dead {
+  background-color: grey;
+}
+
+/* .image {
   background-color: white;
   border-radius: 50%;
   width: 48px;
+} */
+.image img {
+  width: 69px;
+  height: auto;
+  margin-top: -10px;
 }
 
 .middle {
@@ -87,7 +133,10 @@
 }
 
 .nickname {
-
+  white-space: nowrap; /* 줄 바꿈 방지 */
+  overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 텍스트에 대해 ... 표시 */
+  max-width: 140px;
 }
 
 .content {
@@ -98,9 +147,28 @@
   max-width: 140px;
 }
 
+.right {
+  width: 42px;
+}
+
 .time {
   font-size: 12px;
   height: 18px;
+  width: 44px;
+}
+
+.unreadArea {
+  display: flex;
+}
+
+.new {
+  margin-top: 2px;
+  border-radius: 50%;
+  background-color: red;
+  width: 12px;
+  height: 12px;
+  color: white;
+  font-size: 10px;
 }
 
 .unread {
@@ -118,6 +186,76 @@
   background-color: inherit;
   border: none;
 }
-.friendItem img {
+/* .friendItem img {
   height: 20px;
+} */
+
+.kebab {
+  height: 20px;
+}
+
+/* 모달 */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 드롭다운 컨테이너의 스타일 추가 */
+.dropdown {
+  position: relative;
+  display: flex;
+
+}
+
+/* kebab 아이콘의 스타일 */
+.dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* 드롭다운 컨텐츠의 스타일 */
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 0;
+}
+
+/* kebab 버튼 클릭 시 드롭다운 컨텐츠 표시 */
+.dropdown:hover .dropdownContent {
+  display: block;
+}
+
+/* 드롭다운 컨텐츠 내 삭제 버튼의 스타일 */
+.dropdownContent button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* 삭제 버튼에 마우스 호버 시 스타일 변경 */
+.dropdownContent button:hover {
+  background-color: #f1f1f1;
 }

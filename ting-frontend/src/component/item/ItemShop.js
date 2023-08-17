@@ -74,6 +74,11 @@ function ItemShop() {
     setModalSign(false);
   };
 
+  const addComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
+  };
+
   return (
     <div>
       <div className={styles.outBox}>
@@ -99,7 +104,7 @@ function ItemShop() {
                       className={styles.coinImage}
                       alt="coin"
                     ></img>
-                    {item.price}
+                    {addComma(item.price)}
                   </div>
                   <div>{item.description}</div>
                 </div>

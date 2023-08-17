@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
 // import { useNavigate } from "react-router-dom";
 
 import AOS from "aos";
@@ -20,14 +19,14 @@ import { useSelector } from "react-redux";
 function MainPage() {
   // 채팅 기능 추가 //
   const messageStore = useMessageStore();
-  let userdata = useSelector((state) => state.userdataReducer.userdata);
+  const userdata = useSelector((state) => state.userdataReducer.userdata);
 
   const { connected, currentRoomIndex, roomIndices, messageLogsObject } =
     messageStore;
 
   // 모든 채팅방 연결
   const connectSocket = () => {
-    messageStore.connect();
+    messageStore.connect(null, userdata.userId);
   };
 
   useEffect(() => {
@@ -37,139 +36,164 @@ function MainPage() {
   }, [userdata]);
   // 여기까지 채팅 //
 
-  useEffect(() => {
-    AOS.init();
-    return () => {
-      AOS.refresh(); // 컴포넌트가 언마운트될 때 AOS를 해제
-    };
-  }, []);
+  // useEffect(() => {
+  //   AOS.init();
+  //   return () => {
+  //     AOS.refresh(); // 컴포넌트가 언마운트될 때 AOS를 해제
+  //   };
+  // }, []);
 
+  const [wheelHandlerActive, setWheelHandlerActive] = useState(true);
   const outerDivRef = useRef();
-  useEffect(() => {
-    const wheelHandler = (e) => {
-      e.preventDefault();
-      const { deltaY } = e;
-      const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
-      const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
+  const wheelHandler = (e) => {
+    // e.preventDefault();
+    const { deltaY } = e;
+    const { scrollTop } = outerDivRef.current; // 스크롤 위쪽 끝부분 위치
+    const pageHeight = window.innerHeight; // 화면 세로길이, 100vh와 같습니다.
 
-      if (deltaY > 0) {
-        // 스크롤 내릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight - 5) {
-          //현재 1페이지
-          console.log(scrollTop, pageHeight);
-          outerDivRef.current.scrollTo({
-            top: pageHeight,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (
-          scrollTop >= pageHeight - 5 &&
-          scrollTop < pageHeight * 2 - 5
-        ) {
-          //현재 2페이지
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (
-          scrollTop >= pageHeight * 2 - 5 &&
-          scrollTop < pageHeight * 3 - 5
-        ) {
-          // 현재 3페이지
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 3,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          // 현재 4페이지
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 4,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
+    if (deltaY > 0) {
+      // 스크롤 내릴 때
+      if (scrollTop >= 0 && scrollTop < pageHeight - 5) {
+        //현재 1페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight,
+          left: 0,
+          behavior: "smooth",
+        });
+      } else if (
+        scrollTop >= pageHeight - 5 &&
+        scrollTop < pageHeight * 2 - 5
+      ) {
+        //현재 2페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight * 2,
+          left: 0,
+          behavior: "smooth",
+        });
+      } else if (
+        scrollTop >= pageHeight * 2 - 5 &&
+        scrollTop < pageHeight * 3 - 5
+      ) {
+        // 현재 3페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight * 3,
+          left: 0,
+          behavior: "smooth",
+        });
       } else {
-        // 스크롤 올릴 때
-        if (scrollTop >= 0 && scrollTop < pageHeight + 5) {
-          //현재 1페이지
-          outerDivRef.current.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (
-          scrollTop >= pageHeight + 5 &&
-          scrollTop < pageHeight * 2 + 5
-        ) {
-          //현재 2페이지
-          outerDivRef.current.scrollTo({
-            top: pageHeight,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else if (
-          scrollTop >= pageHeight * 2 + 5 &&
-          scrollTop < pageHeight * 3 + 5
-        ) {
-          // 현재 3페이지
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 2,
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          outerDivRef.current.scrollTo({
-            top: pageHeight * 3,
-            left: 0,
-            behavior: "smooth",
-          });
-        }
+        // 현재 4페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight * 4,
+          left: 0,
+          behavior: "smooth",
+        });
       }
-    };
-    const outerDivRefCurrent = outerDivRef.current;
-    outerDivRefCurrent.addEventListener("wheel", wheelHandler);
+    } else {
+      // 스크롤 올릴 때
+      if (scrollTop >= 0 && scrollTop < pageHeight + 5) {
+        //현재 1페이지
+        outerDivRef.current.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+      } else if (
+        scrollTop >= pageHeight + 5 &&
+        scrollTop < pageHeight * 2 + 5
+      ) {
+        //현재 2페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight,
+          left: 0,
+          behavior: "smooth",
+        });
+      } else if (
+        scrollTop >= pageHeight * 2 + 5 &&
+        scrollTop < pageHeight * 3 + 5
+      ) {
+        // 현재 3페이지
+        outerDivRef.current.scrollTo({
+          top: pageHeight * 2,
+          left: 0,
+          behavior: "smooth",
+        });
+      } else {
+        outerDivRef.current.scrollTo({
+          top: pageHeight * 3,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  const scrollStyle = () => {
+    outerDivRef.current.className = styles.outer;
+  };
+
+  const noScrollStyle = () => {
+    outerDivRef.current.className = styles.outerNoScroll;
+  };
+
+  useEffect(() => {
+    if (wheelHandlerActive) {
+      window.addEventListener("wheel", wheelHandler);
+      window.addEventListener("DOMMouseScroll", wheelHandler);
+      window.addEventListener("mousewheel", wheelHandler);
+      scrollStyle();
+    } else {
+      window.removeEventListener("wheel", wheelHandler);
+      window.removeEventListener("DOMMouseScroll", wheelHandler);
+      window.removeEventListener("mousewheel", wheelHandler);
+      noScrollStyle();
+    }
+
     return () => {
-      outerDivRefCurrent.removeEventListener("wheel", wheelHandler);
+      window.removeEventListener("wheel", wheelHandler);
+      window.removeEventListener("DOMMouseScroll", wheelHandler);
+      window.removeEventListener("mousewheel", wheelHandler);
     };
-  }, []);
+  }, [wheelHandler, wheelHandlerActive]);
 
   return (
     <div ref={outerDivRef} className={styles.outer}>
       <NavBar />
-      <FriendButton />
+      {userdata && (
+        <FriendButton
+          toggleWheelHandler={() => setWheelHandlerActive((active) => !active)}
+        />
+      )}
 
       {/*section1 */}
       <div className={styles.wrapper}>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
-        <div class={styles.snowflake}>
+        <div className={styles.snowflake}>
           <img src="/img/heart_1.png"></img>
         </div>
         {/* <div className={styles.backgroundFish} id={styles.backgroundFish1}>
@@ -248,7 +272,6 @@ function MainPage() {
       </div>
 
       {/*section4 */}
-
       <div
         // data-aos="fade-down"
         // data-aos-duration="1000"
@@ -269,6 +292,7 @@ function MainPage() {
         ></img>
       </div>
 
+      {/* section5 */}
       <div
         // data-aos="fade-down"
         // data-aos-duration="1000"

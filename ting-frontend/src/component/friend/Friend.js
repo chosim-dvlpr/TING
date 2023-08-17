@@ -6,7 +6,7 @@ import FriendList from "./FriendList";
 import FriendChatting from "./FriendChatting";
 import { messageStore } from "../../redux/messageStore";
 
-function Friend({ onSearch, onSearch2 }){
+function Friend({ onSearch, onSearch2, temperature, friendUnread, curChattingObj }){
   let Navigate = useNavigate();
   let userdata = useSelector((state) => state.userdataReducer.userdata);
   let [isFriendList, setIsFriendList] = useState(true);
@@ -40,6 +40,18 @@ function Friend({ onSearch, onSearch2 }){
     setIsFriendChatting(data)
   };
 
+  const setTemperature = (data) => {
+    temperature(data);
+  }
+
+  const setFriendUnread = (data) => {
+    friendUnread(data);
+  }
+
+  const setCurChattingObj = (data) => {
+    curChattingObj(data);
+  }
+
   // const closeModal = () => {
   //   setIsModalOpened(false);
   // }
@@ -55,11 +67,11 @@ function Friend({ onSearch, onSearch2 }){
         {/* <FriendList /> */}
         {
           isFriendList &&
-          <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} />
+          <FriendList onSearch={closeModal} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting}  setChattingObj={setChattingObj} friendUnread={setFriendUnread}/>
         }
         {
           isFriendChatting &&
-          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} />
+          <FriendChatting onSearch2={showProfile} showFriendList={showFriendList} showFriendChatting={setIsFriendChatting} setChattingObj={setChattingObj} chattingObj={chattingObj} getTemperature={setTemperature} curChattingObj={setCurChattingObj}/>
         }    
       </div>
 

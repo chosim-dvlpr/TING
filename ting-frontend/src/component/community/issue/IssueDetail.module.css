@@ -4,7 +4,6 @@
   min-height: 100vh;
 }
 
-
 .issueBoardContainer {
   margin: 0 auto;
   background-color: white;
@@ -23,74 +22,148 @@
   margin: 20px;
   width: 85%;
   margin: 0 auto;
-  box-shadow:inset 2px 2px 2px 2px rgba(200, 200, 200, 0.233),
-  5px 5px 10px 0px rgba(100, 100, 100, .1),
-  3px 3px 5px 0px rgba(100, 100, 100, .1);
+  box-shadow: inset 2px 2px 2px 2px rgba(200, 200, 200, 0.233),
+    5px 5px 10px 0px rgba(100, 100, 100, 0.1),
+    3px 3px 5px 0px rgba(100, 100, 100, 0.1);
   border-radius: 15px;
 }
 
-
 .deleteButton {
   width: 60px;
-  height: 44px;
-  padding: 8px 16px;
+  min-height: 40px;
+  padding: 5px 15px;
   background-color: #e58490;
   color: #fff;
   border: none;
   cursor: pointer;
   float: right;
-  border-radius: 15px;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
 }
 
 .deleteButton:hover {
   background-color: #d75c6b;
 }
 
-
 .voteContainer {
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 8px 16px;
 
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px #c4c4c4, -5px -5px 10px #ffffff; 
-    transition: box-shadow 0.3s ease-in-out;
-  }
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #c4c4c4, -5px -5px 10px #ffffff;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.leftVoteButton {
+  display: flex;
   
-  .voteButton {
-    padding: 8px 16px;
-    border: none;
-    background: #f0f0f0; /* Light background color */
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff; /* Neumorphism shadow */
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
+  padding: 5px 15px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
+}
+
+.leftVoteButton:hover {
+  background: #e0e0e0;
+  box-shadow: 3px 3px 6px #c4c4c4, -3px -3px 6px #ffffff;
+}
+
+.rightVoteButton {
+  display: flex;
   
-  .voteButton:hover {
-    background: #e0e0e0; /* Slightly darker background color on hover */
-    box-shadow: 3px 3px 6px #c4c4c4, -3px -3px 6px #ffffff; /* Adjusted Neumorphism shadow on hover */
-  }
-  
-  .voteArea { 
-    display: flex;
-    padding: 8px;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: flex 0.3s ease-in-out;
-  }
-  
-  .agreeArea {
-    display: flex;
-    background-color: #f1b7be; /* Pink */
-  }
-  
-  .opposeArea {
-    display: flex;
-    background-color: #8bcad5; /* Blue */
-  }
-  
+  padding: 5px 15px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px #c4c4c4, -2px -2px 5px #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
+}
+
+.rightVoteButton:hover {
+  background: #e0e0e0;
+  box-shadow: 3px 3px 6px #c4c4c4, -3px -3px 6px #ffffff;
+}
+
+
+.voteArea {
+  display: flex;
+  justify-content: space-between;
+
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: flex 0.3s ease-in-out;
+  flex: 1;
+}
+.agreeArea,
+.opposeArea {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  min-width: 40px;
+  min-height: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: flex 0.3s ease-in-out;
+}
+.agreeArea {
+  display: flex;
+  width: 100px;
+  background-color: #f1b7be; /* Pink */
+}
+
+.opposeArea {
+  display: flex;
+  background-color: #8bcad5; /* Blue */
+}
+
+
+
+.issueContent {
+  min-height: 80px;
+  margin-top: 40px;
+}
+
+/* 목록 돌아가기 버튼 */
+.listButton {
+  width: 60px;
+  min-height: 40px;
+  padding: 5px 15px;
+  background-color: #f1b7be;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  float: right;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+    5px 5px 10px 0px rgba(0, 0, 0, 0.1), 3px 3px 5px 0px rgba(0, 0, 0, 0.1);
+  margin: 0 5px;
+}
+
+.listButton:hover {
+  background-color: #e58490;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+}

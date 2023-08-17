@@ -58,7 +58,7 @@ function Introduce(){
     <div className="Introduce">
       <h3>Introduce</h3>
       <input type="text" onChange={(e) => setIntroduce(e.target.value)}></input>
-      <button onClick={() => Navigate("/signup/select/profileimage")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/profileimage")}>다음</button> */}
     </div>
   )
 }

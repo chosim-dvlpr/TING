@@ -25,7 +25,7 @@ function Job(){
           )
         }
       <br/>
-      <button onClick={() => Navigate("/signup/select/hobby")}>다음</button>
+      {/* <button onClick={() => Navigate("/signup/select/hobby")}>다음</button> */}
     </div>
   )
 }

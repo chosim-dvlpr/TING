@@ -6,16 +6,16 @@ export const signupReducer = createSlice({
     // 기본값
     email: "",
     password: "",
-    phonenumber: "",
+    phoneNumber: "",
     name: "",
     nickname: "",
     gender: "",
     birth: "",
     region: "",
     // 선택값
-    // profileImage: "",
+    profileImage: "",
     mbtiCode: "",
-    heightCode: "",
+    height: "",
     drinkingCode: "",
     smokingCode: "",
     religionCode: "",
@@ -32,8 +32,8 @@ export const signupReducer = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload;
     },
-    setPhonenumber: (state, action) => {
-      state.phonenumber = action.payload;
+    setPhoneNumber: (state, action) => {
+      state.phoneNumber = action.payload;
     },
     setName: (state, action) => {
       state.name = action.payload;
@@ -67,11 +67,12 @@ export const signupReducer = createSlice({
       state.religionCode = action.payload;
     },
     setHobbyCodeList: (state, action) => {
-      let hobbyIndex = state.hobbyCodeList.indexOf(action.payload);
+      const hobbyIndex = state.hobbyCodeList.findIndex(data => data.code === action.payload.code);
       if (hobbyIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.hobbyCodeList.splice(hobbyIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.hobbyCodeList.push(action.payload);
       }
     },
@@ -79,38 +80,51 @@ export const signupReducer = createSlice({
       state.jobCode = action.payload;
     },
     setPersonalityCodeList: (state, action) => {
-      let personalityIndex = state.personalityCodeList.indexOf(action.payload);
+      const personalityIndex = state.personalityCodeList.findIndex(data => data.code === action.payload.code);
       if (personalityIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.personalityCodeList.splice(personalityIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.personalityCodeList.push(action.payload);
-      }    
+      } 
     },
     setIntroduce: (state, action) => {
       state.introduce = action.payload;
     },
     setStyleCodeList: (state, action) => {
-      let styleIndex = state.styleCodeList.indexOf(action.payload);
+      const styleIndex = state.styleCodeList.findIndex(data => data.code === action.payload.code);
       if (styleIndex > -1) {
+        // 이미 존재하는 경우, 해당 항목을 배열에서 제거
         state.styleCodeList.splice(styleIndex, 1);
-      }
-      else {
+      } else {
+        // 존재하지 않는 경우, 해당 항목을 배열에 추가
         state.styleCodeList.push(action.payload);
-      }       
+      }   
     },
     setDeleteStyleCodeList: (state, action) => {
       state.styleCodeList.slice(action.payload, 1);
     },
-    // setProfileImage: (state, action) => {
-    //   state.profileImage = action.payload;
-    // },
+    completeSignupStep: (state) => {
+      const keys = Object.keys(state); // state 객체의 모든 키(key)를 배열로 얻기
+      // console.log(keys)
+      keys.forEach((key, i) => {
+        if (key.includes("List")) {
+          state[key] = [];
+        }
+        else {
+          state[key] = "";  
+        }
+      })
+
+    }
+
   }
 })
 
 
-export const { setEmail, setPassword, setPhonenumber, setName, setNickname, setGender, setRegion, setBirth,
+export const { setEmail, setPassword, setPhoneNumber, setName, setNickname, setGender, setRegion, setBirth,
   setMbtiCode, setHeightCode, setDrinkingCode, setSmokingCode, setReligionCode, setHobbyCodeList,
-  setJobCode, setPersonalityCodeList, setIntroduction, setStyleCodeList,
+  setJobCode, setPersonalityCodeList, setIntroduce, setStyleCodeList, completeSignupStep,
 } = signupReducer.actions;
 export default signupReducer;

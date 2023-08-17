@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import styles from "./css/ReportDetail.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import tokenHttp from "../../api/tokenHttp";
 
 import Button from "react-bootstrap/Button";
@@ -9,6 +9,9 @@ const ReportDetail = () => {
   const [searchParams, setSeratchParams] = useSearchParams();
   const [reportedUser, setReportedUser] = useState({});
   const [report, setReport] = useState({});
+  const [comment, setComment] = useState("");
+
+  const commentRef = useRef();
 
   useEffect(() => {
     const reportedUserId = searchParams.get("reportedUserId");
@@ -35,10 +38,35 @@ const ReportDetail = () => {
       });
   }, [searchParams]);
 
-  const changeCommentHandler = () => {};
+  const changeCommentHandler = () => {
+    setComment(commentRef.current.value);
+  };
 
-  const registerComment = () => {};
-  const deleteUser = () => {};
+  // 신고 의견 등록하기
+  const registerComment = () => {
+    tokenHttp
+      .post("/admin/report", { reportId: report.reportId, comment: comment })
+      .then(() => {
+        alert("관리자 의견이 등록되었습니다.");
+      })
+      .catch(() => {
+        alert("관리자 의견 등록에 실패하였습니다.");
+      });
+  };
+
+  // 유저 삭제하기
+  const deleteUser = () => {
+    if (window.confirm("정말 유저를 삭제하시겠습니까?")) {
+      tokenHttp
+        .delete(`/admin/user/${report.reportedUserId}`)
+        .then(() => {
+          alert("유저가 삭제되었습니다.");
+        })
+        .catch(() => {
+          alert("유저 삭제에 실패하였습니다.");
+        });
+    }
+  };
 
   return (
     <div>
@@ -76,11 +104,7 @@ const ReportDetail = () => {
             <div className={styles.commentDiv}>
               <label>관리자 의견</label>
               <div>
-                <input
-                  type="text"
-                  value={report.comment}
-                  onChange={changeCommentHandler}
-                />
+                <input type="text" onChange={changeCommentHandler} ref={commentRef} />
                 <Button
                   variant="secondary"
                   onClick={() => {

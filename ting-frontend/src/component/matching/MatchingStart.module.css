@@ -5,10 +5,16 @@
   font-style: normal;
 }
 
+.outer{
+  overflow: hidden;
+}
+
 video {
   width: 100%;
   margin:10px 0;
-  height: auto;
+  height: 100%;
+  min-width: 388px;
+  min-height: 291px;
   border-radius: 40px;
   background-color: #91cad6;
   border: 5px solid #91cad6
@@ -34,6 +40,7 @@ p{
 .container {
   position: relative;
   height: 88vh;
+  min-width: 1000px;
   background-color: white;
   margin-left: 100px;
   /* padding-right: 130px; */
@@ -60,9 +67,16 @@ p{
 }
 
 .videoContainer {
-  margin: 50px;
+  margin: 50px 20px;
+  min-width: 980px;
   display: flex;
   justify-content: space-between;
+}
+
+.eachVideo {
+  display: flex;
+  width: 39%;
+  align-items: center;
 }
 
 .cardOuter{
@@ -71,6 +85,7 @@ p{
   height: 300px;
   margin : 20px auto;
   display: flex;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -87,8 +102,31 @@ p{
 .cardContent {
   margin: 10px;
   z-index: 1;
+  word-break: keep-all;
   font-family: UhBeeSe_hyun;
-  font-size: 20px;
+  font-size: 30px;
+}
+
+.cardCategory {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
+}
+
+.cardCategoryBottom {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1;
+  word-break: keep-all;
+  font-family: UhBeeSe_hyun;
+  font-size: 15px;
+  color: red;
 }
 
 
