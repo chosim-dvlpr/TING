@@ -65,7 +65,6 @@ function DeleteAccount() {
           checkUserAxios();
         }
       });
-      // if (window.confirm("탈퇴하시겠습니까?")) checkUserAxios();
     } else {
       Swal.fire({
         title: "이메일 또는 비밀번호가 \n올바르지 않습니다.",
@@ -78,8 +77,8 @@ function DeleteAccount() {
   const checkUserAxios = () => {
     tokenHttp.delete("/user").then((response) => {
       if (response.data.code === 200) {
-        dispatch(logout()); // redux의 user 정보 삭제
         Navigate("/");
+        dispatch(logout()); // redux의 user 정보 삭제
       } else if (response.data.code === 400) {
         console.log("회원 탈퇴 실패");
       } else if (response.data.code === 401) {
@@ -93,7 +92,6 @@ function DeleteAccount() {
   return (
     <div className={commonStyles.wrapper}>
       <p>이메일과 비밀번호를 확인해주세요.</p>
-      {/* <label className={commonStyles.label} htmlFor='email'>이메일</label> */}
       <input
         className={commonStyles.input}
         type="text"
@@ -102,7 +100,6 @@ function DeleteAccount() {
         onChange={(e) => setEmail(e.target.value)}
       ></input>
       <br></br>
-      {/* <label className={commonStyles.label} htmlFor='password'>비밀번호</label> */}
       <input
         className={commonStyles.input}
         type="password"

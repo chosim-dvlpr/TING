@@ -4,7 +4,6 @@ import tokenHttp from "../../api/tokenHttp";
 import { getCurrentUserdata } from "../../redux/userdata";
 
 import styles from "./NavBar.module.css";
-import Dropdown from "react-bootstrap/Dropdown";
 
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../redux/userdata";
@@ -62,7 +61,6 @@ const NavBar = () => {
             className={styles.logo}
             alt="logo"
           ></img>
-          {/* <span>TING</span> */}
         </Link>
         <Link className={styles.navMenu} to="/tutorial">
           <img
@@ -102,42 +100,37 @@ const NavBar = () => {
         ) : null}
       </div>
       <div className={styles.navRight}>
-        {
-          userData ? (
-            <div ref={dropdownRef} className={styles.yesLoginedDiv}>
-              {/* userData에서 프로필 이미지 받아서 표시 */}
-              {/* TODO: 프로필 이미지 클릭시 드롭다운 메뉴 */}
-              {dropdown ? (
-                <div className={styles.dropDownMenu}>
-                  <div onClick={handleMypage}>마이페이지</div>
-                  <div onClick={handleLogout}>로그아웃</div>
-                </div>
-              ) : null}
-              <div className={styles.profileImageDiv}>
-                <img
-                  src={`https://i9b107.p.ssafy.io:5157/${userData.fishSkin}`}
-                  onClick={() => setDropdown(!dropdown)}
-                  className={styles.profileImage}
-                  alt="profile"
-                />
+        {userData ? (
+          <div ref={dropdownRef} className={styles.yesLoginedDiv}>
+            {dropdown ? (
+              <div className={styles.dropDownMenu}>
+                <div onClick={handleMypage}>마이페이지</div>
+                <div onClick={handleLogout}>로그아웃</div>
               </div>
-              <div>
-                <span className={styles.nickname}>{userData.nickname}</span>님
-              </div>
+            ) : null}
+            <div className={styles.profileImageDiv}>
+              <img
+                src={`https://i9b107.p.ssafy.io:5157/${userData.fishSkin}`}
+                onClick={() => setDropdown(!dropdown)}
+                className={styles.profileImage}
+                alt="profile"
+              />
             </div>
-          ) : (
-            <>
-              <div
-                id={styles.login}
-                className={styles.loginDiv}
-                onClick={() => navigate("/login")}
-              >
-                로그인
-              </div>
-            </>
-          )
-          // null
-        }
+            <div>
+              <span className={styles.nickname}>{userData.nickname}</span>님
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              id={styles.login}
+              className={styles.loginDiv}
+              onClick={() => navigate("/login")}
+            >
+              로그인
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

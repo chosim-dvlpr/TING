@@ -186,7 +186,6 @@ function SelectMoney() {
     tokenHttp
       .post("/point/kakaopay/ready", data)
       .then((response) => {
-        console.log(response.data.data);
         dispatch(setPointPaymentId(response.data.data.pointPaymentId));
         window.location.href = response.data.data.redirectUrl;
       })
