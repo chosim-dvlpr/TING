@@ -75,6 +75,10 @@ public class DateController {
      */
     @PostMapping("/date/result")
     public CommonResponse selectFinalChoice(@RequestBody Map<String, Object> requestMap, Principal principal) throws InterruptedException {
+        log.info("===========selectFinalChoice===========");
+        log.info("requestMap: {}", requestMap);
+        log.info("userId: {}", principal.getName());
+
         Long matchingId = Long.parseLong(requestMap.get("matchingId").toString());
         Long userId = Long.parseLong(principal.getName());
         log.info("/date/result - matchingId: {}", matchingId);
