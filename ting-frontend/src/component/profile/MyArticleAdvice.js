@@ -1,8 +1,7 @@
 // 상담 게시판
 
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux"; // Redux의 useSelector 임포트
+import { useNavigate } from "react-router-dom";
 
 import Pagination from "../community/common/Pagination";
 import tokenHttp from "../../api/tokenHttp";
@@ -28,7 +27,6 @@ function MyArticleAdvice() {
       .get("/advice/my", { params: params })
       .then((response) => {
         if (response.data.code === 200) {
-          console.log("성공");
           setMyAdviceArticleList(response.data.data.adviceBoardList); // 내가 쓴 게시글 데이터를 저장
           setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
         } else if (response.data.code === 400) {
