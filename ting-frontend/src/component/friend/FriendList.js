@@ -32,10 +32,10 @@ function FriendList({
         if (response.data.code === 200) {
           setFriendList(response.data.data); // 친구 리스트 state에 저장
         } else if (response.data.code === 400) {
-          console.log("친구 목록 불러오기 실패");
+          console.log("물고기 목록 불러오기 실패");
         }
       })
-      .catch(() => console.log("친구 목록 불러오기 실패"));
+      .catch(() => console.log("물고기 목록 불러오기 실패"));
   };
 
   // 리스트 페이지에 들어가면 친구 목록을 불러옴
@@ -79,7 +79,7 @@ function FriendList({
       friendListAxios();
       Navigate("/");
     } catch (error) {
-      console.error("친구 삭제 에러:".error);
+      console.error("물고기 삭제 에러:".error);
     }
   };
 
@@ -277,7 +277,7 @@ function FriendList({
                       <button
                         onClick={() => handleFriendDelete(friend.chattingId)}
                       >
-                        친구 삭제
+                        물고기 삭제
                       </button>
                     </div>
                   </div>
@@ -287,7 +287,7 @@ function FriendList({
             ))
         ) : (
           <div>
-            친구가 없습니다.<br></br>매칭을 통해 새로운 인연을 만들어보세요!
+            물고기가 없습니다.<br></br>매칭을 통해 새로운 인연을 만들어보세요!
           </div>
         )}
       </div>
