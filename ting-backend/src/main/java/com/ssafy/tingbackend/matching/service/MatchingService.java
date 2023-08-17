@@ -116,14 +116,14 @@ public class MatchingService {
                 User male = socketInfos.get(mId).getUser();
 
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- start
-//                boolean isMatched = false;
-//                for (MatchingUser femaleMatchingUser : femaleMatchingUserList) {
-//                    if (femaleMatchingUser.getUser().getId() == male.getId()) {
-//                        isMatched = true;
-//                        break;
-//                    }
-//                }
-//                if (isMatched) continue;
+                boolean isMatched = false;
+                for (MatchingUser femaleMatchingUser : femaleMatchingUserList) {
+                    if (femaleMatchingUser.getUser().getId() == male.getId()) {
+                        isMatched = true;
+                        break;
+                    }
+                }
+                if (isMatched) continue;
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- end
 
 
