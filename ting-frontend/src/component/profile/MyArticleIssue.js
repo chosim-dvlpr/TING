@@ -14,6 +14,7 @@ import { getDate } from "../common/TimeCalculate";
 function MyArticleIssue() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalElements, setTotalElements] = useState(0);
   const [myIssueArticleList, setMyIssueArticleList] = useState([]);
   const userdata = useSelector((state) => state.userdataReducer.userdata);
 
@@ -33,6 +34,7 @@ function MyArticleIssue() {
         if (response.data.code === 200) {
           setMyIssueArticleList(response.data.data.issueBoardList); // 내가 쓴 게시글 데이터를 저장
           setTotalPages(response.data.data.totalPages); // 전체 페이지 저장
+          setTotalElements(response.data.data.totalElements);
         } else if (response.data.code === 400) {
           console.log("실패");
         } else if (response.data.code === 403) {
@@ -71,7 +73,7 @@ function MyArticleIssue() {
           {myIssueArticleList.length > 0 ? (
             myIssueArticleList.map((article, i) => (
               <tr key={i}>
-                <td>{article.issueId}</td>
+                <td>{totalElements - 5 * (currentPage - 1) - i}</td>
                 <td
                   className={commonStyles.clickable}
                   onClick={() =>
