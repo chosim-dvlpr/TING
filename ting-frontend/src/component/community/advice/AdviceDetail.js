@@ -105,9 +105,9 @@ function AdviceDetail() {
         confirmButtonText: "확인",
         cancelButtonText: "취소",
         width: 400,
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          tokenHttp.delete(`advice/${adviceId}`);
+          await tokenHttp.delete(`advice/${adviceId}`);
           // Swal.fire({ title: "글이 정상적으로 \n삭제되었습니다", width: 400 });
           navigate("/community/advice");
         }
