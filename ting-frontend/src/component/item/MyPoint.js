@@ -77,7 +77,7 @@ function MyPoint() {
             className={styles.coinImage}
             alt="coin"
           ></img>
-          {addComma(myPoint)} Point
+          {addComma(myPoint)} 팅
         </span>
         <div
           className={styles.ChargeButton}

@@ -21,10 +21,6 @@ function AdminPage() {
             <img src={process.env.PUBLIC_URL + "/img/admin/image22.png"} width="30px" />
             Report
           </div>
-          <div className={styles.sideList} onClick={() => navigate("/admin/user")}>
-            <img src={process.env.PUBLIC_URL + "/img/admin/image23.png"} width="30px" />
-            User
-          </div>
           <div className={styles.sideList} onClick={() => navigate("/admin/qna")}>
             <img src={process.env.PUBLIC_URL + "/img/admin/image24.png"} width="30px" />
             Q&A

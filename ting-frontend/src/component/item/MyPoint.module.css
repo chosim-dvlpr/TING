@@ -22,7 +22,9 @@
 }
 
 .PointText {
-  width: 300px;
+  width: 350px;
+  margin: 10px;
+  padding: 0 10px;
 }
 
 .ChargeButton {
