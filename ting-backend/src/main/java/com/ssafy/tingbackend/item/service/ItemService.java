@@ -229,10 +229,11 @@ public class ItemService {
         userLoop:
         for (User user : allUsers) {
             List<Inventory> inventoryList = inventoryRepository.findByUserId(user.getId());
+            int quantity = (user.getGender().equals("M")) ? 3 : 5;
 
             for (Inventory inventory : inventoryList) {
                 if (inventory.getItemType() == ItemType.FREE_MATCHING_TICKET) {
-                    inventory.setQuantity(3);
+                    inventory.setQuantity(quantity);
                     inventoryRepository.save(inventory);
                     continue userLoop;
                 }
@@ -241,7 +242,7 @@ public class ItemService {
 
             Inventory freeTicketInventory = Inventory.builder()
                     .user(user)
-                    .quantity(3)
+                    .quantity(quantity)
                     .itemType(ItemType.FREE_MATCHING_TICKET)
                     .build();
             inventoryRepository.save(freeTicketInventory);

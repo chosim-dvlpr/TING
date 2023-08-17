@@ -76,7 +76,7 @@ public class MatchingService {
         // 유저 성별에 해당하는 대기열에 넣기
         int time = 60 + Math.round((float) Math.random() * 60); // 1분 ~ 2분
 
-        // 선택정보 입력개수에 따른 대기시간 계산
+        // 선택정보 입력개수에 따른 대기시간 계산 (최대 1분 20초)
         time += calcAdditionalInfo(user);
 
         if ("M".equals(user.getGender())) {
@@ -84,26 +84,26 @@ public class MatchingService {
 
             // 이성의 대기 큐 인원수에 따른 대기시간 계산
             if (fQueue.isEmpty()) {
-                time += 660;
+                time += 60;
             } else if (fQueue.size() < 5) {
-                time += 180;
+                time += 10;
             } else if (fQueue.size() < 10) {
-                time += 30;
+                time += 3;
             } else {
-                time -= 60;
+                time = Math.max(time - 60, 0);
             }
         } else {
             fQueue.add(socketSessionId);
 
             // 이성의 대기 큐 인원수에 따른 대기시간 계산
             if (mQueue.isEmpty()) {
-                time += 660;
+                time += 60;
             } else if (mQueue.size() < 5) {
-                time += 180;
+                time += 10;
             } else if (mQueue.size() < 10) {
-                time += 30;
+                time += 3;
             } else {
-                time -= 60;
+                time = Math.max(time - 60, 0);
             }
         }
 
@@ -543,7 +543,8 @@ public class MatchingService {
             matchingUserRepository.save(new MatchingUser(matching, socketInfos.get(pairSocketSessionId).getUser()));
 
             // 매칭 질문 생성하여 저장
-            Question[] questions = getQuestions();
+//            Question[] questions = getQuestions();
+            Question[] questions = getStaticQuestions();
             List<MatchingQuestion> matchingQuestions = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 matchingQuestions.add(new MatchingQuestion(matching, questions[i], i + 1));
@@ -609,6 +610,38 @@ public class MatchingService {
 
         matchingInfo.setIsValidate(false);
         matchingInfoRepository.save(matchingInfo);
+    }
+
+
+    public Question[] getStaticQuestions() {
+        List<Question> selectedQuestions = new ArrayList<>();
+        Question question = questionRepository.findById(6L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(12L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(50L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(17L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(63L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(57L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(91L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(34L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(3L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+        question = questionRepository.findById(5L).orElseThrow(() -> new CommonException(ExceptionType.QUESTION_NOT_FOUND));
+        selectedQuestions.add(question);
+
+        Question[] questions = new Question[10];
+        for (int i = 0; i < 10; i++) {
+            questions[i] = selectedQuestions.get(i);
+        }
+
+        return questions;
     }
 
     public Question[] getQuestions() {
