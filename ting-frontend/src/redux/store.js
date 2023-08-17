@@ -4,6 +4,7 @@ import userdataReducer from "./userdata.js";
 import openviduReducer from "./openviduStore.js";
 import matchingReducer from "./matchingStore.js";
 import itemReducer from "./itemStore.js";
+import finalMatchingReducer from "./finalMatchingStore";
 
 import storage from 'redux-persist/lib/storage';
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   openviduReducer: openviduReducer.reducer,
   matchingReducer: matchingReducer.reducer,
   itemReducer: itemReducer.reducer,
-  friendReducer: friendReducer.reducer
+  friendReducer: friendReducer.reducer,
+  finalMatchingReducer: finalMatchingReducer.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

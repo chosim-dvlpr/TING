@@ -184,9 +184,10 @@ function AdviceBoard() {
                       </td>
                       <td className={styles.table_3}>{advice.hit}</td>
                       <td className={styles.table_4}>
-                        {advice.modifiedTime === null
+                        {getDate(advice.createdTime)}
+                        {/* {advice.modifiedTime === null
                           ? getDate(advice.createdTime)
-                          : `${getDate(advice.modifiedTime)}`}
+                          : `${getDate(advice.modifiedTime)}`} */}
                       </td>
                     </tr>
                   )

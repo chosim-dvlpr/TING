@@ -254,6 +254,13 @@ p{
 
 .ScoreCheckBox h1{
   height: 86px;
-  margin-bottom:10px;
   line-height: 86px;
+  font-family: UhBeeSe_hyun;
+  margin-bottom: 0px;
+}
+.ScoreCheckBox h3{
+  height: 40px;
+  margin-bottom:10px;
+  line-height: 40px;
+  font-family: UhBeeSe_hyun;
 }

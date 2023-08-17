@@ -153,6 +153,9 @@ function FriendList({
   const handleAlive = async (userItemQuantity, chattingId) => {
     try {
       Swal.fire({
+        imageUrl: `${process.env.PUBLIC_URL}/img/item/fish_ticket.png`,
+        imageWidth: 200,
+        imageHeight: 200,
         title: `물고기를 살리시겠습니까?\n내 물고기 부활티켓 : ${userItemQuantity}`,
         showCancelButton: true,
         confirmButtonText: "살리기",
