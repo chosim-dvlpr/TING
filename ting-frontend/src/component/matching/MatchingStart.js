@@ -81,7 +81,7 @@ function MatchingStart() {
 
     // 오픈 비두 입장 토큰이 없으면 경고창 띄우고 메인으로 돌려보내기
     if (accessToken === null) {
-      alert("로그인 후 돌아오세요");
+      Swal.fire({ title: "로그인 후 돌아오세요", width: 400 });
       navigate("/");
     }
 
@@ -376,7 +376,7 @@ function MatchingStart() {
       // 내가 던진 점수 시그널은 무시
       if (data.userId === userData.userId) return;
 
-      alert("상대방과의 연결이 끊어졌습니다.");
+      Swal.fire({ title: "상대방과의 연결이\n끊어졌습니다.", width: 400 });
       navigate("/");
     });
 
