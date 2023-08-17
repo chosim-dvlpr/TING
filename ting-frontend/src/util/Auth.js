@@ -13,7 +13,7 @@ function Auth(SpecificComponent, adminRoute = null) {
     const user = state.userdataReducer.userdata;
 
     // 관리자 페이지 접근 권한
-    if (user && user.email !== "admin@admin.com") {
+    if (adminRoute && user && user.email !== "admin@admin.com") {
       Swal.fire({ title: "관리자만 접근 가능한 페이지 입니다.", width: 400 });
       navigate("/");
       return;
