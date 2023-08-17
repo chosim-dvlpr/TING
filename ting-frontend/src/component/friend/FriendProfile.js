@@ -3,8 +3,8 @@ import basicHttp from "../../api/basicHttp";
 import { useDispatch } from "react-redux";
 import { getFriendId } from "../../redux/friendStore";
 import styles from "./FriendProfile.module.css";
-import { render } from "react-dom";
 import Thermometer from "react-thermometer-component";
+import { regionList } from "../../SelectionDataList";
 
 function FriendProfile(props) {
   let dispatch = useDispatch();
@@ -26,6 +26,18 @@ function FriendProfile(props) {
         }
       })
       .catch(() => console.log("프로필 불러오기 실패"));
+  };
+
+  // 지역 영어를 한글로 변환
+  const matchRegion = (regionData) => {
+    const matchingRegion = regionList.find(
+      (region) => region.regionEn === regionData
+    );
+    if (matchingRegion) {
+      return matchingRegion.regionKor;
+    } else {
+      return regionData; // 일치하는 지역 정보가 없을 경우 원래 regionData 반환
+    }
   };
 
   useEffect(() => {
@@ -70,12 +82,16 @@ function FriendProfile(props) {
         </div>
       </div>
       <div className={styles.nickname}>{friendProfile.nickname}</div>
-      <div className={styles.introduce}>{friendProfile.introduce}</div>
+      {friendProfile.introduce ? (
+        <div className={styles.introduce}>{friendProfile.introduce}</div>
+      ) : (
+        <div className={styles.noIntroduce}></div>
+      )}
       <div className={styles.selfContainer}>
         <div className={styles.self}>#셀프 소개</div>
         <div className={styles.hash}>
-          {<p>#{friendProfile.region}</p>}
-          {<p>#{friendProfile.height}</p>}
+          {<p>#{matchRegion(friendProfile.region)}</p>}
+          {friendProfile.height > 0 && <p>#{friendProfile.height}</p>}
           {friendProfile.mbtiCode && <p>#{friendProfile.mbtiCode.name}</p>}
           {friendProfile.drinkingCode && (
             <p>#{friendProfile.drinkingCode.name}</p>

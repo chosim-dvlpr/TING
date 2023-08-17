@@ -1,24 +1,20 @@
-import { useState, useRef, useEffect, useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import tokenHttp from "../../api/tokenHttp";
-import { getCurrentUserdata } from "../../redux/userdata";
 
 import styles from "./FriendButton.module.css";
 import Friend from "../friend/Friend";
 
-import { Link, useNavigate } from "react-router-dom";
 import FriendProfile from "../friend/FriendProfile";
 import useMessageStore from "../friend/useMessageStore";
 
 const FriendButton = ({ toggleWheelHandler }) => {
   let userData = useSelector((state) => state.userdataReducer.userdata);
-  const navigate = useNavigate();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [show, setShow] = useState(false);
   const [profileShow, setProfileShow] = useState(false);
   const [icon, setIcon] = useState("");
   const [temperature, setTemperature] = useState("");
-  // const [showProfile, setShowProfile] = useState(false);
   const friendId = useSelector((state) => state.friendReducer.friendId);
   const messageStore = useMessageStore();
   const { messageLogs } = messageStore;
@@ -26,12 +22,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
   const [friendUnread, setFriendUnread] = useState(0);
   const [curChattingId, setCurChattingId] = useState(0);
 
-  // let isClosed = true;
-
   const changeIsClosed = () => {
-    // alert(isClosed);
-    // isClosed = !isClosed;
-    // console.log(isClosed);
     if (show) {
       setShow(false);
       setProfileShow(false);
@@ -71,10 +62,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
       .get("/user/skin")
       .then((response) => {
         if (response.data.code == 200) {
-          console.log(response.data.data);
-          console.log(response.data.data.itemType);
           setIcon(getName(response.data.data.itemType));
-          console.log(icon);
         } else {
           console.log("아이콘 불러오기 실패");
         }
@@ -91,20 +79,16 @@ const FriendButton = ({ toggleWheelHandler }) => {
       .then((response) => {
         // 불러오기 성공 시 friendList에 친구목록 저장
         if (response.data.code === 200) {
-          console.log("친구 목록 불러오기 성공");
-          // setFriendList(response.data.data); // 친구 리스트 state에 저장
-          console.log(response.data.data);
           let num = 0;
           response.data.data.map((data) => {
             num += data.unread;
           });
           setTotalUnread(totalUnread + num);
-          // setInitialUnread(num);
         } else if (response.data.code === 400) {
-          console.log("실패");
+          console.log("친구 목록 불러오기 실패");
         }
       })
-      .catch(() => console.log("실패"));
+      .catch(() => console.log("친구 목록 불러오기 실패"));
   };
 
   const getName = (category) => {
@@ -124,7 +108,7 @@ const FriendButton = ({ toggleWheelHandler }) => {
 
   const getCurChatting = (data) => {
     setCurChattingId(data);
-  }
+  };
 
   useEffect(() => {
     friendListAxios();
@@ -139,16 +123,16 @@ const FriendButton = ({ toggleWheelHandler }) => {
   }, [friendUnread]);
 
   useEffect(() => {
-    if(messageLogs) {
+    if (messageLogs) {
       messageLogs.map((data) => {
-        if(data.userId != userData.userId) {
-          if(curChattingId == 0 || curChattingId != data.chattingId) {
-            setTotalUnread(totalUnread+1);
+        if (data.userId != userData.userId) {
+          if (curChattingId == 0 || curChattingId != data.chattingId) {
+            setTotalUnread(totalUnread + 1);
           }
         }
       });
     }
-  }, [messageLogs])
+  }, [messageLogs]);
 
   return (
     <div className={styles.friendContainer}>
@@ -165,10 +149,15 @@ const FriendButton = ({ toggleWheelHandler }) => {
         />
       </button>
       <div>
-        {/* <div className={styles.profileContainer}></div> */}
         {show && (
           <div className={styles.chatContainer}>
-            <Friend onSearch={closeModal} onSearch2={openProfile} temperature={getTemperature} friendUnread={getFriendUnread} curChattingObj={getCurChatting}/>
+            <Friend
+              onSearch={closeModal}
+              onSearch2={openProfile}
+              temperature={getTemperature}
+              friendUnread={getFriendUnread}
+              curChattingObj={getCurChatting}
+            />
           </div>
         )}
         <div>
@@ -178,9 +167,6 @@ const FriendButton = ({ toggleWheelHandler }) => {
             </div>
           )}
         </div>
-        {/* <div className={isClosed? styles.hide : styles.chatConainer}>
-        <Friend />
-      </div> */}
       </div>
     </div>
   );
