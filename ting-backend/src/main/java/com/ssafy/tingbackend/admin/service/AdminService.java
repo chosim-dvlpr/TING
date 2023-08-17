@@ -18,6 +18,7 @@ import com.ssafy.tingbackend.entity.board.IssueBoard;
 import com.ssafy.tingbackend.entity.matching.Matching;
 import com.ssafy.tingbackend.entity.matching.MatchingUser;
 import com.ssafy.tingbackend.entity.payment.PointPayment;
+import com.ssafy.tingbackend.entity.type.ReportStateType;
 import com.ssafy.tingbackend.entity.type.ReportType;
 import com.ssafy.tingbackend.entity.user.LoginLog;
 import com.ssafy.tingbackend.entity.user.User;
@@ -142,6 +143,7 @@ public class AdminService {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new CommonException(ExceptionType.REPORT_NOT_FOUND));
         report.setComment(comment);
+        report.setState(ReportStateType.PROCESSED);
     }
 
     @Transactional
