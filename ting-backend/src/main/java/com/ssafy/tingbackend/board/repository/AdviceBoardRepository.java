@@ -20,7 +20,7 @@ public interface AdviceBoardRepository extends JpaRepository<AdviceBoard, Long> 
     @Query("SELECT a FROM AdviceBoard a WHERE a.isRemoved=false AND a.title Like %:keyword% ORDER BY a.modifiedTime DESC")
     Page<AdviceBoard> findByTitleContaining(String keyword, Pageable pageable);
 
-    Page<AdviceBoard> findListByUser(PageRequest pageRequest, User user);
+    Page<AdviceBoard> findListByUserAndIsRemovedFalse(PageRequest pageRequest, User user);
 
     @Modifying
     @Query("UPDATE AdviceBoard a SET a.hit =:hit WHERE a.id=:id")
