@@ -41,8 +41,7 @@ public class SecurityConfig {
 
                 // 리소스 접근 권한 처리
                 .authorizeRequests()
-//                .antMatchers("/api/auth").permitAll()
-//                .antMatchers("/api/v?/post/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name())
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
 

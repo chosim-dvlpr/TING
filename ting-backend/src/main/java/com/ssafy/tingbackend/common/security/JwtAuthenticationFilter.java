@@ -33,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authenticationToken
                     = new UsernamePasswordAuthenticationToken(userId, null, null);
 
+            log.info(userId);
             if ("6".equals(userId)) {
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
