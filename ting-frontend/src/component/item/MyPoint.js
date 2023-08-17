@@ -192,6 +192,11 @@ function SelectMoney() {
       .catch((err) => console.log(err));
   };
 
+  const threeComma = (number) => {
+    let returnString = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return returnString;
+  }
+
   return (
     <div>
       <div>
@@ -205,7 +210,8 @@ function SelectMoney() {
               getClick(e);
             }}
           >
-            {money.totalAmount}
+            {/* {money.totalAmount} */}
+            {threeComma(money.totalAmount)}
           </button>
         ))}
       </div>
