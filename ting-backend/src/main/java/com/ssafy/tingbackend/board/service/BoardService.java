@@ -79,20 +79,20 @@ public class BoardService {
                 .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
         User user = userRepository.findById(adviceBoard.getUser().getId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-        adviceBoardRepository.updateHit(adviceBoard.getHit()+1, adviceBoard.getId());
+        adviceBoardRepository.updateHit(adviceBoard.getHit() + 1, adviceBoard.getId());
         return AdviceBoardDto.DetailResponse.of(adviceBoard, user);
     }
 
     public Map<String, Object> adviceList(int pageNo) {
         Map<String, Object> result = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo - 1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
 
         Page<AdviceBoard> page = adviceBoardRepository.findList(pageRequest);
         List<AdviceBoard> adviceBoardList = page.getContent();
 
         List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
-        for(AdviceBoard adviceBoard : adviceBoardList) {
+        for (AdviceBoard adviceBoard : adviceBoardList) {
             User user = userRepository.findById(adviceBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
@@ -106,14 +106,14 @@ public class BoardService {
 
     public Map<String, Object> adviceSearchList(int pageNo, String keyword) {
         Map<String, Object> result = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo - 1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
 
         Page<AdviceBoard> page = adviceBoardRepository.findByTitleContaining(keyword, pageRequest);
         List<AdviceBoard> adviceBoardList = page.getContent();
 
         List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
-        for(AdviceBoard adviceBoard : adviceBoardList) {
+        for (AdviceBoard adviceBoard : adviceBoardList) {
             User user = userRepository.findById(adviceBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
@@ -129,14 +129,14 @@ public class BoardService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
         Map<String, Object> result = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 10, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo - 1, 10, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
 
-        Page<AdviceBoard> page = adviceBoardRepository.findListByUser(pageRequest, user);
+        Page<AdviceBoard> page = adviceBoardRepository.findListByUserAndIsRemovedFalse(pageRequest, user);
         List<AdviceBoard> adviceBoardList = page.getContent();
 
         List<AdviceBoardDto.Response> adviceBoardDtoList = new ArrayList<>();
-        for(AdviceBoard adviceBoard : adviceBoardList) {
+        for (AdviceBoard adviceBoard : adviceBoardList) {
             adviceBoardDtoList.add(AdviceBoardDto.Response.of(adviceBoard, user));
         }
 
@@ -179,18 +179,18 @@ public class BoardService {
                 .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
         User user = userRepository.findById(issueBoard.getUser().getId())
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-        issueBoard.setHit(issueBoard.getHit()+1);
+        issueBoard.setHit(issueBoard.getHit() + 1);
         return IssueBoardDto.Response.of(issueBoard, user);
     }
 
     public Map<String, Object> issueList(int pageNo) {
         Map<String, Object> result = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo - 1, 5, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
         Page<IssueBoard> page = issueBoardRepository.findList(pageRequest);
         List<IssueBoard> issueBoardList = page.getContent();
         List<IssueBoardDto.Response> issueBoardResponseList = new ArrayList<>();
-        for(IssueBoard issueBoard : issueBoardList) {
+        for (IssueBoard issueBoard : issueBoardList) {
             User user = userRepository.findById(issueBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             issueBoardResponseList.add(IssueBoardDto.Response.of(issueBoard, user));
@@ -204,16 +204,16 @@ public class BoardService {
 
     public Map<String, Object> issueSearchList(int pageNo, String item, String keyword) {
         Map<String, Object> result = new HashMap<>();
-        PageRequest pageRequest = PageRequest.of(pageNo-1, 5, Sort.by(Sort.Direction.DESC,
+        PageRequest pageRequest = PageRequest.of(pageNo - 1, 5, Sort.by(Sort.Direction.DESC,
                 "createdTime"));
 
         Page<IssueBoard> page = null;
         List<IssueBoard> issueBoardList = new ArrayList<>();
-        if(item.equals("nickname")) {
-            if(userRepository.findByNickname(keyword).isPresent()) {
+        if (item.equals("nickname")) {
+            if (userRepository.findByNickname(keyword).isPresent()) {
                 User user = userRepository.findByNickname(keyword)
                         .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
-                page = issueBoardRepository.findByUserId(user.getId(), pageRequest);
+                page = issueBoardRepository.findAllByUserIdAndIsRemovedFalse(user.getId(), pageRequest);
                 issueBoardList = page.getContent();
             }
         } else {
@@ -222,14 +222,14 @@ public class BoardService {
         }
 
         List<IssueBoardDto.Response> issueBoardResponseList = new ArrayList<>();
-        for(IssueBoard issueBoard : issueBoardList) {
+        for (IssueBoard issueBoard : issueBoardList) {
             User user = userRepository.findById(issueBoard.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             issueBoardResponseList.add(IssueBoardDto.Response.of(issueBoard, user));
         }
 
         result.put("issueBoardList", issueBoardResponseList);
-        if(page != null) {
+        if (page != null) {
             result.put("totalPages", page.getTotalPages());
             result.put("totalElements", page.getTotalElements());
         } else {
@@ -247,15 +247,15 @@ public class BoardService {
         IssueBoard issueBoard = issueBoardRepository.findById(issueId)
                 .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
 
-        if(issueVoteRepository.findVote(user, issueBoard).isPresent()) {
+        if (issueVoteRepository.findVote(user, issueBoard).isPresent()) {
             IssueVote issueVote = issueVoteRepository.findVote(user, issueBoard).get();
-            if(issueVote.isAgree()) issueBoard.setAgreeCount(issueBoard.getAgreeCount()-1);
-            else issueBoard.setOpposeCount(issueBoard.getOpposeCount()-1);
+            if (issueVote.isAgree()) issueBoard.setAgreeCount(issueBoard.getAgreeCount() - 1);
+            else issueBoard.setOpposeCount(issueBoard.getOpposeCount() - 1);
             issueVoteRepository.delete(issueVote);
         }
 
-        if(isAgree) issueBoard.setAgreeCount(issueBoard.getAgreeCount()+1);
-        else issueBoard.setOpposeCount(issueBoard.getOpposeCount()+1);
+        if (isAgree) issueBoard.setAgreeCount(issueBoard.getAgreeCount() + 1);
+        else issueBoard.setOpposeCount(issueBoard.getOpposeCount() + 1);
 
         IssueVote issueVote = new IssueVote(user, issueBoard, isAgree);
         issueVoteRepository.save(issueVote);
@@ -270,12 +270,12 @@ public class BoardService {
         Comment comment = null;
 
         Comment parentComment = null;
-        if(commentRequest.getDepth() == 1) {
+        if (commentRequest.getDepth() == 1) {
             parentComment = commentRepository.findById(commentRequest.getParentId())
                     .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
         }
 
-        if(commentRequest.getBoardType().equals(BoardType.ADVICE)) {
+        if (commentRequest.getBoardType().equals(BoardType.ADVICE)) {
             AdviceBoard adviceBoard = adviceBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ADVICE_BOARD_NOT_FOUND));
             comment = Comment.builder()
@@ -286,7 +286,7 @@ public class BoardService {
                     .user(user)
                     .build();
             comment.setAdviceBoard(adviceBoard);
-        } else if(commentRequest.getBoardType().equals(BoardType.ISSUE)) {
+        } else if (commentRequest.getBoardType().equals(BoardType.ISSUE)) {
             IssueBoard issueBoard = issueBoardRepository.findById(boardId)
                     .orElseThrow(() -> new CommonException(ExceptionType.ISSUE_BOARD_NOT_FOUND));
             comment = Comment.builder()
@@ -333,7 +333,7 @@ public class BoardService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommonException(ExceptionType.COMMENT_NOT_FOUND));
 
-        if(commentLikeRepository.find(user, comment).isPresent()) return;
+        if (commentLikeRepository.find(user, comment).isPresent()) return;
 
         CommentLike commentLike = CommentLike.builder()
                 .user(user)
@@ -359,14 +359,14 @@ public class BoardService {
 
     public List<CommentDto.Response> commentList(BoardType boardType, Long boardId) {
         List<Comment> commentList = new ArrayList<>();
-        if(boardType.equals(BoardType.ADVICE)) {
+        if (boardType.equals(BoardType.ADVICE)) {
             commentList = commentRepository.findAllAdvice(boardId);
-        } else if(boardType.equals(BoardType.ISSUE)) {
+        } else if (boardType.equals(BoardType.ISSUE)) {
             commentList = commentRepository.findAllIssue(boardId);
         }
 
         List<CommentDto.Response> commentDtoList = new ArrayList<>();
-        for(Comment comment: commentList) {
+        for (Comment comment : commentList) {
             User user = userRepository.findById(comment.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             commentDtoList.add(CommentDto.Response.of(comment, user));
@@ -376,14 +376,14 @@ public class BoardService {
 
     public List<CommentDto.Response> commentChildList(BoardType boardType, Long boardId, Long commentId) {
         List<Comment> commentList = new ArrayList<>();
-        if(boardType.equals(BoardType.ADVICE)) {
+        if (boardType.equals(BoardType.ADVICE)) {
             commentList = commentRepository.findChildAdvice(boardId, commentId);
-        } else if(boardType.equals(BoardType.ISSUE)) {
+        } else if (boardType.equals(BoardType.ISSUE)) {
             commentList = commentRepository.findChildIssue(boardId, commentId);
         }
 
         List<CommentDto.Response> commentDtoList = new ArrayList<>();
-        for(Comment comment: commentList) {
+        for (Comment comment : commentList) {
             User user = userRepository.findById(comment.getUser().getId())
                     .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
             commentDtoList.add(CommentDto.Response.of(comment, user));
@@ -396,16 +396,16 @@ public class BoardService {
                 .orElseThrow(() -> new CommonException(ExceptionType.USER_NOT_FOUND));
 
         List<Comment> commentList = new ArrayList<>();
-        if(boardType.equals(BoardType.ADVICE)) {
+        if (boardType.equals(BoardType.ADVICE)) {
             commentList = commentRepository.findAllAdvice(boardId);
-        } else if(boardType.equals(BoardType.ISSUE)) {
+        } else if (boardType.equals(BoardType.ISSUE)) {
             commentList = commentRepository.findAllIssue(boardId);
         }
 
         List<Long> myLikeList = new ArrayList<>();
-        for(Comment comment: commentList) {
+        for (Comment comment : commentList) {
             Long commentId = commentLikeRepository.findByCommentAndUser(comment.getId(), user.getId());
-            if(commentId != null) myLikeList.add(commentId);
+            if (commentId != null) myLikeList.add(commentId);
         }
 
         return myLikeList;
