@@ -109,8 +109,8 @@ public class MatchingService {
             String mSessionId = null;
             // ========= 이미 매칭된 상대는 매칭되지 않게 처리해야함 ============
 
-
             List<MatchingUser> femaleMatchingUserList = matchingUserRepository.findByUserId(female.getId());
+            log.info("femaleMatchingUserList - {}", femaleMatchingUserList);
 
             for (String mId : mQueue) {
                 User male = socketInfos.get(mId).getUser();
@@ -118,14 +118,14 @@ public class MatchingService {
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- start
                 boolean isMatched = false;
                 for (MatchingUser femaleMatchingUser : femaleMatchingUserList) {
-                    if (femaleMatchingUser.getUser().getId() == male.getId()) {
+                    Optional<MatchingUser> byMatchingAndUser = matchingUserRepository.findByMatchingAndUser(femaleMatchingUser.getMatching(), male);
+                    if (byMatchingAndUser.isPresent()) {
                         isMatched = true;
                         break;
                     }
                 }
-                if (isMatched) continue;
+                if (isMatched ) continue;
                 // 이미 만났거나 친구로 있을 경우 매칭되지 않게 처리 -- end
-
 
                 int score = calculateScore(female, male) + calculateScore(male, female)
                         + socketInfos.get(fSessionId).getCount() + socketInfos.get(mId).getCount();
