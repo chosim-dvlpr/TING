@@ -101,9 +101,9 @@ function IssueDetail() {
         confirmButtonText: "확인",
         cancelButtonText: "취소",
         width: 400,
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          tokenHttp.delete(`issue/${issueId}`);
+          await tokenHttp.delete(`issue/${issueId}`);
           // Swal.fire({ title: "글이 정상적으로 \n삭제되었습니다", width: 400 });
           // 글 삭제 후 해당 경로로 이동
           navigate("/community/issue");
