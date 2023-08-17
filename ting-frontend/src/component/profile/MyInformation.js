@@ -26,13 +26,6 @@ function MyInformation() {
 
   // 지역 영어를 한글로 변환
   const matchRegion = (regionData) => {
-    // const regionName =
-    //   regionList.regionEn &&
-    //   regionList.filter((region) =>
-    //     region.regionEn === regionData ? region.regionKor : null
-    //   )[0].regionKor;
-    // console.log(regionName);
-    // return regionName;
     const matchingRegion = regionList.find(
       (region) => region.regionEn === regionData
     );
