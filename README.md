@@ -10,20 +10,62 @@
 | 개발 기간 | 2023.07.10 ~ 2023.08.18 (6주)
 | --- | --- |
 
----
+<br/><br/><br/>
 
 📌 **팀원 소개**
 
-| 팀원 | 역할 | 
-| --- | --- |
-| 변민지 | 팀장, FE |
-| 이은석 | FE |
-| 권기연 | FE |
-| 송찬환 | BE, Infra |
-| 김하영 | BE |
-| 정수정 | BE |
+<table>
+ <tr>
+  <td>
+  <a href="https://github.com/chosim-dvlpr"> 
+   <img src="https://avatars.githubusercontent.com/u/121149171?v=4" />
+  </a>
+  </td>
+    <td>
+  <a href="https://github.com/dollseok"> 
+   <img src="https://avatars.githubusercontent.com/u/122436585?v=4" />
+  </a>
+  </td>
+    <td>
+  <a href="https://github.com/giyeonkwon013"> 
+   <img src="https://avatars.githubusercontent.com/u/122511574?v=4" />
+  </a>
+  </td>
+    <td>
+  <a href="https://github.com/cksghks89"> 
+   <img src="https://avatars.githubusercontent.com/u/23161060?v=4" />
+  </a>
+  </td>
+    <td>
+  <a href="https://github.com/hayeongK"> 
+   <img src="https://avatars.githubusercontent.com/u/83320865?v=4" />
+  </a>
+  </td>
+    <td>
+  <a href="https://github.com/sujeong1201"> 
+   <img src="https://avatars.githubusercontent.com/u/37768793?v=4" />
+  </a>
+  </td>
+ </tr>
+ <tr>
+  <td><b>변민지 (팀장)</b></td>
+  <td><b>이은석</b></td>
+  <td><b>권기연</b></td>
+  <td><b>송찬환</b></td>
+  <td><b>김하영</b></td>
+  <td><b>정수정</b></td>
+ </tr>
+ <tr>
+  <td>FrontEnd</td>
+  <td>FrontEnd</td>
+  <td>FrontEnd</td>
+  <td>Infra, BackEnd</td>
+  <td>BackEnd</td>
+  <td>BackEnd</td>
+ </tr>
+</table>
 
----
+<br/><br/><br/>
 
 📌 **기획 의도**
 
